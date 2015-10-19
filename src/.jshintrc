@@ -1,0 +1,6 @@
+{
+  "extends": "../.jshintrc",
+  "browser": true,
+  "strict": true,
+  "predef": ["define"]
+}

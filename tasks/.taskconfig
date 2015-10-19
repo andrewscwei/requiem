@@ -1,0 +1,136 @@
+/**
+ * Requiem
+ * (c) VARIANTE (http://variante.io)
+ *
+ * Configuration for Gulp tasks.
+ *
+ * This software is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+
+var path = require('path');
+var $util = require('gulp-util');
+
+var env = {
+  clean: $util.env['clean'] || $util.env['c'],
+  port: $util.env['port'] || $util.env['p'],
+  serve: $util.env['serve'] || $util.env['s'],
+  watch: $util.env['watch'] || $util.env['w']
+};
+
+var paths = {
+  src: path.join(__dirname, '../', 'src'),
+  dist: path.join(__dirname, '../', 'dist'),
+  play: path.join(__dirname, '../', 'playground'),
+  modules: path.join(__dirname, '../', 'node_modules')
+};
+
+var tasks = {
+  clean: {
+    input: paths.dist
+  },
+  build: {
+    input: path.join(paths.dist, 'requiem.js'),
+    outputFile: 'requiem.min.js',
+    output: path.join(paths.dist),
+    r: {
+      baseUrl: path.join(paths.src),
+      out: path.join(paths.dist, 'requiem.js'),
+      paths: {
+        almond: path.join(paths.modules, 'almond', 'almond')
+      },
+      include: ['almond', 'requiem'],
+      wrap: {
+        startFile: path.join(paths.src, '_start.js'),
+        endFile: path.join(paths.src, '_end.js')
+      },
+      optimize: 'none',
+      preserveLicenseComments: false,
+      generateSourceMaps: true
+    }
+  },
+  play: {
+    clean: {
+      input: path.join(paths.play, 'build')
+    },
+    styles: {
+      input: path.join(paths.play, 'src', 'stylesheets', '*.scss'),
+      output: path.join(paths.play, 'build', 'stylesheets'),
+      sass: {
+        outputStyle: 'nested',
+        includePaths: [path.join(paths.dist, 'sass')]
+      }
+    },
+    scripts: {
+      webpack: {
+        cache: true,
+        context: path.join(paths.play, 'src', 'javascripts'),
+        debug: true,
+        devtool: 'sourcemap',
+        entry: {
+          main: './main.js'
+        },
+        output: {
+          path: path.join(paths.play, 'build', 'javascripts'),
+          publicPath: 'javascripts/',
+          filename: '[name].js',
+          chunkFilename: '[chunkhash].js',
+          sourceMapFilename: '[file].map'
+        },
+        module: {
+          loaders: [{
+            test: path.join(paths.play, 'src', 'javascripts'),
+            loader: 'babel-loader'
+          }]
+        },
+        resolve: {
+          root: [path.join(paths.dist)],
+          extensions: ['', '.js', '.json']
+        }
+      }
+    },
+    templates: {
+      input: path.join(paths.play, 'src', 'templates', 'views', '**', '*.jade'),
+      output: path.join(paths.play, 'build'),
+      jade: {
+        pretty: true
+      }
+    },
+    serve: {
+      browserSync: {
+        server: {
+          baseDir: path.join(paths.play, 'build')
+        },
+        files: [path.join(paths.play, 'build')],
+        browser: 'google chrome',
+        notify: false,
+        port: (typeof port === 'number') ? env.port : 9000
+      }
+    }
+  },
+  watch: {
+    build: [{
+        files: path.join(paths.src, '**', '*.js'),
+        tasks: [
+          'build'
+        ]
+      }
+    ],
+    play: [{
+      files: [
+        path.join(paths.play, 'src', '**', '*.scss'),
+        path.join(paths.dist, '**', '*.scss')
+      ],
+      tasks: ['styles:play']
+    }, {
+      files: path.join(paths.play, 'src', '**', '*.jade'),
+      tasks: ['templates:play']
+    }]
+  }
+};
+
+module.exports = {
+  env: env,
+  paths: paths,
+  tasks: tasks
+};
