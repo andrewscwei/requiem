@@ -2452,7 +2452,7 @@ define('ui/Element',[
   Element.prototype.hasClass = function(className) {
     if (!assert(typeof className === 'string', 'Invalid class detected: ' + className)) return false;
 
-    return (this.class.indexOf(className) > -1);
+    return (this.classes.indexOf(className) > -1);
   };
 
   /**
@@ -5648,7 +5648,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.3.0', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.3.1', writable: false });
 
   injectModule('dom', dom);
   injectModule('events', events);

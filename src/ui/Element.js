@@ -715,7 +715,7 @@ define([
   Element.prototype.hasClass = function(className) {
     if (!assert(typeof className === 'string', 'Invalid class detected: ' + className)) return false;
 
-    return (this.class.indexOf(className) > -1);
+    return (this.classes.indexOf(className) > -1);
   };
 
   /**
