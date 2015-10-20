@@ -2,17 +2,20 @@
 'use strict';
 
 let r = require('requiem');
+let EventType = r.EventType;
+let DirtyType = r.DirtyType;
+let KeyCode = r.KeyCode;
 
 class Bar extends r.Element {
   init() {
-    this.interval = setInterval(function() {
-      console.log('foo');
-    }, 5000);
     super.init();
   }
 
+  update() {
+    super.update();
+  }
+
   destroy() {
-    clearInterval(this.interval);
     super.destroy();
   }
 }

@@ -42,6 +42,8 @@ define([
   function ElementUpdateDelegate(delegate) {
     log('[ElementUpdateDelegate]::new(', delegate, ')');
 
+    this.__define_properties();
+
     var mDirtyTable = 0;
     var mResizeHandler = null;
     var mScrollHandler = null;
@@ -508,119 +510,126 @@ define([
   }
 
   /**
-   * @property
+   * @protected
    *
-   * Delegate of this ElementUpdateDelegate instance.
-   *
-   * @type {Object}
+   * Define all properties.
    */
-  Object.defineProperty(ElementUpdateDelegate.prototype, 'delegate', {
-    value: null,
-    writable: true
-  });
+  ElementUpdateDelegate.prototype.__define_properties = function() {
+    /**
+     * @property
+     *
+     * Delegate of this ElementUpdateDelegate instance.
+     *
+     * @type {Object}
+     */
+    Object.defineProperty(this, 'delegate', {
+      value: null,
+      writable: true
+    });
 
-  /**
-   * @property
-   *
-   * Indicates whether this ElementUpdateDelegate auto responds to window
-   * behaviors (i.e. resizing, scrolling).
-   *
-   * @type {Boolean}
-   */
-  Object.defineProperty(ElementUpdateDelegate.prototype, 'responsive', {
-    value: false,
-    writable: true
-  });
+    /**
+     * @property
+     *
+     * Indicates whether this ElementUpdateDelegate auto responds to window
+     * behaviors (i.e. resizing, scrolling).
+     *
+     * @type {Boolean}
+     */
+    Object.defineProperty(this, 'responsive', {
+      value: false,
+      writable: true
+    });
 
-  /**
-   * @property
-   *
-   * Indicates the debounce rate of this ElementUpdateDelegate instance.
-   *
-   * @type {Number}
-   */
-  Object.defineProperty(ElementUpdateDelegate.prototype, 'refreshRate', {
-    value: DEFAULT_REFRESH_RATE,
-    writable: true
-  });
+    /**
+     * @property
+     *
+     * Indicates the debounce rate of this ElementUpdateDelegate instance.
+     *
+     * @type {Number}
+     */
+    Object.defineProperty(this, 'refreshRate', {
+      value: DEFAULT_REFRESH_RATE,
+      writable: true
+    });
 
-  /**
-   * @property
-   *
-   * Indicates the dirty flags in which ElementUpdateDelgate instance will
-   * transmit to its child Elements.
-   *
-   * @type {Number}
-   */
-  Object.defineProperty(ElementUpdateDelegate.prototype, 'transmissive', {
-    value: DirtyType.NONE,
-    writable: true
-  });
+    /**
+     * @property
+     *
+     * Indicates the dirty flags in which ElementUpdateDelgate instance will
+     * transmit to its child Elements.
+     *
+     * @type {Number}
+     */
+    Object.defineProperty(this, 'transmissive', {
+      value: DirtyType.NONE,
+      writable: true
+    });
 
-  /**
-   * @property
-   *
-   * Indicates the dirty flags in which this ElementUpdateDelegate is capable
-   * of receiving from parent Elements.
-   *
-   * @type {Number}
-   */
-  Object.defineProperty(ElementUpdateDelegate.prototype, 'receptive', {
-    value: DirtyType.NONE,
-    writable: true
-  });
+    /**
+     * @property
+     *
+     * Indicates the dirty flags in which this ElementUpdateDelegate is capable
+     * of receiving from parent Elements.
+     *
+     * @type {Number}
+     */
+    Object.defineProperty(this, 'receptive', {
+      value: DirtyType.NONE,
+      writable: true
+    });
 
-  /**
-   * @property
-   *
-   * Indicates the conductor in which this ElementUpdateDelegate responds to
-   * (defaults to window).
-   *
-   * @type {Object}
-   */
-  Object.defineProperty(ElementUpdateDelegate.prototype, 'conductor', {
-    value: window,
-    writable: true
-  });
+    /**
+     * @property
+     *
+     * Indicates the conductor in which this ElementUpdateDelegate responds to
+     * (defaults to window).
+     *
+     * @type {Object}
+     */
+    Object.defineProperty(this, 'conductor', {
+      value: window,
+      writable: true
+    });
 
-  /**
-   * @property
-   *
-   * Stores mouse properties if this ElementUpdateDelegate responds to mouse
-   * events.
-   *
-   * @type {Object}
-   */
-  Object.defineProperty(ElementUpdateDelegate.prototype, 'mouse', {
-    value: {},
-    writable: false
-  });
+    /**
+     * @property
+     *
+     * Stores mouse properties if this ElementUpdateDelegate responds to mouse
+     * events.
+     *
+     * @type {Object}
+     */
+    Object.defineProperty(this, 'mouse', {
+      value: {},
+      writable: false
+    });
 
-  /**
-   * @property
-   *
-   * Stores orientation properties if this ElementUpdateDelgate responds to
-   * device orientations (i.e. device accelerometer).
-   *
-   * @type {Object}
-   */
-  Object.defineProperty(ElementUpdateDelegate.prototype, 'orientation', {
-    value: {},
-    writable: false
-  });
+    /**
+     * @property
+     *
+     * Stores orientation properties if this ElementUpdateDelgate responds to
+     * device orientations (i.e. device accelerometer).
+     *
+     * @type {Object}
+     */
+    Object.defineProperty(this, 'orientation', {
+      value: {},
+      writable: false
+    });
 
-  /**
-   * @property
-   *
-   * Stores pressed keycodes if this ElementUpdateDelegate responds to
-   * keyboard events.
-   *
-   * @type {Object}
-   */
-  Object.defineProperty(ElementUpdateDelegate.prototype, 'keyCode', {
-    value: {},
-    writable: false
-  });
+    /**
+     * @property
+     *
+     * Stores pressed keycodes if this ElementUpdateDelegate responds to
+     * keyboard events.
+     *
+     * @type {Object}
+     */
+    Object.defineProperty(this, 'keyCode', {
+      value: {},
+      writable: false
+    });
+  };
 
   /**
    * @protected

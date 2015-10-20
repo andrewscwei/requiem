@@ -1201,6 +1201,8 @@
 	  function ElementUpdateDelegate(delegate) {
 	    log('[ElementUpdateDelegate]::new(', delegate, ')');
 	
+	    this.__define_properties();
+	
 	    var mDirtyTable = 0;
 	    var mResizeHandler = null;
 	    var mScrollHandler = null;
@@ -1667,119 +1669,126 @@
 	  }
 	
 	  /**
-	   * @property
+	   * @protected
 	   *
-	   * Delegate of this ElementUpdateDelegate instance.
-	   *
-	   * @type {Object}
+	   * Define all properties.
 	   */
-	  Object.defineProperty(ElementUpdateDelegate.prototype, 'delegate', {
-	    value: null,
-	    writable: true
-	  });
+	  ElementUpdateDelegate.prototype.__define_properties = function() {
+	    /**
+	     * @property
+	     *
+	     * Delegate of this ElementUpdateDelegate instance.
+	     *
+	     * @type {Object}
+	     */
+	    Object.defineProperty(this, 'delegate', {
+	      value: null,
+	      writable: true
+	    });
 	
-	  /**
-	   * @property
-	   *
-	   * Indicates whether this ElementUpdateDelegate auto responds to window
-	   * behaviors (i.e. resizing, scrolling).
-	   *
-	   * @type {Boolean}
-	   */
-	  Object.defineProperty(ElementUpdateDelegate.prototype, 'responsive', {
-	    value: false,
-	    writable: true
-	  });
+	    /**
+	     * @property
+	     *
+	     * Indicates whether this ElementUpdateDelegate auto responds to window
+	     * behaviors (i.e. resizing, scrolling).
+	     *
+	     * @type {Boolean}
+	     */
+	    Object.defineProperty(this, 'responsive', {
+	      value: false,
+	      writable: true
+	    });
 	
-	  /**
-	   * @property
-	   *
-	   * Indicates the debounce rate of this ElementUpdateDelegate instance.
-	   *
-	   * @type {Number}
-	   */
-	  Object.defineProperty(ElementUpdateDelegate.prototype, 'refreshRate', {
-	    value: DEFAULT_REFRESH_RATE,
-	    writable: true
-	  });
+	    /**
+	     * @property
+	     *
+	     * Indicates the debounce rate of this ElementUpdateDelegate instance.
+	     *
+	     * @type {Number}
+	     */
+	    Object.defineProperty(this, 'refreshRate', {
+	      value: DEFAULT_REFRESH_RATE,
+	      writable: true
+	    });
 	
-	  /**
-	   * @property
-	   *
-	   * Indicates the dirty flags in which ElementUpdateDelgate instance will
-	   * transmit to its child Elements.
-	   *
-	   * @type {Number}
-	   */
-	  Object.defineProperty(ElementUpdateDelegate.prototype, 'transmissive', {
-	    value: DirtyType.NONE,
-	    writable: true
-	  });
+	    /**
+	     * @property
+	     *
+	     * Indicates the dirty flags in which ElementUpdateDelgate instance will
+	     * transmit to its child Elements.
+	     *
+	     * @type {Number}
+	     */
+	    Object.defineProperty(this, 'transmissive', {
+	      value: DirtyType.NONE,
+	      writable: true
+	    });
 	
-	  /**
-	   * @property
-	   *
-	   * Indicates the dirty flags in which this ElementUpdateDelegate is capable
-	   * of receiving from parent Elements.
-	   *
-	   * @type {Number}
-	   */
-	  Object.defineProperty(ElementUpdateDelegate.prototype, 'receptive', {
-	    value: DirtyType.NONE,
-	    writable: true
-	  });
+	    /**
+	     * @property
+	     *
+	     * Indicates the dirty flags in which this ElementUpdateDelegate is capable
+	     * of receiving from parent Elements.
+	     *
+	     * @type {Number}
+	     */
+	    Object.defineProperty(this, 'receptive', {
+	      value: DirtyType.NONE,
+	      writable: true
+	    });
 	
-	  /**
-	   * @property
-	   *
-	   * Indicates the conductor in which this ElementUpdateDelegate responds to
-	   * (defaults to window).
-	   *
-	   * @type {Object}
-	   */
-	  Object.defineProperty(ElementUpdateDelegate.prototype, 'conductor', {
-	    value: window,
-	    writable: true
-	  });
+	    /**
+	     * @property
+	     *
+	     * Indicates the conductor in which this ElementUpdateDelegate responds to
+	     * (defaults to window).
+	     *
+	     * @type {Object}
+	     */
+	    Object.defineProperty(this, 'conductor', {
+	      value: window,
+	      writable: true
+	    });
 	
-	  /**
-	   * @property
-	   *
-	   * Stores mouse properties if this ElementUpdateDelegate responds to mouse
-	   * events.
-	   *
-	   * @type {Object}
-	   */
-	  Object.defineProperty(ElementUpdateDelegate.prototype, 'mouse', {
-	    value: {},
-	    writable: false
-	  });
+	    /**
+	     * @property
+	     *
+	     * Stores mouse properties if this ElementUpdateDelegate responds to mouse
+	     * events.
+	     *
+	     * @type {Object}
+	     */
+	    Object.defineProperty(this, 'mouse', {
+	      value: {},
+	      writable: false
+	    });
 	
-	  /**
-	   * @property
-	   *
-	   * Stores orientation properties if this ElementUpdateDelgate responds to
-	   * device orientations (i.e. device accelerometer).
-	   *
-	   * @type {Object}
-	   */
-	  Object.defineProperty(ElementUpdateDelegate.prototype, 'orientation', {
-	    value: {},
-	    writable: false
-	  });
+	    /**
+	     * @property
+	     *
+	     * Stores orientation properties if this ElementUpdateDelgate responds to
+	     * device orientations (i.e. device accelerometer).
+	     *
+	     * @type {Object}
+	     */
+	    Object.defineProperty(this, 'orientation', {
+	      value: {},
+	      writable: false
+	    });
 	
-	  /**
-	   * @property
-	   *
-	   * Stores pressed keycodes if this ElementUpdateDelegate responds to
-	   * keyboard events.
-	   *
-	   * @type {Object}
-	   */
-	  Object.defineProperty(ElementUpdateDelegate.prototype, 'keyCode', {
-	    value: {},
-	    writable: false
-	  });
+	    /**
+	     * @property
+	     *
+	     * Stores pressed keycodes if this ElementUpdateDelegate responds to
+	     * keyboard events.
+	     *
+	     * @type {Object}
+	     */
+	    Object.defineProperty(this, 'keyCode', {
+	      value: {},
+	      writable: false
+	    });
+	  };
 	
 	  /**
 	   * @protected
@@ -2512,7 +2521,7 @@
 	  Element.prototype.hasClass = function(className) {
 	    if (!assert(typeof className === 'string', 'Invalid class detected: ' + className)) return false;
 	
-	    return (this.class.indexOf(className) > -1);
+	    return (this.classes.indexOf(className) > -1);
 	  };
 	
 	  /**
@@ -5708,7 +5717,7 @@
 	  var requiem = {};
 	
 	  Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-	  Object.defineProperty(requiem, 'version', { value: '0.3.0', writable: false });
+	  Object.defineProperty(requiem, 'version', { value: '0.4.0', writable: false });
 	
 	  injectModule('dom', dom);
 	  injectModule('events', events);
@@ -5776,6 +5785,9 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var r = __webpack_require__(1);
+	var EventType = r.EventType;
+	var DirtyType = r.DirtyType;
+	var KeyCode = r.KeyCode;
 	
 	var Playground = (function (_r$Element) {
 	  _inherits(Playground, _r$Element);
@@ -5798,7 +5810,9 @@
 	    }
 	  }, {
 	    key: 'destroy',
-	    value: function destroy() {}
+	    value: function destroy() {
+	      _get(Object.getPrototypeOf(Playground.prototype), 'destroy', this).call(this);
+	    }
 	  }]);
 	
 	  return Playground;
@@ -5822,6 +5836,9 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var r = __webpack_require__(1);
+	var EventType = r.EventType;
+	var DirtyType = r.DirtyType;
+	var KeyCode = r.KeyCode;
 	
 	var Bar = (function (_r$Element) {
 	  _inherits(Bar, _r$Element);
@@ -5835,15 +5852,16 @@
 	  _createClass(Bar, [{
 	    key: 'init',
 	    value: function init() {
-	      this.interval = setInterval(function () {
-	        console.log('foo');
-	      }, 5000);
 	      _get(Object.getPrototypeOf(Bar.prototype), 'init', this).call(this);
+	    }
+	  }, {
+	    key: 'update',
+	    value: function update() {
+	      _get(Object.getPrototypeOf(Bar.prototype), 'update', this).call(this);
 	    }
 	  }, {
 	    key: 'destroy',
 	    value: function destroy() {
-	      clearInterval(this.interval);
 	      _get(Object.getPrototypeOf(Bar.prototype), 'destroy', this).call(this);
 	    }
 	  }]);

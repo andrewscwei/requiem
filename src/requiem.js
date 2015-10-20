@@ -28,7 +28,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.3.1', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.4.0', writable: false });
 
   injectModule('dom', dom);
   injectModule('events', events);

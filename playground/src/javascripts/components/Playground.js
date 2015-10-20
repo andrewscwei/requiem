@@ -2,6 +2,9 @@
 'use strict';
 
 let r = require('requiem');
+let EventType = r.EventType;
+let DirtyType = r.DirtyType;
+let KeyCode = r.KeyCode;
 
 class Playground extends r.Element {
   init() {
@@ -13,7 +16,7 @@ class Playground extends r.Element {
   }
 
   destroy() {
-
+    super.destroy();
   }
 }
 
