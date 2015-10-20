@@ -148,9 +148,9 @@ define([
     this.init = function() {
       log('[ElementUpdateDelegate]::init()');
 
-      var r = this.conductor || window;
+      var conductor = this.conductor || window;
 
-      if (window && r && r.addEventListener && (this.responsive === true || this.responsive instanceof Array)) {
+      if (window && conductor && conductor.addEventListener && (this.responsive === true || this.responsive instanceof Array)) {
         if (this.responsive === true || this.responsive.indexOf(EventType.OBJECT.RESIZE) > -1 || this.responsive.indexOf(EventType.DEVICE.ORIENTATION_CHANGE) > -1) {
           mResizeHandler = (this.refreshRate === 0.0) ? _onWindowResize.bind(this) : debounce(_onWindowResize.bind(this), this.refreshRate);
         }
@@ -189,15 +189,15 @@ define([
         }
 
         if (mScrollHandler) {
-          r.addEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
+          conductor.addEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
         }
 
         if (mMouseWheelHandler) {
-          this.delegate.addEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
+          conductor.addEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
         }
 
         if (mMouseMoveHandler) {
-          this.delegate.addEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+          conductor.addEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
         }
 
         if (mOrientationChangeHandler) {
@@ -235,24 +235,24 @@ define([
 
       _cancelAnimationFrame();
 
-      var r = this.conductor || window;
+      var conductor = this.conductor || window;
 
-      if (window && r && r.removeEventListener) {
+      if (window && conductor && conductor.removeEventListener) {
         if (mResizeHandler) {
           window.removeEventListener(EventType.OBJECT.RESIZE, mResizeHandler);
           window.removeEventListener(EventType.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
         }
 
         if (mScrollHandler) {
-          r.removeEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
+          conductor.removeEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
         }
 
         if (mMouseWheelHandler) {
-          this.delegate.removeEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
+          conductor.removeEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
         }
 
         if (mMouseMoveHandler) {
-          this.delegate.removeEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+          conductor.removeEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
         }
 
         if (mOrientationChangeHandler) {
