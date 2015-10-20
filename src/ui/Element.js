@@ -719,6 +719,104 @@ define([
   };
 
   /**
+   * Gets the value of the attribute with the specified name.
+   *
+   * @param  {String} key  Name of the attribute.
+   *
+   * @return {*} Value of the attribute.
+   */
+  Element.prototype.getAttribute = function(key) {
+    return this.element.getAttribute(key);
+  };
+
+  /**
+   * Sets an attribute of this Element instance.
+   *
+   * @param {String} key              Name of the attribute.
+   * @param {*}      value:undefined  Value of the attribute. If unspecified,
+   *                                  the attribute will still be present but
+   *                                  have no value.
+   */
+  Element.prototype.setAttribute = function(key, value) {
+    if (value === undefined || value === null) {
+      this.element.setAttribute(key, '');
+    }
+    else {
+      this.element.setAttribute(key, value);
+    }
+  };
+
+  /**
+   * Removes an attribute from this Element instance.
+   *
+   * @param  {String} key  Name of the attribute.
+   */
+  Element.prototype.removeAttribute = function(key) {
+    this.element.removeAttribute(key);
+  };
+
+  /**
+   * Checks to see if this Element instance has the attribute of the specified
+   * name.
+   *
+   * @param  {String}  key  Name of the attribute.
+   *
+   * @return {Boolean} True if attribute with said name exists, false otherwise.
+   */
+  Element.prototype.hasAttribute = function(key) {
+    return !isNull(this.element.getAttribute(key));
+  };
+
+  Element.prototype.getStyle = function(key) {
+    var value = this.element.style[key];
+
+    if (value === '') {
+      return null;
+    }
+    else {
+      return value;
+    }
+  };
+
+  /**
+   * Sets an inline CSS rule of this Element instance.
+   *
+   * @param {String} key    Name of the CSS rule in camelCase.
+   * @param {*}      value  Value of the style. If a number is provided, it will
+   *                        be automatically suffixed with 'px'.
+   *
+   * @see http://www.w3schools.com/jsref/dom_obj_style.asp
+   */
+  Element.prototype.setStyle = function(key, value) {
+    if (typeof value === 'number') {
+      value = value + 'px';
+    }
+
+    this.element.style[key] = value;
+  };
+
+  /**
+   * Removes an inline CSS rule from this Element instance by its rule name in
+   * camelCase.
+   *
+   * @param  {String} key  Name of the CSS rule.
+   *
+   * @see http://www.w3schools.com/jsref/dom_obj_style.asp
+   */
+  Element.prototype.removeStyle = function(key) {
+    this.element.style[key] = '';
+  };
+
+  /**
+   * Checks to see if this Element instance has the specified inline CSS rule.
+   * @param  {[type]}  key [description]
+   * @return {Boolean}     [description]
+   */
+  Element.prototype.hasStyle = function(key) {
+    return this.element.style[key] !== '';
+  };
+
+  /**
    * Creates the associated DOM element from scratch.
    *
    * @return {Element}
@@ -829,12 +927,36 @@ define([
      *
      * @type {Array}
      */
-    Object.defineProperty(this, 'class', {
+    Object.defineProperty(this, 'classes', {
       get: function() {
         return this.element.className.split(' ');
       },
       set: function(value) {
         this.element.className = value.join(' ');
+      }
+    });
+
+    /**
+     * @property
+     *
+     * Gets the attributes of this Element instance.
+     *
+     * @type {NamedNodeMap}
+     */
+    Object.defineProperty(this, 'attributes', {
+      get: function() {
+        return this.element.attributes;
+      }
+    });
+
+    /**
+     * @property
+     *
+     * Gets the CSS styles of this Element instance.
+     */
+    Object.defineProperty(this, 'styles', {
+      get: function() {
+        return this.element.style;
       }
     });
 
@@ -887,13 +1009,13 @@ define([
     /**
      * @property
      *
-     * Style of this Element instance (depicted by Directives.Style).
+     * Scheme of this Element instance (depicted by Directives.Scheme).
      *
      * @type {String}
      */
-    Object.defineProperty(this, 'style', {
+    Object.defineProperty(this, 'scheme', {
       get: function() {
-        var s = this.element.getAttribute(Directives.Style) || this.element.getAttribute('data-' + Directives.Style);
+        var s = this.element.getAttribute(Directives.Scheme) || this.element.getAttribute('data-' + Directives.Scheme);
 
         if (!s || s === '') {
           return null;
@@ -903,17 +1025,17 @@ define([
         }
       },
       set: function(value) {
-        if (this.style === value) return;
+        if (this.scheme === value) return;
 
         if (value === null || value === undefined) {
-          this.element.removeAttribute(Directives.Style);
-          this.element.removeAttribute('data-' + Directives.Style);
+          this.element.removeAttribute(Directives.Scheme);
+          this.element.removeAttribute('data-' + Directives.Scheme);
         }
         else {
-          this.element.setAttribute('data-' + Directives.Style, value);
+          this.element.setAttribute('data-' + Directives.Scheme, value);
         }
 
-        this.updateDelegate.setDirty(DirtyType.STYLE);
+        this.updateDelegate.setDirty(DirtyType.SCHEME);
       }
     });
 

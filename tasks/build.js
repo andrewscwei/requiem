@@ -47,7 +47,16 @@ gulp.task('build', function(done) {
           gzip: true
         }))
         .pipe(gulp.dest(config.tasks.build.output))
-        .on('end', done);
+        .on('end', function() {
+          if (config.env.watch) {
+            for (var i = 0; i < config.tasks.watch.build.length; i++) {
+              var entry = config.tasks.watch.build[i];
+              gulp.watch(entry.files, entry.tasks);
+            }
+          }
+
+          done();
+        });
     },
     function(err) {
       $util.log($util.colors.blue('[r]'), $util.colors.red(err));

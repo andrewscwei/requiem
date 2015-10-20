@@ -18,5 +18,5 @@ define({
   Property:   'r-property',
   Data:       'r-data',
   State:      'r-state',
-  Style:      'r-style'
+  Scheme:     'r-scheme'
 });
