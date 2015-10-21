@@ -32,14 +32,14 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.5.0', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.5.1', writable: false });
 
-  injectModule('dom', dom);
-  injectModule('events', events);
-  injectModule('net', net);
-  injectModule('types', types);
-  injectModule('ui', ui);
-  injectModule('utils', utils);
+  injectModule(requiem, 'dom', dom);
+  injectModule(requiem, 'events', events);
+  injectModule(requiem, 'net', net);
+  injectModule(requiem, 'types', types);
+  injectModule(requiem, 'ui', ui);
+  injectModule(requiem, 'utils', utils);
 
   polyfill();
 
