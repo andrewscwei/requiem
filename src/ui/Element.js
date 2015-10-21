@@ -649,6 +649,15 @@ define([
   };
 
   /**
+   * Dispatches an event.
+   *
+   * @param {Event} event
+   */
+  Element.prototype.dispatchEvent = function(event) {
+    this.element.dispatchEvent(event);
+  };
+
+  /**
    * Adds class(es) to this Element instance.
    *
    * @param {Stirng/Array} className
@@ -767,6 +776,13 @@ define([
     return !isNull(this.element.getAttribute(key));
   };
 
+  /**
+   * Gets the value of an inline CSS rule of this Element instance by its name.
+   *
+   * @param {String} key  Name of the CSS rule in camelCase.
+   *
+   * @return {String} Value of the style.
+   */
   Element.prototype.getStyle = function(key) {
     var value = this.element.style[key];
 

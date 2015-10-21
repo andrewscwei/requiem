@@ -11,6 +11,8 @@
 'use strict';
 
 define('requiem', [
+  'helpers/injectModule',
+  'helpers/polyfill',
   'dom',
   'events',
   'net',
@@ -18,6 +20,8 @@ define('requiem', [
   'ui',
   'utils'
 ], function(
+  injectModule,
+  polyfill,
   dom,
   events,
   net,
@@ -28,7 +32,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.4.1', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.5.0', writable: false });
 
   injectModule('dom', dom);
   injectModule('events', events);
@@ -37,31 +41,7 @@ define('requiem', [
   injectModule('ui', ui);
   injectModule('utils', utils);
 
-  /**
-   * @private
-   *
-   * Injects a module and all of its sub-modules into the core Requiem module.
-   *
-   * @param {String} name    Name of the module (used as the key for the
-   *                        key-value pair in Requiem).
-   * @param {Object} module  Module object (used as value for the key-value
-   *                        pair in Requiem).
-   */
-  function injectModule(name, module) {
-    Object.defineProperty(requiem, name, {
-      value: module,
-      writable: false
-    });
-
-    for (var key in module) {
-      if (module.hasOwnProperty(key)) {
-        Object.defineProperty(requiem, key, {
-          value: module[key],
-          writable: false
-        });
-      }
-    }
-  }
+  polyfill();
 
   return requiem;
 });

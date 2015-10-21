@@ -470,6 +470,82 @@ define("almond", function(){});
 
 
 
+define('helpers/injectModule',[],function() {
+  /**
+   * Injects a module and all of its sub-modules into a target module.
+   *
+   * @param {Object} target      Target module for injecting a module into.
+   * @param {String} moduleName  Name of the module to be injected (used as the
+   *                             key for the key-value pair in target module).
+   * @param {Object} module      Module object (used as value for the key-value
+   *                             pair in target module).
+   */
+  function injectModule(target, moduleName, module) {
+    Object.defineProperty(target, moduleName, {
+      value: module,
+      writable: false
+    });
+
+    for (var key in module) {
+      if (module.hasOwnProperty(key)) {
+        Object.defineProperty(target, key, {
+          value: module[key],
+          writable: false
+        });
+      }
+    }
+  }
+
+  return injectModule;
+});
+
+/**
+ * Requiem
+ * (c) VARIANTE (http://variante.io)
+ *
+ * This software is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * @type {Function}
+ */
+
+
+
+define('helpers/polyfill',[],function() {
+  /**
+   * Applies special polyfills to the browser window (i.e. IE happiness).
+   */
+  function polyfill() {
+    if (!window) return;
+
+    // Create CustomEvent class.
+    function CustomEvent ( event, params ) {
+      params = params || { bubbles: false, cancelable: false, detail: undefined };
+      var evt = document.createEvent( 'CustomEvent' );
+      evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+      return evt;
+    }
+
+    CustomEvent.prototype = window.Event.prototype;
+
+    window.CustomEvent = CustomEvent;
+  }
+
+  return polyfill;
+});
+
+/**
+ * Requiem
+ * (c) VARIANTE (http://variante.io)
+ *
+ * This software is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * @type {Function}
+ */
+
+
+
 define('helpers/assert',[],function() {
   /**
    * Asserts the specified condition and throws a warning if assertion fails.
@@ -2398,6 +2474,15 @@ define('ui/Element',[
   };
 
   /**
+   * Dispatches an event.
+   *
+   * @param {Event} event
+   */
+  Element.prototype.dispatchEvent = function(event) {
+    this.element.dispatchEvent(event);
+  };
+
+  /**
    * Adds class(es) to this Element instance.
    *
    * @param {Stirng/Array} className
@@ -2516,6 +2601,13 @@ define('ui/Element',[
     return !isNull(this.element.getAttribute(key));
   };
 
+  /**
+   * Gets the value of an inline CSS rule of this Element instance by its name.
+   *
+   * @param {String} key  Name of the CSS rule in camelCase.
+   *
+   * @return {String} Value of the style.
+   */
   Element.prototype.getStyle = function(key) {
     var value = this.element.style[key];
 
@@ -4019,14 +4111,17 @@ define('net/AssetLoader',[
 
     log('[AssetLoader]::_onXHRProgress("' + path + '":' + bytesLoaded + '/' + bytesTotal + ')');
 
-    var progressEvent = document.createEvent('CustomEvent');
-    progressEvent.initCustomEvent(EventType.OBJECT.PROGRESS, true, true, {
-      id: id,
-      path: path,
-      type: type,
-      pending: this._pending,
-      loaded: this.bytesLoaded,
-      total: this.bytesTotal
+    var progressEvent = new CustomEvent(EventType.OBJECT.PROGRESS, {
+      bubbles: true,
+      cancelable: true,
+      detail: {
+        id: id,
+        path: path,
+        type: type,
+        pending: this._pending,
+        loaded: this.bytesLoaded,
+        total: this.bytesTotal
+      }
     });
 
     this.dispatchEvent(progressEvent);
@@ -4049,14 +4144,17 @@ define('net/AssetLoader',[
 
     this._pending--;
 
-    var loadEvent = document.createEvent('CustomEvent');
-    loadEvent.initCustomEvent(EventType.OBJECT.LOAD, true, true, {
-      id: id,
-      path: path,
-      type: type,
-      pending: this._pending,
-      loaded: this.bytesLoaded,
-      total: this.bytesTotal
+    var loadEvent = new CustomEvent(EventType.OBJECT.LOAD, {
+      bubbles: true,
+      cancelable: true,
+      detail: {
+        id: id,
+        path: path,
+        type: type,
+        pending: this._pending,
+        loaded: this.bytesLoaded,
+        total: this.bytesTotal
+      }
     });
 
     this.dispatchEvent(loadEvent);
@@ -4079,27 +4177,33 @@ define('net/AssetLoader',[
 
     this._pending--;
 
-    var errorEvent = document.createEvent('CustomEvent');
-    errorEvent.initCustomEvent(EventType.OBJECT.ERROR, true, true, {
-      id: id,
-      path: path,
-      type: type,
-      pending: this._pending,
-      loaded: this.bytesLoaded,
-      total: this.bytesTotal
-    });
-
-    this.dispatchEvent(errorEvent);
-
-    if (this._pending === 0) {
-      var loadEvent = document.createEvent('CustomEvent');
-      loadEvent.initCustomEvent(EventType.OBJECT.LOAD, true, true, {
+    var errorEvent = new CustomEvent(EventType.OBJECT.ERROR, {
+      bubbles: true,
+      cancelable: true,
+      detail: {
         id: id,
         path: path,
         type: type,
         pending: this._pending,
         loaded: this.bytesLoaded,
         total: this.bytesTotal
+      }
+    });
+
+    this.dispatchEvent(errorEvent);
+
+    if (this._pending === 0) {
+      var loadEvent = new CustomEvent(EventType.OBJECT.LOAD, {
+        bubbles: true,
+        cancelable: true,
+        detail: {
+          id: id,
+          path: path,
+          type: type,
+          pending: this._pending,
+          loaded: this.bytesLoaded,
+          total: this.bytesTotal
+        }
       });
 
       this.dispatchEvent(loadEvent);
@@ -4123,27 +4227,33 @@ define('net/AssetLoader',[
 
     this._pending--;
 
-    var abortEvent = document.createEvent('CustomEvent');
-    abortEvent.initCustomEvent(EventType.OBJECT.ABORT, true, true, {
-      id: id,
-      path: path,
-      type: type,
-      pending: this._pending,
-      loaded: this.bytesLoaded,
-      total: this.bytesTotal
-    });
-
-    this.dispatchEvent(abortEvent);
-
-    if (this._pending === 0) {
-      var loadEvent = document.createEvent('CustomEvent');
-      loadEvent.initCustomEvent(EventType.OBJECT.LOAD, true, true, {
+    var abortEvent = new CustomEvent(EventType.OBJECT.ABORT, {
+      bubbles: true,
+      cancelable: true,
+      detail: {
         id: id,
         path: path,
         type: type,
         pending: this._pending,
         loaded: this.bytesLoaded,
         total: this.bytesTotal
+      }
+    });
+
+    this.dispatchEvent(abortEvent);
+
+    if (this._pending === 0) {
+      var loadEvent = new CustomEvent(EventType.OBJECT.LOAD, {
+        bubbles: true,
+        cancelable: true,
+        detail: {
+          id: id,
+          path: path,
+          type: type,
+          pending: this._pending,
+          loaded: this.bytesLoaded,
+          total: this.bytesTotal
+        }
       });
 
       this.dispatchEvent(loadEvent);
@@ -5643,6 +5753,8 @@ define('utils', [
 
 
 define('requiem', [
+  'helpers/injectModule',
+  'helpers/polyfill',
   'dom',
   'events',
   'net',
@@ -5650,6 +5762,8 @@ define('requiem', [
   'ui',
   'utils'
 ], function(
+  injectModule,
+  polyfill,
   dom,
   events,
   net,
@@ -5660,7 +5774,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.4.1', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.5.0', writable: false });
 
   injectModule('dom', dom);
   injectModule('events', events);
@@ -5669,31 +5783,7 @@ define('requiem', [
   injectModule('ui', ui);
   injectModule('utils', utils);
 
-  /**
-   * @private
-   *
-   * Injects a module and all of its sub-modules into the core Requiem module.
-   *
-   * @param {String} name    Name of the module (used as the key for the
-   *                        key-value pair in Requiem).
-   * @param {Object} module  Module object (used as value for the key-value
-   *                        pair in Requiem).
-   */
-  function injectModule(name, module) {
-    Object.defineProperty(requiem, name, {
-      value: module,
-      writable: false
-    });
-
-    for (var key in module) {
-      if (module.hasOwnProperty(key)) {
-        Object.defineProperty(requiem, key, {
-          value: module[key],
-          writable: false
-        });
-      }
-    }
-  }
+  polyfill();
 
   return requiem;
 });
