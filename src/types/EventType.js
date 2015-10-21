@@ -18,6 +18,9 @@ define({
    *
    * @see http://www.w3schools.com/jsref/dom_obj_event.asp
    */
+  DATA: {
+    CHANGE: 'datachange'
+  },
   MOUSE: {
     CLICK: 'click',
     CONTEXT_MENU: 'contextmenu',
