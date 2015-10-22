@@ -131,7 +131,13 @@ define([
    *                                   inherits that of the descriptor in
    *                                   Object#defineProperty, plus a few extra
    *                                   options: {
-   *
+   *                                     {Boolean}   unique:true
+   *                                     {DirtyType} dirtyType:undefined
+   *                                     {EventType} eventType:undefined
+   *                                     {String}    attribute:undefined
+   *                                     {Function}  onChange:undefined
+   *                                     {*}         get:undefined
+   *                                     {*}         set:undefined
    *                                   }
    * @param  {String} scope:undefined  Scope (property) of the Element instance
    *                                   to create the new property in. The
@@ -147,15 +153,16 @@ define([
     assertType(descriptor.writable, 'boolean', true, 'Optional writable key in descriptor must be a boolean');
     assertType(descriptor.unique, 'boolean', true, 'Optional unique key in descriptor must be a boolean');
     assertType(descriptor.dirtyType, 'number', true, 'Optional dirty type must be of DirtyType enum (number)');
+    assertType(descriptor.eventType, 'string', true, 'Optional event type must be a string');
     assertType(descriptor.attribute, 'string', true, 'Optional attribute must be a string');
-    assertType(descriptor.event, Event, true, 'Optional event must be an Event instance');
+    assertType(descriptor.onChange, 'function', true, 'Optional change handler must be a function');
     assertType(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
     assert(validateAttribute(descriptor.attribute), 'Attribute \'' + descriptor.attribute + '\' is reserved');
 
     var dirtyType = descriptor.dirtyType;
     var defaultValue = descriptor.defaultValue;
     var attribute = descriptor.attribute;
-    var event = descriptor.event;
+    var eventType = descriptor.eventType;
     var unique = descriptor.unique;
 
     if (unique === undefined) unique = true;
@@ -195,6 +202,8 @@ define([
       newDescriptor.set = function(val) {
         if (unique && (this['__'+propertyName] === val)) return;
 
+        var oldVal = this[propertyName];
+
         if (typeof descriptor.set === 'function') {
           val = descriptor.set(val);
         }
@@ -206,6 +215,10 @@ define([
           this['__'+propertyName] = val;
         }
 
+        if (descriptor.onChange !== undefined) {
+          descriptor.onChange(oldVal, val);
+        }
+
         if (attribute !== undefined) {
           element.setAttribute(attribute, val);
         }
@@ -214,7 +227,15 @@ define([
           element.setDirty(dirtyType);
         }
 
-        if (event !== undefined) {
+        if (eventType !== undefined) {
+          var event = new CustomEvent(eventType, {
+            detail: {
+              property: propertyName,
+              oldValue: oldVal,
+              newValue: val
+            }
+          });
+
           element.dispatchEvent(event);
         }
       };
@@ -240,11 +261,15 @@ define([
       var child = this.children[key];
 
       if (child instanceof Array) {
-        child.forEach(function(c) {
+        var n = child.length;
+
+        for (var i = 0; i < n; i++) {
+          var c = child[i];
+
           if (c.nodeState === NodeState.IDLE || c.nodeState === NodeState.DESTROYED) {
             c.init();
           }
-        });
+        }
       }
       else {
         if (child.nodeState === NodeState.IDLE || child.nodeState === NodeState.DESTROYED) {
@@ -265,11 +290,15 @@ define([
       var child = this.children[key];
 
       if (child instanceof Array) {
-        child.forEach(function(c) {
+        var n = child.length;
+
+        for (var i = 0; i < n; i++) {
+          var c = child[i];
+
           if (c.nodeState !== NodeState.DESTROYED) {
             c.destroy();
           }
-        });
+        }
       }
       else {
         if (child.nodeState !== NodeState.DESTROYED) {
