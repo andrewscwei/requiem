@@ -199,15 +199,15 @@ define([
 
     if (descriptor.set) {
       newDescriptor.set = function(val) {
-        if (unique && (this['__'+propertyName] === val)) return;
-
         var oldVal = this['__'+propertyName];
+
+        if (unique && (oldVal === val)) return;
 
         if (typeof descriptor.set === 'function') {
           val = descriptor.set(val);
         }
 
-        if (this['__'+propertyName] === undefined) {
+        if (oldVal === undefined) {
           Object.defineProperty(this, '__'+propertyName, { value: val, writable: true });
         }
         else {

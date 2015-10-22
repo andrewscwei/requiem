@@ -11,13 +11,10 @@ class Bar extends r.Element {
     this.bar = 'hello';
 
     r.Element.defineProperty(this, 'foo', {
-      defaultValue: 1,
+      defaultValue: 0,
       dirtyType: DirtyType.DATA,
       eventType: EventType.DATA.CHANGE,
       attribute: 'data-foo',
-      onChange: (oldVal, newVal) => {
-        console.log(oldVal, newVal);
-      },
       get: true,
       set: true
     });
@@ -35,7 +32,6 @@ class Bar extends r.Element {
 
   update() {
     if (this.isDirty(DirtyType.DATA)) {
-      console.log('Data is dirty!');
     }
 
     super.update();

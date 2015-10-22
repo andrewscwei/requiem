@@ -2111,29 +2111,29 @@
 	    if (descriptor.get) {
 	      newDescriptor.get = function() {
 	        if (typeof descriptor.get === 'function') {
-	          return descriptor.get(scope['__'+propertyName]);
+	          return descriptor.get(this['__'+propertyName]);
 	        }
 	        else {
-	          return scope['__'+propertyName];
+	          return this['__'+propertyName];
 	        }
 	      }.bind(scope);
 	    }
 	
 	    if (descriptor.set) {
 	      newDescriptor.set = function(val) {
-	        if (unique && (scope['__'+propertyName] === val)) return;
+	        var oldVal = this['__'+propertyName];
 	
-	        var oldVal = scope['__'+propertyName];
+	        if (unique && (oldVal === val)) return;
 	
 	        if (typeof descriptor.set === 'function') {
 	          val = descriptor.set(val);
 	        }
 	
-	        if (scope['__'+propertyName] === undefined) {
-	          Object.defineProperty(scope, '__'+propertyName, { value: val, writable: true });
+	        if (oldVal === undefined) {
+	          Object.defineProperty(this, '__'+propertyName, { value: val, writable: true });
 	        }
 	        else {
-	          scope['__'+propertyName] = val;
+	          this['__'+propertyName] = val;
 	        }
 	
 	        if (descriptor.onChange !== undefined) {
@@ -2159,7 +2159,7 @@
 	
 	          element.dispatchEvent(event);
 	        }
-	      };
+	      }.bind(scope);
 	    }
 	
 	    Object.defineProperty(scope, propertyName, newDescriptor);
@@ -5998,7 +5998,7 @@
 	  var requiem = {};
 	
 	  Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-	  Object.defineProperty(requiem, 'version', { value: '0.6.5', writable: false });
+	  Object.defineProperty(requiem, 'version', { value: '0.6.6', writable: false });
 	
 	  injectModule(requiem, 'dom', dom);
 	  injectModule(requiem, 'events', events);
@@ -6060,12 +6060,10 @@
 	    value: function init() {
 	      var _this = this;
 	
-	      console.log('Property foo:', this.properties.foo);
 	      var bar = this.getChild('bar');
 	      bar.addEventListener(EventType.DATA.CHANGE, function (event) {
 	        _this.data.bar++;
 	        _this.data.foo--;
-	        console.log(event.detail);
 	      });
 	
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
@@ -6124,13 +6122,10 @@
 	      this.bar = 'hello';
 	
 	      r.Element.defineProperty(this, 'foo', {
-	        defaultValue: 1,
+	        defaultValue: 0,
 	        dirtyType: DirtyType.DATA,
 	        eventType: EventType.DATA.CHANGE,
 	        attribute: 'data-foo',
-	        onChange: function onChange(oldVal, newVal) {
-	          console.log(oldVal, newVal);
-	        },
 	        get: true,
 	        set: true
 	      });
@@ -6148,9 +6143,7 @@
 	  }, {
 	    key: 'update',
 	    value: function update() {
-	      if (this.isDirty(DirtyType.DATA)) {
-	        console.log('Data is dirty!');
-	      }
+	      if (this.isDirty(DirtyType.DATA)) {}
 	
 	      _get(Object.getPrototypeOf(Bar.prototype), 'update', this).call(this);
 	    }
