@@ -2053,7 +2053,13 @@
 	   *                                   inherits that of the descriptor in
 	   *                                   Object#defineProperty, plus a few extra
 	   *                                   options: {
-	   *
+	   *                                     {Boolean}   unique:true
+	   *                                     {DirtyType} dirtyType:undefined
+	   *                                     {EventType} eventType:undefined
+	   *                                     {String}    attribute:undefined
+	   *                                     {Function}  onChange:undefined
+	   *                                     {*}         get:undefined
+	   *                                     {*}         set:undefined
 	   *                                   }
 	   * @param  {String} scope:undefined  Scope (property) of the Element instance
 	   *                                   to create the new property in. The
@@ -2069,15 +2075,16 @@
 	    assertType(descriptor.writable, 'boolean', true, 'Optional writable key in descriptor must be a boolean');
 	    assertType(descriptor.unique, 'boolean', true, 'Optional unique key in descriptor must be a boolean');
 	    assertType(descriptor.dirtyType, 'number', true, 'Optional dirty type must be of DirtyType enum (number)');
+	    assertType(descriptor.eventType, 'string', true, 'Optional event type must be a string');
 	    assertType(descriptor.attribute, 'string', true, 'Optional attribute must be a string');
-	    assertType(descriptor.event, Event, true, 'Optional event must be an Event instance');
+	    assertType(descriptor.onChange, 'function', true, 'Optional change handler must be a function');
 	    assertType(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
 	    assert(validateAttribute(descriptor.attribute), 'Attribute \'' + descriptor.attribute + '\' is reserved');
 	
 	    var dirtyType = descriptor.dirtyType;
 	    var defaultValue = descriptor.defaultValue;
 	    var attribute = descriptor.attribute;
-	    var event = descriptor.event;
+	    var eventType = descriptor.eventType;
 	    var unique = descriptor.unique;
 	
 	    if (unique === undefined) unique = true;
@@ -2090,6 +2097,10 @@
 	      scope = element[scope];
 	    }
 	
+	    if (defaultValue !== undefined) {
+	      Object.defineProperty(scope, '__'+propertyName, { value: defaultValue, writable: true });
+	    }
+	
 	    var newDescriptor = {};
 	
 	    if (descriptor.configurable !== undefined) newDescriptor.configurable = descriptor.configurable;
@@ -2100,32 +2111,33 @@
 	    if (descriptor.get) {
 	      newDescriptor.get = function() {
 	        if (typeof descriptor.get === 'function') {
-	          return descriptor.get();
+	          return descriptor.get(scope['__'+propertyName]);
 	        }
 	        else {
-	          if (this['__'+propertyName] === undefined) {
-	            return defaultValue;
-	          }
-	          else {
-	            return this['__'+propertyName];
-	          }
+	          return scope['__'+propertyName];
 	        }
 	      }.bind(scope);
 	    }
 	
 	    if (descriptor.set) {
 	      newDescriptor.set = function(val) {
-	        if (unique && (this['__'+propertyName] === val)) return;
+	        if (unique && (scope['__'+propertyName] === val)) return;
 	
-	        if (this['__'+propertyName] === undefined) {
-	          Object.defineProperty(this, '__'+propertyName, { value: val, writable: true });
-	        }
-	        else {
-	          this['__'+propertyName] = val;
-	        }
+	        var oldVal = scope['__'+propertyName];
 	
 	        if (typeof descriptor.set === 'function') {
-	          descriptor.set(val);
+	          val = descriptor.set(val);
+	        }
+	
+	        if (scope['__'+propertyName] === undefined) {
+	          Object.defineProperty(scope, '__'+propertyName, { value: val, writable: true });
+	        }
+	        else {
+	          scope['__'+propertyName] = val;
+	        }
+	
+	        if (descriptor.onChange !== undefined) {
+	          descriptor.onChange(oldVal, val);
 	        }
 	
 	        if (attribute !== undefined) {
@@ -2136,7 +2148,15 @@
 	          element.setDirty(dirtyType);
 	        }
 	
-	        if (event !== undefined) {
+	        if (eventType !== undefined) {
+	          var event = new CustomEvent(eventType, {
+	            detail: {
+	              property: propertyName,
+	              oldValue: oldVal,
+	              newValue: val
+	            }
+	          });
+	
 	          element.dispatchEvent(event);
 	        }
 	      };
@@ -2162,11 +2182,15 @@
 	      var child = this.children[key];
 	
 	      if (child instanceof Array) {
-	        child.forEach(function(c) {
+	        var n = child.length;
+	
+	        for (var i = 0; i < n; i++) {
+	          var c = child[i];
+	
 	          if (c.nodeState === NodeState.IDLE || c.nodeState === NodeState.DESTROYED) {
 	            c.init();
 	          }
-	        });
+	        }
 	      }
 	      else {
 	        if (child.nodeState === NodeState.IDLE || child.nodeState === NodeState.DESTROYED) {
@@ -2187,11 +2211,15 @@
 	      var child = this.children[key];
 	
 	      if (child instanceof Array) {
-	        child.forEach(function(c) {
+	        var n = child.length;
+	
+	        for (var i = 0; i < n; i++) {
+	          var c = child[i];
+	
 	          if (c.nodeState !== NodeState.DESTROYED) {
 	            c.destroy();
 	          }
-	        });
+	        }
 	      }
 	      else {
 	        if (child.nodeState !== NodeState.DESTROYED) {
@@ -5970,7 +5998,7 @@
 	  var requiem = {};
 	
 	  Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-	  Object.defineProperty(requiem, 'version', { value: '0.5.1', writable: false });
+	  Object.defineProperty(requiem, 'version', { value: '0.6.5', writable: false });
 	
 	  injectModule(requiem, 'dom', dom);
 	  injectModule(requiem, 'events', events);
@@ -6037,7 +6065,7 @@
 	      bar.addEventListener(EventType.DATA.CHANGE, function (event) {
 	        _this.data.bar++;
 	        _this.data.foo--;
-	        console.log('Received event!');
+	        console.log(event.detail);
 	      });
 	
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
@@ -6098,8 +6126,11 @@
 	      r.Element.defineProperty(this, 'foo', {
 	        defaultValue: 1,
 	        dirtyType: DirtyType.DATA,
+	        eventType: EventType.DATA.CHANGE,
 	        attribute: 'data-foo',
-	        event: new Event(EventType.DATA.CHANGE),
+	        onChange: function onChange(oldVal, newVal) {
+	          console.log(oldVal, newVal);
+	        },
 	        get: true,
 	        set: true
 	      });
@@ -6110,7 +6141,6 @@
 	      b.setStyle('backgroundColor', '#000');
 	      b.addEventListener(EventType.MOUSE.CLICK, function (event) {
 	        _this.foo++;
-	        console.log(_this.foo);
 	      });
 	
 	      _get(Object.getPrototypeOf(Bar.prototype), 'init', this).call(this);

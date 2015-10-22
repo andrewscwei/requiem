@@ -2029,16 +2029,16 @@ define('ui/Element',[
 
     if (unique === undefined) unique = true;
 
-    if (defaultValue !== undefined) {
-      Object.defineProperty(this, '__'+propertyName, { value: defaultValue, writable: true });
-    }
-
     if (scope === undefined) {
       scope = element;
     }
     else {
       assert(element.hasOwnProperty(scope), 'The specified Element instance does not have a property called \'' + scope + '\'');
       scope = element[scope];
+    }
+
+    if (defaultValue !== undefined) {
+      Object.defineProperty(scope, '__'+propertyName, { value: defaultValue, writable: true });
     }
 
     var newDescriptor = {};
@@ -2051,29 +2051,29 @@ define('ui/Element',[
     if (descriptor.get) {
       newDescriptor.get = function() {
         if (typeof descriptor.get === 'function') {
-          return descriptor.get(this['__'+propertyName]);
+          return descriptor.get(scope['__'+propertyName]);
         }
         else {
-          return this['__'+propertyName];
+          return scope['__'+propertyName];
         }
       }.bind(scope);
     }
 
     if (descriptor.set) {
       newDescriptor.set = function(val) {
-        if (unique && (this['__'+propertyName] === val)) return;
+        if (unique && (scope['__'+propertyName] === val)) return;
 
-        var oldVal = this['__'+propertyName];
+        var oldVal = scope['__'+propertyName];
 
         if (typeof descriptor.set === 'function') {
           val = descriptor.set(val);
         }
 
-        if (this['__'+propertyName] === undefined) {
-          Object.defineProperty(this, '__'+propertyName, { value: val, writable: true });
+        if (scope['__'+propertyName] === undefined) {
+          Object.defineProperty(scope, '__'+propertyName, { value: val, writable: true });
         }
         else {
-          this['__'+propertyName] = val;
+          scope['__'+propertyName] = val;
         }
 
         if (descriptor.onChange !== undefined) {
@@ -5938,7 +5938,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.6.4', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.6.5', writable: false });
 
   injectModule(requiem, 'dom', dom);
   injectModule(requiem, 'events', events);

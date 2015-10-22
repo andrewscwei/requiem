@@ -13,8 +13,11 @@ class Bar extends r.Element {
     r.Element.defineProperty(this, 'foo', {
       defaultValue: 1,
       dirtyType: DirtyType.DATA,
+      eventType: EventType.DATA.CHANGE,
       attribute: 'data-foo',
-      event: new Event(EventType.DATA.CHANGE),
+      onChange: (oldVal, newVal) => {
+        console.log(oldVal, newVal);
+      },
       get: true,
       set: true
     });
@@ -25,7 +28,6 @@ class Bar extends r.Element {
     b.setStyle('backgroundColor', '#000');
     b.addEventListener(EventType.MOUSE.CLICK, (event) => {
       this.foo++;
-      console.log(this.foo);
     });
 
     super.init();

@@ -13,7 +13,7 @@ class Playground extends r.Element {
     bar.addEventListener(EventType.DATA.CHANGE, (event) => {
       this.data.bar++;
       this.data.foo--;
-      console.log('Received event!');
+      console.log(event.detail);
     });
 
     super.init();
