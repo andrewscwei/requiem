@@ -119,9 +119,7 @@ gulp.task('serve:play', function() {
  * @param {Boolean} --serve
  */
 gulp.task('play', function(done) {
-  config.env.clean = true;
-
-  var seq = ['build', 'clean:play', ['styles:play', 'scripts:play', 'templates:play']];
+  var seq = ['clean', 'build', 'clean:play', ['styles:play', 'scripts:play', 'templates:play']];
   if (config.env.serve) seq.push('serve:play');
   seq.push(done);
 

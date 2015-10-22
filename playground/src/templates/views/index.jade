@@ -1,5 +1,12 @@
 extends ../layouts/base
 
 block content
-  main(data-r-controller='Playground', data-r-instance='playground')
+  main(
+    data-r-controller='Playground',
+    data-r-instance='playground',
+    data-r-property-foo=50,
+    data-r-data-foo=60,
+    data-r-data-bar=1
+  )
     div(data-r-controller='Bar', data-r-instance='bar')
+      button(data-r-instance='button')

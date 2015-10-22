@@ -12,7 +12,6 @@ var path = require('path');
 var $util = require('gulp-util');
 
 var env = {
-  clean: $util.env['clean'] || $util.env['c'],
   port: $util.env['port'] || $util.env['p'],
   serve: $util.env['serve'] || $util.env['s'],
   watch: $util.env['watch'] || $util.env['w']

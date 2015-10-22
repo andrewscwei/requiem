@@ -901,6 +901,43 @@ define('helpers/log',[],function() {
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  *
+ * @type {Function}
+ */
+
+
+
+define('helpers/validateAttribute',[
+  'types/Directives',
+],
+function(
+  Directives
+) {
+  /**
+   * Validates whether the attribute can be used (could be reserved by Requiem).
+   *
+   * @param {String} attribute  Name of the attribute.
+   *
+   * @return {Boolean} True if attribute is OK to be used, false otherwise.
+   */
+  function validateAttribute(attribute) {
+    for (var d in Directives) {
+      if (attribute === d) return false;
+      if (attribute === 'data-'+d) return false;
+    }
+
+    return true;
+  }
+
+  return validateAttribute;
+});
+
+/**
+ * Requiem
+ * (c) VARIANTE (http://variante.io)
+ *
+ * This software is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ *
  * UI dirty types.
  *
  * @type {Object}
@@ -1842,6 +1879,7 @@ define('ui/Element',[
   'helpers/assertType',
   'helpers/isNull',
   'helpers/log',
+  'helpers/validateAttribute',
   'types/DirtyType',
   'types/NodeState',
   'types/EventType',
@@ -1852,6 +1890,7 @@ define('ui/Element',[
   assertType,
   isNull,
   log,
+  validateAttribute,
   DirtyType,
   NodeState,
   EventType,
@@ -1918,35 +1957,23 @@ define('ui/Element',[
           return g[1].toUpperCase();
         });
 
-        Object.defineProperty(this.properties, pProperty, {
+        Element.defineProperty(this, pProperty, {
           value: (a.value === '') ? true : a.value,
-          writable: true
-        });
+          writable: false
+        }, 'properties');
       }
       else if (regData.test(a.name)) {
         var pData = a.name.replace(regData, '').replace(/-([a-z])/g, function(g) {
           return g[1].toUpperCase();
         });
 
-        Object.defineProperty(this.data, pData, {
-          get: (function(key, val) {
-            return function() {
-              if (this.data[key] === undefined) {
-                return val;
-              }
-              else {
-                return this.data[key];
-              }
-            }.bind(this);
-          }.bind(this)('_'+pData, (a.value === '') ? true : a.value)),
-          set: (function(attr, key) {
-            return function(value) {
-              this.data[key] = value;
-              this.element.setAttribute(attr, value);
-              this.updateDelegate.setDirty(DirtyType.DATA);
-            }.bind(this);
-          }.bind(this)(a.name, '_'+pData))
-        });
+        Element.defineProperty(this, pData, {
+          defaultValue: (a.value === '') ? true : a.value,
+          attribute: a.name,
+          dirtyType: DirtyType.DATA,
+          get: true,
+          set: true
+        }, 'data');
       }
     }
 
@@ -1954,6 +1981,113 @@ define('ui/Element',[
 
     this.init();
   }
+
+  /**
+   * Defines a property in an Element instance.
+   *
+   * @param  {Element} element         Element instance of which the property
+   *                                   belongs.
+   * @param  {String} propertyName     Name of the property.
+   * @param  {Object} descriptor       Object literal that defines the behavior
+   *                                   of the new property. This object literal
+   *                                   inherits that of the descriptor in
+   *                                   Object#defineProperty, plus a few extra
+   *                                   options: {
+   *
+   *                                   }
+   * @param  {String} scope:undefined  Scope (property) of the Element instance
+   *                                   to create the new property in. The
+   *                                   specified property must be enumerable and
+   *                                   it must be a direct property of the
+   *                                   Element instance.
+   */
+  Element.defineProperty = function(element, propertyName, descriptor, scope) {
+    assertType(element, Element, false, 'Parameter \'element\' must be an Element instance');
+    assertType(descriptor, 'object', false, 'Parameter \'descriptor\' must be an object literal');
+    assertType(descriptor.configurable, 'boolean', true, 'Optional configurable key in descriptor must be a boolean');
+    assertType(descriptor.enumerable, 'boolean', true, 'Optional enumerable key in descriptor must be a boolean');
+    assertType(descriptor.writable, 'boolean', true, 'Optional writable key in descriptor must be a boolean');
+    assertType(descriptor.unique, 'boolean', true, 'Optional unique key in descriptor must be a boolean');
+    assertType(descriptor.dirtyType, 'number', true, 'Optional dirty type must be of DirtyType enum (number)');
+    assertType(descriptor.attribute, 'string', true, 'Optional attribute must be a string');
+    assertType(descriptor.event, Event, true, 'Optional event must be an Event instance');
+    assertType(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
+    assert(validateAttribute(descriptor.attribute), 'Attribute \'' + descriptor.attribute + '\' is reserved');
+
+    var dirtyType = descriptor.dirtyType;
+    var defaultValue = descriptor.defaultValue;
+    var attribute = descriptor.attribute;
+    var event = descriptor.event;
+    var unique = descriptor.unique;
+
+    if (unique === undefined) unique = true;
+
+    if (scope === undefined) {
+      scope = element;
+    }
+    else {
+      assert(element.hasOwnProperty(scope), 'The specified Element instance does not have a property called \'' + scope + '\'');
+      scope = element[scope];
+    }
+
+    var newDescriptor = {};
+
+    if (descriptor.configurable !== undefined) newDescriptor.configurable = descriptor.configurable;
+    if (descriptor.enumerable !== undefined) newDescriptor.enumerable = descriptor.enumerable;
+    if (descriptor.value !== undefined) newDescriptor.value = descriptor.value;
+    if (descriptor.writable !== undefined) newDescriptor.writable = descriptor.writable;
+
+    if (descriptor.get) {
+      newDescriptor.get = function() {
+        if (typeof descriptor.get === 'function') {
+          return descriptor.get();
+        }
+        else {
+          if (this['__'+propertyName] === undefined) {
+            return defaultValue;
+          }
+          else {
+            return this['__'+propertyName];
+          }
+        }
+      }.bind(scope);
+    }
+
+    if (descriptor.set) {
+      newDescriptor.set = function(val) {
+        if (unique && (this['__'+propertyName] === val)) return;
+
+        if (this['__'+propertyName] === undefined) {
+          Object.defineProperty(this, '__'+propertyName, { value: val, writable: true });
+        }
+        else {
+          this['__'+propertyName] = val;
+        }
+
+        if (typeof descriptor.set === 'function') {
+          descriptor.set(val);
+        }
+
+        if (attribute !== undefined) {
+          element.setAttribute(attribute, val);
+        }
+
+        if (dirtyType !== undefined) {
+          element.setDirty(dirtyType);
+        }
+
+        if (event !== undefined) {
+          element.dispatchEvent(event);
+        }
+      };
+    }
+
+    Object.defineProperty(scope, propertyName, newDescriptor);
+
+    if (defaultValue !== undefined && attribute !== undefined) {
+      element.setAttribute(attribute, defaultValue);
+    }
+  };
 
   /**
    * Initializes this Element instance. Must manually invoke.
@@ -2572,6 +2706,8 @@ define('ui/Element',[
    *                                  have no value.
    */
   Element.prototype.setAttribute = function(key, value) {
+    if (!assert(validateAttribute(key), 'Attribute \'' + key + '\' is reserved')) return;
+
     if (value === undefined || value === null) {
       this.element.setAttribute(key, '');
     }
@@ -5774,7 +5910,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.5.1', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.6.0', writable: false });
 
   injectModule(requiem, 'dom', dom);
   injectModule(requiem, 'events', events);

@@ -530,6 +530,82 @@
 	
 	
 	
+	define('helpers/injectModule',[],function() {
+	  /**
+	   * Injects a module and all of its sub-modules into a target module.
+	   *
+	   * @param {Object} target      Target module for injecting a module into.
+	   * @param {String} moduleName  Name of the module to be injected (used as the
+	   *                             key for the key-value pair in target module).
+	   * @param {Object} module      Module object (used as value for the key-value
+	   *                             pair in target module).
+	   */
+	  function injectModule(target, moduleName, module) {
+	    Object.defineProperty(target, moduleName, {
+	      value: module,
+	      writable: false
+	    });
+	
+	    for (var key in module) {
+	      if (module.hasOwnProperty(key)) {
+	        Object.defineProperty(target, key, {
+	          value: module[key],
+	          writable: false
+	        });
+	      }
+	    }
+	  }
+	
+	  return injectModule;
+	});
+	
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 *
+	 * @type {Function}
+	 */
+	
+	
+	
+	define('helpers/polyfill',[],function() {
+	  /**
+	   * Applies special polyfills to the browser window (i.e. IE happiness).
+	   */
+	  function polyfill() {
+	    if (!window) return;
+	
+	    // Create CustomEvent class.
+	    function CustomEvent ( event, params ) {
+	      params = params || { bubbles: false, cancelable: false, detail: undefined };
+	      var evt = document.createEvent( 'CustomEvent' );
+	      evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+	      return evt;
+	    }
+	
+	    CustomEvent.prototype = window.Event.prototype;
+	
+	    window.CustomEvent = CustomEvent;
+	  }
+	
+	  return polyfill;
+	});
+	
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 *
+	 * @type {Function}
+	 */
+	
+	
+	
 	define('helpers/assert',[],function() {
 	  /**
 	   * Asserts the specified condition and throws a warning if assertion fails.
@@ -885,6 +961,43 @@
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 *
+	 * @type {Function}
+	 */
+	
+	
+	
+	define('helpers/validateAttribute',[
+	  'types/Directives',
+	],
+	function(
+	  Directives
+	) {
+	  /**
+	   * Validates whether the attribute can be used (could be reserved by Requiem).
+	   *
+	   * @param {String} attribute  Name of the attribute.
+	   *
+	   * @return {Boolean} True if attribute is OK to be used, false otherwise.
+	   */
+	  function validateAttribute(attribute) {
+	    for (var d in Directives) {
+	      if (attribute === d) return false;
+	      if (attribute === 'data-'+d) return false;
+	    }
+	
+	    return true;
+	  }
+	
+	  return validateAttribute;
+	});
+	
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 *
 	 * UI dirty types.
 	 *
 	 * @type {Object}
@@ -967,6 +1080,9 @@
 	   *
 	   * @see http://www.w3schools.com/jsref/dom_obj_event.asp
 	   */
+	  DATA: {
+	    CHANGE: 'datachange'
+	  },
 	  MOUSE: {
 	    CLICK: 'click',
 	    CONTEXT_MENU: 'contextmenu',
@@ -1823,6 +1939,7 @@
 	  'helpers/assertType',
 	  'helpers/isNull',
 	  'helpers/log',
+	  'helpers/validateAttribute',
 	  'types/DirtyType',
 	  'types/NodeState',
 	  'types/EventType',
@@ -1833,6 +1950,7 @@
 	  assertType,
 	  isNull,
 	  log,
+	  validateAttribute,
 	  DirtyType,
 	  NodeState,
 	  EventType,
@@ -1899,35 +2017,23 @@
 	          return g[1].toUpperCase();
 	        });
 	
-	        Object.defineProperty(this.properties, pProperty, {
+	        Element.defineProperty(this, pProperty, {
 	          value: (a.value === '') ? true : a.value,
-	          writable: true
-	        });
+	          writable: false
+	        }, 'properties');
 	      }
 	      else if (regData.test(a.name)) {
 	        var pData = a.name.replace(regData, '').replace(/-([a-z])/g, function(g) {
 	          return g[1].toUpperCase();
 	        });
 	
-	        Object.defineProperty(this.data, pData, {
-	          get: (function(key, val) {
-	            return function() {
-	              if (this.data[key] === undefined) {
-	                return val;
-	              }
-	              else {
-	                return this.data[key];
-	              }
-	            }.bind(this);
-	          }.bind(this)('_'+pData, (a.value === '') ? true : a.value)),
-	          set: (function(attr, key) {
-	            return function(value) {
-	              this.data[key] = value;
-	              this.element.setAttribute(attr, value);
-	              this.updateDelegate.setDirty(DirtyType.DATA);
-	            }.bind(this);
-	          }.bind(this)(a.name, '_'+pData))
-	        });
+	        Element.defineProperty(this, pData, {
+	          defaultValue: (a.value === '') ? true : a.value,
+	          attribute: a.name,
+	          dirtyType: DirtyType.DATA,
+	          get: true,
+	          set: true
+	        }, 'data');
 	      }
 	    }
 	
@@ -1935,6 +2041,113 @@
 	
 	    this.init();
 	  }
+	
+	  /**
+	   * Defines a property in an Element instance.
+	   *
+	   * @param  {Element} element         Element instance of which the property
+	   *                                   belongs.
+	   * @param  {String} propertyName     Name of the property.
+	   * @param  {Object} descriptor       Object literal that defines the behavior
+	   *                                   of the new property. This object literal
+	   *                                   inherits that of the descriptor in
+	   *                                   Object#defineProperty, plus a few extra
+	   *                                   options: {
+	   *
+	   *                                   }
+	   * @param  {String} scope:undefined  Scope (property) of the Element instance
+	   *                                   to create the new property in. The
+	   *                                   specified property must be enumerable and
+	   *                                   it must be a direct property of the
+	   *                                   Element instance.
+	   */
+	  Element.defineProperty = function(element, propertyName, descriptor, scope) {
+	    assertType(element, Element, false, 'Parameter \'element\' must be an Element instance');
+	    assertType(descriptor, 'object', false, 'Parameter \'descriptor\' must be an object literal');
+	    assertType(descriptor.configurable, 'boolean', true, 'Optional configurable key in descriptor must be a boolean');
+	    assertType(descriptor.enumerable, 'boolean', true, 'Optional enumerable key in descriptor must be a boolean');
+	    assertType(descriptor.writable, 'boolean', true, 'Optional writable key in descriptor must be a boolean');
+	    assertType(descriptor.unique, 'boolean', true, 'Optional unique key in descriptor must be a boolean');
+	    assertType(descriptor.dirtyType, 'number', true, 'Optional dirty type must be of DirtyType enum (number)');
+	    assertType(descriptor.attribute, 'string', true, 'Optional attribute must be a string');
+	    assertType(descriptor.event, Event, true, 'Optional event must be an Event instance');
+	    assertType(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
+	    assert(validateAttribute(descriptor.attribute), 'Attribute \'' + descriptor.attribute + '\' is reserved');
+	
+	    var dirtyType = descriptor.dirtyType;
+	    var defaultValue = descriptor.defaultValue;
+	    var attribute = descriptor.attribute;
+	    var event = descriptor.event;
+	    var unique = descriptor.unique;
+	
+	    if (unique === undefined) unique = true;
+	
+	    if (scope === undefined) {
+	      scope = element;
+	    }
+	    else {
+	      assert(element.hasOwnProperty(scope), 'The specified Element instance does not have a property called \'' + scope + '\'');
+	      scope = element[scope];
+	    }
+	
+	    var newDescriptor = {};
+	
+	    if (descriptor.configurable !== undefined) newDescriptor.configurable = descriptor.configurable;
+	    if (descriptor.enumerable !== undefined) newDescriptor.enumerable = descriptor.enumerable;
+	    if (descriptor.value !== undefined) newDescriptor.value = descriptor.value;
+	    if (descriptor.writable !== undefined) newDescriptor.writable = descriptor.writable;
+	
+	    if (descriptor.get) {
+	      newDescriptor.get = function() {
+	        if (typeof descriptor.get === 'function') {
+	          return descriptor.get();
+	        }
+	        else {
+	          if (this['__'+propertyName] === undefined) {
+	            return defaultValue;
+	          }
+	          else {
+	            return this['__'+propertyName];
+	          }
+	        }
+	      }.bind(scope);
+	    }
+	
+	    if (descriptor.set) {
+	      newDescriptor.set = function(val) {
+	        if (unique && (this['__'+propertyName] === val)) return;
+	
+	        if (this['__'+propertyName] === undefined) {
+	          Object.defineProperty(this, '__'+propertyName, { value: val, writable: true });
+	        }
+	        else {
+	          this['__'+propertyName] = val;
+	        }
+	
+	        if (typeof descriptor.set === 'function') {
+	          descriptor.set(val);
+	        }
+	
+	        if (attribute !== undefined) {
+	          element.setAttribute(attribute, val);
+	        }
+	
+	        if (dirtyType !== undefined) {
+	          element.setDirty(dirtyType);
+	        }
+	
+	        if (event !== undefined) {
+	          element.dispatchEvent(event);
+	        }
+	      };
+	    }
+	
+	    Object.defineProperty(scope, propertyName, newDescriptor);
+	
+	    if (defaultValue !== undefined && attribute !== undefined) {
+	      element.setAttribute(attribute, defaultValue);
+	    }
+	  };
 	
 	  /**
 	   * Initializes this Element instance. Must manually invoke.
@@ -2455,6 +2668,15 @@
 	  };
 	
 	  /**
+	   * Dispatches an event.
+	   *
+	   * @param {Event} event
+	   */
+	  Element.prototype.dispatchEvent = function(event) {
+	    this.element.dispatchEvent(event);
+	  };
+	
+	  /**
 	   * Adds class(es) to this Element instance.
 	   *
 	   * @param {Stirng/Array} className
@@ -2544,6 +2766,8 @@
 	   *                                  have no value.
 	   */
 	  Element.prototype.setAttribute = function(key, value) {
+	    if (!assert(validateAttribute(key), 'Attribute \'' + key + '\' is reserved')) return;
+	
 	    if (value === undefined || value === null) {
 	      this.element.setAttribute(key, '');
 	    }
@@ -2573,6 +2797,13 @@
 	    return !isNull(this.element.getAttribute(key));
 	  };
 	
+	  /**
+	   * Gets the value of an inline CSS rule of this Element instance by its name.
+	   *
+	   * @param {String} key  Name of the CSS rule in camelCase.
+	   *
+	   * @return {String} Value of the style.
+	   */
 	  Element.prototype.getStyle = function(key) {
 	    var value = this.element.style[key];
 	
@@ -4076,14 +4307,17 @@
 	
 	    log('[AssetLoader]::_onXHRProgress("' + path + '":' + bytesLoaded + '/' + bytesTotal + ')');
 	
-	    var progressEvent = document.createEvent('CustomEvent');
-	    progressEvent.initCustomEvent(EventType.OBJECT.PROGRESS, true, true, {
-	      id: id,
-	      path: path,
-	      type: type,
-	      pending: this._pending,
-	      loaded: this.bytesLoaded,
-	      total: this.bytesTotal
+	    var progressEvent = new CustomEvent(EventType.OBJECT.PROGRESS, {
+	      bubbles: true,
+	      cancelable: true,
+	      detail: {
+	        id: id,
+	        path: path,
+	        type: type,
+	        pending: this._pending,
+	        loaded: this.bytesLoaded,
+	        total: this.bytesTotal
+	      }
 	    });
 	
 	    this.dispatchEvent(progressEvent);
@@ -4106,14 +4340,17 @@
 	
 	    this._pending--;
 	
-	    var loadEvent = document.createEvent('CustomEvent');
-	    loadEvent.initCustomEvent(EventType.OBJECT.LOAD, true, true, {
-	      id: id,
-	      path: path,
-	      type: type,
-	      pending: this._pending,
-	      loaded: this.bytesLoaded,
-	      total: this.bytesTotal
+	    var loadEvent = new CustomEvent(EventType.OBJECT.LOAD, {
+	      bubbles: true,
+	      cancelable: true,
+	      detail: {
+	        id: id,
+	        path: path,
+	        type: type,
+	        pending: this._pending,
+	        loaded: this.bytesLoaded,
+	        total: this.bytesTotal
+	      }
 	    });
 	
 	    this.dispatchEvent(loadEvent);
@@ -4136,27 +4373,33 @@
 	
 	    this._pending--;
 	
-	    var errorEvent = document.createEvent('CustomEvent');
-	    errorEvent.initCustomEvent(EventType.OBJECT.ERROR, true, true, {
-	      id: id,
-	      path: path,
-	      type: type,
-	      pending: this._pending,
-	      loaded: this.bytesLoaded,
-	      total: this.bytesTotal
-	    });
-	
-	    this.dispatchEvent(errorEvent);
-	
-	    if (this._pending === 0) {
-	      var loadEvent = document.createEvent('CustomEvent');
-	      loadEvent.initCustomEvent(EventType.OBJECT.LOAD, true, true, {
+	    var errorEvent = new CustomEvent(EventType.OBJECT.ERROR, {
+	      bubbles: true,
+	      cancelable: true,
+	      detail: {
 	        id: id,
 	        path: path,
 	        type: type,
 	        pending: this._pending,
 	        loaded: this.bytesLoaded,
 	        total: this.bytesTotal
+	      }
+	    });
+	
+	    this.dispatchEvent(errorEvent);
+	
+	    if (this._pending === 0) {
+	      var loadEvent = new CustomEvent(EventType.OBJECT.LOAD, {
+	        bubbles: true,
+	        cancelable: true,
+	        detail: {
+	          id: id,
+	          path: path,
+	          type: type,
+	          pending: this._pending,
+	          loaded: this.bytesLoaded,
+	          total: this.bytesTotal
+	        }
 	      });
 	
 	      this.dispatchEvent(loadEvent);
@@ -4180,27 +4423,33 @@
 	
 	    this._pending--;
 	
-	    var abortEvent = document.createEvent('CustomEvent');
-	    abortEvent.initCustomEvent(EventType.OBJECT.ABORT, true, true, {
-	      id: id,
-	      path: path,
-	      type: type,
-	      pending: this._pending,
-	      loaded: this.bytesLoaded,
-	      total: this.bytesTotal
-	    });
-	
-	    this.dispatchEvent(abortEvent);
-	
-	    if (this._pending === 0) {
-	      var loadEvent = document.createEvent('CustomEvent');
-	      loadEvent.initCustomEvent(EventType.OBJECT.LOAD, true, true, {
+	    var abortEvent = new CustomEvent(EventType.OBJECT.ABORT, {
+	      bubbles: true,
+	      cancelable: true,
+	      detail: {
 	        id: id,
 	        path: path,
 	        type: type,
 	        pending: this._pending,
 	        loaded: this.bytesLoaded,
 	        total: this.bytesTotal
+	      }
+	    });
+	
+	    this.dispatchEvent(abortEvent);
+	
+	    if (this._pending === 0) {
+	      var loadEvent = new CustomEvent(EventType.OBJECT.LOAD, {
+	        bubbles: true,
+	        cancelable: true,
+	        detail: {
+	          id: id,
+	          path: path,
+	          type: type,
+	          pending: this._pending,
+	          loaded: this.bytesLoaded,
+	          total: this.bytesTotal
+	        }
 	      });
 	
 	      this.dispatchEvent(loadEvent);
@@ -5700,6 +5949,8 @@
 	
 	
 	define('requiem', [
+	  'helpers/injectModule',
+	  'helpers/polyfill',
 	  'dom',
 	  'events',
 	  'net',
@@ -5707,6 +5958,8 @@
 	  'ui',
 	  'utils'
 	], function(
+	  injectModule,
+	  polyfill,
 	  dom,
 	  events,
 	  net,
@@ -5717,40 +5970,16 @@
 	  var requiem = {};
 	
 	  Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-	  Object.defineProperty(requiem, 'version', { value: '0.4.0', writable: false });
+	  Object.defineProperty(requiem, 'version', { value: '0.5.1', writable: false });
 	
-	  injectModule('dom', dom);
-	  injectModule('events', events);
-	  injectModule('net', net);
-	  injectModule('types', types);
-	  injectModule('ui', ui);
-	  injectModule('utils', utils);
+	  injectModule(requiem, 'dom', dom);
+	  injectModule(requiem, 'events', events);
+	  injectModule(requiem, 'net', net);
+	  injectModule(requiem, 'types', types);
+	  injectModule(requiem, 'ui', ui);
+	  injectModule(requiem, 'utils', utils);
 	
-	  /**
-	   * @private
-	   *
-	   * Injects a module and all of its sub-modules into the core Requiem module.
-	   *
-	   * @param {String} name    Name of the module (used as the key for the
-	   *                        key-value pair in Requiem).
-	   * @param {Object} module  Module object (used as value for the key-value
-	   *                        pair in Requiem).
-	   */
-	  function injectModule(name, module) {
-	    Object.defineProperty(requiem, name, {
-	      value: module,
-	      writable: false
-	    });
-	
-	    for (var key in module) {
-	      if (module.hasOwnProperty(key)) {
-	        Object.defineProperty(requiem, key, {
-	          value: module[key],
-	          writable: false
-	        });
-	      }
-	    }
-	  }
+	  polyfill();
 	
 	  return requiem;
 	});
@@ -5801,6 +6030,16 @@
 	  _createClass(Playground, [{
 	    key: 'init',
 	    value: function init() {
+	      var _this = this;
+	
+	      console.log('Property foo:', this.properties.foo);
+	      var bar = this.getChild('bar');
+	      bar.addEventListener(EventType.DATA.CHANGE, function (event) {
+	        _this.data.bar++;
+	        _this.data.foo--;
+	        console.log('Received event!');
+	      });
+	
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
 	    }
 	  }, {
@@ -5852,11 +6091,37 @@
 	  _createClass(Bar, [{
 	    key: 'init',
 	    value: function init() {
+	      var _this = this;
+	
+	      this.bar = 'hello';
+	
+	      r.Element.defineProperty(this, 'foo', {
+	        defaultValue: 1,
+	        dirtyType: DirtyType.DATA,
+	        attribute: 'data-foo',
+	        event: new Event(EventType.DATA.CHANGE),
+	        get: true,
+	        set: true
+	      });
+	
+	      var b = this.getChild('button');
+	      b.setStyle('width', 50);
+	      b.setStyle('height', 30);
+	      b.setStyle('backgroundColor', '#000');
+	      b.addEventListener(EventType.MOUSE.CLICK, function (event) {
+	        _this.foo++;
+	        console.log(_this.foo);
+	      });
+	
 	      _get(Object.getPrototypeOf(Bar.prototype), 'init', this).call(this);
 	    }
 	  }, {
 	    key: 'update',
 	    value: function update() {
+	      if (this.isDirty(DirtyType.DATA)) {
+	        console.log('Data is dirty!');
+	      }
+	
 	      _get(Object.getPrototypeOf(Bar.prototype), 'update', this).call(this);
 	    }
 	  }, {
