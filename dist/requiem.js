@@ -2057,15 +2057,15 @@ define('ui/Element',[
       newDescriptor.set = function(val) {
         if (unique && (this['__'+propertyName] === val)) return;
 
+        if (typeof descriptor.set === 'function') {
+          val = descriptor.set(val);
+        }
+
         if (this['__'+propertyName] === undefined) {
           Object.defineProperty(this, '__'+propertyName, { value: val, writable: true });
         }
         else {
           this['__'+propertyName] = val;
-        }
-
-        if (typeof descriptor.set === 'function') {
-          descriptor.set(val);
         }
 
         if (attribute !== undefined) {
@@ -5910,7 +5910,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.6.1', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.6.2', writable: false });
 
   injectModule(requiem, 'dom', dom);
   injectModule(requiem, 'events', events);
