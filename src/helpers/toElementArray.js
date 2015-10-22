@@ -24,7 +24,7 @@ define([
    * @param {Boolean}      keepElement
    */
   function toElementArray(element, keepElement) {
-    if (!assert(element, 'Element is undefined or null.')) return null;
+    if (!element) return null;
 
     var elements;
 
