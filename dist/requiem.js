@@ -2051,29 +2051,29 @@ define('ui/Element',[
     if (descriptor.get) {
       newDescriptor.get = function() {
         if (typeof descriptor.get === 'function') {
-          return descriptor.get(scope['__'+propertyName]);
+          return descriptor.get(this['__'+propertyName]);
         }
         else {
-          return scope['__'+propertyName];
+          return this['__'+propertyName];
         }
       }.bind(scope);
     }
 
     if (descriptor.set) {
       newDescriptor.set = function(val) {
-        if (unique && (scope['__'+propertyName] === val)) return;
+        if (unique && (this['__'+propertyName] === val)) return;
 
-        var oldVal = scope['__'+propertyName];
+        var oldVal = this['__'+propertyName];
 
         if (typeof descriptor.set === 'function') {
           val = descriptor.set(val);
         }
 
-        if (scope['__'+propertyName] === undefined) {
-          Object.defineProperty(scope, '__'+propertyName, { value: val, writable: true });
+        if (this['__'+propertyName] === undefined) {
+          Object.defineProperty(this, '__'+propertyName, { value: val, writable: true });
         }
         else {
-          scope['__'+propertyName] = val;
+          this['__'+propertyName] = val;
         }
 
         if (descriptor.onChange !== undefined) {
@@ -2099,7 +2099,7 @@ define('ui/Element',[
 
           element.dispatchEvent(event);
         }
-      };
+      }.bind(scope);
     }
 
     Object.defineProperty(scope, propertyName, newDescriptor);
@@ -5938,7 +5938,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.6.5', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.6.6', writable: false });
 
   injectModule(requiem, 'dom', dom);
   injectModule(requiem, 'events', events);
