@@ -32,6 +32,9 @@ define([
    */
   function changeElementState(element, state) {
     var elements = toElementArray(element, true);
+
+    if (!elements) return;
+
     var n = elements.length;
 
     for (var i = 0; i < n; i++) {

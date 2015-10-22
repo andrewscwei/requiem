@@ -5051,6 +5051,9 @@ define('utils/changeElementState',[
    */
   function changeElementState(element, state) {
     var elements = toElementArray(element, true);
+
+    if (!elements) return;
+
     var n = elements.length;
 
     for (var i = 0; i < n; i++) {
@@ -5938,7 +5941,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.6.8', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.6.9', writable: false });
 
   injectModule(requiem, 'dom', dom);
   injectModule(requiem, 'events', events);
