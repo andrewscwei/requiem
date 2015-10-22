@@ -177,12 +177,12 @@ define([
 
     if (descriptor.get) {
       newDescriptor.get = function() {
-        if (typeof descriptor.get === 'function') {
-          return descriptor.get();
+        if ((defaultValue !== undefined && this['__'+propertyName] === undefined)) {
+          return defaultValue;
         }
         else {
-          if (this['__'+propertyName] === undefined) {
-            return defaultValue;
+          if (typeof descriptor.get === 'function') {
+            return descriptor.get(this['__'+propertyName]);
           }
           else {
             return this['__'+propertyName];
