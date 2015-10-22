@@ -167,6 +167,10 @@ define([
 
     if (unique === undefined) unique = true;
 
+    if (defaultValue !== undefined) {
+      Object.defineProperty(this, '__'+propertyName, { value: defaultValue, writable: true });
+    }
+
     if (scope === undefined) {
       scope = element;
     }
@@ -184,16 +188,11 @@ define([
 
     if (descriptor.get) {
       newDescriptor.get = function() {
-        if ((defaultValue !== undefined && this['__'+propertyName] === undefined)) {
-          return defaultValue;
+        if (typeof descriptor.get === 'function') {
+          return descriptor.get(this['__'+propertyName]);
         }
         else {
-          if (typeof descriptor.get === 'function') {
-            return descriptor.get(this['__'+propertyName]);
-          }
-          else {
-            return this['__'+propertyName];
-          }
+          return this['__'+propertyName];
         }
       }.bind(scope);
     }
@@ -202,7 +201,7 @@ define([
       newDescriptor.set = function(val) {
         if (unique && (this['__'+propertyName] === val)) return;
 
-        var oldVal = this[propertyName];
+        var oldVal = this['__'+propertyName];
 
         if (typeof descriptor.set === 'function') {
           val = descriptor.set(val);
