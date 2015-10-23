@@ -1,16 +1,17 @@
 
 'use strict';
 
-let r = require('requiem');
-let EventType = r.EventType;
-let DirtyType = r.DirtyType;
-let KeyCode = r.KeyCode;
+let requiem = require('requiem');
+let Element = requiem.Element;
+let EventType = requiem.EventType;
+let DirtyType = requiem.DirtyType;
+let KeyCode = requiem.KeyCode;
 
-class Bar extends r.Element {
+class Bar extends Element {
   init() {
     this.bar = 'hello';
 
-    r.Element.defineProperty(this, 'foo', {
+    Element.defineProperty(this, 'foo', {
       defaultValue: 0,
       dirtyType: DirtyType.DATA,
       eventType: EventType.DATA.CHANGE,
@@ -32,6 +33,7 @@ class Bar extends r.Element {
 
   update() {
     if (this.isDirty(DirtyType.DATA)) {
+
     }
 
     super.update();

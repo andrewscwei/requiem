@@ -858,10 +858,8 @@
 	define('types/Directives',{
 	  Controller: 'r-controller',
 	  Instance:   'r-instance',
-	  Property:   'r-property',
-	  Data:       'r-data',
 	  State:      'r-state',
-	  Scheme:     'r-scheme'
+	  Property:   'r'
 	});
 	
 	/**
@@ -2006,34 +2004,27 @@
 	    // Further extend data/properties per custom attribute.
 	    var attributes = this.element.attributes;
 	    var nAtributes = attributes.length;
-	    var regProperty = new RegExp('^' + Directives.Property + '-' + '|^data-' + Directives.Property + '-', 'i');
-	    var regData = new RegExp('^' + Directives.Data + '-' + '|^data-' + Directives.Data + '-', 'i');
+	    var regex = new RegExp('^' + Directives.Property + '-' + '|^data-' + Directives.Property + '-', 'i');
 	
 	    for (var i = 0; i < nAtributes; i++) {
 	      var a = attributes[i];
 	
-	      if (regProperty.test(a.name)) {
-	        var pProperty = a.name.replace(regProperty, '').replace(/-([a-z])/g, function(g) {
-	          return g[1].toUpperCase();
-	        });
-	
-	        Element.defineProperty(this, pProperty, {
-	          value: (a.value === '') ? true : a.value,
-	          writable: false
-	        }, 'properties');
+	      if (!validateAttribute(a.name)) {
+	        continue;
 	      }
-	      else if (regData.test(a.name)) {
-	        var pData = a.name.replace(regData, '').replace(/-([a-z])/g, function(g) {
+	
+	      if (regex.test(a.name)) {
+	        var propertyName = a.name.replace(regex, '').replace(/-([a-z])/g, function(g) {
 	          return g[1].toUpperCase();
 	        });
 	
-	        Element.defineProperty(this, pData, {
+	        Element.defineProperty(this, propertyName, {
 	          defaultValue: (a.value === '') ? true : a.value,
 	          attribute: a.name,
 	          dirtyType: DirtyType.DATA,
 	          get: true,
 	          set: true
-	        }, 'data');
+	        }, 'properties');
 	      }
 	    }
 	
@@ -2248,7 +2239,7 @@
 	   * instance.
 	   *
 	   * @param {Object/Number}  Either the conductor or the refresh rate (if 1
-	   *                        argument supplied).
+	   *                         argument supplied).
 	   * @param {Number}         Refresh rate.
 	   * @param {...args}        EventType(s) which this element will respond to.
 	   */
@@ -3072,39 +3063,6 @@
 	    });
 	
 	    /**
-	     * @property
-	     *
-	     * Scheme of this Element instance (depicted by Directives.Scheme).
-	     *
-	     * @type {String}
-	     */
-	    Object.defineProperty(this, 'scheme', {
-	      get: function() {
-	        var s = this.element.getAttribute(Directives.Scheme) || this.element.getAttribute('data-' + Directives.Scheme);
-	
-	        if (!s || s === '') {
-	          return null;
-	        }
-	        else {
-	          return s;
-	        }
-	      },
-	      set: function(value) {
-	        if (this.scheme === value) return;
-	
-	        if (value === null || value === undefined) {
-	          this.element.removeAttribute(Directives.Scheme);
-	          this.element.removeAttribute('data-' + Directives.Scheme);
-	        }
-	        else {
-	          this.element.setAttribute('data-' + Directives.Scheme, value);
-	        }
-	
-	        this.updateDelegate.setDirty(DirtyType.SCHEME);
-	      }
-	    });
-	
-	    /**
 	     * @property (read-only)
 	     *
 	     * Child elements.
@@ -3117,16 +3075,15 @@
 	    });
 	
 	    /**
-	     * @property (read-only)
+	     * @property
 	     *
 	     * Data attributes.
 	     *
 	     * @type {Object}
-	     * @see ui.Directives.Data
 	     */
 	    Object.defineProperty(this, 'data', {
 	      value: {},
-	      writable: false
+	      writable: true
 	    });
 	
 	    /**
@@ -3551,7 +3508,7 @@
 	   * @param {Boolean}      keepElement
 	   */
 	  function toElementArray(element, keepElement) {
-	    if (!assert(element, 'Element is undefined or null.')) return null;
+	    if (!element) return null;
 	
 	    var elements;
 	
@@ -5111,6 +5068,9 @@
 	   */
 	  function changeElementState(element, state) {
 	    var elements = toElementArray(element, true);
+	
+	    if (!elements) return;
+	
 	    var n = elements.length;
 	
 	    for (var i = 0; i < n; i++) {
@@ -5998,7 +5958,7 @@
 	  var requiem = {};
 	
 	  Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-	  Object.defineProperty(requiem, 'version', { value: '0.6.6', writable: false });
+	  Object.defineProperty(requiem, 'version', { value: '0.7.0', writable: false });
 	
 	  injectModule(requiem, 'dom', dom);
 	  injectModule(requiem, 'events', events);
@@ -6062,8 +6022,9 @@
 	
 	      var bar = this.getChild('bar');
 	      bar.addEventListener(EventType.DATA.CHANGE, function (event) {
-	        _this.data.bar++;
-	        _this.data.foo--;
+	        console.log(_this.properties);
+	        _this.properties.bar++;
+	        _this.properties.foo--;
 	      });
 	
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
@@ -6100,13 +6061,14 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var r = __webpack_require__(1);
-	var EventType = r.EventType;
-	var DirtyType = r.DirtyType;
-	var KeyCode = r.KeyCode;
+	var requiem = __webpack_require__(1);
+	var Element = requiem.Element;
+	var EventType = requiem.EventType;
+	var DirtyType = requiem.DirtyType;
+	var KeyCode = requiem.KeyCode;
 	
-	var Bar = (function (_r$Element) {
-	  _inherits(Bar, _r$Element);
+	var Bar = (function (_Element) {
+	  _inherits(Bar, _Element);
 	
 	  function Bar() {
 	    _classCallCheck(this, Bar);
@@ -6121,7 +6083,7 @@
 	
 	      this.bar = 'hello';
 	
-	      r.Element.defineProperty(this, 'foo', {
+	      Element.defineProperty(this, 'foo', {
 	        defaultValue: 0,
 	        dirtyType: DirtyType.DATA,
 	        eventType: EventType.DATA.CHANGE,
@@ -6155,7 +6117,7 @@
 	  }]);
 	
 	  return Bar;
-	})(r.Element);
+	})(Element);
 	
 	module.exports = Bar;
 

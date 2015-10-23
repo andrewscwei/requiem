@@ -84,34 +84,27 @@ define([
     // Further extend data/properties per custom attribute.
     var attributes = this.element.attributes;
     var nAtributes = attributes.length;
-    var regProperty = new RegExp('^' + Directives.Property + '-' + '|^data-' + Directives.Property + '-', 'i');
-    var regData = new RegExp('^' + Directives.Data + '-' + '|^data-' + Directives.Data + '-', 'i');
+    var regex = new RegExp('^' + Directives.Property + '-' + '|^data-' + Directives.Property + '-', 'i');
 
     for (var i = 0; i < nAtributes; i++) {
       var a = attributes[i];
 
-      if (regProperty.test(a.name)) {
-        var pProperty = a.name.replace(regProperty, '').replace(/-([a-z])/g, function(g) {
-          return g[1].toUpperCase();
-        });
-
-        Element.defineProperty(this, pProperty, {
-          value: (a.value === '') ? true : a.value,
-          writable: false
-        }, 'properties');
+      if (!validateAttribute(a.name)) {
+        continue;
       }
-      else if (regData.test(a.name)) {
-        var pData = a.name.replace(regData, '').replace(/-([a-z])/g, function(g) {
+
+      if (regex.test(a.name)) {
+        var propertyName = a.name.replace(regex, '').replace(/-([a-z])/g, function(g) {
           return g[1].toUpperCase();
         });
 
-        Element.defineProperty(this, pData, {
+        Element.defineProperty(this, propertyName, {
           defaultValue: (a.value === '') ? true : a.value,
           attribute: a.name,
           dirtyType: DirtyType.DATA,
           get: true,
           set: true
-        }, 'data');
+        }, 'properties');
       }
     }
 
@@ -326,7 +319,7 @@ define([
    * instance.
    *
    * @param {Object/Number}  Either the conductor or the refresh rate (if 1
-   *                        argument supplied).
+   *                         argument supplied).
    * @param {Number}         Refresh rate.
    * @param {...args}        EventType(s) which this element will respond to.
    */
@@ -1150,39 +1143,6 @@ define([
     });
 
     /**
-     * @property
-     *
-     * Scheme of this Element instance (depicted by Directives.Scheme).
-     *
-     * @type {String}
-     */
-    Object.defineProperty(this, 'scheme', {
-      get: function() {
-        var s = this.element.getAttribute(Directives.Scheme) || this.element.getAttribute('data-' + Directives.Scheme);
-
-        if (!s || s === '') {
-          return null;
-        }
-        else {
-          return s;
-        }
-      },
-      set: function(value) {
-        if (this.scheme === value) return;
-
-        if (value === null || value === undefined) {
-          this.element.removeAttribute(Directives.Scheme);
-          this.element.removeAttribute('data-' + Directives.Scheme);
-        }
-        else {
-          this.element.setAttribute('data-' + Directives.Scheme, value);
-        }
-
-        this.updateDelegate.setDirty(DirtyType.SCHEME);
-      }
-    });
-
-    /**
      * @property (read-only)
      *
      * Child elements.
@@ -1195,16 +1155,15 @@ define([
     });
 
     /**
-     * @property (read-only)
+     * @property
      *
      * Data attributes.
      *
      * @type {Object}
-     * @see ui.Directives.Data
      */
     Object.defineProperty(this, 'data', {
       value: {},
-      writable: false
+      writable: true
     });
 
     /**

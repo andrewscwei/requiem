@@ -10,8 +10,9 @@ class Playground extends r.Element {
   init() {
     let bar = this.getChild('bar');
     bar.addEventListener(EventType.DATA.CHANGE, (event) => {
-      this.data.bar++;
-      this.data.foo--;
+      console.log(this.properties);
+      this.properties.bar++;
+      this.properties.foo--;
     });
 
     super.init();

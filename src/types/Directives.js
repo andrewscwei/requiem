@@ -15,8 +15,6 @@
 define({
   Controller: 'r-controller',
   Instance:   'r-instance',
-  Property:   'r-property',
-  Data:       'r-data',
   State:      'r-state',
-  Scheme:     'r-scheme'
+  Property:   'r'
 });
