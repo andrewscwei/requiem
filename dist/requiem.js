@@ -5864,14 +5864,12 @@ define('utils', [
   return api;
 });
 
-/**
+/*!
  * Requiem
  * (c) VARIANTE (http://variante.io)
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * Construction of the Requiem API.
  */
 
 
@@ -5898,7 +5896,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.7.0', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.7.1', writable: false });
 
   injectModule(requiem, 'dom', dom);
   injectModule(requiem, 'events', events);
