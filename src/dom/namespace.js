@@ -27,12 +27,14 @@ define([
    * @return {Object} Reference to the created namespace.
    */
   function namespace(identifiers, scope) {
-    assertType(identifiers, 'string', false, 'Invalid parameter: identifiers');
+    assertType(identifiers, 'string', true, 'Invalid parameter: identifiers');
     assertType(scope, 'object', true, 'Invalid optional parameter: scope');
 
-    var defaultScope = (window) ? window : {};
+    if (!scope) scope = (window) ? window : {};
+    if (identifiers === undefined || identifiers === '') return scope;
+
     var groups = identifiers.split('.');
-    var currentScope = (scope === undefined || scope === null) ? defaultScope : scope;
+    var currentScope = scope;
 
     for (var i = 0; i < groups.length; i++) {
       currentScope = currentScope[groups[i]] || (currentScope[groups[i]] = {});

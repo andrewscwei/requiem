@@ -2,8 +2,9 @@
 'use strict';
 
 let r = require('requiem');
+let namespace = r.namespace;
 
-r.sightread({
-  Playground: require('./components/Playground'),
-  Bar: require('./components/Bar')
-});
+namespace().Playground = require('./components/Playground');
+namespace().Bar = require('./components/Bar');
+
+r.sightread(document.getElementById('playground'));

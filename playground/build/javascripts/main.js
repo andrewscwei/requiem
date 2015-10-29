@@ -48,11 +48,12 @@
 	'use strict';
 	
 	var r = __webpack_require__(1);
+	var namespace = r.namespace;
 	
-	r.sightread({
-	  Playground: __webpack_require__(2),
-	  Bar: __webpack_require__(3)
-	});
+	namespace().Playground = __webpack_require__(2);
+	namespace().Bar = __webpack_require__(3);
+	
+	r.sightread(document.getElementById('playground'));
 
 /***/ },
 /* 1 */
@@ -765,12 +766,14 @@
 	   * @return {Object} Reference to the created namespace.
 	   */
 	  function namespace(identifiers, scope) {
-	    assertType(identifiers, 'string', false, 'Invalid parameter: identifiers');
+	    assertType(identifiers, 'string', true, 'Invalid parameter: identifiers');
 	    assertType(scope, 'object', true, 'Invalid optional parameter: scope');
 	
-	    var defaultScope = (window) ? window : {};
+	    if (!scope) scope = (window) ? window : {};
+	    if (identifiers === undefined || identifiers === '') return scope;
+	
 	    var groups = identifiers.split('.');
-	    var currentScope = (scope === undefined || scope === null) ? defaultScope : scope;
+	    var currentScope = scope;
 	
 	    for (var i = 0; i < groups.length; i++) {
 	      currentScope = currentScope[groups[i]] || (currentScope[groups[i]] = {});
@@ -3619,6 +3622,7 @@
 	  'dom/namespace',
 	  'dom/ready',
 	  'helpers/assert',
+	  'helpers/assertType',
 	  'types/Directives',
 	  'ui/Element',
 	  'ui/Video',
@@ -3627,6 +3631,7 @@
 	  namespace,
 	  ready,
 	  assert,
+	  assertType,
 	  Directives,
 	  Element,
 	  Video,
@@ -3637,11 +3642,50 @@
 	   * into instances of its corresponding controller class (or Requiem Element by
 	   * by default).
 	   *
-	   * @param {Object} controllerScope
+	   * @param {*} element:document          Element to perform the sightread on.
+	   *                                      By default it is the document.
+	   * @param {*} controllerScope:document  Scope (object literal) that contains
+	   *                                      all controller classes to instantiate
+	   *                                      from during the sightreading process.
 	   */
-	  function sightread(controllerScope) {
+	  function sightread() {
+	    var element = document;
+	    var controllerScope = window;
+	
+	    if (arguments.length === 1) {
+	      var obj = arguments[0];
+	
+	      if (obj instanceof HTMLElement) {
+	        element = obj;
+	      }
+	      else if (typeof obj === 'object') {
+	        controllerScope = obj;
+	      }
+	    }
+	    else if (arguments.length === 2) {
+	      var arg1 = arguments[0];
+	      var arg2 = arguments[1];
+	
+	      if (arg1) element = arg1;
+	      if (arg2) controllerScope = arg2;
+	    }
+	
 	    ready(function() {
-	      getChildElements(document, controllerScope);
+	      if (element === document) {
+	        getChildElements(element, controllerScope);
+	      }
+	      else {
+	        var instanceName = getInstanceNameFromElement(element);
+	        var ControllerClass = getControllerClassFromElement(element, controllerScope);
+	
+	        assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
+	
+	        new ControllerClass({
+	          element: element,
+	          name: instanceName,
+	          children: getChildElements(element, controllerScope)
+	        });
+	      }
 	    });
 	  }
 	
@@ -3669,60 +3713,75 @@
 	
 	    for (var i = 0; i < n; i++) {
 	      var child = qualifiedChildren[i];
-	      var className = child.getAttribute(Directives.Controller) || child.getAttribute('data-' + Directives.Controller);
-	      var childName = child.getAttribute(Directives.Instance) || child.getAttribute('data-' + Directives.Instance);
-	      var controller = (className) ? namespace(className, controllerScope) : null;
+	      var instanceName = getInstanceNameFromElement(child);
+	      var ControllerClass = getControllerClassFromElement(child, controllerScope);
 	
-	      // If no controller class is specified but element is marked as an instance, default the controller class to
-	      // Element.
-	      if (!controller && childName && childName.length > 0) {
-	        controller = Element;
-	      }
-	      else if (typeof controller !== 'function') {
-	        switch (className) {
-	          case 'Video': {
-	            controller = Video;
-	            break;
-	          }
-	          case 'Element': {
-	            controller = Element;
-	            break;
-	          }
-	          default: {
-	            controller = null;
-	            break;
-	          }
-	        }
-	      }
+	      assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerScope);
 	
-	      if (!assert(typeof controller === 'function', 'Class "' + className + '" is not found in specified controllerScope ' + (controllerScope || window) + '.')) continue;
-	
-	      var m = new controller({
+	      var m = new ControllerClass({
 	        element: child,
-	        name: childName,
+	        name: instanceName,
 	        children: getChildElements(child, controllerScope)
 	      });
 	
-	      if (childName && childName.length > 0) {
+	      if (instanceName && instanceName.length > 0) {
 	        if (!children) children = {};
 	
-	        if (!children[childName]) {
-	          children[childName] = m;
+	        if (!children[instanceName]) {
+	          children[instanceName] = m;
 	        }
 	        else {
-	          if (children[childName] instanceof Array) {
-	            children[childName].push(m);
+	          if (children[instanceName] instanceof Array) {
+	            children[instanceName].push(m);
 	          }
 	          else {
-	            var a = [children[childName]];
+	            var a = [children[instanceName]];
 	            a.push(m);
-	            children[childName] = a;
+	            children[instanceName] = a;
 	          }
 	        }
 	      }
 	    }
 	
 	    return children;
+	  }
+	
+	  function getControllerClassFromElement(element, controllerScope) {
+	    var controllerClassName = getControllerClassNameFromElement(element);
+	    var instanceName = getInstanceNameFromElement(element);
+	    var controllerClass = (controllerClassName) ? namespace(controllerClassName, controllerScope) : undefined;
+	
+	    // If no controller class is specified but element is marked as an instance, default the controller class to
+	    // Element.
+	    if (!controllerClass && instanceName && instanceName.length > 0) {
+	      controllerClass = Element;
+	    }
+	    else if (typeof controllerClass !== 'function') {
+	      switch (controllerClassName) {
+	        case 'Video': {
+	          controllerClass = Video;
+	          break;
+	        }
+	        case 'Element': {
+	          controllerClass = Element;
+	          break;
+	        }
+	        default: {
+	          controllerClass = null;
+	          break;
+	        }
+	      }
+	    }
+	
+	    return controllerClass;
+	  }
+	
+	  function getInstanceNameFromElement(element) {
+	    return element.getAttribute(Directives.Instance) || element.getAttribute('data-' + Directives.Instance);
+	  }
+	
+	  function getControllerClassNameFromElement(element) {
+	    return element.getAttribute(Directives.Controller) || element.getAttribute('data-' + Directives.Controller);
 	  }
 	
 	  function filterParentElements(nodeList) {
@@ -5924,14 +5983,12 @@
 	  return api;
 	});
 	
-	/**
+	/*!
 	 * Requiem
 	 * (c) VARIANTE (http://variante.io)
 	 *
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
-	 *
-	 * Construction of the Requiem API.
 	 */
 	
 	
@@ -5958,7 +6015,7 @@
 	  var requiem = {};
 	
 	  Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-	  Object.defineProperty(requiem, 'version', { value: '0.7.0', writable: false });
+	  Object.defineProperty(requiem, 'version', { value: '0.7.1', writable: false });
 	
 	  injectModule(requiem, 'dom', dom);
 	  injectModule(requiem, 'events', events);
