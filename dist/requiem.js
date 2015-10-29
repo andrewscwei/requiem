@@ -3616,20 +3616,11 @@ define('dom/sightread',[
 
       assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
 
-      var m = new ControllerClass({
+      return new ControllerClass({
         element: element,
         name: instanceName,
         children: getChildElements(element, controllerScope)
       });
-
-      if (instanceName && instanceName !== '') {
-        var o = {};
-        o[instanceName] = m;
-        return o;
-      }
-      else {
-        return m;
-      }
     }
   }
 
@@ -5959,7 +5950,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.9.0', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.10.0', writable: false });
 
   injectModule(requiem, 'dom', dom);
   injectModule(requiem, 'events', events);
