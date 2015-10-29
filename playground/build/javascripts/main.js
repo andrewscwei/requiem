@@ -53,7 +53,12 @@
 	namespace().Playground = __webpack_require__(2);
 	namespace().Bar = __webpack_require__(3);
 	
-	r.sightread(document.getElementById('playground'));
+	var nodes = undefined;
+	
+	r.ready(function () {
+	  nodes = r.sightread();
+	  console.log(nodes);
+	});
 
 /***/ },
 /* 1 */
@@ -3620,7 +3625,6 @@
 	
 	define('dom/sightread',[
 	  'dom/namespace',
-	  'dom/ready',
 	  'helpers/assert',
 	  'helpers/assertType',
 	  'types/Directives',
@@ -3629,7 +3633,6 @@
 	  'utils/hasChild'
 	], function(
 	  namespace,
-	  ready,
 	  assert,
 	  assertType,
 	  Directives,
@@ -3670,23 +3673,21 @@
 	      if (arg2) controllerScope = arg2;
 	    }
 	
-	    ready(function() {
-	      if (element === document) {
-	        getChildElements(element, controllerScope);
-	      }
-	      else {
-	        var instanceName = getInstanceNameFromElement(element);
-	        var ControllerClass = getControllerClassFromElement(element, controllerScope);
+	    if (element === document) {
+	      return getChildElements(element, controllerScope);
+	    }
+	    else {
+	      var instanceName = getInstanceNameFromElement(element);
+	      var ControllerClass = getControllerClassFromElement(element, controllerScope);
 	
-	        assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
+	      assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
 	
-	        new ControllerClass({
-	          element: element,
-	          name: instanceName,
-	          children: getChildElements(element, controllerScope)
-	        });
-	      }
-	    });
+	      return new ControllerClass({
+	        element: element,
+	        name: instanceName,
+	        children: getChildElements(element, controllerScope)
+	      });
+	    }
 	  }
 	
 	  /**

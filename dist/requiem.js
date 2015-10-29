@@ -3559,7 +3559,6 @@ define('utils/hasChild',[
 
 define('dom/sightread',[
   'dom/namespace',
-  'dom/ready',
   'helpers/assert',
   'helpers/assertType',
   'types/Directives',
@@ -3568,7 +3567,6 @@ define('dom/sightread',[
   'utils/hasChild'
 ], function(
   namespace,
-  ready,
   assert,
   assertType,
   Directives,
@@ -3609,23 +3607,21 @@ define('dom/sightread',[
       if (arg2) controllerScope = arg2;
     }
 
-    ready(function() {
-      if (element === document) {
-        getChildElements(element, controllerScope);
-      }
-      else {
-        var instanceName = getInstanceNameFromElement(element);
-        var ControllerClass = getControllerClassFromElement(element, controllerScope);
+    if (element === document) {
+      return getChildElements(element, controllerScope);
+    }
+    else {
+      var instanceName = getInstanceNameFromElement(element);
+      var ControllerClass = getControllerClassFromElement(element, controllerScope);
 
-        assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
+      assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
 
-        new ControllerClass({
-          element: element,
-          name: instanceName,
-          children: getChildElements(element, controllerScope)
-        });
-      }
-    });
+      return new ControllerClass({
+        element: element,
+        name: instanceName,
+        children: getChildElements(element, controllerScope)
+      });
+    }
   }
 
   /**
@@ -5954,7 +5950,7 @@ define('requiem', [
   var requiem = {};
 
   Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.7.1', writable: false });
+  Object.defineProperty(requiem, 'version', { value: '0.9.0', writable: false });
 
   injectModule(requiem, 'dom', dom);
   injectModule(requiem, 'events', events);

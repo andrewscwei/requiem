@@ -12,7 +12,6 @@
 
 define([
   'dom/namespace',
-  'dom/ready',
   'helpers/assert',
   'helpers/assertType',
   'types/Directives',
@@ -21,7 +20,6 @@ define([
   'utils/hasChild'
 ], function(
   namespace,
-  ready,
   assert,
   assertType,
   Directives,
@@ -62,23 +60,21 @@ define([
       if (arg2) controllerScope = arg2;
     }
 
-    ready(function() {
-      if (element === document) {
-        getChildElements(element, controllerScope);
-      }
-      else {
-        var instanceName = getInstanceNameFromElement(element);
-        var ControllerClass = getControllerClassFromElement(element, controllerScope);
+    if (element === document) {
+      return getChildElements(element, controllerScope);
+    }
+    else {
+      var instanceName = getInstanceNameFromElement(element);
+      var ControllerClass = getControllerClassFromElement(element, controllerScope);
 
-        assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
+      assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
 
-        new ControllerClass({
-          element: element,
-          name: instanceName,
-          children: getChildElements(element, controllerScope)
-        });
-      }
-    });
+      return new ControllerClass({
+        element: element,
+        name: instanceName,
+        children: getChildElements(element, controllerScope)
+      });
+    }
   }
 
   /**
