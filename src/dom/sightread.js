@@ -32,11 +32,19 @@ define([
    * into instances of its corresponding controller class (or Requiem Element by
    * by default).
    *
-   * @param {Object} controllerScope
+   * @param {Object}      controllerScope        Scope (object literal) that
+   *                                             contains all controller classes
+   *                                             to instantiate from during
+   *                                             the sightreading process.
+   * @param {HTMLElement} elementScope:document  Element to perform the
+   *                                             sightread on. By default it
+   *                                             is the document.
    */
-  function sightread(controllerScope) {
+  function sightread(controllerScope, elementScope) {
+    if (elementScope === undefined) elementScope = document;
+
     ready(function() {
-      getChildElements(document, controllerScope);
+      getChildElements(elementScope, controllerScope);
     });
   }
 
