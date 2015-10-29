@@ -10,7 +10,7 @@ namespace().Bar = require('./components/Bar');
 let nodes;
 
 r.ready(() => {
-  nodes = r.sightread();
+  nodes = r.sightread(document.getElementById('playground'));
   console.log(nodes);
 });
 

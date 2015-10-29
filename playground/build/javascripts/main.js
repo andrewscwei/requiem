@@ -56,7 +56,7 @@
 	var nodes = undefined;
 	
 	r.ready(function () {
-	  nodes = r.sightread();
+	  nodes = r.sightread(document.getElementById('playground'));
 	  console.log(nodes);
 	});
 
@@ -3682,11 +3682,20 @@
 	
 	      assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
 	
-	      return new ControllerClass({
+	      var m = new ControllerClass({
 	        element: element,
 	        name: instanceName,
 	        children: getChildElements(element, controllerScope)
 	      });
+	
+	      if (instanceName && instanceName !== '') {
+	        var o = {};
+	        o[instanceName] = m;
+	        return o;
+	      }
+	      else {
+	        return m;
+	      }
 	    }
 	  }
 	
@@ -6016,7 +6025,7 @@
 	  var requiem = {};
 	
 	  Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-	  Object.defineProperty(requiem, 'version', { value: '0.7.1', writable: false });
+	  Object.defineProperty(requiem, 'version', { value: '0.9.0', writable: false });
 	
 	  injectModule(requiem, 'dom', dom);
 	  injectModule(requiem, 'events', events);

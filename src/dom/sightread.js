@@ -69,11 +69,20 @@ define([
 
       assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
 
-      return new ControllerClass({
+      var m = new ControllerClass({
         element: element,
         name: instanceName,
         children: getChildElements(element, controllerScope)
       });
+
+      if (instanceName && instanceName !== '') {
+        var o = {};
+        o[instanceName] = m;
+        return o;
+      }
+      else {
+        return m;
+      }
     }
   }
 
