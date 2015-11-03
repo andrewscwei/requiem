@@ -9,9 +9,7 @@
 'use strict';
 
 let assert = require('../helpers/assert');
-let toElementArray = require('../helpers/toElementArray');
 let getIntersectRect = require('./getIntersectRect');
-let getRect = require('./getRect');
 
 /**
  * Hit tests a vector or element against other elements.
@@ -19,17 +17,17 @@ let getRect = require('./getRect');
  * @param {Object|HTMLElement|Element} obj
  * @param {number}                     obj.x
  * @param {number}                     obj.y
- * @param {...Object}                  rect
- * @param {number}                     rect.top
- * @param {number}                     rect.right
- * @param {number}                     rect.bottom
- * @param {number}                     rect.left
+ * @param {...Object}                  rects
+ * @param {number}                     rects.top
+ * @param {number}                     rects.right
+ * @param {number}                     rects.bottom
+ * @param {number}                     rects.left
  *
  * @return {boolean} True if test passes, false otherwise.
  *
  * @alias module:requiem~utils.hitTestRect
  */
-function hitTestRect(obj, rect) {
+function hitTestRect(obj, rects) {
   if (!assert(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
 
   let args = Array.prototype.slice.call(arguments);

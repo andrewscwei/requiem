@@ -10,7 +10,6 @@
 
 let assert = require('../helpers/assert');
 let inherit = require('../helpers/inherit');
-let log = require('../helpers/log');
 let DirtyType = require('../types/DirtyType');
 let Element = require('./Element');
 

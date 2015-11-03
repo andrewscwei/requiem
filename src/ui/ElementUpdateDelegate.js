@@ -8,7 +8,6 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
 let debounce = require('../helpers/debounce');
 let log = require('../helpers/log');
 let DirtyType = require('../types/DirtyType');

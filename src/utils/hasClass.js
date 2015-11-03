@@ -10,7 +10,6 @@
 
 let assert = require('../helpers/assert');
 let toElementArray = require('../helpers/toElementArray');
-let Element = require('../ui/Element');
 let getClassIndex = require('./getClassIndex');
 
 /**

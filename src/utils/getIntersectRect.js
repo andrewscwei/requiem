@@ -9,7 +9,6 @@
 'use strict';
 
 let assert = require('../helpers/assert');
-let Element = require('../ui/Element');
 let getRect = require('./getRect');
 
 /**

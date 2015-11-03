@@ -8,7 +8,6 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
 let toElementArray = require('../helpers/toElementArray');
 let getElementState = require('./getElementState');
 let Directive = require('../types/Directive');
