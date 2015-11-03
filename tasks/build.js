@@ -2,8 +2,6 @@
  * Requiem
  * (c) VARIANTE (http://variante.io)
  *
- * Build tasks.
- *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  */
@@ -11,18 +9,14 @@
 var config = require('./.taskconfig');
 var del = require('del');
 var gulp = require('gulp');
-var r = require('requirejs');
-var sequence = require('run-sequence');
-var $rename = require('gulp-rename');
-var $size = require('gulp-size');
-var $uglify = require('gulp-uglify');
 var $util = require('gulp-util');
+var webpack = require('webpack');
 
 /**
- * Cleans the build directory.
+ * Cleans the built files.
  */
 gulp.task('clean', function(done) {
-  del(config.tasks.clean.input).then(function(paths) {
+  del(config.tasks.build.clean.input).then(function(paths) {
     done();
   });
 });
@@ -31,35 +25,15 @@ gulp.task('clean', function(done) {
  * Builds the JavaScript library.
  */
 gulp.task('build', function(done) {
-  r.optimize(config.tasks.build.r,
-    function(res) {
-      $util.log($util.colors.blue('[r]'), 'Successfully compiled library');
+  webpack(config.tasks.build.webpack.pretty).run(build(function() {
+    webpack(config.tasks.build.webpack.ugly).run(build(done));
+  }));
 
-      gulp.src(config.tasks.build.input)
-        .pipe($size({
-          title: 'build:pretty',
-          gzip: true
-        }))
-        .pipe($uglify())
-        .pipe($rename(config.tasks.build.outputFile))
-        .pipe($size({
-          title: 'build:ugly',
-          gzip: true
-        }))
-        .pipe(gulp.dest(config.tasks.build.output))
-        .on('end', function() {
-          if (config.env.watch) {
-            for (var i = 0; i < config.tasks.watch.build.length; i++) {
-              var entry = config.tasks.watch.build[i];
-              gulp.watch(entry.files, entry.tasks);
-            }
-          }
-
-          done();
-        });
-    },
-    function(err) {
-      $util.log($util.colors.blue('[r]'), $util.colors.red(err));
-      done();
-    });
+  function build(cb) {
+    return function(err, stats) {
+      if (err) throw new $util.PluginError('webpack', err);
+      $util.log($util.colors.green('[webpack]'), stats.toString());
+      cb();
+    };
+  }
 });

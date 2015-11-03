@@ -19,8 +19,6 @@ var webpack = require('webpack');
 var $jade = require('gulp-jade');
 var $postcss = require('gulp-postcss');
 var $sass = require('gulp-sass');
-var $size = require('gulp-size');
-var $sourcemaps = require('gulp-sourcemaps');
 var $util = require('gulp-util');
 
 /**
@@ -37,14 +35,12 @@ gulp.task('clean:play', function(done) {
  */
 gulp.task('styles:play', function() {
   return gulp.src(config.tasks.play.styles.input)
-    .pipe($sourcemaps.init())
     .pipe($sass(config.tasks.play.styles.sass)
     .on('error', function(err) {
       $util.log($util.colors.red('[sass] ' + err.message));
       this.emit('end');
     }))
     .pipe($postcss([autoprefixer()]))
-    .pipe($sourcemaps.write())
     .pipe(gulp.dest(config.tasks.play.styles.output));
 });
 
@@ -52,7 +48,7 @@ gulp.task('styles:play', function() {
  * Compiles JavaScripts for the playground, option to watch for
  * changes.
  *
- * @param {Boolean} --watch
+ * @param {boolean} --watch
  */
 gulp.task('scripts:play', function(done) {
   var watchGuard = false;
@@ -93,8 +89,8 @@ gulp.task('templates:play', function() {
 /**
  * Serves the playground to the browser.
  *
- * @param {Number}  --port
- * @param {Boolean} --watch
+ * @param {number}  --port
+ * @param {boolean} --watch
  */
 gulp.task('serve:play', function() {
   browserSync(config.tasks.play.serve.browserSync);
@@ -114,9 +110,9 @@ gulp.task('serve:play', function() {
  * Builds the library and playground, option to watch for
  * file changes and serve.
  *
- * @param {Number}  --port
- * @param {Boolean} --watch
- * @param {Boolean} --serve
+ * @param {number}  --port
+ * @param {boolean} --watch
+ * @param {boolean} --serve
  */
 gulp.task('play', function(done) {
   var seq = ['clean', 'build', 'clean:play', ['styles:play', 'scripts:play', 'templates:play']];

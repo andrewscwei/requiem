@@ -9,6 +9,7 @@
  */
 
 require('./tasks/build');
+require('./tasks/docs');
 require('./tasks/play');
 
 var config = require('./tasks/.taskconfig');
@@ -18,9 +19,9 @@ var sequence = require('run-sequence');
 /**
  * Default task.
  *
- * @param {Boolean} --watch
+ * @param {boolean} --watch
  */
 gulp.task('default', function(done) {
-  var seq = ['clean', 'build'];
+  var seq = ['clean', 'build', 'docs'];
   sequence.apply(null, seq);
 });

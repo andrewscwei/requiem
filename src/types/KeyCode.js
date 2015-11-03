@@ -5,14 +5,19 @@
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Universal keyboard key codes.
- *
  * @type {Object}
  */
 
 'use strict';
 
-define({
+/**
+ * Enum for universal key codes.
+ *
+ * @readonly
+ * @enum {number}
+ * @alias module:requiem~types.KeyCode
+ */
+let KeyCode = {
   BACKSPACE:     8,
   TAB:           9,
   ENTER:         13,
@@ -111,4 +116,6 @@ define({
   BACK_SLASH:    220,
   CLOSE_BRACKET: 221,
   SINGLE_QUOTE:  222
-});
+};
+
+module.exports = KeyCode;

@@ -4,31 +4,29 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * @type {Function}
  */
 
 'use strict';
 
-define(function() {
-  /**
-   * Applies special polyfills to the browser window (i.e. IE happiness).
-   */
-  function polyfill() {
-    if (!window) return;
+/**
+ * Applies special polyfills to the browser window (i.e. IE happiness).
+ *
+ * @alias module:requiem~helpers.polyfill
+ */
+function polyfill() {
+  if (!window) return;
 
-    // Create CustomEvent class.
-    function CustomEvent ( event, params ) {
-      params = params || { bubbles: false, cancelable: false, detail: undefined };
-      var evt = document.createEvent( 'CustomEvent' );
-      evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-      return evt;
-    }
-
-    CustomEvent.prototype = window.Event.prototype;
-
-    window.CustomEvent = CustomEvent;
+  // Create CustomEvent class.
+  function CustomEvent ( event, params ) {
+    params = params || { bubbles: false, cancelable: false, detail: undefined };
+    let evt = document.createEvent( 'CustomEvent' );
+    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+    return evt;
   }
 
-  return polyfill;
-});
+  CustomEvent.prototype = window.Event.prototype;
+
+  window.CustomEvent = CustomEvent;
+}
+
+module.exports = polyfill;

@@ -8,38 +8,31 @@
 
 'use strict';
 
-define('requiem', [
-  'helpers/injectModule',
-  'helpers/polyfill',
-  'dom',
-  'events',
-  'net',
-  'types',
-  'ui',
-  'utils'
-], function(
-  injectModule,
-  polyfill,
-  dom,
-  events,
-  net,
-  types,
-  ui,
-  utils
-) {
-  var requiem = {};
+let injectModule = require('./helpers/injectModule');
+let polyfill = require('./helpers/polyfill');
 
-  Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-  Object.defineProperty(requiem, 'version', { value: '0.10.0', writable: false });
+/**
+ * @module requiem
+ */
+let requiem = {};
 
-  injectModule(requiem, 'dom', dom);
-  injectModule(requiem, 'events', events);
-  injectModule(requiem, 'net', net);
-  injectModule(requiem, 'types', types);
-  injectModule(requiem, 'ui', ui);
-  injectModule(requiem, 'utils', utils);
+/**
+ * @property {string} name - Module name.
+ */
+Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
 
-  polyfill();
+/**
+ * @property {string} version - Version number.
+ */
+Object.defineProperty(requiem, 'version', { value: '0.10.0', writable: false });
 
-  return requiem;
-});
+injectModule(requiem, 'dom',    require('./dom'));
+injectModule(requiem, 'events', require('./events'));
+injectModule(requiem, 'net',    require('./net'));
+injectModule(requiem, 'types',  require('./types'));
+injectModule(requiem, 'ui',     require('./ui'));
+injectModule(requiem, 'utils',  require('./utils'));
+
+polyfill();
+
+module.exports = requiem;

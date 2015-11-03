@@ -4,38 +4,33 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * @type {Function}
  */
 
 'use strict';
 
-define([
-  'helpers/assert',
-  'ui/Element'
-], function(
-  assert,
-  Element
-) {
-  /**
-   * Gets the index of a specified class in a DOM element,
-   *
-   * @param {Object} element    HTMLElement, Requiem Element, or jQuery object.
-   * @param {String} className
-   *
-   * @return {Number} Index of given class name. -1 if not found.
-   */
-  function getClassIndex(element, className) {
-    if (!assert((element) && ((element instanceof HTMLElement) || (element instanceof Element) || (element.jquery)), 'Invalid element specified. Element must be an instance of HTMLElement or Element.')) return null;
-    if (element instanceof Element) element = element.element;
-    if (element.jquery) element = element.get(0);
+let assert = require('../helpers/assert');
+let Element = require('../ui/Element');
 
-    if (!assert(className && (typeof className === 'string'), 'Invalid class name: ' + className)) return -1;
+/**
+ * Gets the index of a specified class in a DOM element,
+ *
+ * @param {HTMLElement|Element} element
+ * @param {string}              className
+ *
+ * @return {number} Index of given class name. -1 if not found.
+ *
+ * @alias module:requiem~utils.getClassIndex
+ */
+function getClassIndex(element, className) {
+  if (!assert((element) && ((element instanceof HTMLElement) || (element instanceof Element) || (element.jquery)), 'Invalid element specified. Element must be an instance of HTMLElement or Element.')) return null;
+  if (element instanceof Element) element = element.element;
+  if (element.jquery) element = element.get(0);
 
-    var classList = element.className.split(' ');
+  if (!assert(className && (typeof className === 'string'), 'Invalid class name: ' + className)) return -1;
 
-    return classList.indexOf(className);
-  }
+  let classList = element.className.split(' ');
 
-  return getClassIndex;
-});
+  return classList.indexOf(className);
+}
+
+module.exports = getClassIndex;

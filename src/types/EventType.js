@@ -4,20 +4,18 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * Requiem supported event types.
- *
- * @type {Object}
  */
 
 'use strict';
 
-define({
-  /**
-   * DOM native events.
-   *
-   * @see http://www.w3schools.com/jsref/dom_obj_event.asp
-   */
+/**
+ * Enum for all supported event types.
+ *
+ * @readonly
+ * @enum {string}
+ * @alias module:requiem~types.EventType
+ */
+let EventType = {
   DATA: {
     CHANGE: 'datachange'
   },
@@ -142,4 +140,6 @@ define({
     TOUCH_MOVE: 'touchmove',
     TOUCH_START: 'touchstart'
   }
-});
+};
+
+module.exports = EventType;

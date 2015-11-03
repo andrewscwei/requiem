@@ -4,63 +4,57 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * @type {Function}
  */
 
 'use strict';
 
-define([
-  'helpers/assert',
-  'helpers/toElementArray',
-  'utils/getIntersectRect',
-  'utils/getRect'
-], function(
-  assert,
-  toElementArray,
-  getIntersectRect,
-  getRect
-) {
-  /**
-   * Hit tests a vector or element against other elements.
-   *
-   * @param {Object/Array}  Vector ({ x, y }), HTMLElement, Requiem Element, or
-   *                       jQuery object.
-   * @param {Object/Array}  HTMLElement, Requiem Element, or jQuery object.
-   *
-   * @return {Boolean} True if test passes, false otherwise.
-   */
-  function hitTestElement() {
-    if (!assert(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
+let assert = require('../helpers/assert');
+let toElementArray = require('../helpers/toElementArray');
+let getIntersectRect = require('./getIntersectRect');
+let getRect = require('./getRect');
 
-    var args = Array.prototype.slice.call(arguments);
-    var isVector = (typeof args[0] === 'object') && args[0].hasOwnProperty('x') && args[0].hasOwnProperty('y');
+/**
+ * Hit tests a vector or element against other elements.
+ *
+ * @param {Object|HTMLElement|Element} obj
+ * @param {number}                     obj.x
+ * @param {number}                     obj.y
+ * @param {...(HTMLElement|Element)}   element
+ *
+ * @return {boolean} True if test passes, false otherwise.
+ *
+ * @alias module:requiem~utils.hitTestElement
+ */
+function hitTestElement(obj, element) {
+  if (!assert(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
 
-    if (isVector) {
-      var vector = args.shift();
-      var n = args.length;
-      var pass = false;
+  let args = Array.prototype.slice.call(arguments);
+  let isVector = (typeof args[0] === 'object') && args[0].hasOwnProperty('x') && args[0].hasOwnProperty('y');
 
-      for (var i = 0; i < n; i++) {
-        var rect = getRect(args[i]);
-        var clampedX = ((vector.x >= rect.left) && (vector.x <= rect.right));
-        var clampedY = ((vector.y >= rect.top) && (vector.x <= rect.bottom));
+  if (isVector) {
+    let vector = args.shift();
+    let n = args.length;
+    let pass = false;
 
-        if (clampedX && clampedY) {
-          pass = true;
-        }
+    for (let i = 0; i < n; i++) {
+      let rect = getRect(args[i]);
+      let clampedX = ((vector.x >= rect.left) && (vector.x <= rect.right));
+      let clampedY = ((vector.y >= rect.top) && (vector.x <= rect.bottom));
+
+      if (clampedX && clampedY) {
+        pass = true;
       }
-
-      return pass;
     }
-    else {
-      var intersectRect = getIntersectRect.apply(null, arguments);
 
-      if (!assert(intersectRect, 'Invalid elements specified.')) return false;
-
-      return (intersectRect.width * intersectRect.height !== 0);
-    }
+    return pass;
   }
+  else {
+    let intersectRect = getIntersectRect.apply(null, arguments);
 
-  return hitTestElement;
-});
+    if (!assert(intersectRect, 'Invalid elements specified.')) return false;
+
+    return (intersectRect.width * intersectRect.height !== 0);
+  }
+}
+
+module.exports = hitTestElement;

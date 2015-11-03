@@ -4,51 +4,44 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * @type {Function}
  */
 
 'use strict';
 
-define([
-  'helpers/assert',
-  'types/Directives',
-  'ui/Element'
-], function(
-  assert,
-  Directives,
-  Element
-) {
-  /**
-   * Gets the state of a DOM element, assumes that state classes are prefixed
-   * with 'state-'.
-   *
-   * @param {Object} element  HTMLElement, Requiem Element, or jQuery object.
-   *
-   * @return {String} State of the given element ('state-' prefix is omitted).
-   */
-  function getElementState(element) {
-    if (!assert((element) && ((element instanceof HTMLElement) || (element instanceof Element) || (element.jquery)), 'Invalid element specified.')) return null;
+let assert = require('../helpers/assert');
+let Directive = require('../types/Directive');
+let Element = require('../ui/Element');
 
-    if (element.jquery) element = element.get(0);
+/**
+ * Gets the state of a DOM element, assumes that state classes are prefixed with
+ * 'state-'.
+ *
+ * @param {HTMLElement|Element} element
+ *
+ * @return {string} State of the given element ('state-' prefix is omitted).
+ *
+ * @alias module:requiem~utils.getElementState
+ */
+function getElementState(element) {
+  if (!assert((element) && ((element instanceof HTMLElement) || (element instanceof Element) || (element.jquery)), 'Invalid element specified.')) return null;
 
-    var s;
+  if (element.jquery) element = element.get(0);
 
-    if (element instanceof Element) {
-      s = element.state;
-    }
-    else {
-      s = element.getAttribute(Directives.State) || element.getAttribute('data-' + Directives.State);
-    }
+  let s;
 
-    if (!s || s === '') {
-      return null;
-    }
-    else {
-      return s;
-    }
+  if (element instanceof Element) {
+    s = element.state;
+  }
+  else {
+    s = element.getAttribute(Directive.STATE) || element.getAttribute('data-' + Directive.STATE);
   }
 
-  return getElementState;
+  if (!s || s === '') {
+    return null;
+  }
+  else {
+    return s;
+  }
 }
-);
+
+module.exports = getElementState;

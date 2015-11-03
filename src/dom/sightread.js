@@ -4,200 +4,201 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * @type {Function}
  */
 
 'use strict';
 
-define([
-  'dom/namespace',
-  'helpers/assert',
-  'helpers/assertType',
-  'types/Directives',
-  'ui/Element',
-  'ui/Video',
-  'utils/hasChild'
-], function(
-  namespace,
-  assert,
-  assertType,
-  Directives,
-  Element,
-  Video,
-  hasChild
-) {
-  /**
-   * Parses the entire DOM and transforms elements marked with Requiem attributes
-   * into instances of its corresponding controller class (or Requiem Element by
-   * by default).
-   *
-   * @param {*} element:document          Element to perform the sightread on.
-   *                                      By default it is the document.
-   * @param {*} controllerScope:document  Scope (object literal) that contains
-   *                                      all controller classes to instantiate
-   *                                      from during the sightreading process.
-   */
-  function sightread() {
-    var element = document;
-    var controllerScope = window;
+let namespace = require('./namespace');
+let assert = require('../helpers/assert');
+let assertType = require('../helpers/assertType');
+let Directive = require('../types/Directive');
+let Element = require('../ui/Element');
+let Video = require('../ui/Video');
+let hasChild = require('../utils/hasChild');
 
-    if (arguments.length === 1) {
-      var obj = arguments[0];
+/**
+ * Crawls a DOM node and performs transformations on child nodes marked with
+ * Requiem attributes, such as instantiating controller classes and assigning
+ * instance names.
+ *
+ * @param {HTMLElement} [element=document]      - Target element for
+ *                                                sightreading. By default this
+ *                                                will be the document.
+ * @param {Object}      [controllerDict=window] - Look-up dictionary (object
+ *                                                literal) that provides all
+ *                                                controller classes when
+ *                                                sightreading encounters a
+ *                                                controller marked element.
+ *
+ * @return {Object|Element} Either a dictionary (object literal) containing
+ *                          all instantiated Requiem Element instances (if the
+ *                          target element was the entire document) or a
+ *                          single Requiem Element instance representing to
+ *                          the single target element.
+ *
+ * @alias module:requiem~dom.sightread
+ */
+function sightread() {
+  let element = document;
+  let controllerDict = window;
 
-      if (obj instanceof HTMLElement) {
-        element = obj;
-      }
-      else if (typeof obj === 'object') {
-        controllerScope = obj;
-      }
+  if (arguments.length === 1) {
+    let obj = arguments[0];
+
+    if (obj instanceof HTMLElement) {
+      element = obj;
     }
-    else if (arguments.length === 2) {
-      var arg1 = arguments[0];
-      var arg2 = arguments[1];
-
-      if (arg1) element = arg1;
-      if (arg2) controllerScope = arg2;
-    }
-
-    if (element === document) {
-      return getChildElements(element, controllerScope);
-    }
-    else {
-      var instanceName = getInstanceNameFromElement(element);
-      var ControllerClass = getControllerClassFromElement(element, controllerScope);
-
-      assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerScope);
-
-      return new ControllerClass({
-        element: element,
-        name: instanceName,
-        children: getChildElements(element, controllerScope)
-      });
+    else if (typeof obj === 'object') {
+      controllerDict = obj;
     }
   }
+  else if (arguments.length === 2) {
+    let arg1 = arguments[0];
+    let arg2 = arguments[1];
 
-  /**
-   * Transforms all the DOM elements inside the specified element marked with custom
-   * Requiem attributes into an instance of either its specified controller class or a generic
-   * Requiem Element. If a marked DOM element is a child of another marked DOM element, it will
-   * be passed into the parent element's children tree as its specified controller
-   * class instance or a generic Requiem Element.
-   *
-   * @param {Object} element         HTMLElement, Requiem Element, or jQuery object.
-   * @param {Object} controllerScope
-   */
-  function getChildElements(element, controllerScope) {
-    var children = null;
+    if (arg1) element = arg1;
+    if (arg2) controllerDict = arg2;
+  }
 
-    if (!element) element = document;
-    if (element.jquery) element = element.get(0);
-    if (!assert((element instanceof HTMLElement) || (element instanceof Element) || (document && element === document), 'Element must be an instance of an HTMLElement or the DOM itself.')) return null;
-    if (element instanceof Element) element = element.element;
+  if (element === document) {
+    return getChildElements(element, controllerDict);
+  }
+  else {
+    let instanceName = getInstanceNameFromElement(element);
+    let ControllerClass = getControllerClassFromElement(element, controllerDict);
 
-    var nodeList = element.querySelectorAll('[' + Directives.Controller + '], [data-' + Directives.Controller + '], [' + Directives.Instance + '], [data-' + Directives.Instance + ']');
-    var qualifiedChildren = filterParentElements(nodeList);
-    var n = qualifiedChildren.length;
+    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
 
-    for (var i = 0; i < n; i++) {
-      var child = qualifiedChildren[i];
-      var instanceName = getInstanceNameFromElement(child);
-      var ControllerClass = getControllerClassFromElement(child, controllerScope);
+    return new ControllerClass({
+      element: element,
+      name: instanceName,
+      children: getChildElements(element, controllerDict)
+    });
+  }
+}
 
-      assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerScope);
+/**
+ * Transforms all the DOM elements inside the specified element marked with custom
+ * Requiem attributes into an instance of either its specified controller class or a generic
+ * Requiem Element. If a marked DOM element is a child of another marked DOM element, it will
+ * be passed into the parent element's children tree as its specified controller
+ * class instance or a generic Requiem Element.
+ *
+ * @param {Object} element         HTMLElement, Requiem Element, or jQuery object.
+ * @param {Object} controllerDict
+ *
+ * @private
+ */
+function getChildElements(element, controllerDict) {
+  let children = null;
 
-      var m = new ControllerClass({
-        element: child,
-        name: instanceName,
-        children: getChildElements(child, controllerScope)
-      });
+  if (!element) element = document;
+  if (element.jquery) element = element.get(0);
+  if (!assert((element instanceof HTMLElement) || (element instanceof Element) || (document && element === document), 'Element must be an instance of an HTMLElement or the DOM itself.')) return null;
+  if (element instanceof Element) element = element.element;
 
-      if (instanceName && instanceName.length > 0) {
-        if (!children) children = {};
+  let nodeList = element.querySelectorAll('[' + Directive.CONTROLLER + '], [data-' + Directive.CONTROLLER + '], [' + Directive.INSTANCE + '], [data-' + Directive.INSTANCE + ']');
+  let qualifiedChildren = filterParentElements(nodeList);
+  let n = qualifiedChildren.length;
 
-        if (!children[instanceName]) {
-          children[instanceName] = m;
+  for (let i = 0; i < n; i++) {
+    let child = qualifiedChildren[i];
+    let instanceName = getInstanceNameFromElement(child);
+    let ControllerClass = getControllerClassFromElement(child, controllerDict);
+
+    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
+
+    let m = new ControllerClass({
+      element: child,
+      name: instanceName,
+      children: getChildElements(child, controllerDict)
+    });
+
+    if (instanceName && instanceName.length > 0) {
+      if (!children) children = {};
+
+      if (!children[instanceName]) {
+        children[instanceName] = m;
+      }
+      else {
+        if (children[instanceName] instanceof Array) {
+          children[instanceName].push(m);
         }
         else {
-          if (children[instanceName] instanceof Array) {
-            children[instanceName].push(m);
-          }
-          else {
-            var a = [children[instanceName]];
-            a.push(m);
-            children[instanceName] = a;
-          }
+          let a = [children[instanceName]];
+          a.push(m);
+          children[instanceName] = a;
         }
       }
     }
-
-    return children;
   }
 
-  function getControllerClassFromElement(element, controllerScope) {
-    var controllerClassName = getControllerClassNameFromElement(element);
-    var instanceName = getInstanceNameFromElement(element);
-    var controllerClass = (controllerClassName) ? namespace(controllerClassName, controllerScope) : undefined;
+  return children;
+}
 
-    // If no controller class is specified but element is marked as an instance, default the controller class to
-    // Element.
-    if (!controllerClass && instanceName && instanceName.length > 0) {
-      controllerClass = Element;
+function getControllerClassFromElement(element, controllerDict) {
+  let controllerClassName = getControllerClassNameFromElement(element);
+  let instanceName = getInstanceNameFromElement(element);
+  let controllerClass = (controllerClassName) ? namespace(controllerClassName, controllerDict) : undefined;
+
+  // If no controller class is specified but element is marked as an instance, default the controller class to
+  // Element.
+  if (!controllerClass && instanceName && instanceName.length > 0) {
+    controllerClass = Element;
+  }
+  else if (typeof controllerClass !== 'function') {
+    switch (controllerClassName) {
+      case 'Video': {
+        controllerClass = Video;
+        break;
+      }
+      case 'Element': {
+        controllerClass = Element;
+        break;
+      }
+      default: {
+        controllerClass = null;
+        break;
+      }
     }
-    else if (typeof controllerClass !== 'function') {
-      switch (controllerClassName) {
-        case 'Video': {
-          controllerClass = Video;
-          break;
-        }
-        case 'Element': {
-          controllerClass = Element;
-          break;
-        }
-        default: {
-          controllerClass = null;
-          break;
-        }
+  }
+
+  return controllerClass;
+}
+
+function getInstanceNameFromElement(element) {
+  return element.getAttribute(Directive.INSTANCE) || element.getAttribute('data-' + Directive.INSTANCE);
+}
+
+function getControllerClassNameFromElement(element) {
+  return element.getAttribute(Directive.CONTROLLER) || element.getAttribute('data-' + Directive.CONTROLLER);
+}
+
+function filterParentElements(nodeList) {
+  let n = nodeList.length;
+  let o = [];
+
+  for (let i = 0; i < n; i++) {
+    let isParent = true;
+    let child = nodeList[i];
+
+    for (let j = 0; j < n; j++) {
+      if (i === j) continue;
+
+      let parent = nodeList[j];
+
+      if (hasChild(parent, child)) {
+        isParent = false;
+        break;
       }
     }
 
-    return controllerClass;
-  }
-
-  function getInstanceNameFromElement(element) {
-    return element.getAttribute(Directives.Instance) || element.getAttribute('data-' + Directives.Instance);
-  }
-
-  function getControllerClassNameFromElement(element) {
-    return element.getAttribute(Directives.Controller) || element.getAttribute('data-' + Directives.Controller);
-  }
-
-  function filterParentElements(nodeList) {
-    var n = nodeList.length;
-    var o = [];
-
-    for (var i = 0; i < n; i++) {
-      var isParent = true;
-      var child = nodeList[i];
-
-      for (var j = 0; j < n; j++) {
-        if (i === j) continue;
-
-        var parent = nodeList[j];
-
-        if (hasChild(parent, child)) {
-          isParent = false;
-          break;
-        }
-      }
-
-      if (isParent) {
-        o.push(child);
-      }
+    if (isParent) {
+      o.push(child);
     }
-
-    return o;
   }
 
-  return sightread;
-});
+  return o;
+}
+
+module.exports = sightread;

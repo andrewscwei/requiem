@@ -4,52 +4,44 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * @type {Function}
  */
 
 'use strict';
 
-define([
-  'helpers/assert',
-  'helpers/toElementArray',
-  'types/Directives',
-  'ui/Element',
-  'utils/getElementState'
-], function(
-  assert,
-  toElementArray,
-  Directives,
-  Element,
-  getElementState
-) {
-  /**
-   * Changes the state of DOM element(s), assumes that state classes are
-   * prefixed with 'state-'.
-   *
-   * @param {*}      element  HTMLElement, Requiem Element, or jQuery object.
-   * @param {String} state
-   */
-  function changeElementState(element, state) {
-    var elements = toElementArray(element, true);
+let assert = require('../helpers/assert');
+let toElementArray = require('../helpers/toElementArray');
+let getElementState = require('./getElementState');
+let Directive = require('../types/Directive');
+let Element = require('../ui/Element');
 
-    if (!elements) return;
+/**
+ * Changes the state of DOM element(s), assumes that state classes are prefixed
+ * with 'state-'.
+ *
+ * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
+ * @param {string}                                      state
+ *
+ * @alias module:requiem~utils.changeElementState
+ */
+function changeElementState(element, state) {
+  let elements = toElementArray(element, true);
 
-    var n = elements.length;
+  if (!elements) return;
 
-    for (var i = 0; i < n; i++) {
-      var e = elements[i];
+  let n = elements.length;
 
-      if (getElementState(e) === state) continue;
+  for (let i = 0; i < n; i++) {
+    let e = elements[i];
 
-      if (e instanceof Element) {
-        e.state = state;
-      }
-      else {
-        e.setAttribute('data-' + Directives.State, state);
-      }
+    if (getElementState(e) === state) continue;
+
+    if (e instanceof Element) {
+      e.state = state;
+    }
+    else {
+      e.setAttribute('data-' + Directive.STATE, state);
     }
   }
+}
 
-  return changeElementState;
-});
+module.exports = changeElementState;

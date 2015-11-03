@@ -4,44 +4,37 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * @type {Function}
  */
 
 'use strict';
 
-define([
-  'helpers/assert',
-  'helpers/toElementArray',
-  'ui/Element',
-  'utils/getClassIndex',
-], function(
-  assert,
-  toElementArray,
-  Element,
-  getClassIndex
-) {
-  /**
-   * Verifies that the specified element(s) has the specified class.
-   *
-   * @param {*}      element    HTMLElement, Requiem Element, or jQuery object.
-   * @param {String} className
-   *
-   * @return {Boolean} True if element(s) has given class, false otherwise.
-   */
-  function hasClass(element, className) {
-    if (!assert(className && (typeof className === 'string'), 'Invalid class name: ' + className)) return false;
+let assert = require('../helpers/assert');
+let toElementArray = require('../helpers/toElementArray');
+let Element = require('../ui/Element');
+let getClassIndex = require('./getClassIndex');
 
-    var elements = toElementArray(element);
-    var n = elements.length;
+/**
+ * Verifies that the specified element(s) has the specified class.
+ *
+ * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
+ * @param {string}                                      className
+ *
+ * @return {boolean} True if element(s) has given class, false otherwise.
+ *
+ * @alias module:requiem~utils.hasClass
+ */
+function hasClass(element, className) {
+  if (!assert(className && (typeof className === 'string'), 'Invalid class name: ' + className)) return false;
 
-    for (var i = 0; i < n; i++) {
-      var e = elements[i];
-      if (getClassIndex(e, className) < 0) return false;
-    }
+  let elements = toElementArray(element);
+  let n = elements.length;
 
-    return true;
+  for (let i = 0; i < n; i++) {
+    let e = elements[i];
+    if (getClassIndex(e, className) < 0) return false;
   }
 
-  return hasClass;
-});
+  return true;
+}
+
+module.exports = hasClass;

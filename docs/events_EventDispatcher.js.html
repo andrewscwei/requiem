@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: events/EventDispatcher.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: events/EventDispatcher.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Requiem
+ * (c) VARIANTE (http://variante.io)
+ *
+ * This software is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+
+'use strict';
+
+let assert = require('../helpers/assert');
+let assertType = require('../helpers/assertType');
+let log = require('../helpers/log');
+
+/**
+ * @class
+ *
+ * Creates a new EventDispatcher instance.
+ *
+ * @alias module:requiem~events.EventDispatcher
+ */
+function EventDispatcher() {
+  this.__define_properties();
+}
+
+/**
+ * Adds an event listener to this EventDispatcher instance.
+ *
+ * @param {string}   type
+ * @param {Function} listener
+ */
+EventDispatcher.prototype.addEventListener = function(type, listener) {
+  if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
+  if (!assertType(listener, 'function', false, 'Invalid parameter: listener')) return;
+
+  log('[EventDispatcher]::addEventListener(' + type + ')');
+
+  if (!this._listenerMap) {
+    Object.defineProperty(this, '_listenerMap', {
+      value: {},
+      writable: true
+    });
+  }
+
+  if (!this._listenerMap[type]) {
+    this._listenerMap[type] = [];
+  }
+
+  this._listenerMap[type].push(listener);
+};
+
+/**
+ * Removes an event listener from this EventDispatcher instance. If no
+ * listener method is specified, all the listeners of the specified type
+ * will be removed.
+ *
+ * @param {string}   type
+ * @param {Function} listener:undefined
+ */
+EventDispatcher.prototype.removeEventListener = function(type, listener) {
+  if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
+  if (!assertType(listener, 'function', true, 'Invalid parameter: listener')) return;
+  if (!assert(this._listenerMap, 'Listener map is null.')) return;
+  if (!assert(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+
+  log('[EventDispatcher]::removeEventListener(' + type + ')');
+
+  if (listener) {
+    let index = this._listenerMap[type].indexOf(listener);
+
+    if (index > -1) {
+      this._listenerMap[type].splice(index, 1);
+    }
+  } else {
+    delete this._listenerMap[type];
+  }
+};
+
+/**
+ * Determines whether this EventDispatcher instance has a specific event
+ * listener registered. If no listener is specified, it will check if any
+ * listener of the specified event type is registered.
+ *
+ * @param {string}   type
+ * @param {Function} [listener]
+ *
+ * @return {boolean}
+ */
+EventDispatcher.prototype.hasEventListener = function(type, listener) {
+  if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
+  if (!assertType(listener, 'function', true, 'Invalid parameter: listener')) return;
+  if (!assert(this._listenerMap, 'Listener map is null.')) return;
+  if (!assert(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+
+  if (listener) {
+    let index = this._listenerMap[type].indexOf(listener);
+
+    return (index > -1);
+  } else {
+    return true;
+  }
+};
+
+/**
+ * Dispatches the specified event.
+ *
+ * @param {Event} event
+ */
+EventDispatcher.prototype.dispatchEvent = function(event) {
+  if (!assertType(event, Event, false, 'Event must be specified.')) return;
+  if (!assert(this._listenerMap, 'Listener map is null.')) return;
+
+  if (!this._listenerMap[event.type]) return;
+
+  log('[EventDispatcher]::dispatchEvent(' + event.type + ')');
+
+  event.target = this;
+  event.currentTarget = this;
+  event.customTarget = this;
+
+  let arrlen = this._listenerMap[event.type].length;
+
+  for (let i = 0; i &lt; arrlen; i++) {
+    let listener = this._listenerMap[event.type][i];
+
+    listener.call(this, event);
+  }
+};
+
+/**
+ * Defines all properties.
+ *
+ * @private
+ */
+EventDispatcher.prototype.__define_properties = function() {};
+
+module.exports = EventDispatcher;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="AssetLoader.html">AssetLoader</a></li><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li><li><a href="module-requiem-ui.Video.html">Video</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-net.html">net</a></li><li><a href="module-requiem-types.html">types</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Mon Nov 02 2015 23:18:47 GMT-0800 (PST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

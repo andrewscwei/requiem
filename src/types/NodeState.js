@@ -12,7 +12,14 @@
 
 'use strict';
 
-define({
+/**
+ * Enum for all node states.
+ *
+ * @readonly
+ * @enum {number}
+ * @alias module:requiem~types.NodeState
+ */
+let NodeState = {
   /**
    * Element is instantiated but not initialized yet. This state almost never
    * persists.
@@ -33,4 +40,6 @@ define({
    * Element is destroyed.
    */
   DESTROYED: 3
-});
+};
+
+module.exports = NodeState;

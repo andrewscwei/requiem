@@ -2,5 +2,5 @@
   "extends": "../.jshintrc",
   "browser": true,
   "strict": true,
-  "predef": ["define"]
+  "predef": ["-Element"]
 }

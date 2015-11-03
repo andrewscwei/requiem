@@ -2,6 +2,8 @@
 'use strict';
 
 let r = require('requiem');
+
+console.log(r);
 let namespace = r.namespace;
 
 namespace().Playground = require('./components/Playground');
@@ -11,6 +13,4 @@ let nodes;
 
 r.ready(() => {
   nodes = r.sightread(document.getElementById('playground'));
-  console.log(nodes);
 });
-

@@ -4,49 +4,45 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * @type {Function}
  */
 
 'use strict';
 
-define([
-  'helpers/assert',
-  'helpers/toElementArray'
-], function(
-  assert,
-  toElementArray
-) {
-  /**
-   * Checks if specified parent contains specified child.
-   *
-   * @param {Object} parent  HTMLElement, Requiem Element, or jQuery object.
-   * @param {Object} child   HTMLElement, Requiem Element, or jQuery object.
-   *
-   * @return {Boolean} True if parent has given child, false otherwise.
-   */
-  function hasChild(parent, child) {
-    var ps = toElementArray(parent);
-    var cs = toElementArray(child);
+let assert = require('../helpers/assert');
+let toElementArray = require('../helpers/toElementArray');
 
-    if (!assert(ps.length === 1, 'Invalid parent specified. Parent must be a single HTMLElement, Requiem Element, or jQuery object.')) return false;
-    if (!assert(cs.length === 1, 'Invalid child specified. Child must be a single HTMLElement, Requiem Element, or jQuery object.')) return false;
-    if (!assert(document, 'Document not found. This method requires document to be valid.')) return false;
+/**
+ * Checks if specified parent contains specified child.
+ *
+ * @param {HTMLElement|Element} parent - HTMLElement, Requiem Element, or jQuery
+ *                                       object.
+ * @param {HTMLElement|Element} child  - HTMLElement, Requiem Element, or jQuery
+ *                                       object.
+ *
+ * @return {boolean} True if parent has given child, false otherwise.
+ *
+ * @alias module:requiem~utils.hasChild
+ */
+function hasChild(parent, child) {
+  let ps = toElementArray(parent);
+  let cs = toElementArray(child);
 
-    var p = ps[0];
-    var c = cs[0];
+  if (!assert(ps.length === 1, 'Invalid parent specified. Parent must be a single HTMLElement, Requiem Element, or jQuery object.')) return false;
+  if (!assert(cs.length === 1, 'Invalid child specified. Child must be a single HTMLElement, Requiem Element, or jQuery object.')) return false;
+  if (!assert(document, 'Document not found. This method requires document to be valid.')) return false;
 
-    if (!c.parentNode) return false;
+  let p = ps[0];
+  let c = cs[0];
 
-    while (c !== null && c !== undefined && c !== document) {
-      c = c.parentNode;
+  if (!c.parentNode) return false;
 
-      if (c === p) return true;
-    }
+  while (c !== null && c !== undefined && c !== document) {
+    c = c.parentNode;
 
-    return false;
+    if (c === p) return true;
   }
 
-  return hasChild;
+  return false;
 }
-);
+
+module.exports = hasChild;
