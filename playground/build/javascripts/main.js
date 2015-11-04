@@ -46,18 +46,15 @@
 
 	'use strict';
 	
-	let r = __webpack_require__(1);
+	var _requiem = __webpack_require__(1);
 	
-	console.log(r);
-	let namespace = r.namespace;
+	_requiem.dom.namespace().Playground = __webpack_require__(2);
+	_requiem.dom.namespace().Bar = __webpack_require__(3);
 	
-	namespace().Playground = __webpack_require__(2);
-	namespace().Bar = __webpack_require__(3);
+	var nodes = undefined;
 	
-	let nodes;
-	
-	r.ready(() => {
-	  nodes = r.sightread(document.getElementById('playground'));
+	_requiem.dom.ready(function () {
+	  nodes = _requiem.dom.sightread();
 	});
 
 /***/ },
@@ -146,7 +143,7 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.10.0', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.11.1', writable: false });
 	
 		injectModule(requiem, 'dom', __webpack_require__(3));
 		injectModule(requiem, 'events', __webpack_require__(24));
@@ -2467,7 +2464,6 @@
 	
 		function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 	
-		var assert = __webpack_require__(6);
 		var debounce = __webpack_require__(19);
 		var log = __webpack_require__(13);
 		var DirtyType = __webpack_require__(15);
@@ -3151,7 +3147,6 @@
 	
 		var assert = __webpack_require__(6);
 		var inherit = __webpack_require__(21);
-		var log = __webpack_require__(13);
 		var DirtyType = __webpack_require__(15);
 		var Element = __webpack_require__(11);
 	
@@ -4689,7 +4684,6 @@
 	
 		var assert = __webpack_require__(6);
 		var toElementArray = __webpack_require__(23);
-		var Element = __webpack_require__(11);
 		var getClassIndex = __webpack_require__(34);
 	
 		/**
@@ -4777,7 +4771,6 @@
 	
 		function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 	
-		var assert = __webpack_require__(6);
 		var toElementArray = __webpack_require__(23);
 		var getElementState = __webpack_require__(36);
 		var Directive = __webpack_require__(10);
@@ -4881,7 +4874,6 @@
 		'use strict';
 	
 		var assert = __webpack_require__(6);
-		var Element = __webpack_require__(11);
 		var getRect = __webpack_require__(38);
 	
 		/**
@@ -4960,7 +4952,6 @@
 	
 		var assert = __webpack_require__(6);
 		var toElementArray = __webpack_require__(23);
-		var Element = __webpack_require__(11);
 		var getViewportRect = __webpack_require__(39);
 	
 		/**
@@ -5095,7 +5086,6 @@
 		function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 	
 		var assert = __webpack_require__(6);
-		var toElementArray = __webpack_require__(23);
 		var getIntersectRect = __webpack_require__(37);
 		var getRect = __webpack_require__(38);
 	
@@ -5105,13 +5095,13 @@
 		 * @param {Object|HTMLElement|Element} obj
 		 * @param {number}                     obj.x
 		 * @param {number}                     obj.y
-		 * @param {...(HTMLElement|Element)}   element
+		 * @param {...(HTMLElement|Element)}   elements
 		 *
 		 * @return {boolean} True if test passes, false otherwise.
 		 *
 		 * @alias module:requiem~utils.hitTestElement
 		 */
-		function hitTestElement(obj, element) {
+		function hitTestElement(obj, elements) {
 		  if (!assert(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
 	
 		  var args = Array.prototype.slice.call(arguments);
@@ -5161,9 +5151,7 @@
 		function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 	
 		var assert = __webpack_require__(6);
-		var toElementArray = __webpack_require__(23);
 		var getIntersectRect = __webpack_require__(37);
-		var getRect = __webpack_require__(38);
 	
 		/**
 		 * Hit tests a vector or element against other elements.
@@ -5171,17 +5159,17 @@
 		 * @param {Object|HTMLElement|Element} obj
 		 * @param {number}                     obj.x
 		 * @param {number}                     obj.y
-		 * @param {...Object}                  rect
-		 * @param {number}                     rect.top
-		 * @param {number}                     rect.right
-		 * @param {number}                     rect.bottom
-		 * @param {number}                     rect.left
+		 * @param {...Object}                  rects
+		 * @param {number}                     rects.top
+		 * @param {number}                     rects.right
+		 * @param {number}                     rects.bottom
+		 * @param {number}                     rects.left
 		 *
 		 * @return {boolean} True if test passes, false otherwise.
 		 *
 		 * @alias module:requiem~utils.hitTestRect
 		 */
-		function hitTestRect(obj, rect) {
+		function hitTestRect(obj, rects) {
 		  if (!assert(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
 	
 		  var args = Array.prototype.slice.call(arguments);
@@ -5193,12 +5181,12 @@
 		    var pass = false;
 	
 		    for (var i = 0; i < n; i++) {
-		      var _rect = args[i];
+		      var rect = args[i];
 	
-		      if (!assert(_rect.top !== undefined && !isNaN(_rect.top) && _rect.right !== undefined && !isNaN(_rect.right) && _rect.bottom !== undefined && !isNaN(_rect.bottom) && _rect.left !== undefined && !isNaN(_rect.left), 'Invalid rect supplied. Rect must be an object containing "top", "right", "bottom", and "left" key values.')) return false;
+		      if (!assert(rect.top !== undefined && !isNaN(rect.top) && rect.right !== undefined && !isNaN(rect.right) && rect.bottom !== undefined && !isNaN(rect.bottom) && rect.left !== undefined && !isNaN(rect.left), 'Invalid rect supplied. Rect must be an object containing "top", "right", "bottom", and "left" key values.')) return false;
 	
-		      var clampedX = vector.x >= _rect.left && vector.x <= _rect.right;
-		      var clampedY = vector.y >= _rect.top && vector.x <= _rect.bottom;
+		      var clampedX = vector.x >= rect.left && vector.x <= rect.right;
+		      var clampedY = vector.y >= rect.top && vector.x <= rect.bottom;
 	
 		      if (clampedX && clampedY) {
 		        pass = true;
@@ -5610,31 +5598,58 @@
 
 	'use strict';
 	
-	let r = __webpack_require__(1);
-	let EventType = r.EventType;
-	let DirtyType = r.DirtyType;
-	let KeyCode = r.KeyCode;
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-	class Playground extends r.Element {
-	  init() {
-	    let bar = this.getChild('bar');
-	    bar.addEventListener(EventType.DATA.CHANGE, event => {
-	      console.log(this.properties);
-	      this.properties.bar++;
-	      this.properties.foo--;
-	    });
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	    super.init();
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var r = __webpack_require__(1);
+	var EventType = r.EventType;
+	var DirtyType = r.DirtyType;
+	var KeyCode = r.KeyCode;
+	
+	var Playground = (function (_r$Element) {
+	  _inherits(Playground, _r$Element);
+	
+	  function Playground() {
+	    _classCallCheck(this, Playground);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Playground).apply(this, arguments));
 	  }
 	
-	  update() {
-	    super.update();
-	  }
+	  _createClass(Playground, [{
+	    key: 'init',
+	    value: function init() {
+	      var _this2 = this;
 	
-	  destroy() {
-	    super.destroy();
-	  }
-	}
+	      var bar = this.getChild('bar');
+	      bar.addEventListener(EventType.DATA.CHANGE, function (event) {
+	        console.log(_this2.properties);
+	        _this2.properties.bar++;
+	        _this2.properties.foo--;
+	      });
+	
+	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
+	    }
+	  }, {
+	    key: 'update',
+	    value: function update() {
+	      _get(Object.getPrototypeOf(Playground.prototype), 'update', this).call(this);
+	    }
+	  }, {
+	    key: 'destroy',
+	    value: function destroy() {
+	      _get(Object.getPrototypeOf(Playground.prototype), 'destroy', this).call(this);
+	    }
+	  }]);
+	
+	  return Playground;
+	})(r.Element);
 	
 	module.exports = Playground;
 
@@ -5644,46 +5659,73 @@
 
 	'use strict';
 	
-	let requiem = __webpack_require__(1);
-	let Element = requiem.Element;
-	let EventType = requiem.EventType;
-	let DirtyType = requiem.DirtyType;
-	let KeyCode = requiem.KeyCode;
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-	class Bar extends Element {
-	  init() {
-	    this.bar = 'hello';
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	    Element.defineProperty(this, 'foo', {
-	      defaultValue: 0,
-	      dirtyType: DirtyType.DATA,
-	      eventType: EventType.DATA.CHANGE,
-	      attribute: 'data-foo',
-	      get: true,
-	      set: true
-	    });
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	    let b = this.getChild('button');
-	    b.setStyle('width', 50);
-	    b.setStyle('height', 30);
-	    b.setStyle('backgroundColor', '#000');
-	    b.addEventListener(EventType.MOUSE.CLICK, event => {
-	      this.foo++;
-	    });
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	    super.init();
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var requiem = __webpack_require__(1);
+	var Element = requiem.Element;
+	var EventType = requiem.EventType;
+	var DirtyType = requiem.DirtyType;
+	var KeyCode = requiem.KeyCode;
+	
+	var Bar = (function (_Element) {
+	  _inherits(Bar, _Element);
+	
+	  function Bar() {
+	    _classCallCheck(this, Bar);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Bar).apply(this, arguments));
 	  }
 	
-	  update() {
-	    if (this.isDirty(DirtyType.DATA)) {}
+	  _createClass(Bar, [{
+	    key: 'init',
+	    value: function init() {
+	      var _this2 = this;
 	
-	    super.update();
-	  }
+	      this.bar = 'hello';
 	
-	  destroy() {
-	    super.destroy();
-	  }
-	}
+	      Element.defineProperty(this, 'foo', {
+	        defaultValue: 0,
+	        dirtyType: DirtyType.DATA,
+	        eventType: EventType.DATA.CHANGE,
+	        attribute: 'data-foo',
+	        get: true,
+	        set: true
+	      });
+	
+	      var b = this.getChild('button');
+	      b.setStyle('width', 50);
+	      b.setStyle('height', 30);
+	      b.setStyle('backgroundColor', '#000');
+	      b.addEventListener(EventType.MOUSE.CLICK, function (event) {
+	        _this2.foo++;
+	      });
+	
+	      _get(Object.getPrototypeOf(Bar.prototype), 'init', this).call(this);
+	    }
+	  }, {
+	    key: 'update',
+	    value: function update() {
+	      if (this.isDirty(DirtyType.DATA)) {}
+	
+	      _get(Object.getPrototypeOf(Bar.prototype), 'update', this).call(this);
+	    }
+	  }, {
+	    key: 'destroy',
+	    value: function destroy() {
+	      _get(Object.getPrototypeOf(Bar.prototype), 'destroy', this).call(this);
+	    }
+	  }]);
+	
+	  return Bar;
+	})(Element);
 	
 	module.exports = Bar;
 

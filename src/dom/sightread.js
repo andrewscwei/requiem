@@ -61,18 +61,18 @@ function sightread() {
   }
 
   if (element === document) {
-    return getChildElements(element, controllerDict);
+    return _getChildElements(element, controllerDict);
   }
   else {
-    let instanceName = getInstanceNameFromElement(element);
-    let ControllerClass = getControllerClassFromElement(element, controllerDict);
+    let instanceName = _getInstanceNameFromElement(element);
+    let ControllerClass = _getControllerClassFromElement(element, controllerDict);
 
-    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
+    assertType(ControllerClass, 'function', false, 'Class \'' + _getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
 
     return new ControllerClass({
       element: element,
       name: instanceName,
-      children: getChildElements(element, controllerDict)
+      children: _getChildElements(element, controllerDict)
     });
   }
 }
@@ -84,12 +84,13 @@ function sightread() {
  * be passed into the parent element's children tree as its specified controller
  * class instance or a generic Requiem Element.
  *
- * @param {Object} element         HTMLElement, Requiem Element, or jQuery object.
- * @param {Object} controllerDict
+ * @param {HTMLElement|Element} [element=document]
+ * @param {Object}              [controllerDict=window]
  *
  * @private
+ * @alias module:requiem~dom._getChildElements
  */
-function getChildElements(element, controllerDict) {
+function _getChildElements(element, controllerDict) {
   let children = null;
 
   if (!element) element = document;
@@ -98,20 +99,20 @@ function getChildElements(element, controllerDict) {
   if (element instanceof Element) element = element.element;
 
   let nodeList = element.querySelectorAll('[' + Directive.CONTROLLER + '], [data-' + Directive.CONTROLLER + '], [' + Directive.INSTANCE + '], [data-' + Directive.INSTANCE + ']');
-  let qualifiedChildren = filterParentElements(nodeList);
+  let qualifiedChildren = _filterParentElements(nodeList);
   let n = qualifiedChildren.length;
 
   for (let i = 0; i < n; i++) {
     let child = qualifiedChildren[i];
-    let instanceName = getInstanceNameFromElement(child);
-    let ControllerClass = getControllerClassFromElement(child, controllerDict);
+    let instanceName = _getInstanceNameFromElement(child);
+    let ControllerClass = _getControllerClassFromElement(child, controllerDict);
 
-    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
+    assertType(ControllerClass, 'function', false, 'Class \'' + _getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
 
     let m = new ControllerClass({
       element: child,
       name: instanceName,
-      children: getChildElements(child, controllerDict)
+      children: _getChildElements(child, controllerDict)
     });
 
     if (instanceName && instanceName.length > 0) {
@@ -136,9 +137,9 @@ function getChildElements(element, controllerDict) {
   return children;
 }
 
-function getControllerClassFromElement(element, controllerDict) {
-  let controllerClassName = getControllerClassNameFromElement(element);
-  let instanceName = getInstanceNameFromElement(element);
+function _getControllerClassFromElement(element, controllerDict) {
+  let controllerClassName = _getControllerClassNameFromElement(element);
+  let instanceName = _getInstanceNameFromElement(element);
   let controllerClass = (controllerClassName) ? namespace(controllerClassName, controllerDict) : undefined;
 
   // If no controller class is specified but element is marked as an instance, default the controller class to
@@ -166,15 +167,15 @@ function getControllerClassFromElement(element, controllerDict) {
   return controllerClass;
 }
 
-function getInstanceNameFromElement(element) {
+function _getInstanceNameFromElement(element) {
   return element.getAttribute(Directive.INSTANCE) || element.getAttribute('data-' + Directive.INSTANCE);
 }
 
-function getControllerClassNameFromElement(element) {
+function _getControllerClassNameFromElement(element) {
   return element.getAttribute(Directive.CONTROLLER) || element.getAttribute('data-' + Directive.CONTROLLER);
 }
 
-function filterParentElements(nodeList) {
+function _filterParentElements(nodeList) {
   let n = nodeList.length;
   let o = [];
 

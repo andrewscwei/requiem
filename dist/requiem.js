@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.11.1', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.12.0', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(24));
@@ -549,17 +549,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  if (element === document) {
-	    return getChildElements(element, controllerDict);
+	    return _getChildElements(element, controllerDict);
 	  } else {
-	    var instanceName = getInstanceNameFromElement(element);
-	    var ControllerClass = getControllerClassFromElement(element, controllerDict);
+	    var instanceName = _getInstanceNameFromElement(element);
+	    var ControllerClass = _getControllerClassFromElement(element, controllerDict);
 
-	    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
+	    assertType(ControllerClass, 'function', false, 'Class \'' + _getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
 
 	    return new ControllerClass({
 	      element: element,
 	      name: instanceName,
-	      children: getChildElements(element, controllerDict)
+	      children: _getChildElements(element, controllerDict)
 	    });
 	  }
 	}
@@ -571,12 +571,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * be passed into the parent element's children tree as its specified controller
 	 * class instance or a generic Requiem Element.
 	 *
-	 * @param {Object} element         HTMLElement, Requiem Element, or jQuery object.
-	 * @param {Object} controllerDict
+	 * @param {HTMLElement|Element} [element=document]
+	 * @param {Object}              [controllerDict=window]
 	 *
 	 * @private
+	 * @alias module:requiem~dom._getChildElements
 	 */
-	function getChildElements(element, controllerDict) {
+	function _getChildElements(element, controllerDict) {
 	  var children = null;
 
 	  if (!element) element = document;
@@ -585,20 +586,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (_instanceof(element, Element)) element = element.element;
 
 	  var nodeList = element.querySelectorAll('[' + Directive.CONTROLLER + '], [data-' + Directive.CONTROLLER + '], [' + Directive.INSTANCE + '], [data-' + Directive.INSTANCE + ']');
-	  var qualifiedChildren = filterParentElements(nodeList);
+	  var qualifiedChildren = _filterParentElements(nodeList);
 	  var n = qualifiedChildren.length;
 
 	  for (var i = 0; i < n; i++) {
 	    var child = qualifiedChildren[i];
-	    var instanceName = getInstanceNameFromElement(child);
-	    var ControllerClass = getControllerClassFromElement(child, controllerDict);
+	    var instanceName = _getInstanceNameFromElement(child);
+	    var ControllerClass = _getControllerClassFromElement(child, controllerDict);
 
-	    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
+	    assertType(ControllerClass, 'function', false, 'Class \'' + _getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
 
 	    var m = new ControllerClass({
 	      element: child,
 	      name: instanceName,
-	      children: getChildElements(child, controllerDict)
+	      children: _getChildElements(child, controllerDict)
 	    });
 
 	    if (instanceName && instanceName.length > 0) {
@@ -621,9 +622,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return children;
 	}
 
-	function getControllerClassFromElement(element, controllerDict) {
-	  var controllerClassName = getControllerClassNameFromElement(element);
-	  var instanceName = getInstanceNameFromElement(element);
+	function _getControllerClassFromElement(element, controllerDict) {
+	  var controllerClassName = _getControllerClassNameFromElement(element);
+	  var instanceName = _getInstanceNameFromElement(element);
 	  var controllerClass = controllerClassName ? namespace(controllerClassName, controllerDict) : undefined;
 
 	  // If no controller class is specified but element is marked as an instance, default the controller class to
@@ -653,15 +654,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return controllerClass;
 	}
 
-	function getInstanceNameFromElement(element) {
+	function _getInstanceNameFromElement(element) {
 	  return element.getAttribute(Directive.INSTANCE) || element.getAttribute('data-' + Directive.INSTANCE);
 	}
 
-	function getControllerClassNameFromElement(element) {
+	function _getControllerClassNameFromElement(element) {
 	  return element.getAttribute(Directive.CONTROLLER) || element.getAttribute('data-' + Directive.CONTROLLER);
 	}
 
-	function filterParentElements(nodeList) {
+	function _filterParentElements(nodeList) {
 	  var n = nodeList.length;
 	  var o = [];
 
