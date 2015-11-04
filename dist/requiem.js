@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.12.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.12.1', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(24));
@@ -3623,10 +3623,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!this._listenerMap[event.type]) return;
 
 	  log('[EventDispatcher]::dispatchEvent(' + event.type + ')');
-
-	  event.target = this;
-	  event.currentTarget = this;
-	  event.customTarget = this;
 
 	  var arrlen = this._listenerMap[event.type].length;
 

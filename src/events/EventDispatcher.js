@@ -114,10 +114,6 @@ EventDispatcher.prototype.dispatchEvent = function(event) {
 
   log('[EventDispatcher]::dispatchEvent(' + event.type + ')');
 
-  event.target = this;
-  event.currentTarget = this;
-  event.customTarget = this;
-
   let arrlen = this._listenerMap[event.type].length;
 
   for (let i = 0; i < arrlen; i++) {
