@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.12.2', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.13.0', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(24));
@@ -1735,6 +1735,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @protected
 	 */
 	Element.prototype.__define_properties = function () {
+	  var _this2 = this;
+
 	  /**
 	   * View of this Element instance.
 	   *
@@ -1929,6 +1931,66 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Object.defineProperty(this, 'cachesListeners', {
 	    value: true,
 	    writable: true
+	  });
+
+	  /**
+	   * Wrapper for the 'innerHTML' property of the internal element.
+	   *
+	   * @property {string}
+	   */
+	  Object.defineProperty(this, 'content', {
+	    get: function get() {
+	      return this.element.innerHTML;
+	    },
+	    set: function set(value) {
+	      this.element.innerHTML = value;
+	    }
+	  });
+
+	  /**
+	   * Specifies whether this Element instance is hidden. This property follows
+	   * the rules of the CSS rule 'display: none'.
+	   *
+	   * @property {boolean}
+	   */
+	  Element.defineProperty(this, 'hidden', {
+	    get: true,
+	    set: function set(value) {
+	      assertType(value, 'boolean', false);
+
+	      if (value) {
+	        _this2.setStyle('display', 'none');
+	      } else {
+	        if (_this2.getStyle('display') === 'none') {
+	          _this2.removeStyle('display');
+	        }
+	      }
+
+	      return value;
+	    }
+	  });
+
+	  /**
+	   * Specifies whether this Element instance is invisible. This property follows
+	   * the rules of the CSS rule 'visibility: hidden'.
+	   *
+	   * @property {boolean}
+	   */
+	  Element.defineProperty(this, 'invisible', {
+	    get: true,
+	    set: function set(value) {
+	      assertType(value, 'boolean', false);
+
+	      if (value) {
+	        _this2.setStyle('visibility', 'hidden');
+	      } else {
+	        if (_this2.getStyle('visibility') === 'hidden') {
+	          _this2.removeStyle('visibility');
+	        }
+	      }
+
+	      return value;
+	    }
 	  });
 	};
 

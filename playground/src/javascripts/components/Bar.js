@@ -23,7 +23,7 @@ class Bar extends Element {
     let b = this.getChild('button');
     b.setStyle('width', 50);
     b.setStyle('height', 30);
-    b.setStyle('backgroundColor', '#000');
+    b.setStyle('backgroundColor', '#ff0');
     b.addEventListener(EventType.MOUSE.CLICK, (event) => {
       this.foo++;
     });

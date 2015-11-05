@@ -1212,6 +1212,68 @@ Element.prototype.__define_properties = function() {
     value: true,
     writable: true
   });
+
+  /**
+   * Wrapper for the 'innerHTML' property of the internal element.
+   *
+   * @property {string}
+   */
+  Object.defineProperty(this, 'content', {
+    get: function() {
+      return this.element.innerHTML;
+    },
+    set: function(value) {
+      this.element.innerHTML = value;
+    }
+  });
+
+  /**
+   * Specifies whether this Element instance is hidden. This property follows
+   * the rules of the CSS rule 'display: none'.
+   *
+   * @property {boolean}
+   */
+  Element.defineProperty(this, 'hidden', {
+    get: true,
+    set: (value) => {
+      assertType(value, 'boolean', false);
+
+      if (value) {
+        this.setStyle('display', 'none');
+      }
+      else {
+        if (this.getStyle('display') === 'none') {
+          this.removeStyle('display');
+        }
+      }
+
+      return value;
+    }
+  });
+
+  /**
+   * Specifies whether this Element instance is invisible. This property follows
+   * the rules of the CSS rule 'visibility: hidden'.
+   *
+   * @property {boolean}
+   */
+  Element.defineProperty(this, 'invisible', {
+    get: true,
+    set: (value) => {
+      assertType(value, 'boolean', false);
+
+      if (value) {
+        this.setStyle('visibility', 'hidden');
+      }
+      else {
+        if (this.getStyle('visibility') === 'hidden') {
+          this.removeStyle('visibility');
+        }
+      }
+
+      return value;
+    }
+  });
 };
 
 /**
