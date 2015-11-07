@@ -8,7 +8,6 @@
 
 'use strict';
 
-let Directive = require('../types/Directive');
 let getControllerClassNameFromElement = require('./getControllerClassNameFromElement');
 let getInstanceNameFromElement = require('./getInstanceNameFromElement');
 let namespace = require('../dom/namespace');

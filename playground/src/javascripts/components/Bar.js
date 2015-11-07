@@ -1,11 +1,7 @@
 
 'use strict';
 
-let requiem = require('requiem');
-let Element = requiem.Element;
-let EventType = requiem.EventType;
-let DirtyType = requiem.DirtyType;
-let KeyCode = requiem.KeyCode;
+import { Element, EventType, DirtyType, KeyCode } from 'requiem';
 
 class Bar extends Element {
   init() {

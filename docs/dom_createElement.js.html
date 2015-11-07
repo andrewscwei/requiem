@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: ui/index.js</title>
+    <title>JSDoc: Source: dom/createElement.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: ui/index.js</h1>
+    <h1 class="page-title">Source: dom/createElement.js</h1>
 
     
 
@@ -36,18 +36,28 @@
 
 'use strict';
 
+let assertType = require('../helpers/assertType');
+
 /**
- * Collection of UI related methods/classes.
+ * Creates a DOM element from the provided string.
  *
- * @namespace module:requiem~ui
+ * @param {string} value - String describing the DOM element.
+ *
+ * @return {HTMLElement} DOM element.
+ *
+ * @alias module:requiem~dom.createElement
  */
-let ui = {};
+function createElement(value) {
+  if (!document) return null;
 
-Object.defineProperty(ui, 'Element',                { value: require('./Element'),                writable: false, enumerable: true });
-Object.defineProperty(ui, 'ElementUpdateDelegate',  { value: require('./ElementUpdateDelegate'),  writable: false, enumerable: true });
-Object.defineProperty(ui, 'Video',                  { value: require('./Video'),                  writable: false, enumerable: true });
+  assertType(value, 'string', true, 'Value must be a string');
 
-module.exports = ui;
+  let div = document.createElement('div');
+  div.innerHTML = value;
+  return div.firstChild;
+}
+
+module.exports = createElement;
 </code></pre>
         </article>
     </section>

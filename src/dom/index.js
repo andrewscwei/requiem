@@ -15,8 +15,9 @@
  */
 let dom = {};
 
-Object.defineProperty(dom, 'namespace', { value: require('./namespace'), writable: false, enumerable: true });
-Object.defineProperty(dom, 'ready',     { value: require('./ready'),     writable: false, enumerable: true });
-Object.defineProperty(dom, 'sightread', { value: require('./sightread'), writable: false, enumerable: true });
+Object.defineProperty(dom, 'namespace',     { value: require('./namespace'),     writable: false, enumerable: true });
+Object.defineProperty(dom, 'ready',         { value: require('./ready'),         writable: false, enumerable: true });
+Object.defineProperty(dom, 'sightread',     { value: require('./sightread'),     writable: false, enumerable: true });
+Object.defineProperty(dom, 'createElement', { value: require('./createElement'), writable: false, enumerable: true });
 
 module.exports = dom;

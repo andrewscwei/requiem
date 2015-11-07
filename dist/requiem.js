@@ -80,14 +80,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.14.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.15.0', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
-	injectModule(requiem, 'events', __webpack_require__(27));
-	injectModule(requiem, 'net', __webpack_require__(29));
-	injectModule(requiem, 'types', __webpack_require__(31));
-	injectModule(requiem, 'ui', __webpack_require__(33));
-	injectModule(requiem, 'utils', __webpack_require__(34));
+	injectModule(requiem, 'events', __webpack_require__(28));
+	injectModule(requiem, 'net', __webpack_require__(30));
+	injectModule(requiem, 'types', __webpack_require__(32));
+	injectModule(requiem, 'ui', __webpack_require__(34));
+	injectModule(requiem, 'utils', __webpack_require__(35));
 
 	polyfill();
 
@@ -200,6 +200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(dom, 'namespace', { value: __webpack_require__(4), writable: false, enumerable: true });
 	Object.defineProperty(dom, 'ready', { value: __webpack_require__(8), writable: false, enumerable: true });
 	Object.defineProperty(dom, 'sightread', { value: __webpack_require__(9), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'createElement', { value: __webpack_require__(27), writable: false, enumerable: true });
 
 	module.exports = dom;
 
@@ -498,7 +499,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
-	var namespace = __webpack_require__(4);
 	var assert = __webpack_require__(6);
 	var assertType = __webpack_require__(5);
 	var getInstanceNameFromElement = __webpack_require__(10);
@@ -759,7 +759,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Directive = __webpack_require__(11);
 	var getControllerClassNameFromElement = __webpack_require__(13);
 	var getInstanceNameFromElement = __webpack_require__(10);
 	var namespace = __webpack_require__(4);
@@ -870,6 +869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var EventType = __webpack_require__(20);
 	var Directive = __webpack_require__(11);
 	var ElementUpdateDelegate = __webpack_require__(21);
+	var getControllerClassFromElement = __webpack_require__(12);
 
 	/**
 	 * @class
@@ -1249,9 +1249,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return;
 
 	    if (_instanceof(child, HTMLElement)) {
-	      child = new Element({
-	        element: child,
-	        name: name
+	      var ControllerClass = getControllerClassFromElement(child) || Element;
+	      child = new ControllerClass({
+	        element: child
 	      });
 	    }
 
@@ -1837,8 +1837,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @protected
 	 */
 	Element.prototype.__define_properties = function () {
-	  var _this2 = this;
-
 	  /**
 	   * View of this Element instance.
 	   *
@@ -2057,19 +2055,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	  Element.defineProperty(this, 'hidden', {
 	    get: true,
-	    set: function set(value) {
+	    set: (function (value) {
 	      assertType(value, 'boolean', false);
 
 	      if (value) {
-	        _this2.setStyle('display', 'none');
+	        this.setStyle('display', 'none');
 	      } else {
-	        if (_this2.getStyle('display') === 'none') {
-	          _this2.removeStyle('display');
+	        if (this.getStyle('display') === 'none') {
+	          this.removeStyle('display');
 	        }
 	      }
 
 	      return value;
-	    }
+	    }).bind(this)
 	  });
 
 	  /**
@@ -2080,19 +2078,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	  Element.defineProperty(this, 'invisible', {
 	    get: true,
-	    set: function set(value) {
+	    set: (function (value) {
 	      assertType(value, 'boolean', false);
 
 	      if (value) {
-	        _this2.setStyle('visibility', 'hidden');
+	        this.setStyle('visibility', 'hidden');
 	      } else {
-	        if (_this2.getStyle('visibility') === 'hidden') {
-	          _this2.removeStyle('visibility');
+	        if (this.getStyle('visibility') === 'hidden') {
+	          this.removeStyle('visibility');
 	        }
 	      }
 
 	      return value;
-	    }
+	    }).bind(this)
 	  });
 	};
 
@@ -3660,6 +3658,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
 
+	'use strict';
+
+	var assertType = __webpack_require__(5);
+
+	/**
+	 * Creates a DOM element from the provided string.
+	 *
+	 * @param {string} value - String describing the DOM element.
+	 *
+	 * @return {HTMLElement} DOM element.
+	 *
+	 * @alias module:requiem~dom.createElement
+	 */
+	function createElement(value) {
+	  if (!document) return null;
+
+	  assertType(value, 'string', true, 'Value must be a string');
+
+	  var div = document.createElement('div');
+	  div.innerHTML = value;
+	  return div.firstChild;
+	}
+
+	module.exports = createElement;
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+
 	'use strict'
 
 	/**
@@ -3670,12 +3705,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var events = {};
 
-	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(28), writable: false, enumerable: true });
+	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(29), writable: false, enumerable: true });
 
 	module.exports = events;
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3813,7 +3848,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventDispatcher;
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3834,12 +3869,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var net = {};
 
-	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(30), writable: false, enumerable: true });
+	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(31), writable: false, enumerable: true });
 
 	module.exports = net;
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3857,7 +3892,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var assert = __webpack_require__(6);
 	var inherit = __webpack_require__(24);
 	var log = __webpack_require__(16);
-	var EventDispatcher = __webpack_require__(28);
+	var EventDispatcher = __webpack_require__(29);
 	var EventType = __webpack_require__(20);
 
 	/**
@@ -4489,7 +4524,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = AssetLoader;
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4513,13 +4548,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(types, 'Directive', { value: __webpack_require__(11), writable: false, enumerable: true });
 	Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(18), writable: false, enumerable: true });
 	Object.defineProperty(types, 'EventType', { value: __webpack_require__(20), writable: false, enumerable: true });
-	Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(32), writable: false, enumerable: true });
+	Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(33), writable: false, enumerable: true });
 	Object.defineProperty(types, 'NodeState', { value: __webpack_require__(19), writable: false, enumerable: true });
 
 	module.exports = types;
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports) {
 
 	/**
@@ -4646,7 +4681,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4674,7 +4709,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ui;
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4695,26 +4730,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var utils = {};
 
-	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(35), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(38), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(36), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(36), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(39), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(37), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(25), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(37), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(39), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(40), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(41), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(42), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(43), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(44), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(45), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate', { value: __webpack_require__(46), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(47), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'transform', { value: __webpack_require__(48), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(38), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(40), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(41), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(42), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(43), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(44), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(45), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(46), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate', { value: __webpack_require__(47), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(48), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'transform', { value: __webpack_require__(49), writable: false, enumerable: true });
 
 	module.exports = utils;
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4731,7 +4766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var assert = __webpack_require__(6);
 	var toElementArray = __webpack_require__(26);
-	var hasClass = __webpack_require__(36);
+	var hasClass = __webpack_require__(37);
 
 	/**
 	 * Adds a class(es) to DOM element(s).
@@ -4773,7 +4808,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = addClass;
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4788,7 +4823,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var assert = __webpack_require__(6);
 	var toElementArray = __webpack_require__(26);
-	var getClassIndex = __webpack_require__(37);
+	var getClassIndex = __webpack_require__(38);
 
 	/**
 	 * Verifies that the specified element(s) has the specified class.
@@ -4817,7 +4852,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hasClass;
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4860,7 +4895,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getClassIndex;
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4876,7 +4911,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
 	var toElementArray = __webpack_require__(26);
-	var getElementState = __webpack_require__(39);
+	var getElementState = __webpack_require__(40);
 	var Directive = __webpack_require__(11);
 	var Element = __webpack_require__(14);
 
@@ -4912,7 +4947,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = changeElementState;
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4964,7 +4999,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getElementState;
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4978,7 +5013,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var assert = __webpack_require__(6);
-	var getRect = __webpack_require__(41);
+	var getRect = __webpack_require__(42);
 
 	/**
 	 * Computes the intersecting rect of 2 given elements. If only 1 element is
@@ -5041,7 +5076,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getIntersectRect;
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5056,7 +5091,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var assert = __webpack_require__(6);
 	var toElementArray = __webpack_require__(26);
-	var getViewportRect = __webpack_require__(42);
+	var getViewportRect = __webpack_require__(43);
 
 	/**
 	 * Gets the rect of a given element or the overall rect of an array of elements.
@@ -5133,7 +5168,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getRect;
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5174,7 +5209,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getViewportRect;
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5190,8 +5225,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	var assert = __webpack_require__(6);
-	var getIntersectRect = __webpack_require__(40);
-	var getRect = __webpack_require__(41);
+	var getIntersectRect = __webpack_require__(41);
+	var getRect = __webpack_require__(42);
 
 	/**
 	 * Hit tests a vector or element against other elements.
@@ -5239,7 +5274,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hitTestElement;
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5255,7 +5290,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	var assert = __webpack_require__(6);
-	var getIntersectRect = __webpack_require__(40);
+	var getIntersectRect = __webpack_require__(41);
 
 	/**
 	 * Hit tests a vector or element against other elements.
@@ -5310,7 +5345,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hitTestRect;
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5368,7 +5403,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = removeClass;
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5466,7 +5501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = translate;
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5560,7 +5595,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = translate3d;
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5575,7 +5610,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var assert = __webpack_require__(6);
 	var toElementArray = __webpack_require__(26);
-	var getRect = __webpack_require__(41);
+	var getRect = __webpack_require__(42);
 
 	/**
 	 * Transforms a DOM element.

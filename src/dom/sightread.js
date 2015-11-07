@@ -8,7 +8,6 @@
 
 'use strict';
 
-let namespace = require('./namespace');
 let assert = require('../helpers/assert');
 let assertType = require('../helpers/assertType');
 let getInstanceNameFromElement = require('../helpers/getInstanceNameFromElement');

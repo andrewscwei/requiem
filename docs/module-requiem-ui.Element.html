@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Video</title>
+    <title>JSDoc: Class: Element</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Video</h1>
+    <h1 class="page-title">Class: Element</h1>
 
     
 
@@ -31,10 +31,10 @@
         <h2>
             <span class="ancestors"><a href="module-requiem.html">requiem</a><a href="module-requiem-ui.html">~ui</a>.</span>
         
-        Video
+        Element
         </h2>
         
-            <div class="class-description">Controller of a DOM 'video' element.</div>
+            <div class="class-description">Generic HTMLElement wrapper.</div>
         
     
 </header>
@@ -48,7 +48,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="Video"><span class="type-signature"></span>new Video<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Element"><span class="type-signature"></span>new Element<span class="signature">(init<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -56,20 +56,78 @@
 
 
 
-    <h5>Extends:</h5>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-    <ul>
-        <li><a href="module-requiem-ui.Element.html">module:requiem~ui.Element</a></li>
-    </ul>
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>init</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">HTMLElement</span>
+|
+
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Object</span>
 
 
+            
+            </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
 
+                
+                </td>
+            
 
+            
 
+            <td class="description last">Optional initial properties/
+                                            element of this Element instance.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -105,7 +163,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Video.js.html">ui/Video.js</a>, <a href="ui_Video.js.html#line24">line 24</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
@@ -135,17 +193,6 @@
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="module-requiem-ui.Element.html">module:requiem~ui.Element</a></li>
-    </ul>
-
-
-    
 
     
 
@@ -156,26 +203,527 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
-<h4 class="name" id=".PRELOAD"><span class="type-signature">(static) </span>PRELOAD<span class="type-signature"> :Object</span></h4>
+
+    
+
+    <h4 class="name" id=".defineProperty"><span class="type-signature">(static) </span>defineProperty<span class="signature">(element, propertyName, descriptor, scope<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Defines a property in an Element instance.
+</div>
 
 
 
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
+                <td class="name"><code>element</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Element</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Requiem Element instance
+                                                     of which the property
+                                                     belongs.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>propertyName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Name of the property to
+                                                     be defined.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>descriptor</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">Object</span>
 
 
-        </li>
-    </ul>
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Object literal that
+                                                     defines the behavior of
+                                                     the new property. This
+                                                     object literal inherits
+                                                     that of the descriptor
+                                                     in Object#defineProperty,
+                                                     plus a few extra options.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>unique</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last">Specifies that the
+                                                     modifier method will
+                                                     only invoke if the new
+                                                     value is different from
+                                                     the old value.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dirtyType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DirtyType</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Specifies the DirtyType
+                                                     to mark as dirty at the
+                                                     end of the modifier
+                                                     cycle.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>eventType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">EventType</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Specifies the EventType
+                                                     to dispatch at the end
+                                                     of the modifier cycle.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attribute</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Specifies the DOM
+                                                     attribute to update
+                                                     when the property value
+                                                     changes.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onChange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Method invoked when the
+                                                     property changes.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>get</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+|
+
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Method invoked when the
+                                                     accessor method is
+                                                     called. This is a good
+                                                     place to manipulate the
+                                                     value before it is
+                                                     retrieved. If simply set
+                                                     to true, a generic
+                                                     accessor method will be
+                                                     used.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>set</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+|
+
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Method invoked when the
+                                                     modifier method is
+                                                     called. This is a good
+                                                     placd to manipulate the
+                                                     value before it is set.
+                                                     If simply set to true,
+                                                     a generic modifier
+                                                     method will be used.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>scope</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Name of the property of
+                                                     the Element instance to
+                                                     create the new property
+                                                     in. This property must
+                                                     be enumerable and it
+                                                     must be a direct (not
+                                                     nested) property of the
+                                                     Element instance.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
 
 
 
@@ -210,19 +758,12 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Video.js.html">ui/Video.js</a>, <a href="ui_Video.js.html#line37">line 37</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
     
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="http://www.w3schools.com/tags/tag_video.asp">http://www.w3schools.com/tags/tag_video.asp</a></li>
-        </ul>
-    </dd>
     
 
     
@@ -233,11 +774,15 @@
 
 
 
-        
-    
 
-    
-        <h3 class="subsection-title">Methods</h3>
+
+
+
+
+
+
+
+
 
         
             
@@ -274,11 +819,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#__define_properties">module:requiem~ui.Element#__define_properties</a>
-    </li></ul></dd>
     
 
     
@@ -410,11 +950,6 @@
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#__set_element">module:requiem~ui.Element#__set_element</a>
-    </li></ul></dd>
     
 
     
@@ -610,11 +1145,6 @@ to the DOM tree of this instance.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#addChild">module:requiem~ui.Element#addChild</a>
-    </li></ul></dd>
-    
 
     
 
@@ -749,11 +1279,6 @@ to the DOM tree of this instance.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#addClass">module:requiem~ui.Element#addClass</a>
-    </li></ul></dd>
-    
 
     
 
@@ -831,11 +1356,6 @@ to the DOM tree of this instance.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#addEventListener">module:requiem~ui.Element#addEventListener</a>
-    </li></ul></dd>
     
 
     
@@ -925,11 +1445,6 @@ to the DOM tree of this instance.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#destroy">module:requiem~ui.Element#destroy</a>
-    </li></ul></dd>
     
 
     
@@ -1062,11 +1577,6 @@ to the DOM tree of this instance.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#dispatchEvent">module:requiem~ui.Element#dispatchEvent</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1150,11 +1660,6 @@ to the DOM tree of this instance.
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#factory">module:requiem~ui.Element#factory</a>
-    </li></ul></dd>
     
 
     
@@ -1302,11 +1807,6 @@ to the DOM tree of this instance.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#getAttribute">module:requiem~ui.Element#getAttribute</a>
-    </li></ul></dd>
     
 
     
@@ -1519,11 +2019,6 @@ immediately.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#getChild">module:requiem~ui.Element#getChild</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1680,11 +2175,6 @@ immediately.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#getStyle">module:requiem~ui.Element#getStyle</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1838,11 +2328,6 @@ name.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#hasAttribute">module:requiem~ui.Element#hasAttribute</a>
-    </li></ul></dd>
     
 
     
@@ -2006,11 +2491,6 @@ name.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#hasChild">module:requiem~ui.Element#hasChild</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2164,11 +2644,6 @@ name.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#hasClass">module:requiem~ui.Element#hasClass</a>
-    </li></ul></dd>
     
 
     
@@ -2345,11 +2820,6 @@ listeners were being added.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#hasEventListener">module:requiem~ui.Element#hasEventListener</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2499,11 +2969,6 @@ listeners were being added.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#hasStyle">module:requiem~ui.Element#hasStyle</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2604,11 +3069,6 @@ listeners were being added.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#init">module:requiem~ui.Element#init</a>
-    </li></ul></dd>
-    
 
     
 
@@ -2686,11 +3146,6 @@ listeners were being added.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#isDirty">module:requiem~ui.Element#isDirty</a>
-    </li></ul></dd>
     
 
     
@@ -2780,11 +3235,6 @@ listeners were being added.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#removeAllEventListeners">module:requiem~ui.Element#removeAllEventListeners</a>
-    </li></ul></dd>
     
 
     
@@ -2916,11 +3366,6 @@ listeners were being added.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#removeAttribute">module:requiem~ui.Element#removeAttribute</a>
-    </li></ul></dd>
     
 
     
@@ -3067,11 +3512,6 @@ listeners were being added.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#removeChild">module:requiem~ui.Element#removeChild</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3206,11 +3646,6 @@ listeners were being added.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#removeClass">module:requiem~ui.Element#removeClass</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3288,11 +3723,6 @@ listeners were being added.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#removeEventListener">module:requiem~ui.Element#removeEventListener</a>
-    </li></ul></dd>
     
 
     
@@ -3432,11 +3862,6 @@ camelCase.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#removeStyle">module:requiem~ui.Element#removeStyle</a>
-    </li></ul></dd>
     
 
     
@@ -3655,11 +4080,6 @@ instance.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#respondsTo">module:requiem~ui.Element#respondsTo</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3835,11 +4255,6 @@ instance.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#setAttribute">module:requiem~ui.Element#setAttribute</a>
-    </li></ul></dd>
-    
 
     
 
@@ -3917,11 +4332,6 @@ instance.
 
     
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#setDirty">module:requiem~ui.Element#setDirty</a>
-    </li></ul></dd>
     
 
     
@@ -4085,11 +4495,6 @@ instance.
     
 
     
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#setStyle">module:requiem~ui.Element#setStyle</a>
-    </li></ul></dd>
-    
 
     
 
@@ -4180,11 +4585,6 @@ instance.
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#toString">module:requiem~ui.Element#toString</a>
-    </li></ul></dd>
     
 
     
@@ -4285,11 +4685,6 @@ instance.
 
     
 
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="module-requiem-ui.Element.html#update">module:requiem~ui.Element#update</a>
-    </li></ul></dd>
     
 
     

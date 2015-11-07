@@ -49,12 +49,18 @@
 	var _requiem = __webpack_require__(1);
 	
 	_requiem.dom.namespace().Playground = __webpack_require__(2);
-	_requiem.dom.namespace().Bar = __webpack_require__(3);
+	_requiem.dom.namespace().Foo = __webpack_require__(3);
+	_requiem.dom.namespace().Bar = __webpack_require__(4);
 	
 	var nodes = undefined;
 	
+	var e = _requiem.dom.createElement('<div data-r-controller="Foo" data-r-instance="foo"></div>');
+	
 	_requiem.dom.ready(function () {
 	  nodes = _requiem.dom.sightread();
+	
+	  nodes.playground.addChild(e);
+	  nodes.playground.removeChild(e);
 	});
 
 /***/ },
@@ -143,14 +149,14 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.14.0', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.15.0', writable: false });
 	
 		injectModule(requiem, 'dom', __webpack_require__(3));
-		injectModule(requiem, 'events', __webpack_require__(27));
-		injectModule(requiem, 'net', __webpack_require__(29));
-		injectModule(requiem, 'types', __webpack_require__(31));
-		injectModule(requiem, 'ui', __webpack_require__(33));
-		injectModule(requiem, 'utils', __webpack_require__(34));
+		injectModule(requiem, 'events', __webpack_require__(28));
+		injectModule(requiem, 'net', __webpack_require__(30));
+		injectModule(requiem, 'types', __webpack_require__(32));
+		injectModule(requiem, 'ui', __webpack_require__(34));
+		injectModule(requiem, 'utils', __webpack_require__(35));
 	
 		polyfill();
 	
@@ -263,6 +269,7 @@
 		Object.defineProperty(dom, 'namespace', { value: __webpack_require__(4), writable: false, enumerable: true });
 		Object.defineProperty(dom, 'ready', { value: __webpack_require__(8), writable: false, enumerable: true });
 		Object.defineProperty(dom, 'sightread', { value: __webpack_require__(9), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'createElement', { value: __webpack_require__(27), writable: false, enumerable: true });
 	
 		module.exports = dom;
 	
@@ -933,6 +940,7 @@
 		var EventType = __webpack_require__(20);
 		var Directive = __webpack_require__(11);
 		var ElementUpdateDelegate = __webpack_require__(21);
+		var getControllerClassFromElement = __webpack_require__(12);
 	
 		/**
 		 * @class
@@ -1312,9 +1320,9 @@
 		    if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return;
 	
 		    if (_instanceof(child, HTMLElement)) {
-		      child = new Element({
-		        element: child,
-		        name: name
+		      var ControllerClass = getControllerClassFromElement(child) || Element;
+		      child = new ControllerClass({
+		        element: child
 		      });
 		    }
 	
@@ -3723,6 +3731,43 @@
 		 * http://www.opensource.org/licenses/mit-license.php
 		 */
 	
+		'use strict';
+	
+		var assertType = __webpack_require__(5);
+	
+		/**
+		 * Creates a DOM element from the provided string.
+		 *
+		 * @param {string} value - String describing the DOM element.
+		 *
+		 * @return {HTMLElement} DOM element.
+		 *
+		 * @alias module:requiem~dom.createElement
+		 */
+		function createElement(value) {
+		  if (!document) return null;
+	
+		  assertType(value, 'string', true, 'Value must be a string');
+	
+		  var div = document.createElement('div');
+		  div.innerHTML = value;
+		  return div.firstChild;
+		}
+	
+		module.exports = createElement;
+	
+	/***/ },
+	/* 28 */
+	/***/ function(module, exports, __webpack_require__) {
+	
+		/**
+		 * Requiem
+		 * (c) VARIANTE (http://variante.io)
+		 *
+		 * This software is released under the MIT License:
+		 * http://www.opensource.org/licenses/mit-license.php
+		 */
+	
 		'use strict'
 	
 		/**
@@ -3733,12 +3778,12 @@
 		;
 		var events = {};
 	
-		Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(28), writable: false, enumerable: true });
+		Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(29), writable: false, enumerable: true });
 	
 		module.exports = events;
 	
 	/***/ },
-	/* 28 */
+	/* 29 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -3876,7 +3921,7 @@
 		module.exports = EventDispatcher;
 	
 	/***/ },
-	/* 29 */
+	/* 30 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -3897,12 +3942,12 @@
 		;
 		var net = {};
 	
-		Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(30), writable: false, enumerable: true });
+		Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(31), writable: false, enumerable: true });
 	
 		module.exports = net;
 	
 	/***/ },
-	/* 30 */
+	/* 31 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -3920,7 +3965,7 @@
 		var assert = __webpack_require__(6);
 		var inherit = __webpack_require__(24);
 		var log = __webpack_require__(16);
-		var EventDispatcher = __webpack_require__(28);
+		var EventDispatcher = __webpack_require__(29);
 		var EventType = __webpack_require__(20);
 	
 		/**
@@ -4552,7 +4597,7 @@
 		module.exports = AssetLoader;
 	
 	/***/ },
-	/* 31 */
+	/* 32 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4576,13 +4621,13 @@
 		Object.defineProperty(types, 'Directive', { value: __webpack_require__(11), writable: false, enumerable: true });
 		Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(18), writable: false, enumerable: true });
 		Object.defineProperty(types, 'EventType', { value: __webpack_require__(20), writable: false, enumerable: true });
-		Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(32), writable: false, enumerable: true });
+		Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(33), writable: false, enumerable: true });
 		Object.defineProperty(types, 'NodeState', { value: __webpack_require__(19), writable: false, enumerable: true });
 	
 		module.exports = types;
 	
 	/***/ },
-	/* 32 */
+	/* 33 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -4709,7 +4754,7 @@
 		module.exports = KeyCode;
 	
 	/***/ },
-	/* 33 */
+	/* 34 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4737,7 +4782,7 @@
 		module.exports = ui;
 	
 	/***/ },
-	/* 34 */
+	/* 35 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4758,26 +4803,26 @@
 		;
 		var utils = {};
 	
-		Object.defineProperty(utils, 'addClass', { value: __webpack_require__(35), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(38), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(36), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'addClass', { value: __webpack_require__(36), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(39), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(37), writable: false, enumerable: true });
 		Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(25), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(37), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(39), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(40), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getRect', { value: __webpack_require__(41), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(42), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(43), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(44), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(45), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'translate', { value: __webpack_require__(46), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(47), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'transform', { value: __webpack_require__(48), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(38), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(40), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(41), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getRect', { value: __webpack_require__(42), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(43), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(44), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(45), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(46), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'translate', { value: __webpack_require__(47), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(48), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'transform', { value: __webpack_require__(49), writable: false, enumerable: true });
 	
 		module.exports = utils;
 	
 	/***/ },
-	/* 35 */
+	/* 36 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4794,7 +4839,7 @@
 	
 		var assert = __webpack_require__(6);
 		var toElementArray = __webpack_require__(26);
-		var hasClass = __webpack_require__(36);
+		var hasClass = __webpack_require__(37);
 	
 		/**
 		 * Adds a class(es) to DOM element(s).
@@ -4836,7 +4881,7 @@
 		module.exports = addClass;
 	
 	/***/ },
-	/* 36 */
+	/* 37 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4851,7 +4896,7 @@
 	
 		var assert = __webpack_require__(6);
 		var toElementArray = __webpack_require__(26);
-		var getClassIndex = __webpack_require__(37);
+		var getClassIndex = __webpack_require__(38);
 	
 		/**
 		 * Verifies that the specified element(s) has the specified class.
@@ -4880,7 +4925,7 @@
 		module.exports = hasClass;
 	
 	/***/ },
-	/* 37 */
+	/* 38 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4923,7 +4968,7 @@
 		module.exports = getClassIndex;
 	
 	/***/ },
-	/* 38 */
+	/* 39 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4939,7 +4984,7 @@
 		function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 	
 		var toElementArray = __webpack_require__(26);
-		var getElementState = __webpack_require__(39);
+		var getElementState = __webpack_require__(40);
 		var Directive = __webpack_require__(11);
 		var Element = __webpack_require__(14);
 	
@@ -4975,7 +5020,7 @@
 		module.exports = changeElementState;
 	
 	/***/ },
-	/* 39 */
+	/* 40 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5027,7 +5072,7 @@
 		module.exports = getElementState;
 	
 	/***/ },
-	/* 40 */
+	/* 41 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5041,7 +5086,7 @@
 		'use strict';
 	
 		var assert = __webpack_require__(6);
-		var getRect = __webpack_require__(41);
+		var getRect = __webpack_require__(42);
 	
 		/**
 		 * Computes the intersecting rect of 2 given elements. If only 1 element is
@@ -5104,7 +5149,7 @@
 		module.exports = getIntersectRect;
 	
 	/***/ },
-	/* 41 */
+	/* 42 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5119,7 +5164,7 @@
 	
 		var assert = __webpack_require__(6);
 		var toElementArray = __webpack_require__(26);
-		var getViewportRect = __webpack_require__(42);
+		var getViewportRect = __webpack_require__(43);
 	
 		/**
 		 * Gets the rect of a given element or the overall rect of an array of elements.
@@ -5196,7 +5241,7 @@
 		module.exports = getRect;
 	
 	/***/ },
-	/* 42 */
+	/* 43 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5237,7 +5282,7 @@
 		module.exports = getViewportRect;
 	
 	/***/ },
-	/* 43 */
+	/* 44 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5253,8 +5298,8 @@
 		function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 	
 		var assert = __webpack_require__(6);
-		var getIntersectRect = __webpack_require__(40);
-		var getRect = __webpack_require__(41);
+		var getIntersectRect = __webpack_require__(41);
+		var getRect = __webpack_require__(42);
 	
 		/**
 		 * Hit tests a vector or element against other elements.
@@ -5302,7 +5347,7 @@
 		module.exports = hitTestElement;
 	
 	/***/ },
-	/* 44 */
+	/* 45 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5318,7 +5363,7 @@
 		function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 	
 		var assert = __webpack_require__(6);
-		var getIntersectRect = __webpack_require__(40);
+		var getIntersectRect = __webpack_require__(41);
 	
 		/**
 		 * Hit tests a vector or element against other elements.
@@ -5373,7 +5418,7 @@
 		module.exports = hitTestRect;
 	
 	/***/ },
-	/* 45 */
+	/* 46 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5431,7 +5476,7 @@
 		module.exports = removeClass;
 	
 	/***/ },
-	/* 46 */
+	/* 47 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5529,7 +5574,7 @@
 		module.exports = translate;
 	
 	/***/ },
-	/* 47 */
+	/* 48 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5623,7 +5668,7 @@
 		module.exports = translate3d;
 	
 	/***/ },
-	/* 48 */
+	/* 49 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5638,7 +5683,7 @@
 	
 		var assert = __webpack_require__(6);
 		var toElementArray = __webpack_require__(26);
-		var getRect = __webpack_require__(41);
+		var getRect = __webpack_require__(42);
 	
 		/**
 		 * Transforms a DOM element.
@@ -5769,19 +5814,16 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
+	var _requiem = __webpack_require__(1);
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var r = __webpack_require__(1);
-	var EventType = r.EventType;
-	var DirtyType = r.DirtyType;
-	var KeyCode = r.KeyCode;
-	
-	var Playground = (function (_r$Element) {
-	  _inherits(Playground, _r$Element);
+	var Playground = (function (_Element) {
+	  _inherits(Playground, _Element);
 	
 	  function Playground() {
 	    _classCallCheck(this, Playground);
@@ -5795,7 +5837,7 @@
 	      var _this2 = this;
 	
 	      var bar = this.getChild('bar');
-	      bar.addEventListener(EventType.DATA.CHANGE, function (event) {
+	      bar.addEventListener(_requiem.EventType.DATA.CHANGE, function (event) {
 	        console.log(_this2.properties);
 	        _this2.properties.bar++;
 	        _this2.properties.foo--;
@@ -5816,7 +5858,7 @@
 	  }]);
 	
 	  return Playground;
-	})(r.Element);
+	})(_requiem.Element);
 	
 	module.exports = Playground;
 
@@ -5830,17 +5872,62 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
+	var _requiem = __webpack_require__(1);
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var requiem = __webpack_require__(1);
-	var Element = requiem.Element;
-	var EventType = requiem.EventType;
-	var DirtyType = requiem.DirtyType;
-	var KeyCode = requiem.KeyCode;
+	var Foo = (function (_Element) {
+	  _inherits(Foo, _Element);
+	
+	  function Foo() {
+	    _classCallCheck(this, Foo);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Foo).apply(this, arguments));
+	  }
+	
+	  _createClass(Foo, [{
+	    key: 'init',
+	    value: function init() {
+	      _get(Object.getPrototypeOf(Foo.prototype), 'init', this).call(this);
+	    }
+	  }, {
+	    key: 'destroy',
+	    value: function destroy() {
+	      _get(Object.getPrototypeOf(Foo.prototype), 'destroy', this).call(this);
+	    }
+	  }, {
+	    key: 'update',
+	    value: function update() {
+	      _get(Object.getPrototypeOf(Foo.prototype), 'update', this).call(this);
+	    }
+	  }]);
+	
+	  return Foo;
+	})(_requiem.Element);
+	
+	module.exports = Foo;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _requiem = __webpack_require__(1);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var Bar = (function (_Element) {
 	  _inherits(Bar, _Element);
@@ -5858,10 +5945,10 @@
 	
 	      this.bar = 'hello';
 	
-	      Element.defineProperty(this, 'foo', {
+	      _requiem.Element.defineProperty(this, 'foo', {
 	        defaultValue: 0,
-	        dirtyType: DirtyType.DATA,
-	        eventType: EventType.DATA.CHANGE,
+	        dirtyType: _requiem.DirtyType.DATA,
+	        eventType: _requiem.EventType.DATA.CHANGE,
 	        attribute: 'data-foo',
 	        get: true,
 	        set: true
@@ -5871,7 +5958,7 @@
 	      b.setStyle('width', 50);
 	      b.setStyle('height', 30);
 	      b.setStyle('backgroundColor', '#ff0');
-	      b.addEventListener(EventType.MOUSE.CLICK, function (event) {
+	      b.addEventListener(_requiem.EventType.MOUSE.CLICK, function (event) {
 	        _this2.foo++;
 	      });
 	
@@ -5880,7 +5967,7 @@
 	  }, {
 	    key: 'update',
 	    value: function update() {
-	      if (this.isDirty(DirtyType.DATA)) {}
+	      if (this.isDirty(_requiem.DirtyType.DATA)) {}
 	
 	      _get(Object.getPrototypeOf(Bar.prototype), 'update', this).call(this);
 	    }
@@ -5892,7 +5979,7 @@
 	  }]);
 	
 	  return Bar;
-	})(Element);
+	})(_requiem.Element);
 	
 	module.exports = Bar;
 

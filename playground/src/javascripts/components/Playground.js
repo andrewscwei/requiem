@@ -1,12 +1,9 @@
 
 'use strict';
 
-let r = require('requiem');
-let EventType = r.EventType;
-let DirtyType = r.DirtyType;
-let KeyCode = r.KeyCode;
+import { Element, EventType, DirtyType } from 'requiem';
 
-class Playground extends r.Element {
+class Playground extends Element {
   init() {
     let bar = this.getChild('bar');
     bar.addEventListener(EventType.DATA.CHANGE, (event) => {
