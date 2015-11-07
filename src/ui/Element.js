@@ -388,24 +388,29 @@ Element.prototype.respondsTo = function() {
  *                                             child with the same name, the
  *                                             added child will be grouped
  *                                             together with the existing child.
+ *
+ * @return {Element|Element[]} The added element(s).
  */
 Element.prototype.addChild = function(child, name) {
-  if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return;
+  if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
 
   if (child.jquery) {
-    this.addChild(child.get(), name);
+    return this.addChild(child.get(), name);
   }
   else if (child instanceof Array) {
     let n = child.length;
+    let children = [];
 
     for (let i = 0; i < n; i++) {
       let c = child[i];
 
-      this.addChild(c, name);
+      children.push(this.addChild(c, name));
     }
+
+    return children;
   }
   else {
-    if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return;
+    if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return null;
 
     if (child instanceof HTMLElement) {
       let ControllerClass = getControllerClassFromElement(child) || Element;
@@ -456,6 +461,8 @@ Element.prototype.addChild = function(child, name) {
     if (shouldAddChild) {
       this.element.appendChild(child.element);
     }
+
+    return child;
   }
 };
 
@@ -510,6 +517,8 @@ Element.prototype.hasChild = function(child) {
  *                                                   a string of child name(s)
  *                                                   separated by '.', or an
  *                                                   array of child elements.
+ *
+ * @return {Element|Element[]} The removed element(s).
  */
 Element.prototype.removeChild = function(child) {
   if (!assert(!noval(child, true), 'No valid child specified')) return;
@@ -530,6 +539,7 @@ Element.prototype.removeChild = function(child) {
   else if (this.hasChild(child)) {
     // First extract the DOM element.
     let e;
+    let a = [];
 
     if (child.jquery && child.length === 1) {
       e = child.get(0);
@@ -542,7 +552,7 @@ Element.prototype.removeChild = function(child) {
     }
 
     // No valid DOM element found? Terminate.
-    if (noval(e)) return;
+    if (noval(e)) return null;
 
     for (let key in this.children) {
       let c = this.children[key];
@@ -556,6 +566,7 @@ Element.prototype.removeChild = function(child) {
           t = i;
 
           if (element.element === e) {
+            a.push(element);
             element.destroy();
             e.parentNode.removeChild(e);
             break;
@@ -570,14 +581,25 @@ Element.prototype.removeChild = function(child) {
       }
       else if (c instanceof Element) {
         if (c.element === e) {
+          a.push(c);
           c.destroy();
           e.parentNode.removeChild(e);
           delete this.children[key];
         }
         else {
-          c.removeChild(child);
+          a.push(c.removeChild(child));
         }
       }
+    }
+
+    if (a.length === 0) {
+      return null;
+    }
+    else if (a.length === 1) {
+      return a[0];
+    }
+    else {
+      return a;
     }
   }
 };

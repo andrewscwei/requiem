@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.15.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.15.1', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(28));
@@ -1231,22 +1231,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *                                             child with the same name, the
 	 *                                             added child will be grouped
 	 *                                             together with the existing child.
+	 *
+	 * @return {Element|Element[]} The added element(s).
 	 */
 	Element.prototype.addChild = function (child, name) {
-	  if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return;
+	  if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
 
 	  if (child.jquery) {
-	    this.addChild(child.get(), name);
+	    return this.addChild(child.get(), name);
 	  } else if (_instanceof(child, Array)) {
 	    var n = child.length;
+	    var children = [];
 
 	    for (var i = 0; i < n; i++) {
 	      var c = child[i];
 
-	      this.addChild(c, name);
+	      children.push(this.addChild(c, name));
 	    }
+
+	    return children;
 	  } else {
-	    if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return;
+	    if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return null;
 
 	    if (_instanceof(child, HTMLElement)) {
 	      var ControllerClass = getControllerClassFromElement(child) || Element;
@@ -1295,6 +1300,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (shouldAddChild) {
 	      this.element.appendChild(child.element);
 	    }
+
+	    return child;
 	  }
 	};
 
@@ -1346,6 +1353,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *                                                   a string of child name(s)
 	 *                                                   separated by '.', or an
 	 *                                                   array of child elements.
+	 *
+	 * @return {Element|Element[]} The removed element(s).
 	 */
 	Element.prototype.removeChild = function (child) {
 	  if (!assert(!noval(child, true), 'No valid child specified')) return;
@@ -1366,6 +1375,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    else if (this.hasChild(child)) {
 	        // First extract the DOM element.
 	        var e = undefined;
+	        var a = [];
 
 	        if (child.jquery && child.length === 1) {
 	          e = child.get(0);
@@ -1376,7 +1386,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        // No valid DOM element found? Terminate.
-	        if (noval(e)) return;
+	        if (noval(e)) return null;
 
 	        for (var key in this.children) {
 	          var c = this.children[key];
@@ -1390,6 +1400,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              t = i;
 
 	              if (element.element === e) {
+	                a.push(element);
 	                element.destroy();
 	                e.parentNode.removeChild(e);
 	                break;
@@ -1403,13 +1414,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	          } else if (_instanceof(c, Element)) {
 	            if (c.element === e) {
+	              a.push(c);
 	              c.destroy();
 	              e.parentNode.removeChild(e);
 	              delete this.children[key];
 	            } else {
-	              c.removeChild(child);
+	              a.push(c.removeChild(child));
 	            }
 	          }
+	        }
+
+	        if (a.length === 0) {
+	          return null;
+	        } else if (a.length === 1) {
+	          return a[0];
+	        } else {
+	          return a;
 	        }
 	      }
 	};
