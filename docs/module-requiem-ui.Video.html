@@ -300,7 +300,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1039">line 1039</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1047">line 1047</a>
     </li></ul></dd>
     
 
@@ -436,7 +436,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1309">line 1309</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1317">line 1317</a>
     </li></ul></dd>
     
 
@@ -467,7 +467,7 @@
 
     
 
-    <h4 class="name" id="addChild"><span class="type-signature"></span>addChild<span class="signature">(child, name<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Element|Array.&lt;Element>}</span></h4>
+    <h4 class="name" id="addChild"><span class="type-signature"></span>addChild<span class="signature">(child, name<span class="signature-attributes">opt</span>, controllerDict<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Element|Array.&lt;Element>}</span></h4>
 
     
 
@@ -505,6 +505,8 @@ to the DOM tree of this instance.
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -521,13 +523,16 @@ to the DOM tree of this instance.
             <td class="type">
             
                 
-<span class="param-type">Array</span>
-|
-
 <span class="param-type">Element</span>
 |
 
+<span class="param-type">Array.&lt;Element></span>
+|
+
 <span class="param-type">HTMLElement</span>
+|
+
+<span class="param-type">Array.&lt;HTMLElement></span>
 
 
             
@@ -544,11 +549,19 @@ to the DOM tree of this instance.
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">Single child or an array of
-                                            children. Child elements can be
-                                            instance(s) of Requiem Elements,
-                                            jQuery Elements or HTMLElements.</td>
+            <td class="description last">Single child or
+                                                              an array of
+                                                              children. Child
+                                                              elements can be
+                                                              instance(s) of
+                                                              Requiem Elements,
+                                                              jQuery Elements
+                                                              or HTMLElements.</td>
         </tr>
 
     
@@ -580,18 +593,62 @@ to the DOM tree of this instance.
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">The name of the child/children to
-                                            be added. Typically a name is
-                                            required. If it is not specified,
-                                            this method will attempt to
-                                            deduct the name from the provided
-                                            child/children. This method fails
-                                            if no name is specified or
-                                            deducted. If there exists another
-                                            child with the same name, the
-                                            added child will be grouped
-                                            together with the existing child.</td>
+            <td class="description last">The name of the child/children to be added.
+                         Typically a name is required. If it is not
+                         specified, this method will attempt to deduct the
+                         name from the provided child/children. This method
+                         fails if no name is specified or deducted. If there
+                         exists another child with the same name, the added
+                         child will be grouped together with the existing
+                         child.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>controllerDict</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    window
+                
+                </td>
+            
+
+            <td class="description last">Look-up dictionary (object literal)
+                                          that provides all controller
+                                          classes when sightreading
+                                          encounters a controller marked
+                                          element.</td>
         </tr>
 
     
@@ -637,7 +694,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line394">line 394</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line401">line 401</a>
     </li></ul></dd>
     
 
@@ -801,7 +858,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line830">line 830</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line838">line 838</a>
     </li></ul></dd>
     
 
@@ -884,7 +941,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line669">line 669</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line677">line 677</a>
     </li></ul></dd>
     
 
@@ -978,7 +1035,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line298">line 298</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line299">line 299</a>
     </li></ul></dd>
     
 
@@ -1114,7 +1171,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line821">line 821</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line829">line 829</a>
     </li></ul></dd>
     
 
@@ -1201,7 +1258,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1007">line 1007</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1015">line 1015</a>
     </li></ul></dd>
     
 
@@ -1355,7 +1412,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line902">line 902</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line910">line 910</a>
     </li></ul></dd>
     
 
@@ -1571,7 +1628,7 @@ immediately.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line618">line 618</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line626">line 626</a>
     </li></ul></dd>
     
 
@@ -1732,7 +1789,7 @@ immediately.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line952">line 952</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line960">line 960</a>
     </li></ul></dd>
     
 
@@ -1891,7 +1948,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line941">line 941</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line949">line 949</a>
     </li></ul></dd>
     
 
@@ -2058,7 +2115,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line480">line 480</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line488">line 488</a>
     </li></ul></dd>
     
 
@@ -2217,7 +2274,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line889">line 889</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line897">line 897</a>
     </li></ul></dd>
     
 
@@ -2397,7 +2454,7 @@ listeners were being added.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line735">line 735</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line743">line 743</a>
     </li></ul></dd>
     
 
@@ -2551,7 +2608,7 @@ listeners were being added.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line998">line 998</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1006">line 1006</a>
     </li></ul></dd>
     
 
@@ -2656,7 +2713,7 @@ listeners were being added.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line267">line 267</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line268">line 268</a>
     </li></ul></dd>
     
 
@@ -2739,7 +2796,7 @@ listeners were being added.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1014">line 1014</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1022">line 1022</a>
     </li></ul></dd>
     
 
@@ -2833,7 +2890,7 @@ listeners were being added.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line808">line 808</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line816">line 816</a>
     </li></ul></dd>
     
 
@@ -2969,7 +3026,7 @@ listeners were being added.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line929">line 929</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line937">line 937</a>
     </li></ul></dd>
     
 
@@ -3119,7 +3176,7 @@ listeners were being added.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line523">line 523</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line531">line 531</a>
     </li></ul></dd>
     
 
@@ -3283,7 +3340,7 @@ listeners were being added.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line859">line 859</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line867">line 867</a>
     </li></ul></dd>
     
 
@@ -3366,7 +3423,7 @@ listeners were being added.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line759">line 759</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line767">line 767</a>
     </li></ul></dd>
     
 
@@ -3510,7 +3567,7 @@ camelCase.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line988">line 988</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line996">line 996</a>
     </li></ul></dd>
     
 
@@ -3732,7 +3789,7 @@ instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line347">line 347</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line348">line 348</a>
     </li></ul></dd>
     
 
@@ -3912,7 +3969,7 @@ instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line913">line 913</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line921">line 921</a>
     </li></ul></dd>
     
 
@@ -3995,7 +4052,7 @@ instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1021">line 1021</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1029">line 1029</a>
     </li></ul></dd>
     
 
@@ -4162,7 +4219,7 @@ instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line972">line 972</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line980">line 980</a>
     </li></ul></dd>
     
 
@@ -4256,7 +4313,7 @@ instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1030">line 1030</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1038">line 1038</a>
     </li></ul></dd>
     
 
@@ -4361,7 +4418,7 @@ instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line332">line 332</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line333">line 333</a>
     </li></ul></dd>
     
 
@@ -4409,7 +4466,7 @@ instance.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Fri Nov 06 2015 23:35:10 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Sat Nov 07 2015 01:42:55 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

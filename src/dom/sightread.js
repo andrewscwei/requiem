@@ -14,7 +14,6 @@ let getInstanceNameFromElement = require('../helpers/getInstanceNameFromElement'
 let getControllerClassFromElement = require('../helpers/getControllerClassFromElement');
 let getControllerClassNameFromElement = require('../helpers/getControllerClassNameFromElement');
 let Directive = require('../types/Directive');
-let Element = require('../ui/Element');
 let hasChild = require('../utils/hasChild');
 
 /**
@@ -93,6 +92,7 @@ function sightread() {
  * @alias module:requiem~dom._getChildElements
  */
 function _getChildElements(element, controllerDict) {
+  let Element = require('../ui/Element');
   let children = null;
 
   if (!element) element = document;

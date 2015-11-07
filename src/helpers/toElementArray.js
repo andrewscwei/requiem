@@ -8,7 +8,6 @@
 
 'use strict';
 
-let Element = require('../ui/Element');
 let assert = require('./assert');
 
 /**
@@ -20,6 +19,8 @@ let assert = require('./assert');
  * @alias module:requiem~helpers.toElementArray
  */
 function toElementArray(element, keepElement) {
+  let Element = require('../ui/Element');
+
   if (!element) return null;
 
   let elements;

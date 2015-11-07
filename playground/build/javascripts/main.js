@@ -54,12 +54,12 @@
 	
 	var nodes = undefined;
 	
-	var e = _requiem.dom.createElement('<div data-r-controller="Foo" data-r-instance="foo"></div>');
+	var e = _requiem.dom.createElement('<div data-r-controller="Foo"></div>');
 	
 	_requiem.dom.ready(function () {
 	  nodes = _requiem.dom.sightread();
 	
-	  nodes.playground.addChild(e);
+	  nodes.playground.addChild(e, 'foo');
 	  nodes.playground.removeChild(e);
 	});
 
@@ -149,7 +149,7 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.15.0', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.15.2', writable: false });
 	
 		injectModule(requiem, 'dom', __webpack_require__(3));
 		injectModule(requiem, 'events', __webpack_require__(28));
@@ -568,14 +568,12 @@
 	
 		function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 	
-		var namespace = __webpack_require__(4);
 		var assert = __webpack_require__(6);
 		var assertType = __webpack_require__(5);
 		var getInstanceNameFromElement = __webpack_require__(10);
 		var getControllerClassFromElement = __webpack_require__(12);
 		var getControllerClassNameFromElement = __webpack_require__(13);
 		var Directive = __webpack_require__(11);
-		var Element = __webpack_require__(14);
 		var hasChild = __webpack_require__(25);
 	
 		/**
@@ -651,6 +649,7 @@
 		 * @alias module:requiem~dom._getChildElements
 		 */
 		function _getChildElements(element, controllerDict) {
+		  var Element = __webpack_require__(14);
 		  var children = null;
 	
 		  if (!element) element = document;
@@ -829,7 +828,6 @@
 	
 		'use strict';
 	
-		var Directive = __webpack_require__(11);
 		var getControllerClassNameFromElement = __webpack_require__(13);
 		var getInstanceNameFromElement = __webpack_require__(10);
 		var namespace = __webpack_require__(4);
@@ -935,12 +933,13 @@
 		var noval = __webpack_require__(15);
 		var log = __webpack_require__(16);
 		var validateAttribute = __webpack_require__(17);
+		var getInstanceNameFromElement = __webpack_require__(10);
 		var DirtyType = __webpack_require__(18);
 		var NodeState = __webpack_require__(19);
 		var EventType = __webpack_require__(20);
 		var Directive = __webpack_require__(11);
 		var ElementUpdateDelegate = __webpack_require__(21);
-		var getControllerClassFromElement = __webpack_require__(12);
+		var sightread = __webpack_require__(9);
 	
 		/**
 		 * @class
@@ -1287,48 +1286,61 @@
 		 * transformed into a Requiem Element. A child is automatically appended
 		 * to the DOM tree of this instance.
 		 *
-		 * @param {Array|Element|HTMLElement} child  - Single child or an array of
-		 *                                             children. Child elements can be
-		 *                                             instance(s) of Requiem Elements,
-		 *                                             jQuery Elements or HTMLElements.
-		 * @param {string}                    [name] - The name of the child/children to
-		 *                                             be added. Typically a name is
-		 *                                             required. If it is not specified,
-		 *                                             this method will attempt to
-		 *                                             deduct the name from the provided
-		 *                                             child/children. This method fails
-		 *                                             if no name is specified or
-		 *                                             deducted. If there exists another
-		 *                                             child with the same name, the
-		 *                                             added child will be grouped
-		 *                                             together with the existing child.
+		 * @param {Element|Element[]|HTMLElement|HTMLElement[]} child  - Single child or
+		 *                                                               an array of
+		 *                                                               children. Child
+		 *                                                               elements can be
+		 *                                                               instance(s) of
+		 *                                                               Requiem Elements,
+		 *                                                               jQuery Elements
+		 *                                                               or HTMLElements.
+		 * @param {string} [name] - The name of the child/children to be added.
+		 *                          Typically a name is required. If it is not
+		 *                          specified, this method will attempt to deduct the
+		 *                          name from the provided child/children. This method
+		 *                          fails if no name is specified or deducted. If there
+		 *                          exists another child with the same name, the added
+		 *                          child will be grouped together with the existing
+		 *                          child.
+		 * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
+		 *                                           that provides all controller
+		 *                                           classes when sightreading
+		 *                                           encounters a controller marked
+		 *                                           element.
+		 *
+		 * @return {Element|Element[]} The added element(s).
 		 */
-		Element.prototype.addChild = function (child, name) {
-		  if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return;
+		Element.prototype.addChild = function (child, name, controllerDict) {
+		  if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
+		  if (!assertType(controllerDict, 'object', true, 'Parameter \'controllerDict\' is invalid')) return null;
+	
+		  if (!controllerDict) controllerDict = window;
 	
 		  if (child.jquery) {
-		    this.addChild(child.get(), name);
+		    return this.addChild(child.get(), name);
 		  } else if (_instanceof(child, Array)) {
 		    var n = child.length;
+		    var children = [];
 	
 		    for (var i = 0; i < n; i++) {
 		      var c = child[i];
 	
-		      this.addChild(c, name);
+		      children.push(this.addChild(c, name));
 		    }
+	
+		    return children;
 		  } else {
-		    if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return;
+		    if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return null;
 	
 		    if (_instanceof(child, HTMLElement)) {
-		      var ControllerClass = getControllerClassFromElement(child) || Element;
-		      child = new ControllerClass({
-		        element: child
-		      });
+		      if (noval(name)) name = getInstanceNameFromElement(child);
+		      if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
+	
+		      child.removeAttribute(Directive.INSTANCE);
+		      child.removeAttribute('data-' + Directive.INSTANCE);
+		      child.setAttribute('data-' + Directive.INSTANCE, name);
+		      child = sightread(child, controllerDict);
 		    }
-	
-		    name = name || child.name;
-	
-		    if (!assert(name || child.name, 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
 	
 		    if (this.children[name]) {
 		      if (_instanceof(this.children[name], Array)) {
@@ -1341,8 +1353,6 @@
 		    } else {
 		      this.children[name] = child;
 		    }
-	
-		    child.name = name;
 	
 		    if (child.nodeState === NodeState.IDLE || child.nodeState === NodeState.DESTROYED) {
 		      child.init();
@@ -1366,6 +1376,8 @@
 		    if (shouldAddChild) {
 		      this.element.appendChild(child.element);
 		    }
+	
+		    return child;
 		  }
 		};
 	
@@ -1417,6 +1429,8 @@
 		 *                                                   a string of child name(s)
 		 *                                                   separated by '.', or an
 		 *                                                   array of child elements.
+		 *
+		 * @return {Element|Element[]} The removed element(s).
 		 */
 		Element.prototype.removeChild = function (child) {
 		  if (!assert(!noval(child, true), 'No valid child specified')) return;
@@ -1437,6 +1451,7 @@
 		    else if (this.hasChild(child)) {
 		        // First extract the DOM element.
 		        var e = undefined;
+		        var a = [];
 	
 		        if (child.jquery && child.length === 1) {
 		          e = child.get(0);
@@ -1447,7 +1462,7 @@
 		        }
 	
 		        // No valid DOM element found? Terminate.
-		        if (noval(e)) return;
+		        if (noval(e)) return null;
 	
 		        for (var key in this.children) {
 		          var c = this.children[key];
@@ -1461,6 +1476,7 @@
 		              t = i;
 	
 		              if (element.element === e) {
+		                a.push(element);
 		                element.destroy();
 		                e.parentNode.removeChild(e);
 		                break;
@@ -1474,13 +1490,22 @@
 		            }
 		          } else if (_instanceof(c, Element)) {
 		            if (c.element === e) {
+		              a.push(c);
 		              c.destroy();
 		              e.parentNode.removeChild(e);
 		              delete this.children[key];
 		            } else {
-		              c.removeChild(child);
+		              a.push(c.removeChild(child));
 		            }
 		          }
+		        }
+	
+		        if (a.length === 0) {
+		          return null;
+		        } else if (a.length === 1) {
+		          return a[0];
+		        } else {
+		          return a;
 		        }
 		      }
 		};
@@ -1908,8 +1933,6 @@
 		 * @protected
 		 */
 		Element.prototype.__define_properties = function () {
-		  var _this2 = this;
-	
 		  /**
 		   * View of this Element instance.
 		   *
@@ -2128,19 +2151,19 @@
 		   */
 		  Element.defineProperty(this, 'hidden', {
 		    get: true,
-		    set: function set(value) {
+		    set: (function (value) {
 		      assertType(value, 'boolean', false);
 	
 		      if (value) {
-		        _this2.setStyle('display', 'none');
+		        this.setStyle('display', 'none');
 		      } else {
-		        if (_this2.getStyle('display') === 'none') {
-		          _this2.removeStyle('display');
+		        if (this.getStyle('display') === 'none') {
+		          this.removeStyle('display');
 		        }
 		      }
 	
 		      return value;
-		    }
+		    }).bind(this)
 		  });
 	
 		  /**
@@ -2151,19 +2174,19 @@
 		   */
 		  Element.defineProperty(this, 'invisible', {
 		    get: true,
-		    set: function set(value) {
+		    set: (function (value) {
 		      assertType(value, 'boolean', false);
 	
 		      if (value) {
-		        _this2.setStyle('visibility', 'hidden');
+		        this.setStyle('visibility', 'hidden');
 		      } else {
-		        if (_this2.getStyle('visibility') === 'hidden') {
-		          _this2.removeStyle('visibility');
+		        if (this.getStyle('visibility') === 'hidden') {
+		          this.removeStyle('visibility');
 		        }
 		      }
 	
 		      return value;
-		    }
+		    }).bind(this)
 		  });
 		};
 	
@@ -3670,7 +3693,6 @@
 	
 		function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 	
-		var Element = __webpack_require__(14);
 		var assert = __webpack_require__(6);
 	
 		/**
@@ -3682,6 +3704,8 @@
 		 * @alias module:requiem~helpers.toElementArray
 		 */
 		function toElementArray(element, keepElement) {
+		  var Element = __webpack_require__(14);
+	
 		  if (!element) return null;
 	
 		  var elements = undefined;

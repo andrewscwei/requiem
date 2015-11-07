@@ -41,12 +41,13 @@ let assertType = require('../helpers/assertType');
 let noval = require('../helpers/noval');
 let log = require('../helpers/log');
 let validateAttribute = require('../helpers/validateAttribute');
+let getInstanceNameFromElement = require('../helpers/getInstanceNameFromElement');
 let DirtyType = require('../types/DirtyType');
 let NodeState = require('../types/NodeState');
 let EventType = require('../types/EventType');
 let Directive = require('../types/Directive');
 let ElementUpdateDelegate = require('../ui/ElementUpdateDelegate');
-let getControllerClassFromElement = require('../helpers/getControllerClassFromElement');
+let sightread = require('../dom/sightread');
 
 /**
  * @class
@@ -401,26 +402,35 @@ Element.prototype.respondsTo = function() {
  * transformed into a Requiem Element. A child is automatically appended
  * to the DOM tree of this instance.
  *
- * @param {Array|Element|HTMLElement} child  - Single child or an array of
- *                                             children. Child elements can be
- *                                             instance(s) of Requiem Elements,
- *                                             jQuery Elements or HTMLElements.
- * @param {string}                    [name] - The name of the child/children to
- *                                             be added. Typically a name is
- *                                             required. If it is not specified,
- *                                             this method will attempt to
- *                                             deduct the name from the provided
- *                                             child/children. This method fails
- *                                             if no name is specified or
- *                                             deducted. If there exists another
- *                                             child with the same name, the
- *                                             added child will be grouped
- *                                             together with the existing child.
+ * @param {Element|Element[]|HTMLElement|HTMLElement[]} child  - Single child or
+ *                                                               an array of
+ *                                                               children. Child
+ *                                                               elements can be
+ *                                                               instance(s) of
+ *                                                               Requiem Elements,
+ *                                                               jQuery Elements
+ *                                                               or HTMLElements.
+ * @param {string} [name] - The name of the child/children to be added.
+ *                          Typically a name is required. If it is not
+ *                          specified, this method will attempt to deduct the
+ *                          name from the provided child/children. This method
+ *                          fails if no name is specified or deducted. If there
+ *                          exists another child with the same name, the added
+ *                          child will be grouped together with the existing
+ *                          child.
+ * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
+ *                                           that provides all controller
+ *                                           classes when sightreading
+ *                                           encounters a controller marked
+ *                                           element.
  *
  * @return {Element|Element[]} The added element(s).
  */
-Element.prototype.addChild = function(child, name) {
+Element.prototype.addChild = function(child, name, controllerDict) {
   if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
+  if (!assertType(controllerDict, 'object', true, 'Parameter \'controllerDict\' is invalid')) return null;
+
+  if (!controllerDict) controllerDict = window;
 
   if (child.jquery) {
     return this.addChild(child.get(), name);
@@ -441,15 +451,15 @@ Element.prototype.addChild = function(child, name) {
     if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return null;
 
     if (child instanceof HTMLElement) {
-      let ControllerClass = getControllerClassFromElement(child) || Element;
-      child = new ControllerClass({
-        element: child
-      });
+      if (noval(name)) name = getInstanceNameFromElement(child);
+      if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
+
+      child.removeAttribute(Directive.INSTANCE);
+      child.removeAttribute('data-'+Directive.INSTANCE);
+      child.setAttribute('data-'+Directive.INSTANCE, name);
+      child = sightread(child, controllerDict);
     }
 
-    name = name || child.name;
-
-    if (!assert(name || child.name, 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
 
     if (this.children[name]) {
       if (this.children[name] instanceof Array) {
@@ -464,8 +474,6 @@ Element.prototype.addChild = function(child, name) {
     else {
       this.children[name] = child;
     }
-
-    child.name = name;
 
     if (child.nodeState === NodeState.IDLE || child.nodeState === NodeState.DESTROYED) {
       child.init();
@@ -1370,7 +1378,7 @@ module.exports = Element;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Fri Nov 06 2015 23:35:10 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Sat Nov 07 2015 01:42:55 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

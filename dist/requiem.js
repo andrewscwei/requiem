@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.15.1', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.15.2', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(28));
@@ -505,7 +505,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var getControllerClassFromElement = __webpack_require__(12);
 	var getControllerClassNameFromElement = __webpack_require__(13);
 	var Directive = __webpack_require__(11);
-	var Element = __webpack_require__(14);
 	var hasChild = __webpack_require__(25);
 
 	/**
@@ -581,6 +580,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~dom._getChildElements
 	 */
 	function _getChildElements(element, controllerDict) {
+	  var Element = __webpack_require__(14);
 	  var children = null;
 
 	  if (!element) element = document;
@@ -864,12 +864,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var noval = __webpack_require__(15);
 	var log = __webpack_require__(16);
 	var validateAttribute = __webpack_require__(17);
+	var getInstanceNameFromElement = __webpack_require__(10);
 	var DirtyType = __webpack_require__(18);
 	var NodeState = __webpack_require__(19);
 	var EventType = __webpack_require__(20);
 	var Directive = __webpack_require__(11);
 	var ElementUpdateDelegate = __webpack_require__(21);
-	var getControllerClassFromElement = __webpack_require__(12);
+	var sightread = __webpack_require__(9);
 
 	/**
 	 * @class
@@ -1216,26 +1217,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * transformed into a Requiem Element. A child is automatically appended
 	 * to the DOM tree of this instance.
 	 *
-	 * @param {Array|Element|HTMLElement} child  - Single child or an array of
-	 *                                             children. Child elements can be
-	 *                                             instance(s) of Requiem Elements,
-	 *                                             jQuery Elements or HTMLElements.
-	 * @param {string}                    [name] - The name of the child/children to
-	 *                                             be added. Typically a name is
-	 *                                             required. If it is not specified,
-	 *                                             this method will attempt to
-	 *                                             deduct the name from the provided
-	 *                                             child/children. This method fails
-	 *                                             if no name is specified or
-	 *                                             deducted. If there exists another
-	 *                                             child with the same name, the
-	 *                                             added child will be grouped
-	 *                                             together with the existing child.
+	 * @param {Element|Element[]|HTMLElement|HTMLElement[]} child  - Single child or
+	 *                                                               an array of
+	 *                                                               children. Child
+	 *                                                               elements can be
+	 *                                                               instance(s) of
+	 *                                                               Requiem Elements,
+	 *                                                               jQuery Elements
+	 *                                                               or HTMLElements.
+	 * @param {string} [name] - The name of the child/children to be added.
+	 *                          Typically a name is required. If it is not
+	 *                          specified, this method will attempt to deduct the
+	 *                          name from the provided child/children. This method
+	 *                          fails if no name is specified or deducted. If there
+	 *                          exists another child with the same name, the added
+	 *                          child will be grouped together with the existing
+	 *                          child.
+	 * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
+	 *                                           that provides all controller
+	 *                                           classes when sightreading
+	 *                                           encounters a controller marked
+	 *                                           element.
 	 *
 	 * @return {Element|Element[]} The added element(s).
 	 */
-	Element.prototype.addChild = function (child, name) {
+	Element.prototype.addChild = function (child, name, controllerDict) {
 	  if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
+	  if (!assertType(controllerDict, 'object', true, 'Parameter \'controllerDict\' is invalid')) return null;
+
+	  if (!controllerDict) controllerDict = window;
 
 	  if (child.jquery) {
 	    return this.addChild(child.get(), name);
@@ -1254,15 +1264,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return null;
 
 	    if (_instanceof(child, HTMLElement)) {
-	      var ControllerClass = getControllerClassFromElement(child) || Element;
-	      child = new ControllerClass({
-	        element: child
-	      });
+	      if (noval(name)) name = getInstanceNameFromElement(child);
+	      if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
+
+	      child.removeAttribute(Directive.INSTANCE);
+	      child.removeAttribute('data-' + Directive.INSTANCE);
+	      child.setAttribute('data-' + Directive.INSTANCE, name);
+	      child = sightread(child, controllerDict);
 	    }
-
-	    name = name || child.name;
-
-	    if (!assert(name || child.name, 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
 
 	    if (this.children[name]) {
 	      if (_instanceof(this.children[name], Array)) {
@@ -1275,8 +1284,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      this.children[name] = child;
 	    }
-
-	    child.name = name;
 
 	    if (child.nodeState === NodeState.IDLE || child.nodeState === NodeState.DESTROYED) {
 	      child.init();
@@ -3617,7 +3624,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
-	var Element = __webpack_require__(14);
 	var assert = __webpack_require__(6);
 
 	/**
@@ -3629,6 +3635,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~helpers.toElementArray
 	 */
 	function toElementArray(element, keepElement) {
+	  var Element = __webpack_require__(14);
+
 	  if (!element) return null;
 
 	  var elements = undefined;
