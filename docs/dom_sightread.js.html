@@ -39,9 +39,11 @@
 let namespace = require('./namespace');
 let assert = require('../helpers/assert');
 let assertType = require('../helpers/assertType');
+let getInstanceNameFromElement = require('../helpers/getInstanceNameFromElement');
+let getControllerClassFromElement = require('../helpers/getControllerClassFromElement');
+let getControllerClassNameFromElement = require('../helpers/getControllerClassNameFromElement');
 let Directive = require('../types/Directive');
 let Element = require('../ui/Element');
-let Video = require('../ui/Video');
 let hasChild = require('../utils/hasChild');
 
 /**
@@ -92,10 +94,10 @@ function sightread() {
     return _getChildElements(element, controllerDict);
   }
   else {
-    let instanceName = _getInstanceNameFromElement(element);
-    let ControllerClass = _getControllerClassFromElement(element, controllerDict);
+    let instanceName = getInstanceNameFromElement(element);
+    let ControllerClass = getControllerClassFromElement(element, controllerDict);
 
-    assertType(ControllerClass, 'function', false, 'Class \'' + _getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
+    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
 
     return new ControllerClass({
       element: element,
@@ -106,11 +108,12 @@ function sightread() {
 }
 
 /**
- * Transforms all the DOM elements inside the specified element marked with custom
- * Requiem attributes into an instance of either its specified controller class or a generic
- * Requiem Element. If a marked DOM element is a child of another marked DOM element, it will
- * be passed into the parent element's children tree as its specified controller
- * class instance or a generic Requiem Element.
+ * Transforms all the DOM elements inside the specified element marked with
+ * custom Requiem attributes into an instance of either its specified controller
+ * class or a generic Requiem Element. If a marked DOM element is a child of
+ * another marked DOM element, it will be passed into the parent element's
+ * children tree as its specified controller class instance or a generic Requiem
+ * Element.
  *
  * @param {HTMLElement|Element} [element=document]
  * @param {Object}              [controllerDict=window]
@@ -132,10 +135,10 @@ function _getChildElements(element, controllerDict) {
 
   for (let i = 0; i &lt; n; i++) {
     let child = qualifiedChildren[i];
-    let instanceName = _getInstanceNameFromElement(child);
-    let ControllerClass = _getControllerClassFromElement(child, controllerDict);
+    let instanceName = getInstanceNameFromElement(child);
+    let ControllerClass = getControllerClassFromElement(child, controllerDict);
 
-    assertType(ControllerClass, 'function', false, 'Class \'' + _getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
+    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
 
     let m = new ControllerClass({
       element: child,
@@ -165,44 +168,17 @@ function _getChildElements(element, controllerDict) {
   return children;
 }
 
-function _getControllerClassFromElement(element, controllerDict) {
-  let controllerClassName = _getControllerClassNameFromElement(element);
-  let instanceName = _getInstanceNameFromElement(element);
-  let controllerClass = (controllerClassName) ? namespace(controllerClassName, controllerDict) : undefined;
-
-  // If no controller class is specified but element is marked as an instance, default the controller class to
-  // Element.
-  if (!controllerClass &amp;&amp; instanceName &amp;&amp; instanceName.length > 0) {
-    controllerClass = Element;
-  }
-  else if (typeof controllerClass !== 'function') {
-    switch (controllerClassName) {
-      case 'Video': {
-        controllerClass = Video;
-        break;
-      }
-      case 'Element': {
-        controllerClass = Element;
-        break;
-      }
-      default: {
-        controllerClass = null;
-        break;
-      }
-    }
-  }
-
-  return controllerClass;
-}
-
-function _getInstanceNameFromElement(element) {
-  return element.getAttribute(Directive.INSTANCE) || element.getAttribute('data-' + Directive.INSTANCE);
-}
-
-function _getControllerClassNameFromElement(element) {
-  return element.getAttribute(Directive.CONTROLLER) || element.getAttribute('data-' + Directive.CONTROLLER);
-}
-
+/**
+ * Scans the provided node list and returns a new node list with only parent
+ * nodes.
+ *
+ * @param  {NodeList} nodeList - The node list.
+ *
+ * @return {NodeList} The filtered node list containing only parent nodes.
+ *
+ * @private
+ * @alias module:requiem~dom._filterParentElements
+ */
 function _filterParentElements(nodeList) {
   let n = nodeList.length;
   let o = [];
@@ -241,13 +217,13 @@ module.exports = sightread;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="AssetLoader.html">AssetLoader</a></li><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li><li><a href="module-requiem-ui.Video.html">Video</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-net.html">net</a></li><li><a href="module-requiem-types.html">types</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="AssetLoader.html">AssetLoader</a></li><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li><li><a href="module-requiem-ui.Video.html">Video</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-net.html">net</a></li><li><a href="module-requiem-types.html">types</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Thu Nov 05 2015 02:55:22 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Fri Nov 06 2015 16:14:01 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

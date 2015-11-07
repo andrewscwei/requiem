@@ -84,7 +84,7 @@ var tasks = {
     clean: paths.docs,
     input: paths.src,
     readme: path.join(paths.base, 'README.md'),
-    config: path.join(paths.base, '.jsdocconfig')
+    config: path.join(paths.base, '.docconfig')
   },
   play: {
     clean: {

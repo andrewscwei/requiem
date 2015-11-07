@@ -22,6 +22,6 @@ var sequence = require('run-sequence');
  * @param {boolean} --watch
  */
 gulp.task('default', function(done) {
-  var seq = ['clean', 'build', 'docs'];
+  var seq = ['clean', 'build'];
   sequence.apply(null, seq);
 });

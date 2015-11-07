@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/removeClass.js</title>
+    <title>JSDoc: Source: helpers/getControllerClassFromElement.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/removeClass.js</h1>
+    <h1 class="page-title">Source: helpers/getControllerClassFromElement.js</h1>
 
     
 
@@ -36,48 +36,55 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let toElementArray = require('../helpers/toElementArray');
+let Directive = require('../types/Directive');
+let getControllerClassNameFromElement = require('./getControllerClassNameFromElement');
+let getInstanceNameFromElement = require('./getInstanceNameFromElement');
+let namespace = require('../dom/namespace');
 
 /**
- * Removes a class(es) from DOM element(s).
+ * Gets the controller class from the DOM element.
  *
- * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
- * @param {string|string[]}                             className
+ * @param  {HTMLElement} element
+ * @param  {Object}      [controllerDict] - Look-up dictionary (object literal)
+ *                                          that provides all controller classes
+ *                                          when sightreading encounters a
+ *                                          controller marked element.
  *
- * @alias module:requiem~utils.removeClass
+ * @return {Class} The controller class.
+ *
+ * @alias module:requiem~helpers.getControllerClassFromElement
  */
-function removeClass(element, className) {
-  let elements = toElementArray(element);
-  let classes = [];
-  let n = elements.length;
+function getControllerClassFromElement(element, controllerDict) {
+  let controllerClassName = getControllerClassNameFromElement(element);
+  let instanceName = getInstanceNameFromElement(element);
+  let controllerClass = (controllerClassName) ? namespace(controllerClassName, controllerDict) : undefined;
 
-  if (!assert((typeof className === 'string') || (className instanceof Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
-
-  if (typeof className === 'string') {
-    classes.push(className);
+  // If no controller class is specified but element is marked as an instance,
+  // default the controller class to Element.
+  if (!controllerClass &amp;&amp; instanceName &amp;&amp; instanceName.length > 0) {
+    controllerClass = require('../ui/Element');
   }
-  else {
-    classes = className;
-  }
-
-  let nClasses = classes.length;
-
-  for (let i = 0; i &lt; n; i++) {
-    let e = elements[i];
-
-    for (let j = 0; j &lt; nClasses; j++) {
-      let c = classes[j];
-
-      if (!assert(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
-
-      let regex = new RegExp('^' + c + '\\s+|\\s+' + c, 'g');
-      e.className = e.className.replace(regex, '');
+  else if (typeof controllerClass !== 'function') {
+    switch (controllerClassName) {
+      case 'Video': {
+        controllerClass = require('../ui/Video');
+        break;
+      }
+      case 'Element': {
+        controllerClass = require('../ui/Element');
+        break;
+      }
+      default: {
+        controllerClass = null;
+        break;
+      }
     }
   }
+
+  return controllerClass;
 }
 
-module.exports = removeClass;
+module.exports = getControllerClassFromElement;
 </code></pre>
         </article>
     </section>

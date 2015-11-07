@@ -11,9 +11,11 @@
 let namespace = require('./namespace');
 let assert = require('../helpers/assert');
 let assertType = require('../helpers/assertType');
+let getInstanceNameFromElement = require('../helpers/getInstanceNameFromElement');
+let getControllerClassFromElement = require('../helpers/getControllerClassFromElement');
+let getControllerClassNameFromElement = require('../helpers/getControllerClassNameFromElement');
 let Directive = require('../types/Directive');
 let Element = require('../ui/Element');
-let Video = require('../ui/Video');
 let hasChild = require('../utils/hasChild');
 
 /**
@@ -64,10 +66,10 @@ function sightread() {
     return _getChildElements(element, controllerDict);
   }
   else {
-    let instanceName = _getInstanceNameFromElement(element);
-    let ControllerClass = _getControllerClassFromElement(element, controllerDict);
+    let instanceName = getInstanceNameFromElement(element);
+    let ControllerClass = getControllerClassFromElement(element, controllerDict);
 
-    assertType(ControllerClass, 'function', false, 'Class \'' + _getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
+    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
 
     return new ControllerClass({
       element: element,
@@ -78,11 +80,12 @@ function sightread() {
 }
 
 /**
- * Transforms all the DOM elements inside the specified element marked with custom
- * Requiem attributes into an instance of either its specified controller class or a generic
- * Requiem Element. If a marked DOM element is a child of another marked DOM element, it will
- * be passed into the parent element's children tree as its specified controller
- * class instance or a generic Requiem Element.
+ * Transforms all the DOM elements inside the specified element marked with
+ * custom Requiem attributes into an instance of either its specified controller
+ * class or a generic Requiem Element. If a marked DOM element is a child of
+ * another marked DOM element, it will be passed into the parent element's
+ * children tree as its specified controller class instance or a generic Requiem
+ * Element.
  *
  * @param {HTMLElement|Element} [element=document]
  * @param {Object}              [controllerDict=window]
@@ -104,10 +107,10 @@ function _getChildElements(element, controllerDict) {
 
   for (let i = 0; i < n; i++) {
     let child = qualifiedChildren[i];
-    let instanceName = _getInstanceNameFromElement(child);
-    let ControllerClass = _getControllerClassFromElement(child, controllerDict);
+    let instanceName = getInstanceNameFromElement(child);
+    let ControllerClass = getControllerClassFromElement(child, controllerDict);
 
-    assertType(ControllerClass, 'function', false, 'Class \'' + _getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
+    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
 
     let m = new ControllerClass({
       element: child,
@@ -137,44 +140,17 @@ function _getChildElements(element, controllerDict) {
   return children;
 }
 
-function _getControllerClassFromElement(element, controllerDict) {
-  let controllerClassName = _getControllerClassNameFromElement(element);
-  let instanceName = _getInstanceNameFromElement(element);
-  let controllerClass = (controllerClassName) ? namespace(controllerClassName, controllerDict) : undefined;
-
-  // If no controller class is specified but element is marked as an instance, default the controller class to
-  // Element.
-  if (!controllerClass && instanceName && instanceName.length > 0) {
-    controllerClass = Element;
-  }
-  else if (typeof controllerClass !== 'function') {
-    switch (controllerClassName) {
-      case 'Video': {
-        controllerClass = Video;
-        break;
-      }
-      case 'Element': {
-        controllerClass = Element;
-        break;
-      }
-      default: {
-        controllerClass = null;
-        break;
-      }
-    }
-  }
-
-  return controllerClass;
-}
-
-function _getInstanceNameFromElement(element) {
-  return element.getAttribute(Directive.INSTANCE) || element.getAttribute('data-' + Directive.INSTANCE);
-}
-
-function _getControllerClassNameFromElement(element) {
-  return element.getAttribute(Directive.CONTROLLER) || element.getAttribute('data-' + Directive.CONTROLLER);
-}
-
+/**
+ * Scans the provided node list and returns a new node list with only parent
+ * nodes.
+ *
+ * @param  {NodeList} nodeList - The node list.
+ *
+ * @return {NodeList} The filtered node list containing only parent nodes.
+ *
+ * @private
+ * @alias module:requiem~dom._filterParentElements
+ */
 function _filterParentElements(nodeList) {
   let n = nodeList.length;
   let o = [];
