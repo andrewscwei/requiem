@@ -17,12 +17,12 @@
  */
 let EventType = {
   DATA: {
-    CHANGE: 'datachange'
+    DATA_CHANGE: 'datachange' // Custom
   },
   MOUSE: {
     CLICK: 'click',
     CONTEXT_MENU: 'contextmenu',
-    CLICK_OUTSIDE: 'clickoutside', // Requiem Element exclusive
+    CLICK_OUTSIDE: 'clickoutside', // Custom
     DOUBLE_CLICK: 'dblclick',
     MOUSE_DOWN: 'mousedown',
     MOUSE_ENTER: 'mouseenter',
@@ -54,7 +54,7 @@ let EventType = {
     RESIZE: 'resize',
     SCROLL: 'scroll',
     UNLOAD: 'unload',
-    PROGRESS: 'progress' // custom
+    PROGRESS: 'progress' // Custom
   },
   FORM: {
     BLUR: 'blur',
@@ -67,7 +67,8 @@ let EventType = {
     RESET: 'reset',
     SEARCH: 'search',
     SELECT: 'select',
-    SUBMIT: 'submit'
+    SUBMIT: 'submit',
+    CANCEL: 'cancel' // Custom
   },
   DRAG: {
     DRAG: 'drag',

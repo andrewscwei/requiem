@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.15.2', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.15.3', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(28));
@@ -2454,12 +2454,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var EventType = {
 	  DATA: {
-	    CHANGE: 'datachange'
+	    DATA_CHANGE: 'datachange' // Custom
 	  },
 	  MOUSE: {
 	    CLICK: 'click',
 	    CONTEXT_MENU: 'contextmenu',
-	    CLICK_OUTSIDE: 'clickoutside', // Requiem Element exclusive
+	    CLICK_OUTSIDE: 'clickoutside', // Custom
 	    DOUBLE_CLICK: 'dblclick',
 	    MOUSE_DOWN: 'mousedown',
 	    MOUSE_ENTER: 'mouseenter',
@@ -2491,7 +2491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    RESIZE: 'resize',
 	    SCROLL: 'scroll',
 	    UNLOAD: 'unload',
-	    PROGRESS: 'progress' // custom
+	    PROGRESS: 'progress' // Custom
 	  },
 	  FORM: {
 	    BLUR: 'blur',
@@ -2504,7 +2504,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    RESET: 'reset',
 	    SEARCH: 'search',
 	    SELECT: 'select',
-	    SUBMIT: 'submit'
+	    SUBMIT: 'submit',
+	    CANCEL: 'cancel' // Custom
 	  },
 	  DRAG: {
 	    DRAG: 'drag',
