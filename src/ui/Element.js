@@ -432,7 +432,6 @@ Element.prototype.addChild = function(child, name, controllerDict) {
       child = sightread(child, controllerDict);
     }
 
-
     if (this.children[name]) {
       if (this.children[name] instanceof Array) {
         this.children[name].push(child);

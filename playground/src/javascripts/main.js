@@ -9,11 +9,12 @@ dom.namespace().Bar = require('./components/Bar');
 
 let nodes;
 
-let e = dom.createElement('<div data-r-controller="Foo"></div>');
 
 dom.ready(() => {
   nodes = dom.sightread();
 
-  nodes.playground.addChild(e, 'foo');
-  nodes.playground.removeChild(e);
+  for (let i = 0; i < 5; i++) {
+    let e = dom.createElement('<div data-r-controller="Foo"></div>');
+    nodes.playground.addChild(e, 'foo');
+  }
 });
