@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.15.4', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.15.5', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(28));
@@ -1271,6 +1271,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      child.removeAttribute('data-' + Directive.INSTANCE);
 	      child.setAttribute('data-' + Directive.INSTANCE, name);
 	      child = sightread(child, controllerDict);
+	    } else {
+	      if (noval(name)) name = child.name;
+	      if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
+
+	      child.name = name;
 	    }
 
 	    if (this.children[name]) {

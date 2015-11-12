@@ -431,6 +431,12 @@ Element.prototype.addChild = function(child, name, controllerDict) {
       child.setAttribute('data-'+Directive.INSTANCE, name);
       child = sightread(child, controllerDict);
     }
+    else {
+      if (noval(name)) name = child.name;
+      if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
+
+      child.name = name;
+    }
 
     if (this.children[name]) {
       if (this.children[name] instanceof Array) {

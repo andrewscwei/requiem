@@ -58,7 +58,7 @@
 	  nodes = _requiem.dom.sightread();
 	
 	  for (var i = 0; i < 5; i++) {
-	    var e = _requiem.dom.createElement('<div data-r-controller="Foo"></div>');
+	    var e = new _requiem.Element(document.createElement('a'));
 	    nodes.playground.addChild(e, 'foo');
 	  }
 	});
@@ -149,7 +149,7 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.15.4', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.15.5', writable: false });
 	
 		injectModule(requiem, 'dom', __webpack_require__(3));
 		injectModule(requiem, 'events', __webpack_require__(28));
@@ -1340,6 +1340,11 @@
 		      child.removeAttribute('data-' + Directive.INSTANCE);
 		      child.setAttribute('data-' + Directive.INSTANCE, name);
 		      child = sightread(child, controllerDict);
+		    } else {
+		      if (noval(name)) name = child.name;
+		      if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
+	
+		      child.name = name;
 		    }
 	
 		    if (this.children[name]) {
