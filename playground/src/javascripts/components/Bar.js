@@ -5,39 +5,17 @@ import { Element, EventType, DirtyType, KeyCode } from 'requiem';
 
 class Bar extends Element {
   init() {
-    this.bar = 'hello';
+    this.setStyle('width', 100);
+    this.setStyle('height', 50);
+    this.setStyle('backgroundColor', '#ff0');
 
-    Element.defineProperty(this, 'foo', {
-      defaultValue: 0,
-      dirtyType: DirtyType.DATA,
-      eventType: EventType.DATA.CHANGE,
-      attribute: 'data-foo',
-      get: true,
-      set: true
-    });
-
-    let b = this.getChild('button');
-    b.setStyle('width', 50);
-    b.setStyle('height', 30);
-    b.setStyle('backgroundColor', '#ff0');
-    b.addEventListener(EventType.MOUSE.CLICK, (event) => {
-      this.foo++;
-    });
-
+    console.log('Bar');
     super.init();
   }
 
   update() {
-    if (this.isDirty(DirtyType.DATA)) {
-
-    }
-
     super.update();
-  }
-
-  destroy() {
-    super.destroy();
   }
 }
 
-module.exports = Bar;
+export default Bar;

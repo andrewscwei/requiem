@@ -3,18 +3,14 @@
 
 import { dom, Element } from 'requiem';
 
-dom.namespace().Playground = require('./components/Playground');
-dom.namespace().Foo = require('./components/Foo');
-dom.namespace().Bar = require('./components/Bar');
-
-let nodes;
-
+import Playground from './components/Playground';
+import Foo from './components/Foo';
+import Bar from './components/Bar';
 
 dom.ready(() => {
-  nodes = dom.sightread();
+  dom.namespace().Playground = Playground;
+  dom.namespace().Foo = Foo;
+  dom.namespace().Bar = Bar;
 
-  for (let i = 0; i < 5; i++) {
-    let e = new Element(document.createElement('a'));
-    nodes.playground.addChild(e, 'foo');
-  }
+  let nodes = dom.sightread();
 });

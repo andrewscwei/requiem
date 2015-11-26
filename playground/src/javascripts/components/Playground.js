@@ -3,25 +3,17 @@
 
 import { Element, EventType, DirtyType } from 'requiem';
 
+import Foo from './Foo';
+
 class Playground extends Element {
   init() {
-    let bar = this.getChild('bar');
-    bar.addEventListener(EventType.DATA.CHANGE, (event) => {
-      console.log(this.properties);
-      this.properties.bar++;
-      this.properties.foo--;
-    });
-
+    this.addChild(new Foo(), 'foo');
     super.init();
   }
 
   update() {
     super.update();
   }
-
-  destroy() {
-    super.destroy();
-  }
 }
 
-module.exports = Playground;
+export default Playground;

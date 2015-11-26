@@ -906,6 +906,51 @@ Element.prototype.hasClass = function(className) {
 };
 
 /**
+ * Gets the value of the property with the specified name.
+ *
+ * @param {string} key - Name of the property.
+ *
+ * @return {*} Value of the property.
+ */
+Element.prototype.getProperty = function(key) {
+  return this.properties[key];
+};
+
+/**
+ * Checks to see if this Element instance has the property of the specified
+ * name.
+ *
+ * @param {string} key - Name of the property.
+ *
+ * @return {boolean} True if property exists, false othwerwise.
+ */
+Element.prototype.hasProperty = function(key) {
+  return this.properties.hasOwnProperty(key);
+};
+
+/**
+ * Sets the property of the specified name with the specified value. If
+ * properties does not exist, it will be newly defined.
+ *
+ * @param {string} key   - Name of the property.
+ * @param {*}      value - Value of the property.
+ */
+Element.prototype.setProperty = function(key, value) {
+  if (this.hasProperty(key)) {
+    this.properties[key] = value;
+  }
+  else {
+    Element.defineProperty(this, key, {
+      defaultValue: (value === '') ? true : value,
+      attribute: 'data-'+Directive.PROPERTY+'-'+key,
+      dirtyType: DirtyType.DATA,
+      get: true,
+      set: true
+    }, 'properties');
+  }
+};
+
+/**
  * Gets the value of the attribute with the specified name.
  *
  * @param  {string} key - Name of the attribute.
@@ -1203,9 +1248,12 @@ Element.prototype.__define_properties = function() {
    *
    * @property {Object}
    */
-  Object.defineProperty(this, 'data', {
-    value: {},
-    writable: true
+  Element.defineProperty(this, 'data', {
+    defaultValue: null,
+    get: true,
+    set: true,
+    dirtyType: DirtyType.DATA,
+    eventType: EventType.DATA.DATA_CHANGE
   });
 
   /**

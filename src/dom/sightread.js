@@ -19,7 +19,8 @@ let hasChild = require('../utils/hasChild');
 /**
  * Crawls a DOM node and performs transformations on child nodes marked with
  * Requiem attributes, such as instantiating controller classes and assigning
- * instance names.
+ * instance names. Transformations are also applied to the specified DOM node,
+ * not just its children.
  *
  * @param {HTMLElement} [element=document]      - Target element for
  *                                                sightreading. By default this

@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.15.5', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.16.0', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(28));
@@ -510,7 +510,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Crawls a DOM node and performs transformations on child nodes marked with
 	 * Requiem attributes, such as instantiating controller classes and assigning
-	 * instance names.
+	 * instance names. Transformations are also applied to the specified DOM node,
+	 * not just its children.
 	 *
 	 * @param {HTMLElement} [element=document]      - Target element for
 	 *                                                sightreading. By default this
@@ -1727,6 +1728,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/**
+	 * Gets the value of the property with the specified name.
+	 *
+	 * @param {string} key - Name of the property.
+	 *
+	 * @return {*} Value of the property.
+	 */
+	Element.prototype.getProperty = function (key) {
+	  return this.properties[key];
+	};
+
+	/**
+	 * Checks to see if this Element instance has the property of the specified
+	 * name.
+	 *
+	 * @param {string} key - Name of the property.
+	 *
+	 * @return {boolean} True if property exists, false othwerwise.
+	 */
+	Element.prototype.hasProperty = function (key) {
+	  return this.properties.hasOwnProperty(key);
+	};
+
+	/**
+	 * Sets the property of the specified name with the specified value. If
+	 * properties does not exist, it will be newly defined.
+	 *
+	 * @param {string} key   - Name of the property.
+	 * @param {*}      value - Value of the property.
+	 */
+	Element.prototype.setProperty = function (key, value) {
+	  if (this.hasProperty(key)) {
+	    this.properties[key] = value;
+	  } else {
+	    Element.defineProperty(this, key, {
+	      defaultValue: value === '' ? true : value,
+	      attribute: 'data-' + Directive.PROPERTY + '-' + key,
+	      dirtyType: DirtyType.DATA,
+	      get: true,
+	      set: true
+	    }, 'properties');
+	  }
+	};
+
+	/**
 	 * Gets the value of the attribute with the specified name.
 	 *
 	 * @param  {string} key - Name of the attribute.
@@ -2019,9 +2064,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   *
 	   * @property {Object}
 	   */
-	  Object.defineProperty(this, 'data', {
-	    value: {},
-	    writable: true
+	  Element.defineProperty(this, 'data', {
+	    defaultValue: null,
+	    get: true,
+	    set: true,
+	    dirtyType: DirtyType.DATA,
+	    eventType: EventType.DATA.DATA_CHANGE
 	  });
 
 	  /**

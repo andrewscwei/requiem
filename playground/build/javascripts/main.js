@@ -48,19 +48,26 @@
 	
 	var _requiem = __webpack_require__(1);
 	
-	_requiem.dom.namespace().Playground = __webpack_require__(2);
-	_requiem.dom.namespace().Foo = __webpack_require__(3);
-	_requiem.dom.namespace().Bar = __webpack_require__(4);
+	var _Playground = __webpack_require__(2);
 	
-	var nodes = undefined;
+	var _Playground2 = _interopRequireDefault(_Playground);
+	
+	var _Foo = __webpack_require__(3);
+	
+	var _Foo2 = _interopRequireDefault(_Foo);
+	
+	var _Bar = __webpack_require__(4);
+	
+	var _Bar2 = _interopRequireDefault(_Bar);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	_requiem.dom.ready(function () {
-	  nodes = _requiem.dom.sightread();
+	  _requiem.dom.namespace().Playground = _Playground2.default;
+	  _requiem.dom.namespace().Foo = _Foo2.default;
+	  _requiem.dom.namespace().Bar = _Bar2.default;
 	
-	  for (var i = 0; i < 5; i++) {
-	    var e = new _requiem.Element(document.createElement('a'));
-	    nodes.playground.addChild(e, 'foo');
-	  }
+	  var nodes = _requiem.dom.sightread();
 	});
 
 /***/ },
@@ -579,7 +586,8 @@
 		/**
 		 * Crawls a DOM node and performs transformations on child nodes marked with
 		 * Requiem attributes, such as instantiating controller classes and assigning
-		 * instance names.
+		 * instance names. Transformations are also applied to the specified DOM node,
+		 * not just its children.
 		 *
 		 * @param {HTMLElement} [element=document]      - Target element for
 		 *                                                sightreading. By default this
@@ -5844,7 +5852,17 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
 	var _requiem = __webpack_require__(1);
+	
+	var _Foo = __webpack_require__(3);
+	
+	var _Foo2 = _interopRequireDefault(_Foo);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -5864,15 +5882,7 @@
 	  _createClass(Playground, [{
 	    key: 'init',
 	    value: function init() {
-	      var _this2 = this;
-	
-	      var bar = this.getChild('bar');
-	      bar.addEventListener(_requiem.EventType.DATA.CHANGE, function (event) {
-	        console.log(_this2.properties);
-	        _this2.properties.bar++;
-	        _this2.properties.foo--;
-	      });
-	
+	      this.addChild(new _Foo2.default(), 'foo');
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
 	    }
 	  }, {
@@ -5880,17 +5890,12 @@
 	    value: function update() {
 	      _get(Object.getPrototypeOf(Playground.prototype), 'update', this).call(this);
 	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      _get(Object.getPrototypeOf(Playground.prototype), 'destroy', this).call(this);
-	    }
 	  }]);
 	
 	  return Playground;
 	})(_requiem.Element);
 	
-	module.exports = Playground;
+	exports.default = Playground;
 
 /***/ },
 /* 3 */
@@ -5901,6 +5906,10 @@
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
 	var _requiem = __webpack_require__(1);
 	
@@ -5922,24 +5931,27 @@
 	  _createClass(Foo, [{
 	    key: 'init',
 	    value: function init() {
+	      this.setStyle('width', 100);
+	      this.setStyle('height', 50);
+	      this.setStyle('backgroundColor', '#000');
 	      _get(Object.getPrototypeOf(Foo.prototype), 'init', this).call(this);
-	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      _get(Object.getPrototypeOf(Foo.prototype), 'destroy', this).call(this);
 	    }
 	  }, {
 	    key: 'update',
 	    value: function update() {
 	      _get(Object.getPrototypeOf(Foo.prototype), 'update', this).call(this);
 	    }
+	  }, {
+	    key: 'factory',
+	    value: function factory() {
+	      return _requiem.dom.createElement('<div><div data-r-controller="Bar"></div></div>');
+	    }
 	  }]);
 	
 	  return Foo;
 	})(_requiem.Element);
 	
-	module.exports = Foo;
+	exports.default = Foo;
 
 /***/ },
 /* 4 */
@@ -5950,6 +5962,10 @@
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	
 	var _requiem = __webpack_require__(1);
 	
@@ -5971,47 +5987,24 @@
 	  _createClass(Bar, [{
 	    key: 'init',
 	    value: function init() {
-	      var _this2 = this;
+	      this.setStyle('width', 100);
+	      this.setStyle('height', 50);
+	      this.setStyle('backgroundColor', '#ff0');
 	
-	      this.bar = 'hello';
-	
-	      _requiem.Element.defineProperty(this, 'foo', {
-	        defaultValue: 0,
-	        dirtyType: _requiem.DirtyType.DATA,
-	        eventType: _requiem.EventType.DATA.CHANGE,
-	        attribute: 'data-foo',
-	        get: true,
-	        set: true
-	      });
-	
-	      var b = this.getChild('button');
-	      b.setStyle('width', 50);
-	      b.setStyle('height', 30);
-	      b.setStyle('backgroundColor', '#ff0');
-	      b.addEventListener(_requiem.EventType.MOUSE.CLICK, function (event) {
-	        _this2.foo++;
-	      });
-	
+	      console.log('Bar');
 	      _get(Object.getPrototypeOf(Bar.prototype), 'init', this).call(this);
 	    }
 	  }, {
 	    key: 'update',
 	    value: function update() {
-	      if (this.isDirty(_requiem.DirtyType.DATA)) {}
-	
 	      _get(Object.getPrototypeOf(Bar.prototype), 'update', this).call(this);
-	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      _get(Object.getPrototypeOf(Bar.prototype), 'destroy', this).call(this);
 	    }
 	  }]);
 	
 	  return Bar;
 	})(_requiem.Element);
 	
-	module.exports = Bar;
+	exports.default = Bar;
 
 /***/ }
 /******/ ]);
