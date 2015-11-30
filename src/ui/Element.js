@@ -273,7 +273,7 @@ Element.addEventListener = function() {
   let listener = arguments[2];
   let useCapture = arguments[3] || false;
 
-  assertType(element, Element, true);
+  assert(!element || element instanceof Element);
 
   if (noval(element)) return;
 
@@ -291,7 +291,7 @@ Element.removeEventListener = function() {
   let listener = arguments[2];
   let useCapture = arguments[3] || false;
 
-  assertType(element, Element, true);
+  assert(!element || element instanceof Element);
 
   if (noval(element)) return;
 
