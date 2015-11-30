@@ -156,7 +156,7 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.15.5', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.18.0', writable: false });
 	
 		injectModule(requiem, 'dom', __webpack_require__(3));
 		injectModule(requiem, 'events', __webpack_require__(28));
@@ -1187,6 +1187,42 @@
 		};
 	
 		/**
+		 * Adds an event listener to an Element instance.
+		 *
+		 * @see module:requiem~ui.Element#addEventListener
+		 */
+		Element.addEventListener = function () {
+		  var element = arguments[0];
+		  var event = arguments[1];
+		  var listener = arguments[2];
+		  var useCapture = arguments[3] || false;
+	
+		  assertType(element, Element, true);
+	
+		  if (noval(element)) return;
+	
+		  element.addEventListener(event, listener, useCapture);
+		};
+	
+		/**
+		 * Removes an event listener from an Element instance.
+		 *
+		 * @see module:requiem~ui.Element#removeEventListener
+		 */
+		Element.removeEventListener = function () {
+		  var element = arguments[0];
+		  var event = arguments[1];
+		  var listener = arguments[2];
+		  var useCapture = arguments[3] || false;
+	
+		  assertType(element, Element, true);
+	
+		  if (noval(element)) return;
+	
+		  element.removeEventListener(event, listener, useCapture);
+		};
+	
+		/**
 		 * Initializes this Element instance. Must manually invoke.
 		 */
 		Element.prototype.init = function () {
@@ -1417,7 +1453,7 @@
 		      e = child.get(0);
 		    } else if (_instanceof(child, Element)) {
 		      e = child.element;
-		    } else if (_instanceof(child, HTMLElement)) {
+		    } else {
 		      e = child;
 		    }
 	
@@ -1804,6 +1840,50 @@
 		};
 	
 		/**
+		 * Gets the value of the property with the specified name.
+		 *
+		 * @param {string} key - Name of the property.
+		 *
+		 * @return {*} Value of the property.
+		 */
+		Element.prototype.getProperty = function (key) {
+		  return this.properties[key];
+		};
+	
+		/**
+		 * Checks to see if this Element instance has the property of the specified
+		 * name.
+		 *
+		 * @param {string} key - Name of the property.
+		 *
+		 * @return {boolean} True if property exists, false othwerwise.
+		 */
+		Element.prototype.hasProperty = function (key) {
+		  return this.properties.hasOwnProperty(key);
+		};
+	
+		/**
+		 * Sets the property of the specified name with the specified value. If
+		 * properties does not exist, it will be newly defined.
+		 *
+		 * @param {string} key   - Name of the property.
+		 * @param {*}      value - Value of the property.
+		 */
+		Element.prototype.setProperty = function (key, value) {
+		  if (this.hasProperty(key)) {
+		    this.properties[key] = value;
+		  } else {
+		    Element.defineProperty(this, key, {
+		      defaultValue: value === '' ? true : value,
+		      attribute: 'data-' + Directive.PROPERTY + '-' + key,
+		      dirtyType: DirtyType.DATA,
+		      get: true,
+		      set: true
+		    }, 'properties');
+		  }
+		};
+	
+		/**
 		 * Gets the value of the attribute with the specified name.
 		 *
 		 * @param  {string} key - Name of the attribute.
@@ -1811,7 +1891,11 @@
 		 * @return {*} Value of the attribute.
 		 */
 		Element.prototype.getAttribute = function (key) {
-		  return this.element.getAttribute(key);
+		  var value = this.element.getAttribute(key);
+	
+		  if (value === '') return true;
+		  if (value === undefined || value === null) return null;
+		  return value;
 		};
 	
 		/**
@@ -1824,10 +1908,14 @@
 		Element.prototype.setAttribute = function (key, value) {
 		  if (!assert(validateAttribute(key), 'Attribute \'' + key + '\' is reserved')) return;
 	
-		  if (value === undefined || value === null) {
-		    this.element.setAttribute(key, '');
+		  if (value === undefined || value === null || value === false) {
+		    this.element.removeAttribute(key);
 		  } else {
 		    this.element.setAttribute(key, value);
+		  }
+	
+		  if (key === 'disabled') {
+		    this.setDirty(DirtyType.STATE);
 		  }
 		};
 	
@@ -2096,9 +2184,12 @@
 		   *
 		   * @property {Object}
 		   */
-		  Object.defineProperty(this, 'data', {
-		    value: {},
-		    writable: true
+		  Element.defineProperty(this, 'data', {
+		    defaultValue: null,
+		    get: true,
+		    set: true,
+		    dirtyType: DirtyType.DATA,
+		    eventType: EventType.DATA.DATA_CHANGE
 		  });
 	
 		  /**
@@ -2199,6 +2290,25 @@
 		      }
 	
 		      return value;
+		    }).bind(this)
+		  });
+	
+		  /**
+		   * Specifies whether this Element instance is disabled.
+		   *
+		   * @property {boolean}
+		   */
+		  Object.defineProperty(this, 'disabled', {
+		    get: (function () {
+		      if (this.hasAttribute('disabled')) {
+		        return this.getAttribute('disabled');
+		      } else {
+		        return false;
+		      }
+		    }).bind(this),
+		    set: (function (value) {
+		      assertType(value, 'boolean', false);
+		      this.setAttribute('disabled', value);
 		    }).bind(this)
 		  });
 		};
@@ -3703,11 +3813,9 @@
 		 * http://www.opensource.org/licenses/mit-license.php
 		 */
 	
-		'use strict';
+		'use strict'
 	
-		function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-	
-		var assert = __webpack_require__(6);
+		// let assert = require('./assert');
 	
 		/**
 		 * Transforms given element(s) to an element array.
@@ -3717,6 +3825,10 @@
 		 *
 		 * @alias module:requiem~helpers.toElementArray
 		 */
+		;
+	
+		function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+	
 		function toElementArray(element, keepElement) {
 		  var Element = __webpack_require__(14);
 	
@@ -3731,12 +3843,12 @@
 		  } else if (element.jquery) {
 		    elements = element.get();
 		  } else {
-		    if (!assert(_instanceof(element, HTMLElement) || _instanceof(element, Element), 'Invalid element specified. Element must be an instance of HTMLElement or Requiem Element.')) return null;
+		    // if (!assert((element instanceof HTMLElement) || (element instanceof Element), 'Invalid element specified. Element must be an instance of HTMLElement or Requiem Element.')) return null;
 	
-		    if (_instanceof(element, HTMLElement)) {
-		      elements = [element];
-		    } else if (_instanceof(element, Element)) {
+		    if (_instanceof(element, Element)) {
 		      elements = [element.element];
+		    } else {
+		      elements = [element];
 		    }
 		  }
 	
@@ -3745,7 +3857,7 @@
 		  for (var i = 0; i < n; i++) {
 		    var e = elements[i];
 	
-		    if (!assert(_instanceof(e, HTMLElement) || _instanceof(e, Element), 'Element array contains invalid element(s). Each element must be an instance of HTMLElement or Requiem Element.')) return null;
+		    // if (!assert((e instanceof HTMLElement) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of HTMLElement or Requiem Element.')) return null;
 	
 		    if (!keepElement && _instanceof(e, Element)) {
 		      elements[i] = e.element;
@@ -5883,6 +5995,7 @@
 	    key: 'init',
 	    value: function init() {
 	      this.addChild(new _Foo2.default(), 'foo');
+	
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
 	    }
 	  }, {

@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.17.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.18.0', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(28));
@@ -1111,6 +1111,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	/**
+	 * Adds an event listener to an Element instance.
+	 *
+	 * @see module:requiem~ui.Element#addEventListener
+	 */
+	Element.addEventListener = function () {
+	  var element = arguments[0];
+	  var event = arguments[1];
+	  var listener = arguments[2];
+	  var useCapture = arguments[3] || false;
+
+	  assertType(element, Element, true);
+
+	  if (noval(element)) return;
+
+	  element.addEventListener(event, listener, useCapture);
+	};
+
+	/**
+	 * Removes an event listener from an Element instance.
+	 *
+	 * @see module:requiem~ui.Element#removeEventListener
+	 */
+	Element.removeEventListener = function () {
+	  var element = arguments[0];
+	  var event = arguments[1];
+	  var listener = arguments[2];
+	  var useCapture = arguments[3] || false;
+
+	  assertType(element, Element, true);
+
+	  if (noval(element)) return;
+
+	  element.removeEventListener(event, listener, useCapture);
+	};
+
+	/**
 	 * Initializes this Element instance. Must manually invoke.
 	 */
 	Element.prototype.init = function () {
@@ -1779,7 +1815,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @return {*} Value of the attribute.
 	 */
 	Element.prototype.getAttribute = function (key) {
-	  return this.element.getAttribute(key);
+	  var value = this.element.getAttribute(key);
+
+	  if (value === '') return true;
+	  if (value === undefined || value === null) return null;
+	  return value;
 	};
 
 	/**
@@ -1792,10 +1832,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	Element.prototype.setAttribute = function (key, value) {
 	  if (!assert(validateAttribute(key), 'Attribute \'' + key + '\' is reserved')) return;
 
-	  if (value === undefined || value === null) {
-	    this.element.setAttribute(key, '');
+	  if (value === undefined || value === null || value === false) {
+	    this.element.removeAttribute(key);
 	  } else {
 	    this.element.setAttribute(key, value);
+	  }
+
+	  if (key === 'disabled') {
+	    this.setDirty(DirtyType.STATE);
 	  }
 	};
 
@@ -2170,6 +2214,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      return value;
+	    }).bind(this)
+	  });
+
+	  /**
+	   * Specifies whether this Element instance is disabled.
+	   *
+	   * @property {boolean}
+	   */
+	  Object.defineProperty(this, 'disabled', {
+	    get: (function () {
+	      if (this.hasAttribute('disabled')) {
+	        return this.getAttribute('disabled');
+	      } else {
+	        return false;
+	      }
+	    }).bind(this),
+	    set: (function (value) {
+	      assertType(value, 'boolean', false);
+	      this.setAttribute('disabled', value);
 	    }).bind(this)
 	  });
 	};

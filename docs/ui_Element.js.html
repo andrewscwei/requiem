@@ -291,6 +291,42 @@ Element.defineProperty = function(element, propertyName, descriptor, scope) {
 };
 
 /**
+ * Adds an event listener to an Element instance.
+ *
+ * @see module:requiem~ui.Element#addEventListener
+ */
+Element.addEventListener = function() {
+  let element = arguments[0];
+  let event = arguments[1];
+  let listener = arguments[2];
+  let useCapture = arguments[3] || false;
+
+  assertType(element, Element, true);
+
+  if (noval(element)) return;
+
+  element.addEventListener(event, listener, useCapture);
+};
+
+/**
+ * Removes an event listener from an Element instance.
+ *
+ * @see module:requiem~ui.Element#removeEventListener
+ */
+Element.removeEventListener = function() {
+  let element = arguments[0];
+  let event = arguments[1];
+  let listener = arguments[2];
+  let useCapture = arguments[3] || false;
+
+  assertType(element, Element, true);
+
+  if (noval(element)) return;
+
+  element.removeEventListener(event, listener, useCapture);
+};
+
+/**
  * Initializes this Element instance. Must manually invoke.
  */
 Element.prototype.init = function() {
@@ -459,7 +495,12 @@ Element.prototype.addChild = function(child, name, controllerDict) {
       child.setAttribute('data-'+Directive.INSTANCE, name);
       child = sightread(child, controllerDict);
     }
+    else {
+      if (noval(name)) name = child.name;
+      if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
 
+      child.name = name;
+    }
 
     if (this.children[name]) {
       if (this.children[name] instanceof Array) {
@@ -528,7 +569,7 @@ Element.prototype.hasChild = function(child) {
     else if (child instanceof Element) {
       e = child.element;
     }
-    else if (child instanceof HTMLElement) {
+    else {
       e = child;
     }
 
@@ -929,6 +970,51 @@ Element.prototype.hasClass = function(className) {
 };
 
 /**
+ * Gets the value of the property with the specified name.
+ *
+ * @param {string} key - Name of the property.
+ *
+ * @return {*} Value of the property.
+ */
+Element.prototype.getProperty = function(key) {
+  return this.properties[key];
+};
+
+/**
+ * Checks to see if this Element instance has the property of the specified
+ * name.
+ *
+ * @param {string} key - Name of the property.
+ *
+ * @return {boolean} True if property exists, false othwerwise.
+ */
+Element.prototype.hasProperty = function(key) {
+  return this.properties.hasOwnProperty(key);
+};
+
+/**
+ * Sets the property of the specified name with the specified value. If
+ * properties does not exist, it will be newly defined.
+ *
+ * @param {string} key   - Name of the property.
+ * @param {*}      value - Value of the property.
+ */
+Element.prototype.setProperty = function(key, value) {
+  if (this.hasProperty(key)) {
+    this.properties[key] = value;
+  }
+  else {
+    Element.defineProperty(this, key, {
+      defaultValue: (value === '') ? true : value,
+      attribute: 'data-'+Directive.PROPERTY+'-'+key,
+      dirtyType: DirtyType.DATA,
+      get: true,
+      set: true
+    }, 'properties');
+  }
+};
+
+/**
  * Gets the value of the attribute with the specified name.
  *
  * @param  {string} key - Name of the attribute.
@@ -936,7 +1022,11 @@ Element.prototype.hasClass = function(className) {
  * @return {*} Value of the attribute.
  */
 Element.prototype.getAttribute = function(key) {
-  return this.element.getAttribute(key);
+  let value = this.element.getAttribute(key);
+
+  if (value === '') return true;
+  if (value === undefined || value === null) return null;
+  return value;
 };
 
 /**
@@ -949,11 +1039,15 @@ Element.prototype.getAttribute = function(key) {
 Element.prototype.setAttribute = function(key, value) {
   if (!assert(validateAttribute(key), 'Attribute \'' + key + '\' is reserved')) return;
 
-  if (value === undefined || value === null) {
-    this.element.setAttribute(key, '');
+  if (value === undefined || value === null || value === false) {
+    this.element.removeAttribute(key);
   }
   else {
     this.element.setAttribute(key, value);
+  }
+
+  if (key === 'disabled') {
+    this.setDirty(DirtyType.STATE);
   }
 };
 
@@ -1226,9 +1320,12 @@ Element.prototype.__define_properties = function() {
    *
    * @property {Object}
    */
-  Object.defineProperty(this, 'data', {
-    value: {},
-    writable: true
+  Element.defineProperty(this, 'data', {
+    defaultValue: null,
+    get: true,
+    set: true,
+    dirtyType: DirtyType.DATA,
+    eventType: EventType.DATA.DATA_CHANGE
   });
 
   /**
@@ -1333,6 +1430,26 @@ Element.prototype.__define_properties = function() {
       return value;
     }.bind(this)
   });
+
+  /**
+   * Specifies whether this Element instance is disabled.
+   *
+   * @property {boolean}
+   */
+  Object.defineProperty(this, 'disabled', {
+    get: function() {
+      if (this.hasAttribute('disabled')) {
+        return this.getAttribute('disabled');
+      }
+      else {
+        return false;
+      }
+    }.bind(this),
+    set: function(value) {
+      assertType(value, 'boolean', false);
+      this.setAttribute('disabled', value);
+    }.bind(this)
+  });
 };
 
 /**
@@ -1378,7 +1495,7 @@ module.exports = Element;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Sun Nov 08 2015 22:52:50 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Mon Nov 30 2015 15:43:19 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

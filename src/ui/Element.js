@@ -263,6 +263,42 @@ Element.defineProperty = function(element, propertyName, descriptor, scope) {
 };
 
 /**
+ * Adds an event listener to an Element instance.
+ *
+ * @see module:requiem~ui.Element#addEventListener
+ */
+Element.addEventListener = function() {
+  let element = arguments[0];
+  let event = arguments[1];
+  let listener = arguments[2];
+  let useCapture = arguments[3] || false;
+
+  assertType(element, Element, true);
+
+  if (noval(element)) return;
+
+  element.addEventListener(event, listener, useCapture);
+};
+
+/**
+ * Removes an event listener from an Element instance.
+ *
+ * @see module:requiem~ui.Element#removeEventListener
+ */
+Element.removeEventListener = function() {
+  let element = arguments[0];
+  let event = arguments[1];
+  let listener = arguments[2];
+  let useCapture = arguments[3] || false;
+
+  assertType(element, Element, true);
+
+  if (noval(element)) return;
+
+  element.removeEventListener(event, listener, useCapture);
+};
+
+/**
  * Initializes this Element instance. Must manually invoke.
  */
 Element.prototype.init = function() {
@@ -958,7 +994,11 @@ Element.prototype.setProperty = function(key, value) {
  * @return {*} Value of the attribute.
  */
 Element.prototype.getAttribute = function(key) {
-  return this.element.getAttribute(key);
+  let value = this.element.getAttribute(key);
+
+  if (value === '') return true;
+  if (value === undefined || value === null) return null;
+  return value;
 };
 
 /**
@@ -971,11 +1011,15 @@ Element.prototype.getAttribute = function(key) {
 Element.prototype.setAttribute = function(key, value) {
   if (!assert(validateAttribute(key), 'Attribute \'' + key + '\' is reserved')) return;
 
-  if (value === undefined || value === null) {
-    this.element.setAttribute(key, '');
+  if (value === undefined || value === null || value === false) {
+    this.element.removeAttribute(key);
   }
   else {
     this.element.setAttribute(key, value);
+  }
+
+  if (key === 'disabled') {
+    this.setDirty(DirtyType.STATE);
   }
 };
 
@@ -1356,6 +1400,26 @@ Element.prototype.__define_properties = function() {
       }
 
       return value;
+    }.bind(this)
+  });
+
+  /**
+   * Specifies whether this Element instance is disabled.
+   *
+   * @property {boolean}
+   */
+  Object.defineProperty(this, 'disabled', {
+    get: function() {
+      if (this.hasAttribute('disabled')) {
+        return this.getAttribute('disabled');
+      }
+      else {
+        return false;
+      }
+    }.bind(this),
+    set: function(value) {
+      assertType(value, 'boolean', false);
+      this.setAttribute('disabled', value);
     }.bind(this)
   });
 };

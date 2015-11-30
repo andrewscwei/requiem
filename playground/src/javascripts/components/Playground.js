@@ -8,6 +8,7 @@ import Foo from './Foo';
 class Playground extends Element {
   init() {
     this.addChild(new Foo(), 'foo');
+
     super.init();
   }
 
