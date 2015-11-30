@@ -8,7 +8,7 @@
 
 'use strict';
 
-let assert = require('./assert');
+// let assert = require('./assert');
 
 /**
  * Transforms given element(s) to an element array.
@@ -35,13 +35,13 @@ function toElementArray(element, keepElement) {
     elements = element.get();
   }
   else {
-    if (!assert((element instanceof HTMLElement) || (element instanceof Element), 'Invalid element specified. Element must be an instance of HTMLElement or Requiem Element.')) return null;
+    // if (!assert((element instanceof HTMLElement) || (element instanceof Element), 'Invalid element specified. Element must be an instance of HTMLElement or Requiem Element.')) return null;
 
-    if (element instanceof HTMLElement) {
-      elements = [element];
-    }
-    else if (element instanceof Element) {
+    if (element instanceof Element) {
       elements = [element.element];
+    }
+    else {
+      elements = [element];
     }
   }
 
@@ -50,7 +50,7 @@ function toElementArray(element, keepElement) {
   for (let i = 0; i < n; i++) {
     let e = elements[i];
 
-    if (!assert((e instanceof HTMLElement) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of HTMLElement or Requiem Element.')) return null;
+    // if (!assert((e instanceof HTMLElement) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of HTMLElement or Requiem Element.')) return null;
 
     if (!keepElement && (e instanceof Element)) {
       elements[i] = e.element;

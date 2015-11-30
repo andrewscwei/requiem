@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.16.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.17.0', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(28));
@@ -1341,7 +1341,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      e = child.get(0);
 	    } else if (_instanceof(child, Element)) {
 	      e = child.element;
-	    } else if (_instanceof(child, HTMLElement)) {
+	    } else {
 	      e = child;
 	    }
 
@@ -3674,11 +3674,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
 
-	'use strict';
+	'use strict'
 
-	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
-	var assert = __webpack_require__(6);
+	// let assert = require('./assert');
 
 	/**
 	 * Transforms given element(s) to an element array.
@@ -3688,6 +3686,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @alias module:requiem~helpers.toElementArray
 	 */
+	;
+
+	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+
 	function toElementArray(element, keepElement) {
 	  var Element = __webpack_require__(14);
 
@@ -3702,12 +3704,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else if (element.jquery) {
 	    elements = element.get();
 	  } else {
-	    if (!assert(_instanceof(element, HTMLElement) || _instanceof(element, Element), 'Invalid element specified. Element must be an instance of HTMLElement or Requiem Element.')) return null;
+	    // if (!assert((element instanceof HTMLElement) || (element instanceof Element), 'Invalid element specified. Element must be an instance of HTMLElement or Requiem Element.')) return null;
 
-	    if (_instanceof(element, HTMLElement)) {
-	      elements = [element];
-	    } else if (_instanceof(element, Element)) {
+	    if (_instanceof(element, Element)) {
 	      elements = [element.element];
+	    } else {
+	      elements = [element];
 	    }
 	  }
 
@@ -3716,7 +3718,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  for (var i = 0; i < n; i++) {
 	    var e = elements[i];
 
-	    if (!assert(_instanceof(e, HTMLElement) || _instanceof(e, Element), 'Element array contains invalid element(s). Each element must be an instance of HTMLElement or Requiem Element.')) return null;
+	    // if (!assert((e instanceof HTMLElement) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of HTMLElement or Requiem Element.')) return null;
 
 	    if (!keepElement && _instanceof(e, Element)) {
 	      elements[i] = e.element;

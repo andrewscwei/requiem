@@ -505,7 +505,7 @@ Element.prototype.hasChild = function(child) {
     else if (child instanceof Element) {
       e = child.element;
     }
-    else if (child instanceof HTMLElement) {
+    else {
       e = child;
     }
 
