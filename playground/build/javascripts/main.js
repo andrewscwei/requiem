@@ -156,7 +156,7 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.18.0', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.18.2', writable: false });
 	
 		injectModule(requiem, 'dom', __webpack_require__(3));
 		injectModule(requiem, 'events', __webpack_require__(28));
@@ -1197,7 +1197,7 @@
 		  var listener = arguments[2];
 		  var useCapture = arguments[3] || false;
 	
-		  assertType(element, Element, true);
+		  assert(!element || _instanceof(element, Element));
 	
 		  if (noval(element)) return;
 	
@@ -1215,7 +1215,7 @@
 		  var listener = arguments[2];
 		  var useCapture = arguments[3] || false;
 	
-		  assertType(element, Element, true);
+		  assert(!element || _instanceof(element, Element));
 	
 		  if (noval(element)) return;
 	
@@ -1937,7 +1937,10 @@
 		 * @return {boolean} True if attribute with said name exists, false otherwise.
 		 */
 		Element.prototype.hasAttribute = function (key) {
-		  return !noval(this.element.getAttribute(key));
+		  var value = this.element.getAttribute(key);
+	
+		  if (value === '') return true;
+		  return !noval(value);
 		};
 	
 		/**
@@ -5995,6 +5998,7 @@
 	    key: 'init',
 	    value: function init() {
 	      this.addChild(new _Foo2.default(), 'foo');
+	      console.log(this.disabled);
 	
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
 	    }

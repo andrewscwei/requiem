@@ -1041,7 +1041,10 @@ Element.prototype.removeAttribute = function(key) {
  * @return {boolean} True if attribute with said name exists, false otherwise.
  */
 Element.prototype.hasAttribute = function(key) {
-  return !noval(this.element.getAttribute(key));
+  let value = this.element.getAttribute(key);
+
+  if (value === '') return true;
+  return !noval(value);
 };
 
 /**

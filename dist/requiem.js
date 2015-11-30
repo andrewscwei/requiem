@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.18.1', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.18.2', writable: false });
 
 	injectModule(requiem, 'dom', __webpack_require__(3));
 	injectModule(requiem, 'events', __webpack_require__(28));
@@ -1861,7 +1861,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @return {boolean} True if attribute with said name exists, false otherwise.
 	 */
 	Element.prototype.hasAttribute = function (key) {
-	  return !noval(this.element.getAttribute(key));
+	  var value = this.element.getAttribute(key);
+
+	  if (value === '') return true;
+	  return !noval(value);
 	};
 
 	/**
