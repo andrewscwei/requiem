@@ -1014,7 +1014,9 @@ Element.prototype.setAttribute = function(key, value) {
   if (value === undefined || value === null || value === false) {
     this.element.removeAttribute(key);
   }
-  else {
+  else if (value === true) {
+    this.element.setAttribute(key, '');
+  } else {
     this.element.setAttribute(key, value);
   }
 
