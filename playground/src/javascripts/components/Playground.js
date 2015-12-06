@@ -15,6 +15,11 @@ class Playground extends Element {
 
     this.setProperties({ foo: 'foo', bar: 'bar' });
 
+    let bar = {};
+    console.log(this.constructor === Object);
+
+
+
     super.init();
   }
 

@@ -27,7 +27,6 @@ let assertType = require('./assertType');
 function noval(value, recursive) {
   assertType(recursive, 'boolean', true, 'Invalid parameter: recursive');
 
-
   if (recursive === undefined) recursive = false;
 
   if (value === undefined || value === null) {
@@ -50,7 +49,7 @@ function noval(value, recursive) {
 
     return true;
   }
-  else if (recursive && (typeof value === 'object')) {
+  else if (recursive && (typeof value === 'object') && (value.constructor === Object)) {
     for (let p in value) {
       if (!noval(value[p], true)) return false;
     }

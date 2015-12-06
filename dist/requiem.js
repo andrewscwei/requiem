@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.19.1', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.19.2', writable: false });
 
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(28));
@@ -2492,7 +2492,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    return true;
-	  } else if (recursive && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+	  } else if (recursive && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object) {
 	    for (var p in value) {
 	      if (!noval(value[p], true)) return false;
 	    }
