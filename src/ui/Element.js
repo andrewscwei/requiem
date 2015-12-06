@@ -693,6 +693,9 @@ class Element {
         return null;
       }
     }
+    else if (child instanceof Element) {
+      return child;
+    }
     else if (!noval(child, true)) {
       return child;
     }
