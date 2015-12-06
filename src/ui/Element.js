@@ -1317,7 +1317,7 @@ class Element {
     Element.defineProperty(this, 'hidden', {
       get: true,
       set: (value) => {
-        assertType(value, 'boolean', false);
+        assertType(value, 'boolean', true);
 
         if (value) {
           this.setStyle('display', 'none');
