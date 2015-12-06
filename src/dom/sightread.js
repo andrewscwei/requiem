@@ -8,13 +8,13 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let assertType = require('../helpers/assertType');
-let getInstanceNameFromElement = require('../helpers/getInstanceNameFromElement');
-let getControllerClassFromElement = require('../helpers/getControllerClassFromElement');
-let getControllerClassNameFromElement = require('../helpers/getControllerClassNameFromElement');
-let Directive = require('../types/Directive');
-let hasChild = require('../utils/hasChild');
+import assert from '../helpers/assert';
+import assertType from '../helpers/assertType';
+import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
+import getControllerClassFromElement from '../helpers/getControllerClassFromElement';
+import getControllerClassNameFromElement from '../helpers/getControllerClassNameFromElement';
+import Directive from '../types/Directive';
+import hasChild from '../utils/hasChild';
 
 /**
  * Crawls a DOM node and performs transformations on child nodes marked with
@@ -22,14 +22,13 @@ let hasChild = require('../utils/hasChild');
  * instance names. Transformations are also applied to the specified DOM node,
  * not just its children.
  *
- * @param {HTMLElement} [element=document]      - Target element for
- *                                                sightreading. By default this
- *                                                will be the document.
- * @param {Object}      [controllerDict=window] - Look-up dictionary (object
- *                                                literal) that provides all
- *                                                controller classes when
- *                                                sightreading encounters a
- *                                                controller marked element.
+ * @param {Node}   [element=document]      - Target element for sightreading. By
+ *                                           default this will be the document.
+ * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
+ *                                           that provides all controller
+ *                                           classes when sightreading
+ *                                           encounters a controller marked
+ *                                           element.
  *
  * @return {Object|Element} Either a dictionary (object literal) containing
  *                          all instantiated Requiem Element instances (if the
@@ -46,7 +45,7 @@ function sightread() {
   if (arguments.length === 1) {
     let obj = arguments[0];
 
-    if (obj instanceof HTMLElement) {
+    if (obj instanceof Node) {
       element = obj;
     }
     else if (typeof obj === 'object') {
@@ -86,7 +85,7 @@ function sightread() {
  * children tree as its specified controller class instance or a generic Requiem
  * Element.
  *
- * @param {HTMLElement|Element} [element=document]
+ * @param {Node|Element} [element=document]
  * @param {Object}              [controllerDict=window]
  *
  * @private
@@ -98,7 +97,7 @@ function _getChildElements(element, controllerDict) {
 
   if (!element) element = document;
   if (element.jquery) element = element.get(0);
-  if (!assert((element instanceof HTMLElement) || (element instanceof Element) || (document && element === document), 'Element must be an instance of an HTMLElement or the DOM itself.')) return null;
+  if (!assert((element instanceof Node) || (element instanceof Element) || (document && element === document), 'Element must be an instance of an Node or the DOM itself.')) return null;
   if (element instanceof Element) element = element.element;
 
   let nodeList = element.querySelectorAll('[' + Directive.CONTROLLER + '], [data-' + Directive.CONTROLLER + '], [' + Directive.INSTANCE + '], [data-' + Directive.INSTANCE + ']');

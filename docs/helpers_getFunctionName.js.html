@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/hasChild.js</title>
+    <title>JSDoc: Source: helpers/getFunctionName.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/hasChild.js</h1>
+    <h1 class="page-title">Source: helpers/getFunctionName.js</h1>
 
     
 
@@ -36,44 +36,24 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let toElementArray = require('../helpers/toElementArray');
-
 /**
- * Checks if specified parent contains specified child.
+ * Gets the name of a function/class.
  *
- * @param {Node|Element} parent - Node, Requiem Element, or jQuery
- *                                       object.
- * @param {Node|Element} child  - Node, Requiem Element, or jQuery
- *                                       object.
+ * @param  {Function} f - The function/class.
  *
- * @return {boolean} True if parent has given child, false otherwise.
- *
- * @alias module:requiem~utils.hasChild
+ * @return {string} Name of the function/class.
  */
-function hasChild(parent, child) {
-  let ps = toElementArray(parent);
-  let cs = toElementArray(child);
+function getFunctionName(f) {
+  if (!f) return;
+  if (f.name) return f.name;
 
-  if (!assert(ps.length === 1, 'Invalid parent specified. Parent must be a single Node, Requiem Element, or jQuery object.')) return false;
-  if (!assert(cs.length === 1, 'Invalid child specified. Child must be a single Node, Requiem Element, or jQuery object.')) return false;
-  if (!assert(document, 'Document not found. This method requires document to be valid.')) return false;
+  let regex = /function\s([^(]{1,})\(/;
+  let name = (regex).exec((f).toString());
 
-  let p = ps[0];
-  let c = cs[0];
-
-  if (!c.parentNode) return false;
-
-  while (c !== null &amp;&amp; c !== undefined &amp;&amp; c !== document) {
-    c = c.parentNode;
-
-    if (c === p) return true;
-  }
-
-  return false;
+  return (name &amp;&amp; name.length > 1) ? name[1].trim() : '';
 }
 
-module.exports = hasChild;
+module.exports = getFunctionName;
 </code></pre>
         </article>
     </section>

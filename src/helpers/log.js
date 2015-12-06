@@ -17,7 +17,7 @@
  * @alias module:requiem~helpers.log
  */
 function log(message) {
-  if (window && window.VARS_DEBUG && window.console && console.log) {
+  if (window && window.REQUIEM_DEBUG && window.console && console.log) {
     Function.apply.call(console.log, console, arguments);
   }
 }

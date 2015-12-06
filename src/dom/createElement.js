@@ -8,14 +8,14 @@
 
 'use strict';
 
-let assertType = require('../helpers/assertType');
+import assertType from '../helpers/assertType';
 
 /**
  * Creates a DOM element from the provided string.
  *
  * @param {string} value - String describing the DOM element.
  *
- * @return {HTMLElement} DOM element.
+ * @return {Node} DOM element.
  *
  * @alias module:requiem~dom.createElement
  */

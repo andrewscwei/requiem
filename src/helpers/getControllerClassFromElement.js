@@ -15,7 +15,7 @@ let namespace = require('../dom/namespace');
 /**
  * Gets the controller class from the DOM element.
  *
- * @param  {HTMLElement} element
+ * @param  {Node} element
  * @param  {Object}      [controllerDict] - Look-up dictionary (object literal)
  *                                          that provides all controller classes
  *                                          when sightreading encounters a

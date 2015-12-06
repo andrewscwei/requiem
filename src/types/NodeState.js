@@ -39,7 +39,24 @@ let NodeState = {
   /**
    * Element is destroyed.
    */
-  DESTROYED: 3
+  DESTROYED: 3,
+
+  /**
+   * Gets the name of a node state.
+   *
+   * @param  {NodeState} nodeState - Node state.
+   *
+   * @return {string} Name of the node state.
+   */
+  toString: (nodeState) => {
+    switch (nodeState) {
+      case NodeState.IDLE: return 'IDLE';
+      case NodeState.INITIALIZED: return 'INITIALIZED';
+      case NodeState.UPDATED: return 'UPDATED';
+      case NodeState.DESTROYED: return 'DESTROYED';
+      default: return 'UNKNOWN';
+    }
+  }
 };
 
 module.exports = NodeState;

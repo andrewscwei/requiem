@@ -95,7 +95,7 @@ var tasks = {
       output: path.join(paths.play, 'build', 'stylesheets'),
       sass: {
         outputStyle: 'nested',
-        includePaths: [path.join(paths.dist, 'sass')]
+        includePaths: [path.join(paths.dist, 'sass'), paths.modules]
       }
     },
     scripts: {

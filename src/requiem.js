@@ -8,8 +8,8 @@
 
 'use strict';
 
-let injectModule = require('./helpers/injectModule');
-let polyfill = require('./helpers/polyfill');
+import injectModule from './helpers/injectModule';
+import polyfill from './helpers/polyfill';
 
 /**
  * @module requiem
@@ -24,7 +24,7 @@ Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
 /**
  * @property {string} version - Version number.
  */
-Object.defineProperty(requiem, 'version', { value: '0.18.3', writable: false });
+Object.defineProperty(requiem, 'version', { value: '0.19.0', writable: false });
 
 injectModule(requiem, 'dom',    require('./dom'));
 injectModule(requiem, 'events', require('./events'));

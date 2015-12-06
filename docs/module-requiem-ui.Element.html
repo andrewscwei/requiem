@@ -29,12 +29,9 @@
 <header>
     
         <h2>
-            <span class="ancestors"><a href="module-requiem.html">requiem</a><a href="module-requiem-ui.html">~ui</a>.</span>
+            <span class="ancestors"><a href="module-requiem.html">requiem</a><a href="module-requiem-ui.html">~ui</a>.</span>Element</h2>
         
-        Element
-        </h2>
-        
-            <div class="class-description">Generic HTMLElement wrapper.</div>
+            <div class="class-description">Generic DOM element wrapper.</div>
         
     
 </header>
@@ -53,6 +50,10 @@
     
 
 
+
+<div class="description">
+    Creates a new Element instance with optional initial properties.
+</div>
 
 
 
@@ -95,10 +96,10 @@
             <td class="type">
             
                 
-<span class="param-type">HTMLElement</span>
+<span class="param-type">string</span>
 |
 
-<span class="param-type">String</span>
+<span class="param-type">Node</span>
 |
 
 <span class="param-type">Object</span>
@@ -121,8 +122,15 @@
 
             
 
-            <td class="description last">Optional initial properties/
-                                            element of this Element instance.</td>
+            <td class="description last">Initial properties. If this is a
+                                      string, it will be used as this
+                                      Element's instance name. If this is
+                                      a Node, it would be used as the
+                                      internal DOM element. If this is a
+                                      hash, each key/value pair will be
+                                      mapped to an instance property (only
+                                      existing instance properties will be
+                                      mapped).</td>
         </tr>
 
     
@@ -163,7 +171,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line34">line 34</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -263,7 +271,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line270">line 270</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line261">line 261</a>
     </li></ul></dd>
     
 
@@ -370,9 +378,9 @@
 
             
 
-            <td class="description last">Requiem Element instance
-                                                     of which the property
-                                                     belongs.</td>
+            <td class="description last">Requiem Element
+                                                     instance of which the
+                                                     property belongs.</td>
         </tr>
 
     
@@ -403,8 +411,8 @@
 
             
 
-            <td class="description last">Name of the property to
-                                                     be defined.</td>
+            <td class="description last">Name of the property
+                                                     to be defined.</td>
         </tr>
 
     
@@ -435,13 +443,12 @@
 
             
 
-            <td class="description last">Object literal that
-                                                     defines the behavior of
-                                                     the new property. This
-                                                     object literal inherits
-                                                     that of the descriptor
-                                                     in Object#defineProperty,
-                                                     plus a few extra options.
+            <td class="description last">A hash that defines
+                                                     the behavior of this n
+                                                     ew property. This hash
+                                                     inherits that of the
+                                                     descriptor in
+                                                     Object#defineProperty.
                 <h6>Properties</h6>
                 
 
@@ -506,8 +513,8 @@
             <td class="description last">Specifies that the
                                                      modifier method will
                                                      only invoke if the new
-                                                     value is different from
-                                                     the old value.</td>
+                                                     value is different
+                                                     from the old value.</td>
         </tr>
 
     
@@ -544,10 +551,10 @@
                 </td>
             
 
-            <td class="description last">Specifies the DirtyType
-                                                     to mark as dirty at the
-                                                     end of the modifier
-                                                     cycle.</td>
+            <td class="description last">Specifies the
+                                                     DirtyType to mark as
+                                                     dirty whenever a new
+                                                     value is set.</td>
         </tr>
 
     
@@ -584,9 +591,10 @@
                 </td>
             
 
-            <td class="description last">Specifies the EventType
-                                                     to dispatch at the end
-                                                     of the modifier cycle.</td>
+            <td class="description last">Specifies the
+                                                     EventType to dispatch
+                                                     whenever a new value
+                                                     is set.</td>
         </tr>
 
     
@@ -625,8 +633,8 @@
 
             <td class="description last">Specifies the DOM
                                                      attribute to update
-                                                     when the property value
-                                                     changes.</td>
+                                                     whenever a new value
+                                                     is set.</td>
         </tr>
 
     
@@ -663,8 +671,8 @@
                 </td>
             
 
-            <td class="description last">Method invoked when the
-                                                     property changes.</td>
+            <td class="description last">Method invoked when
+                                                     the property changes.</td>
         </tr>
 
     
@@ -704,15 +712,15 @@
                 </td>
             
 
-            <td class="description last">Method invoked when the
-                                                     accessor method is
+            <td class="description last">Method invoked when
+                                                     the accessor method is
                                                      called. This is a good
-                                                     place to manipulate the
-                                                     value before it is
-                                                     retrieved. If simply set
-                                                     to true, a generic
-                                                     accessor method will be
-                                                     used.</td>
+                                                     place to manipulate
+                                                     the value before it is
+                                                     returned. If simply
+                                                     set to true, a generic
+                                                     accessor method will
+                                                     be used.</td>
         </tr>
 
     
@@ -752,14 +760,15 @@
                 </td>
             
 
-            <td class="description last">Method invoked when the
-                                                     modifier method is
+            <td class="description last">Method invoked when
+                                                     the modifier method is
                                                      called. This is a good
-                                                     placd to manipulate the
-                                                     value before it is set.
-                                                     If simply set to true,
-                                                     a generic modifier
-                                                     method will be used.</td>
+                                                     placd to manipulate
+                                                     the value before it is
+                                                     set. If simply set to
+                                                     true, a generic
+                                                     modifier method will
+                                                     be used.</td>
         </tr>
 
     
@@ -799,14 +808,13 @@
 
             
 
-            <td class="description last">Name of the property of
-                                                     the Element instance to
-                                                     create the new property
-                                                     in. This property must
-                                                     be enumerable and it
-                                                     must be a direct (not
-                                                     nested) property of the
-                                                     Element instance.</td>
+            <td class="description last">Name of the instance
+                                                     property of the
+                                                     Element instance to
+                                                     create the new
+                                                     property in. This
+                                                     property must be
+                                                     enumerable.</td>
         </tr>
 
     
@@ -847,7 +855,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line163">line 163</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -929,7 +937,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line288">line 288</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line279">line 279</a>
     </li></ul></dd>
     
 
@@ -1018,138 +1026,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1146">line 1146</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="__set_element"><span class="type-signature">(protected) </span>__set_element<span class="signature">(value)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Stubbed out setter for element property (for overriding purposes).
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">HTMLElement</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The DOM element.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1439">line 1439</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1135">line 1135</a>
     </li></ul></dd>
     
 
@@ -1188,7 +1065,7 @@
 
 <div class="description">
     Adds a child or multiple children to this Element instance. Any added
-must be a Requiem Element. If an HTMLElement is provided, it will be
+must be a Requiem Element. If an Node is provided, it will be
 transformed into a Requiem Element. A child is automatically appended
 to the DOM tree of this instance.
 </div>
@@ -1242,10 +1119,10 @@ to the DOM tree of this instance.
 <span class="param-type">Array.&lt;Element></span>
 |
 
-<span class="param-type">HTMLElement</span>
+<span class="param-type">Node</span>
 |
 
-<span class="param-type">Array.&lt;HTMLElement></span>
+<span class="param-type">Array.&lt;Node></span>
 
 
             
@@ -1402,7 +1279,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line437">line 437</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line426">line 426</a>
     </li></ul></dd>
     
 
@@ -1561,7 +1438,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line879">line 879</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line868">line 868</a>
     </li></ul></dd>
     
 
@@ -1639,7 +1516,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line718">line 718</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line707">line 707</a>
     </li></ul></dd>
     
 
@@ -1649,7 +1526,7 @@ to the DOM tree of this instance.
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li>HTMLElement#addEventListener</li>
+            <li>Node#addEventListener</li>
         </ul>
     </dd>
     
@@ -1728,7 +1605,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line335">line 335</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line326">line 326</a>
     </li></ul></dd>
     
 
@@ -1859,7 +1736,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line870">line 870</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line859">line 859</a>
     </li></ul></dd>
     
 
@@ -1941,7 +1818,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1114">line 1114</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1103">line 1103</a>
     </li></ul></dd>
     
 
@@ -2090,7 +1967,7 @@ to the DOM tree of this instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line996">line 996</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line985">line 985</a>
     </li></ul></dd>
     
 
@@ -2301,7 +2178,7 @@ immediately.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line667">line 667</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line656">line 656</a>
     </li></ul></dd>
     
 
@@ -2457,7 +2334,7 @@ immediately.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line951">line 951</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line940">line 940</a>
     </li></ul></dd>
     
 
@@ -2610,7 +2487,7 @@ immediately.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1059">line 1059</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1048">line 1048</a>
     </li></ul></dd>
     
 
@@ -2764,7 +2641,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1045">line 1045</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1034">line 1034</a>
     </li></ul></dd>
     
 
@@ -2869,7 +2746,7 @@ name.
 <span class="param-type">Element</span>
 |
 
-<span class="param-type">HTMLElement</span>
+<span class="param-type">Node</span>
 |
 
 <span class="param-type">string</span>
@@ -2883,7 +2760,7 @@ name.
             
 
             <td class="description last">A child is a Requiem Element,
-                                            jQuery element or HTMLElement. It
+                                            jQuery element or Node. It
                                             can also be a string of child
                                             name(s) separated by '.'.</td>
         </tr>
@@ -2926,7 +2803,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line529">line 529</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line518">line 518</a>
     </li></ul></dd>
     
 
@@ -3080,7 +2957,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line938">line 938</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line927">line 927</a>
     </li></ul></dd>
     
 
@@ -3255,7 +3132,7 @@ listeners were being added.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line784">line 784</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line773">line 773</a>
     </li></ul></dd>
     
 
@@ -3405,7 +3282,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line963">line 963</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line952">line 952</a>
     </li></ul></dd>
     
 
@@ -3558,7 +3435,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1105">line 1105</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1094">line 1094</a>
     </li></ul></dd>
     
 
@@ -3658,7 +3535,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line304">line 304</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line295">line 295</a>
     </li></ul></dd>
     
 
@@ -3736,7 +3613,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1121">line 1121</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1110">line 1110</a>
     </li></ul></dd>
     
 
@@ -3825,7 +3702,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line857">line 857</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line846">line 846</a>
     </li></ul></dd>
     
 
@@ -3956,7 +3833,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1033">line 1033</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1022">line 1022</a>
     </li></ul></dd>
     
 
@@ -4036,7 +3913,7 @@ name.
             <td class="type">
             
                 
-<span class="param-type">HTMLElement</span>
+<span class="param-type">Node</span>
 |
 
 <span class="param-type">Element</span>
@@ -4057,7 +3934,7 @@ name.
 
             <td class="description last">A single child is a Requiem
                                                   Element, jQuery element or
-                                                  HTMLElement. It can also be
+                                                  Node. It can also be
                                                   a string of child name(s)
                                                   separated by '.', or an
                                                   array of child elements.</td>
@@ -4101,7 +3978,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line572">line 572</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line561">line 561</a>
     </li></ul></dd>
     
 
@@ -4260,7 +4137,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line908">line 908</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line897">line 897</a>
     </li></ul></dd>
     
 
@@ -4338,7 +4215,7 @@ name.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line808">line 808</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line797">line 797</a>
     </li></ul></dd>
     
 
@@ -4348,7 +4225,7 @@ name.
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li>HTMLElement#removeEventListener</li>
+            <li>Node#removeEventListener</li>
         </ul>
     </dd>
     
@@ -4477,7 +4354,7 @@ camelCase.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1095">line 1095</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1084">line 1084</a>
     </li></ul></dd>
     
 
@@ -4694,7 +4571,7 @@ instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line384">line 384</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line373">line 373</a>
     </li></ul></dd>
     
 
@@ -4869,7 +4746,7 @@ instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1011">line 1011</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1000">line 1000</a>
     </li></ul></dd>
     
 
@@ -4947,7 +4824,7 @@ instance.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1128">line 1128</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1117">line 1117</a>
     </li></ul></dd>
     
 
@@ -5109,7 +4986,7 @@ properties does not exist, it will be newly defined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line974">line 974</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line963">line 963</a>
     </li></ul></dd>
     
 
@@ -5264,7 +5141,7 @@ properties does not exist, it will be newly defined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1079">line 1079</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1068">line 1068</a>
     </li></ul></dd>
     
 
@@ -5353,7 +5230,7 @@ properties does not exist, it will be newly defined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1137">line 1137</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line1126">line 1126</a>
     </li></ul></dd>
     
 
@@ -5453,7 +5330,7 @@ properties does not exist, it will be newly defined.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line369">line 369</a>
+        <a href="ui_Element.js.html">ui/Element.js</a>, <a href="ui_Element.js.html#line360">line 360</a>
     </li></ul></dd>
     
 
@@ -5495,13 +5372,13 @@ properties does not exist, it will be newly defined.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="AssetLoader.html">AssetLoader</a></li><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li><li><a href="module-requiem-ui.Video.html">Video</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-net.html">net</a></li><li><a href="module-requiem-types.html">types</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="AssetLoader.html">AssetLoader</a></li><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li><li><a href="module-requiem-ui.Video.html">Video</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-net.html">net</a></li><li><a href="module-requiem-types.html">types</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getFunctionName">getFunctionName</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.3</a> on Wed Dec 02 2015 19:46:55 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Dec 04 2015 21:41:09 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

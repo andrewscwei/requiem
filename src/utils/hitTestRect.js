@@ -8,13 +8,13 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let getIntersectRect = require('./getIntersectRect');
+import assert from '../helpers/assert';
+import getIntersectRect from './getIntersectRect';
 
 /**
  * Hit tests a vector or element against other elements.
  *
- * @param {Object|HTMLElement|Element} obj
+ * @param {Object|Node|Element} obj
  * @param {number}                     obj.x
  * @param {number}                     obj.y
  * @param {...Object}                  rects

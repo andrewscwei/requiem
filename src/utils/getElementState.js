@@ -8,22 +8,22 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let Directive = require('../types/Directive');
-let Element = require('../ui/Element');
+import assert from '../helpers/assert';
+import Directive from '../types/Directive';
+import Element from '../ui/Element';
 
 /**
  * Gets the state of a DOM element, assumes that state classes are prefixed with
  * 'state-'.
  *
- * @param {HTMLElement|Element} element
+ * @param {Node|Element} element
  *
  * @return {string} State of the given element ('state-' prefix is omitted).
  *
  * @alias module:requiem~utils.getElementState
  */
 function getElementState(element) {
-  if (!assert((element) && ((element instanceof HTMLElement) || (element instanceof Element) || (element.jquery)), 'Invalid element specified.')) return null;
+  if (!assert((element) && ((element instanceof Node) || (element instanceof Element) || (element.jquery)), 'Invalid element specified.')) return null;
 
   if (element.jquery) element = element.get(0);
 

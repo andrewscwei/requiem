@@ -8,14 +8,14 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let toElementArray = require('../helpers/toElementArray');
-let getClassIndex = require('./getClassIndex');
+import assert from '../helpers/assert';
+import toElementArray from '../helpers/toElementArray';
+import getClassIndex from './getClassIndex';
 
 /**
  * Verifies that the specified element(s) has the specified class.
  *
- * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
+ * @param {Node|Node[]|Element|Element[]} element
  * @param {string}                                      className
  *
  * @return {boolean} True if element(s) has given class, false otherwise.

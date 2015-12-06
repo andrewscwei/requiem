@@ -8,13 +8,13 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let Element = require('../ui/Element');
+import assert from '../helpers/assert';
+import Element from '../ui/Element';
 
 /**
  * Gets the index of a specified class in a DOM element,
  *
- * @param {HTMLElement|Element} element
+ * @param {Node|Element} element
  * @param {string}              className
  *
  * @return {number} Index of given class name. -1 if not found.
@@ -22,7 +22,7 @@ let Element = require('../ui/Element');
  * @alias module:requiem~utils.getClassIndex
  */
 function getClassIndex(element, className) {
-  if (!assert((element) && ((element instanceof HTMLElement) || (element instanceof Element) || (element.jquery)), 'Invalid element specified. Element must be an instance of HTMLElement or Element.')) return null;
+  if (!assert((element) && ((element instanceof Node) || (element instanceof Element) || (element.jquery)), 'Invalid element specified. Element must be an instance of Node or Element.')) return null;
   if (element instanceof Element) element = element.element;
   if (element.jquery) element = element.get(0);
 

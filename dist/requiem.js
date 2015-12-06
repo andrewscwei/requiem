@@ -64,8 +64,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var injectModule = __webpack_require__(1);
-	var polyfill = __webpack_require__(2);
+	var _injectModule = __webpack_require__(1);
+
+	var _injectModule2 = _interopRequireDefault(_injectModule);
+
+	var _polyfill = __webpack_require__(2);
+
+	var _polyfill2 = _interopRequireDefault(_polyfill);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * @module requiem
@@ -80,16 +87,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.18.3', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.19.0', writable: false });
 
-	injectModule(requiem, 'dom', __webpack_require__(3));
-	injectModule(requiem, 'events', __webpack_require__(28));
-	injectModule(requiem, 'net', __webpack_require__(30));
-	injectModule(requiem, 'types', __webpack_require__(32));
-	injectModule(requiem, 'ui', __webpack_require__(34));
-	injectModule(requiem, 'utils', __webpack_require__(35));
+	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
+	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(28));
+	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(30));
+	(0, _injectModule2.default)(requiem, 'types', __webpack_require__(33));
+	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(35));
+	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(36));
 
-	polyfill();
+	(0, _polyfill2.default)();
 
 	module.exports = requiem;
 
@@ -218,7 +225,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assertType = __webpack_require__(5);
+	var _assertType = __webpack_require__(5);
+
+	var _assertType2 = _interopRequireDefault(_assertType);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * Generates a nested namespace in the specified scope, as described by the dot-
@@ -238,8 +249,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~dom.namespace
 	 */
 	function namespace(path, scope) {
-	  assertType(path, 'string', true, 'Invalid parameter: path');
-	  assertType(scope, 'object', true, 'Invalid optional parameter: scope');
+	  (0, _assertType2.default)(path, 'string', true, 'Invalid parameter: path');
+	  (0, _assertType2.default)(scope, 'object', true, 'Invalid optional parameter: scope');
 
 	  if (!scope) scope = window ? window : {};
 	  if (path === undefined || path === '') return scope;
@@ -438,7 +449,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assertType = __webpack_require__(5);
+	var _assertType = __webpack_require__(5);
+
+	var _assertType2 = _interopRequireDefault(_assertType);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * Invokes a callback when the DOM is ready.
@@ -448,7 +463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~dom.ready
 	 */
 	function ready(callback) {
-	  assertType(callback, 'function', false, 'Invalid parameter: callback');
+	  (0, _assertType2.default)(callback, 'function', false, 'Invalid parameter: callback');
 
 	  if (!document) return null;
 
@@ -495,17 +510,39 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _assertType = __webpack_require__(5);
+
+	var _assertType2 = _interopRequireDefault(_assertType);
+
+	var _getInstanceNameFromElement = __webpack_require__(10);
+
+	var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
+
+	var _getControllerClassFromElement = __webpack_require__(12);
+
+	var _getControllerClassFromElement2 = _interopRequireDefault(_getControllerClassFromElement);
+
+	var _getControllerClassNameFromElement = __webpack_require__(13);
+
+	var _getControllerClassNameFromElement2 = _interopRequireDefault(_getControllerClassNameFromElement);
+
+	var _Directive = __webpack_require__(11);
+
+	var _Directive2 = _interopRequireDefault(_Directive);
+
+	var _hasChild = __webpack_require__(25);
+
+	var _hasChild2 = _interopRequireDefault(_hasChild);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
-	var assert = __webpack_require__(6);
-	var assertType = __webpack_require__(5);
-	var getInstanceNameFromElement = __webpack_require__(10);
-	var getControllerClassFromElement = __webpack_require__(12);
-	var getControllerClassNameFromElement = __webpack_require__(13);
-	var Directive = __webpack_require__(11);
-	var hasChild = __webpack_require__(25);
 
 	/**
 	 * Crawls a DOM node and performs transformations on child nodes marked with
@@ -513,14 +550,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * instance names. Transformations are also applied to the specified DOM node,
 	 * not just its children.
 	 *
-	 * @param {HTMLElement} [element=document]      - Target element for
-	 *                                                sightreading. By default this
-	 *                                                will be the document.
-	 * @param {Object}      [controllerDict=window] - Look-up dictionary (object
-	 *                                                literal) that provides all
-	 *                                                controller classes when
-	 *                                                sightreading encounters a
-	 *                                                controller marked element.
+	 * @param {Node}   [element=document]      - Target element for sightreading. By
+	 *                                           default this will be the document.
+	 * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
+	 *                                           that provides all controller
+	 *                                           classes when sightreading
+	 *                                           encounters a controller marked
+	 *                                           element.
 	 *
 	 * @return {Object|Element} Either a dictionary (object literal) containing
 	 *                          all instantiated Requiem Element instances (if the
@@ -537,7 +573,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (arguments.length === 1) {
 	    var obj = arguments[0];
 
-	    if (_instanceof(obj, HTMLElement)) {
+	    if (_instanceof(obj, Node)) {
 	      element = obj;
 	    } else if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object') {
 	      controllerDict = obj;
@@ -553,10 +589,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (element === document) {
 	    return _getChildElements(element, controllerDict);
 	  } else {
-	    var instanceName = getInstanceNameFromElement(element);
-	    var ControllerClass = getControllerClassFromElement(element, controllerDict);
+	    var instanceName = (0, _getInstanceNameFromElement2.default)(element);
+	    var ControllerClass = (0, _getControllerClassFromElement2.default)(element, controllerDict);
 
-	    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
+	    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(element) + '\' is not found in specified controller scope: ' + controllerDict);
 
 	    return new ControllerClass({
 	      element: element,
@@ -574,7 +610,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * children tree as its specified controller class instance or a generic Requiem
 	 * Element.
 	 *
-	 * @param {HTMLElement|Element} [element=document]
+	 * @param {Node|Element} [element=document]
 	 * @param {Object}              [controllerDict=window]
 	 *
 	 * @private
@@ -586,19 +622,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  if (!element) element = document;
 	  if (element.jquery) element = element.get(0);
-	  if (!assert(_instanceof(element, HTMLElement) || _instanceof(element, Element) || document && element === document, 'Element must be an instance of an HTMLElement or the DOM itself.')) return null;
+	  if (!(0, _assert2.default)(_instanceof(element, Node) || _instanceof(element, Element) || document && element === document, 'Element must be an instance of an Node or the DOM itself.')) return null;
 	  if (_instanceof(element, Element)) element = element.element;
 
-	  var nodeList = element.querySelectorAll('[' + Directive.CONTROLLER + '], [data-' + Directive.CONTROLLER + '], [' + Directive.INSTANCE + '], [data-' + Directive.INSTANCE + ']');
+	  var nodeList = element.querySelectorAll('[' + _Directive2.default.CONTROLLER + '], [data-' + _Directive2.default.CONTROLLER + '], [' + _Directive2.default.INSTANCE + '], [data-' + _Directive2.default.INSTANCE + ']');
 	  var qualifiedChildren = _filterParentElements(nodeList);
 	  var n = qualifiedChildren.length;
 
 	  for (var i = 0; i < n; i++) {
 	    var child = qualifiedChildren[i];
-	    var instanceName = getInstanceNameFromElement(child);
-	    var ControllerClass = getControllerClassFromElement(child, controllerDict);
+	    var instanceName = (0, _getInstanceNameFromElement2.default)(child);
+	    var ControllerClass = (0, _getControllerClassFromElement2.default)(child, controllerDict);
 
-	    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
+	    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(child) + '\' is not found in specified controller scope: ' + controllerDict);
 
 	    var m = new ControllerClass({
 	      element: child,
@@ -650,7 +686,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var parent = nodeList[j];
 
-	      if (hasChild(parent, child)) {
+	      if ((0, _hasChild2.default)(parent, child)) {
 	        isParent = false;
 	        break;
 	      }
@@ -685,7 +721,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Gets the instance name from a DOM element.
 	 *
-	 * @param  {HTMLElement} element - The DOM element.
+	 * @param  {Node} element - The DOM element.
 	 *
 	 * @return {string} The instance name.
 	 *
@@ -767,7 +803,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Gets the controller class from the DOM element.
 	 *
-	 * @param  {HTMLElement} element
+	 * @param  {Node} element
 	 * @param  {Object}      [controllerDict] - Look-up dictionary (object literal)
 	 *                                          that provides all controller classes
 	 *                                          when sightreading encounters a
@@ -790,7 +826,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    switch (controllerClassName) {
 	      case 'Video':
 	        {
-	          controllerClass = __webpack_require__(23);
+	          controllerClass = __webpack_require__(24);
 	          break;
 	        }
 	      case 'Element':
@@ -830,7 +866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Gets the controller class name from the DOM element.
 	 *
-	 * @param  {HTMLElement} element - The DOM element.
+	 * @param  {Node} element - The DOM element.
 	 *
 	 * @return {string} The controller class name.
 	 *
@@ -856,1416 +892,1546 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _assertType = __webpack_require__(5);
+
+	var _assertType2 = _interopRequireDefault(_assertType);
+
+	var _noval = __webpack_require__(15);
+
+	var _noval2 = _interopRequireDefault(_noval);
+
+	var _getFunctionName = __webpack_require__(16);
+
+	var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
+
+	var _log = __webpack_require__(17);
+
+	var _log2 = _interopRequireDefault(_log);
+
+	var _validateAttribute = __webpack_require__(18);
+
+	var _validateAttribute2 = _interopRequireDefault(_validateAttribute);
+
+	var _getInstanceNameFromElement = __webpack_require__(10);
+
+	var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
+
+	var _DirtyType = __webpack_require__(19);
+
+	var _DirtyType2 = _interopRequireDefault(_DirtyType);
+
+	var _NodeState = __webpack_require__(20);
+
+	var _NodeState2 = _interopRequireDefault(_NodeState);
+
+	var _EventType = __webpack_require__(21);
+
+	var _EventType2 = _interopRequireDefault(_EventType);
+
+	var _Directive = __webpack_require__(11);
+
+	var _Directive2 = _interopRequireDefault(_Directive);
+
+	var _ElementUpdateDelegate = __webpack_require__(22);
+
+	var _ElementUpdateDelegate2 = _interopRequireDefault(_ElementUpdateDelegate);
+
+	var _sightread = __webpack_require__(9);
+
+	var _sightread2 = _interopRequireDefault(_sightread);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
-	var assert = __webpack_require__(6);
-	var assertType = __webpack_require__(5);
-	var noval = __webpack_require__(15);
-	var log = __webpack_require__(16);
-	var validateAttribute = __webpack_require__(17);
-	var getInstanceNameFromElement = __webpack_require__(10);
-	var DirtyType = __webpack_require__(18);
-	var NodeState = __webpack_require__(19);
-	var EventType = __webpack_require__(20);
-	var Directive = __webpack_require__(11);
-	var ElementUpdateDelegate = __webpack_require__(21);
-	var sightread = __webpack_require__(9);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
 	 * @class
 	 *
-	 * Generic HTMLElement wrapper.
-	 *
-	 * @param {HTMLElement|String|Object} [init] - Optional initial properties/
-	 *                                             element of this Element instance.
+	 * Generic DOM element wrapper.
 	 *
 	 * @alias module:requiem~ui.Element
 	 */
-	function Element(init) {
-	  this._nodeState = NodeState.IDLE;
 
-	  // Define instance properties.
-	  this.__define_properties();
+	var Element = (function () {
+	  /**
+	   * Creates a new Element instance with optional initial properties.
+	   * @param  {string|Node|Object} [init] - Initial properties. If this is a
+	   *                                       string, it will be used as this
+	   *                                       Element's instance name. If this is
+	   *                                       a Node, it would be used as the
+	   *                                       internal DOM element. If this is a
+	   *                                       hash, each key/value pair will be
+	   *                                       mapped to an instance property (only
+	   *                                       existing instance properties will be
+	   *                                       mapped).
+	   *
+	   * @return {Element} A new Element instance.
+	   */
 
-	  // Set instance properties per init object.
-	  if (init !== undefined) {
-	    // If init value is an HTMLELement, simply assign it to the internal
-	    // element.
-	    if (_instanceof(init, HTMLElement)) {
-	      this.element = init;
-	    }
-	    // If init value is a string, assign it to the name of this instance.
-	    else if (typeof init === 'string') {
-	        this.name = init;
+	  function Element(init) {
+	    _classCallCheck(this, Element);
+
+	    // Define instance properties.
+	    this.__define_properties();
+
+	    // Scan init object and set instance properties as per object body.
+	    if (init !== undefined && init !== null) {
+	      // If init value is a Node, simply assign it to the internal DOM element.
+	      if (_instanceof(init, Node)) {
+	        this.element = init;
 	      }
-	      // If init value is a hash object, assign each value in the hash to the
-	      // corresponding property of this Element instance with te same name
-	      // as the key of the value.
-	      else if ((typeof init === 'undefined' ? 'undefined' : _typeof(init)) === 'object') {
-	          for (var property in init) {
-	            if (this.hasOwnProperty(property)) {
-	              if (property === 'children') {
-	                var children = init.children;
+	      // If init value is a string, assign it to the name of this instance.
+	      else if (typeof init === 'string') {
+	          this.name = init;
+	        }
+	        // If init value is a hash, map each key/value pair to an instance
+	        // property.
+	        else if ((typeof init === 'undefined' ? 'undefined' : _typeof(init)) === 'object') {
+	            for (var key in init) {
+	              if (this.hasOwnProperty(key)) {
+	                switch (key) {
+	                  case 'children':
+	                    var children = init.children;
+	                    for (var name in children) {
+	                      this.addChild(children[name], name);
+	                    }
+	                    break;
 
-	                for (var childName in children) {
-	                  this.addChild(children[childName], childName);
+	                  default:
+	                    this[key] = init[key];
 	                }
-	              } else {
-	                this[property] = init[property];
 	              }
 	            }
 	          }
-	        }
-	  }
-
-	  // Further extend data/properties per custom attribute.
-	  var attributes = this.element.attributes;
-	  var nAtributes = attributes.length;
-	  var regex = new RegExp('^' + Directive.PROPERTY + '-' + '|^data-' + Directive.PROPERTY + '-', 'i');
-
-	  for (var i = 0; i < nAtributes; i++) {
-	    var a = attributes[i];
-
-	    if (!validateAttribute(a.name)) {
-	      continue;
 	    }
 
-	    if (regex.test(a.name)) {
-	      var propertyName = a.name.replace(regex, '').replace(/-([a-z])/g, function (g) {
+	    // Scan for internal DOM element attributes prefixed with Directive.PROPERTY
+	    // and generate properties from them.
+	    var attributes = this.element.attributes;
+	    var nAtributes = attributes.length;
+	    var regex = new RegExp('^' + _Directive2.default.PROPERTY + '-' + '|^data-' + _Directive2.default.PROPERTY + '-', 'i');
+
+	    for (var i = 0; i < nAtributes; i++) {
+	      var attribute = attributes[i];
+
+	      if (!(0, _validateAttribute2.default)(attribute.name) || !regex.test(attribute.name)) continue;
+
+	      // Generate camel case property name from the attribute.
+	      var propertyName = attribute.name.replace(regex, '').replace(/-([a-z])/g, function (g) {
 	        return g[1].toUpperCase();
 	      });
 
 	      Element.defineProperty(this, propertyName, {
-	        defaultValue: a.value === '' ? true : a.value,
-	        attribute: a.name,
-	        dirtyType: DirtyType.DATA,
+	        defaultValue: this.getAttribute(attribute.name),
+	        attribute: attribute.name,
+	        dirtyType: _DirtyType2.default.DATA,
 	        get: true,
 	        set: true
 	      }, 'properties');
 	    }
+
+	    (0, _log2.default)(this.toString() + ':new(', init, ')');
+
+	    this.init();
 	  }
 
-	  log(this.toString() + ':new(', init, ')');
+	  /**
+	   * Defines a property in an Element instance.
+	   *
+	   * @param {Element}          element                  - Requiem Element
+	   *                                                      instance of which the
+	   *                                                      property belongs.
+	   * @param {string}           propertyName             - Name of the property
+	   *                                                      to be defined.
+	   * @param {Object}           descriptor               - A hash that defines
+	   *                                                      the behavior of this n
+	   *                                                      ew property. This hash
+	   *                                                      inherits that of the
+	   *                                                      descriptor in
+	   *                                                      Object#defineProperty.
+	   * @param {boolean}          [descriptor.unique=true] - Specifies that the
+	   *                                                      modifier method will
+	   *                                                      only invoke if the new
+	   *                                                      value is different
+	   *                                                      from the old value.
+	   * @param {DirtyType}        [descriptor.dirtyType]   - Specifies the
+	   *                                                      DirtyType to mark as
+	   *                                                      dirty whenever a new
+	   *                                                      value is set.
+	   * @param {EventType}        [descriptor.eventType]   - Specifies the
+	   *                                                      EventType to dispatch
+	   *                                                      whenever a new value
+	   *                                                      is set.
+	   * @param {string}           [descriptor.attribute]   - Specifies the DOM
+	   *                                                      attribute to update
+	   *                                                      whenever a new value
+	   *                                                      is set.
+	   * @param {Function}         [descriptor.onChange]    - Method invoked when
+	   *                                                      the property changes.
+	   * @param {Function|boolean} [descriptor.get]         - Method invoked when
+	   *                                                      the accessor method is
+	   *                                                      called. This is a good
+	   *                                                      place to manipulate
+	   *                                                      the value before it is
+	   *                                                      returned. If simply
+	   *                                                      set to true, a generic
+	   *                                                      accessor method will
+	   *                                                      be used.
+	   * @param {Function|boolean} [descriptor.set]         - Method invoked when
+	   *                                                      the modifier method is
+	   *                                                      called. This is a good
+	   *                                                      placd to manipulate
+	   *                                                      the value before it is
+	   *                                                      set. If simply set to
+	   *                                                      true, a generic
+	   *                                                      modifier method will
+	   *                                                      be used.
+	   * @param {string}           [scope]                  - Name of the instance
+	   *                                                      property of the
+	   *                                                      Element instance to
+	   *                                                      create the new
+	   *                                                      property in. This
+	   *                                                      property must be
+	   *                                                      enumerable.
+	   */
 
-	  this.init();
-	}
+	  _createClass(Element, [{
+	    key: 'init',
 
-	/**
-	 * Defines a property in an Element instance.
-	 *
-	 * @param {Element}          element                  - Requiem Element instance
-	 *                                                      of which the property
-	 *                                                      belongs.
-	 * @param {string}           propertyName             - Name of the property to
-	 *                                                      be defined.
-	 * @param {Object}           descriptor               - Object literal that
-	 *                                                      defines the behavior of
-	 *                                                      the new property. This
-	 *                                                      object literal inherits
-	 *                                                      that of the descriptor
-	 *                                                      in Object#defineProperty,
-	 *                                                      plus a few extra options.
-	 * @param {boolean}          [descriptor.unique=true] - Specifies that the
-	 *                                                      modifier method will
-	 *                                                      only invoke if the new
-	 *                                                      value is different from
-	 *                                                      the old value.
-	 * @param {DirtyType}        [descriptor.dirtyType]   - Specifies the DirtyType
-	 *                                                      to mark as dirty at the
-	 *                                                      end of the modifier
-	 *                                                      cycle.
-	 * @param {EventType}        [descriptor.eventType]   - Specifies the EventType
-	 *                                                      to dispatch at the end
-	 *                                                      of the modifier cycle.
-	 * @param {string}           [descriptor.attribute]   - Specifies the DOM
-	 *                                                      attribute to update
-	 *                                                      when the property value
-	 *                                                      changes.
-	 * @param {Function}         [descriptor.onChange]    - Method invoked when the
-	 *                                                      property changes.
-	 * @param {Function|boolean} [descriptor.get]         - Method invoked when the
-	 *                                                      accessor method is
-	 *                                                      called. This is a good
-	 *                                                      place to manipulate the
-	 *                                                      value before it is
-	 *                                                      retrieved. If simply set
-	 *                                                      to true, a generic
-	 *                                                      accessor method will be
-	 *                                                      used.
-	 * @param {Function|boolean} [descriptor.set]         - Method invoked when the
-	 *                                                      modifier method is
-	 *                                                      called. This is a good
-	 *                                                      placd to manipulate the
-	 *                                                      value before it is set.
-	 *                                                      If simply set to true,
-	 *                                                      a generic modifier
-	 *                                                      method will be used.
-	 * @param {string}           [scope]                  - Name of the property of
-	 *                                                      the Element instance to
-	 *                                                      create the new property
-	 *                                                      in. This property must
-	 *                                                      be enumerable and it
-	 *                                                      must be a direct (not
-	 *                                                      nested) property of the
-	 *                                                      Element instance.
-	 */
-	Element.defineProperty = function (element, propertyName, descriptor, scope) {
-	  assertType(element, Element, false, 'Parameter \'element\' must be an Element instance');
-	  assertType(descriptor, 'object', false, 'Parameter \'descriptor\' must be an object literal');
-	  assertType(descriptor.configurable, 'boolean', true, 'Optional configurable key in descriptor must be a boolean');
-	  assertType(descriptor.enumerable, 'boolean', true, 'Optional enumerable key in descriptor must be a boolean');
-	  assertType(descriptor.writable, 'boolean', true, 'Optional writable key in descriptor must be a boolean');
-	  assertType(descriptor.unique, 'boolean', true, 'Optional unique key in descriptor must be a boolean');
-	  assertType(descriptor.dirtyType, 'number', true, 'Optional dirty type must be of DirtyType enum (number)');
-	  assertType(descriptor.eventType, 'string', true, 'Optional event type must be a string');
-	  assertType(descriptor.attribute, 'string', true, 'Optional attribute must be a string');
-	  assertType(descriptor.onChange, 'function', true, 'Optional change handler must be a function');
-	  assertType(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
-	  assert(validateAttribute(descriptor.attribute), 'Attribute \'' + descriptor.attribute + '\' is reserved');
+	    /**
+	     * Initializes this Element instance. Must manually invoke.
+	     */
+	    value: function init() {
+	      (0, _log2.default)(this.toString() + '::init()');
 
-	  var dirtyType = descriptor.dirtyType;
-	  var defaultValue = descriptor.defaultValue;
-	  var attribute = descriptor.attribute;
-	  var eventType = descriptor.eventType;
-	  var unique = descriptor.unique;
+	      this.__set_node_state(_NodeState2.default.INITIALIZED);
+	      this.updateDelegate.init();
 
-	  if (unique === undefined) unique = true;
+	      for (var key in this.children) {
+	        var child = this.children[key];
 
-	  if (scope === undefined) {
-	    scope = element;
-	  } else {
-	    assert(element.hasOwnProperty(scope), 'The specified Element instance does not have a property called \'' + scope + '\'');
-	    scope = element[scope];
-	  }
+	        if (_instanceof(child, Array)) {
+	          var n = child.length;
 
-	  if (defaultValue !== undefined) {
-	    Object.defineProperty(scope, '__' + propertyName, { value: defaultValue, writable: true });
-	  }
+	          for (var i = 0; i < n; i++) {
+	            var c = child[i];
 
-	  var newDescriptor = {};
-
-	  if (descriptor.configurable !== undefined) newDescriptor.configurable = descriptor.configurable;
-	  if (descriptor.enumerable !== undefined) newDescriptor.enumerable = descriptor.enumerable;
-	  if (descriptor.value !== undefined) newDescriptor.value = descriptor.value;
-	  if (descriptor.writable !== undefined) newDescriptor.writable = descriptor.writable;
-
-	  if (descriptor.get) {
-	    newDescriptor.get = (function () {
-	      if (typeof descriptor.get === 'function') {
-	        return descriptor.get(this['__' + propertyName]);
-	      } else {
-	        return this['__' + propertyName];
-	      }
-	    }).bind(scope);
-	  }
-
-	  if (descriptor.set) {
-	    newDescriptor.set = (function (val) {
-	      var oldVal = this['__' + propertyName];
-
-	      if (unique && oldVal === val) return;
-
-	      if (typeof descriptor.set === 'function') {
-	        val = descriptor.set(val);
-	      }
-
-	      if (oldVal === undefined) {
-	        Object.defineProperty(this, '__' + propertyName, { value: val, writable: true });
-	      } else {
-	        this['__' + propertyName] = val;
-	      }
-
-	      if (descriptor.onChange !== undefined) {
-	        descriptor.onChange(oldVal, val);
-	      }
-
-	      if (attribute !== undefined) {
-	        element.setAttribute(attribute, val);
-	      }
-
-	      if (dirtyType !== undefined) {
-	        element.setDirty(dirtyType);
-	      }
-
-	      if (eventType !== undefined) {
-	        var event = new CustomEvent(eventType, {
-	          detail: {
-	            property: propertyName,
-	            oldValue: oldVal,
-	            newValue: val
+	            if (c.nodeState === _NodeState2.default.IDLE || c.nodeState === _NodeState2.default.DESTROYED) {
+	              c.init();
+	            }
 	          }
-	        });
-
-	        element.dispatchEvent(event);
-	      }
-	    }).bind(scope);
-	  }
-
-	  Object.defineProperty(scope, propertyName, newDescriptor);
-
-	  if (defaultValue !== undefined && attribute !== undefined) {
-	    element.setAttribute(attribute, defaultValue);
-	  }
-	};
-
-	/**
-	 * Adds an event listener to an Element instance.
-	 *
-	 * @see module:requiem~ui.Element#addEventListener
-	 */
-	Element.addEventListener = function () {
-	  var element = arguments[0];
-	  var event = arguments[1];
-	  var listener = arguments[2];
-	  var useCapture = arguments[3] || false;
-
-	  assert(!element || _instanceof(element, Element));
-
-	  if (noval(element)) return;
-
-	  element.addEventListener(event, listener, useCapture);
-	};
-
-	/**
-	 * Removes an event listener from an Element instance.
-	 *
-	 * @see module:requiem~ui.Element#removeEventListener
-	 */
-	Element.removeEventListener = function () {
-	  var element = arguments[0];
-	  var event = arguments[1];
-	  var listener = arguments[2];
-	  var useCapture = arguments[3] || false;
-
-	  assert(!element || _instanceof(element, Element));
-
-	  if (noval(element)) return;
-
-	  element.removeEventListener(event, listener, useCapture);
-	};
-
-	/**
-	 * Initializes this Element instance. Must manually invoke.
-	 */
-	Element.prototype.init = function () {
-	  log(this.toString() + '::init()');
-
-	  this._nodeState = NodeState.INITIALIZED;
-	  this.updateDelegate.init();
-
-	  for (var key in this.children) {
-	    var child = this.children[key];
-
-	    if (_instanceof(child, Array)) {
-	      var n = child.length;
-
-	      for (var i = 0; i < n; i++) {
-	        var c = child[i];
-
-	        if (c.nodeState === NodeState.IDLE || c.nodeState === NodeState.DESTROYED) {
-	          c.init();
+	        } else {
+	          if (child.nodeState === _NodeState2.default.IDLE || child.nodeState === _NodeState2.default.DESTROYED) {
+	            child.init();
+	          }
 	        }
 	      }
-	    } else {
-	      if (child.nodeState === NodeState.IDLE || child.nodeState === NodeState.DESTROYED) {
-	        child.init();
-	      }
 	    }
-	  }
-	};
 
-	/**
-	 * Destroys this Element instance.
-	 */
-	Element.prototype.destroy = function () {
-	  log(this.toString() + '::destroy()');
+	    /**
+	     * Destroys this Element instance.
+	     */
 
-	  // Destroy all children first.
-	  for (var key in this.children) {
-	    var child = this.children[key];
+	  }, {
+	    key: 'destroy',
+	    value: function destroy() {
+	      (0, _log2.default)(this.toString() + '::destroy()');
 
-	    if (_instanceof(child, Array)) {
-	      var n = child.length;
+	      // Destroy all children first.
+	      for (var key in this.children) {
+	        var child = this.children[key];
 
-	      for (var i = 0; i < n; i++) {
-	        var c = child[i];
+	        if (_instanceof(child, Array)) {
+	          var n = child.length;
 
-	        if (c.nodeState !== NodeState.DESTROYED) {
-	          c.destroy();
+	          for (var i = 0; i < n; i++) {
+	            var c = child[i];
+
+	            if (c.nodeState !== _NodeState2.default.DESTROYED) {
+	              c.destroy();
+	            }
+	          }
+	        } else {
+	          if (child.nodeState !== _NodeState2.default.DESTROYED) {
+	            child.destroy();
+	          }
 	        }
 	      }
-	    } else {
-	      if (child.nodeState !== NodeState.DESTROYED) {
-	        child.destroy();
-	      }
-	    }
-	  }
 
-	  this.removeAllEventListeners();
-	  this.updateDelegate.destroy();
+	      this.removeAllEventListeners();
+	      this.updateDelegate.destroy();
 
-	  this._nodeState = NodeState.DESTROYED;
-	};
-
-	/**
-	 * Handler invoked whenever a visual update is required.
-	 */
-	Element.prototype.update = function () {
-	  log(this.toString() + '::update()');
-
-	  this._nodeState = NodeState.UPDATED;
-	};
-
-	/**
-	 * Sets up the responsiveness of the internal ElementUpdateDelegate
-	 * instance.
-	 *
-	 * @param {Object|Number}  Either the conductor or the refresh rate (if 1
-	 *                         argument supplied).
-	 * @param {number}         Refresh rate.
-	 * @param {...args}        EventType(s) which this element will respond to.
-	 */
-	Element.prototype.respondsTo = function () {
-	  var args = Array.prototype.slice.call(arguments);
-	  var n = args.length;
-
-	  if (!assert(n > 0, 'Too few arguments')) return;
-	  if (!assert(this.nodeState === NodeState.IDLE, 'Responsiveness must be defined when the node state of this element is IDLE')) return;
-
-	  if (isNaN(args[0])) {
-	    this.updateDelegate.conductor = args.shift();
-	    this.updateDelegate.refreshRate = args.shift();
-	  } else {
-	    this.updateDelegate.refreshRate = args.shift();
-	  }
-
-	  if (args.length === 0) {
-	    this.updateDelegate.responsive = true;
-	  } else {
-	    this.updateDelegate.responsive = args;
-	  }
-	};
-
-	/**
-	 * Adds a child or multiple children to this Element instance. Any added
-	 * must be a Requiem Element. If an HTMLElement is provided, it will be
-	 * transformed into a Requiem Element. A child is automatically appended
-	 * to the DOM tree of this instance.
-	 *
-	 * @param {Element|Element[]|HTMLElement|HTMLElement[]} child  - Single child or
-	 *                                                               an array of
-	 *                                                               children. Child
-	 *                                                               elements can be
-	 *                                                               instance(s) of
-	 *                                                               Requiem Elements,
-	 *                                                               jQuery Elements
-	 *                                                               or HTMLElements.
-	 * @param {string} [name] - The name of the child/children to be added.
-	 *                          Typically a name is required. If it is not
-	 *                          specified, this method will attempt to deduct the
-	 *                          name from the provided child/children. This method
-	 *                          fails if no name is specified or deducted. If there
-	 *                          exists another child with the same name, the added
-	 *                          child will be grouped together with the existing
-	 *                          child.
-	 * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
-	 *                                           that provides all controller
-	 *                                           classes when sightreading
-	 *                                           encounters a controller marked
-	 *                                           element.
-	 *
-	 * @return {Element|Element[]} The added element(s).
-	 */
-	Element.prototype.addChild = function (child, name, controllerDict) {
-	  if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
-	  if (!assertType(controllerDict, 'object', true, 'Parameter \'controllerDict\' is invalid')) return null;
-
-	  if (!controllerDict) controllerDict = window;
-
-	  if (child.jquery) {
-	    return this.addChild(child.get(), name);
-	  } else if (_instanceof(child, Array)) {
-	    var n = child.length;
-	    var children = [];
-
-	    for (var i = 0; i < n; i++) {
-	      var c = child[i];
-
-	      children.push(this.addChild(c, name));
+	      this.__set_node_state(_NodeState2.default.DESTROYED);
 	    }
 
-	    return children;
-	  } else {
-	    if (!assertType(child, [HTMLElement, Element], false, 'Invalid child specified. Child must be an instance of HTMLElement or Requiem Element.')) return null;
+	    /**
+	     * Handler invoked whenever a visual update is required.
+	     */
 
-	    if (_instanceof(child, HTMLElement)) {
-	      if (noval(name)) name = getInstanceNameFromElement(child);
-	      if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
-
-	      child.removeAttribute(Directive.INSTANCE);
-	      child.removeAttribute('data-' + Directive.INSTANCE);
-	      child.setAttribute('data-' + Directive.INSTANCE, name);
-	      child = sightread(child, controllerDict);
-	    } else {
-	      if (noval(name)) name = child.name;
-	      if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
-
-	      child.name = name;
+	  }, {
+	    key: 'update',
+	    value: function update() {
+	      this.__set_node_state(_NodeState2.default.UPDATED);
 	    }
 
-	    if (this.children[name]) {
-	      if (_instanceof(this.children[name], Array)) {
-	        this.children[name].push(child);
+	    /**
+	     * Sets up the responsiveness of the internal ElementUpdateDelegate
+	     * instance.
+	     *
+	     * @param {Object|Number}  Either the conductor or the refresh rate (if 1
+	     *                         argument supplied).
+	     * @param {number}         Refresh rate.
+	     * @param {...args}        EventType(s) which this element will respond to.
+	     */
+
+	  }, {
+	    key: 'respondsTo',
+	    value: function respondsTo() {
+	      var args = Array.prototype.slice.call(arguments);
+	      var n = args.length;
+
+	      if (!(0, _assert2.default)(n > 0, 'Too few arguments')) return;
+	      if (!(0, _assert2.default)(this.nodeState === _NodeState2.default.IDLE, 'Responsiveness must be defined when the node state of this element is IDLE')) return;
+
+	      if (isNaN(args[0])) {
+	        this.updateDelegate.conductor = args.shift();
+	        this.updateDelegate.refreshRate = args.shift();
 	      } else {
-	        var a = [this.children[name]];
-	        a.push(child);
-	        this.children[name] = a;
+	        this.updateDelegate.refreshRate = args.shift();
 	      }
-	    } else {
-	      this.children[name] = child;
+
+	      if (args.length === 0) {
+	        this.updateDelegate.responsive = true;
+	      } else {
+	        this.updateDelegate.responsive = args;
+	      }
 	    }
 
-	    if (child.nodeState === NodeState.IDLE || child.nodeState === NodeState.DESTROYED) {
-	      child.init();
-	    }
+	    /**
+	     * Adds a child or multiple children to this Element instance. Any added
+	     * must be a Requiem Element. If an Node is provided, it will be
+	     * transformed into a Requiem Element. A child is automatically appended
+	     * to the DOM tree of this instance.
+	     *
+	     * @param {Element|Element[]|Node|Node[]} child  - Single child or
+	     *                                                               an array of
+	     *                                                               children. Child
+	     *                                                               elements can be
+	     *                                                               instance(s) of
+	     *                                                               Requiem Elements,
+	     *                                                               jQuery Elements
+	     *                                                               or HTMLElements.
+	     * @param {string} [name] - The name of the child/children to be added.
+	     *                          Typically a name is required. If it is not
+	     *                          specified, this method will attempt to deduct the
+	     *                          name from the provided child/children. This method
+	     *                          fails if no name is specified or deducted. If there
+	     *                          exists another child with the same name, the added
+	     *                          child will be grouped together with the existing
+	     *                          child.
+	     * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
+	     *                                           that provides all controller
+	     *                                           classes when sightreading
+	     *                                           encounters a controller marked
+	     *                                           element.
+	     *
+	     * @return {Element|Element[]} The added element(s).
+	     */
 
-	    var shouldAddChild = true;
+	  }, {
+	    key: 'addChild',
+	    value: function addChild(child, name, controllerDict) {
+	      if (!(0, _assert2.default)(child !== undefined, 'Parameter \'child\' must be specified')) return null;
+	      if (!(0, _assertType2.default)(controllerDict, 'object', true, 'Parameter \'controllerDict\' is invalid')) return null;
 
-	    if (child.element.parentNode && document) {
-	      var e = child.element;
+	      if (!controllerDict) controllerDict = window;
 
-	      while (e !== null && e !== undefined && e !== document) {
-	        e = e.parentNode;
+	      if (child.jquery) {
+	        return this.addChild(child.get(), name);
+	      } else if (_instanceof(child, Array)) {
+	        var n = child.length;
+	        var children = [];
 
-	        if (e === this.element) {
-	          shouldAddChild = false;
-	          break;
+	        for (var i = 0; i < n; i++) {
+	          var c = child[i];
+
+	          children.push(this.addChild(c, name));
 	        }
+
+	        return children;
+	      } else {
+	        if (!(0, _assertType2.default)(child, [Node, Element], false, 'Invalid child specified. Child must be an instance of Node or Requiem Element.')) return null;
+
+	        if (_instanceof(child, Node)) {
+	          if ((0, _noval2.default)(name)) name = (0, _getInstanceNameFromElement2.default)(child);
+	          if (!(0, _assert2.default)(!(0, _noval2.default)(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
+
+	          child.removeAttribute(_Directive2.default.INSTANCE);
+	          child.removeAttribute('data-' + _Directive2.default.INSTANCE);
+	          child.setAttribute('data-' + _Directive2.default.INSTANCE, name);
+	          child = (0, _sightread2.default)(child, controllerDict);
+	        } else {
+	          if ((0, _noval2.default)(name)) name = child.name;
+	          if (!(0, _assert2.default)(!(0, _noval2.default)(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
+
+	          child.name = name;
+	        }
+
+	        if (this.children[name]) {
+	          if (_instanceof(this.children[name], Array)) {
+	            this.children[name].push(child);
+	          } else {
+	            var a = [this.children[name]];
+	            a.push(child);
+	            this.children[name] = a;
+	          }
+	        } else {
+	          this.children[name] = child;
+	        }
+
+	        if (child.nodeState === _NodeState2.default.IDLE || child.nodeState === _NodeState2.default.DESTROYED) {
+	          child.init();
+	        }
+
+	        var shouldAddChild = true;
+
+	        if (child.element.parentNode && document) {
+	          var e = child.element;
+
+	          while (e !== null && e !== undefined && e !== document) {
+	            e = e.parentNode;
+
+	            if (e === this.element) {
+	              shouldAddChild = false;
+	              break;
+	            }
+	          }
+	        }
+
+	        if (shouldAddChild) {
+	          this.element.appendChild(child.element);
+	        }
+
+	        return child;
 	      }
 	    }
 
-	    if (shouldAddChild) {
-	      this.element.appendChild(child.element);
-	    }
+	    /**
+	     * Determines if this Element instance contains the specified child.
+	     *
+	     * @param {Element|Node|string} child - A child is a Requiem Element,
+	     *                                             jQuery element or Node. It
+	     *                                             can also be a string of child
+	     *                                             name(s) separated by '.'.
+	     *
+	     * @return {boolean} True if this Element instance has the specified child,
+	     *                   false otherwise.
+	     */
 
-	    return child;
-	  }
-	};
+	  }, {
+	    key: 'hasChild',
+	    value: function hasChild(child) {
+	      if (!(0, _assert2.default)(child !== undefined, 'Child is undefined')) return false;
 
-	/**
-	 * Determines if this Element instance contains the specified child.
-	 *
-	 * @param {Element|HTMLElement|string} child - A child is a Requiem Element,
-	 *                                             jQuery element or HTMLElement. It
-	 *                                             can also be a string of child
-	 *                                             name(s) separated by '.'.
-	 *
-	 * @return {boolean} True if this Element instance has the specified child,
-	 *                   false otherwise.
-	 */
-	Element.prototype.hasChild = function (child) {
-	  if (!assert(child !== undefined, 'Child is undefined')) return false;
-
-	  if (typeof child === 'string') {
-	    return !noval(this.getChild(child));
-	  } else {
-	    var e = undefined;
-
-	    if (child.jquery && child.length === 1) {
-	      e = child.get(0);
-	    } else if (_instanceof(child, Element)) {
-	      e = child.element;
-	    } else {
-	      e = child;
-	    }
-
-	    while (!noval(e) && e !== document) {
-	      e = e.parentNode;
-
-	      if (e === this.element) {
-	        return true;
-	      }
-	    }
-
-	    return false;
-	  }
-	};
-
-	/**
-	 * Removes a child or multiple children from this Element instance.
-	 *
-	 * @param {HTMLElement|Element|Array|string} child - A single child is a Requiem
-	 *                                                   Element, jQuery element or
-	 *                                                   HTMLElement. It can also be
-	 *                                                   a string of child name(s)
-	 *                                                   separated by '.', or an
-	 *                                                   array of child elements.
-	 *
-	 * @return {Element|Element[]} The removed element(s).
-	 */
-	Element.prototype.removeChild = function (child) {
-	  if (!assert(!noval(child, true), 'No valid child specified')) return;
-
-	  // If child is a string, treat each entry separated by '.' as a child name.
-	  if (typeof child === 'string') {
-	    this.removeChild(this.getChild(child));
-	  }
-	  // If child is an array, remove each element inside recursively.
-	  else if (_instanceof(child, Array) || child.jquery && child.length > 1) {
-	      while (child.length > 0) {
-	        this.removeChild(child[0]);
-	      }
-	    }
-	    // If child is not an array, assume that it is an object that equates or
-	    // contains a valid DOM element. Remove it accordingly if this Element
-	    // instance is indeed its parent/ancestor.
-	    else if (this.hasChild(child)) {
-	        // First extract the DOM element.
+	      if (typeof child === 'string') {
+	        return !(0, _noval2.default)(this.getChild(child));
+	      } else {
 	        var e = undefined;
-	        var a = [];
 
 	        if (child.jquery && child.length === 1) {
 	          e = child.get(0);
 	        } else if (_instanceof(child, Element)) {
 	          e = child.element;
-	        } else if (_instanceof(child, HTMLElement)) {
+	        } else {
 	          e = child;
 	        }
 
-	        // No valid DOM element found? Terminate.
-	        if (noval(e)) return null;
+	        while (!(0, _noval2.default)(e) && e !== document) {
+	          e = e.parentNode;
 
-	        for (var key in this.children) {
-	          var c = this.children[key];
+	          if (e === this.element) {
+	            return true;
+	          }
+	        }
 
-	          if (_instanceof(c, Array)) {
-	            var n = c.length;
-	            var t = 0;
+	        return false;
+	      }
+	    }
 
-	            for (var i = 0; i < n; i++) {
-	              var element = c[i];
-	              t = i;
+	    /**
+	     * Removes a child or multiple children from this Element instance.
+	     *
+	     * @param {Node|Element|Array|string} child - A single child is a Requiem
+	     *                                                   Element, jQuery element or
+	     *                                                   Node. It can also be
+	     *                                                   a string of child name(s)
+	     *                                                   separated by '.', or an
+	     *                                                   array of child elements.
+	     *
+	     * @return {Element|Element[]} The removed element(s).
+	     */
 
-	              if (element.element === e) {
-	                a.push(element);
-	                element.destroy();
-	                e.parentNode.removeChild(e);
-	                break;
+	  }, {
+	    key: 'removeChild',
+	    value: function removeChild(child) {
+	      if (!(0, _assert2.default)(!(0, _noval2.default)(child, true), 'No valid child specified')) return;
+
+	      // If child is a string, treat each entry separated by '.' as a child name.
+	      if (typeof child === 'string') {
+	        this.removeChild(this.getChild(child));
+	      }
+	      // If child is an array, remove each element inside recursively.
+	      else if (_instanceof(child, Array) || child.jquery && child.length > 1) {
+	          while (child.length > 0) {
+	            this.removeChild(child[0]);
+	          }
+	        }
+	        // If child is not an array, assume that it is an object that equates or
+	        // contains a valid DOM element. Remove it accordingly if this Element
+	        // instance is indeed its parent/ancestor.
+	        else if (this.hasChild(child)) {
+	            // First extract the DOM element.
+	            var e = undefined;
+	            var a = [];
+
+	            if (child.jquery && child.length === 1) {
+	              e = child.get(0);
+	            } else if (_instanceof(child, Element)) {
+	              e = child.element;
+	            } else if (_instanceof(child, Node)) {
+	              e = child;
+	            }
+
+	            // No valid DOM element found? Terminate.
+	            if ((0, _noval2.default)(e)) return null;
+
+	            for (var key in this.children) {
+	              var c = this.children[key];
+
+	              if (_instanceof(c, Array)) {
+	                var n = c.length;
+	                var t = 0;
+
+	                for (var i = 0; i < n; i++) {
+	                  var element = c[i];
+	                  t = i;
+
+	                  if (element.element === e) {
+	                    a.push(element);
+	                    element.destroy();
+	                    e.parentNode.removeChild(e);
+	                    break;
+	                  }
+	                }
+
+	                c.splice(t, 1);
+
+	                if (c.length === 0) {
+	                  delete this.children[key];
+	                }
+	              } else if (_instanceof(c, Element)) {
+	                if (c.element === e) {
+	                  a.push(c);
+	                  c.destroy();
+	                  e.parentNode.removeChild(e);
+	                  delete this.children[key];
+	                } else {
+	                  a.push(c.removeChild(child));
+	                }
 	              }
 	            }
 
-	            c.splice(t, 1);
-
-	            if (c.length === 0) {
-	              delete this.children[key];
-	            }
-	          } else if (_instanceof(c, Element)) {
-	            if (c.element === e) {
-	              a.push(c);
-	              c.destroy();
-	              e.parentNode.removeChild(e);
-	              delete this.children[key];
+	            if (a.length === 0) {
+	              return null;
+	            } else if (a.length === 1) {
+	              return a[0];
 	            } else {
-	              a.push(c.removeChild(child));
+	              return a;
 	            }
 	          }
-	        }
-
-	        if (a.length === 0) {
-	          return null;
-	        } else if (a.length === 1) {
-	          return a[0];
-	        } else {
-	          return a;
-	        }
-	      }
-	};
-
-	/**
-	 * Gets a child by its name. If child is an array, it will be returned
-	 * immediately.
-	 *
-	 * @param {string}  name             - Name of the child, depth separated by
-	 *                                     '.' (i.e. 'foo.bar').
-	 * @param {boolean} [recursive=true] - Speciifies whether to search for the
-	 *                                     child recursively down the tree.
-	 *
-	 * @return {Object|Array} The fetched child.
-	 */
-	Element.prototype.getChild = function (name, recursive) {
-	  if (!assertType(name, 'string', false, 'Child name must be specified')) return null;
-	  if (!assertType(recursive, 'boolean', true, 'Parameter \'recursive\', if specified, must be a boolean')) return null;
-
-	  recursive = recursive === undefined ? true : recursive;
-
-	  var targets = name.split('.');
-	  var currentTarget = targets.shift();
-	  var child = this.children[currentTarget];
-
-	  if (recursive && targets.length > 0) {
-	    if (_instanceof(child, Array)) {
-	      var children = [];
-	      var n = child.length;
-
-	      for (var i = 0; i < n; i++) {
-	        var c = child[i];
-
-	        if (_instanceof(c, Element)) {
-	          children.push(c.getChild(targets.join('.')));
-	        } else {
-	          children.push(null);
-	        }
-	      }
-
-	      if (!noval(children, true)) {
-	        return children;
-	      } else {
-	        return null;
-	      }
-	    } else if (_instanceof(child, Element)) {
-	      return child.getChild(targets.join('.'));
-	    } else {
-	      return null;
-	    }
-	  } else if (!noval(child, true)) {
-	    return child;
-	  } else {
-	    return null;
-	  }
-	};
-
-	/**
-	 * @see HTMLElement#addEventListener
-	 */
-	Element.prototype.addEventListener = function () {
-	  var _this = this;
-
-	  var event = arguments[0];
-	  var listener = arguments[1];
-	  var useCapture = arguments[2] || false;
-
-	  if (this.cachesListeners) {
-	    if (!this._listenerMap) {
-	      Object.defineProperty(this, '_listenerMap', {
-	        value: {},
-	        writable: false
-	      });
 	    }
 
-	    if (!this._listenerMap[event]) {
-	      this._listenerMap[event] = [];
-	    }
+	    /**
+	     * Gets a child by its name. If child is an array, it will be returned
+	     * immediately.
+	     *
+	     * @param {string}  name             - Name of the child, depth separated by
+	     *                                     '.' (i.e. 'foo.bar').
+	     * @param {boolean} [recursive=true] - Speciifies whether to search for the
+	     *                                     child recursively down the tree.
+	     *
+	     * @return {Object|Array} The fetched child.
+	     */
 
-	    var m = this._listenerMap[event];
-	    var n = m.length;
-	    var b = true;
+	  }, {
+	    key: 'getChild',
+	    value: function getChild(name, recursive) {
+	      if (!(0, _assertType2.default)(name, 'string', false, 'Child name must be specified')) return null;
+	      if (!(0, _assertType2.default)(recursive, 'boolean', true, 'Parameter \'recursive\', if specified, must be a boolean')) return null;
 
-	    if (event === EventType.MOUSE.CLICK_OUTSIDE) {
-	      (function () {
-	        var _listener = listener;
-	        listener = (function (event) {
-	          if (event.target !== this.element && !this.hasChild(event.target)) {
-	            _listener(event);
+	      recursive = recursive === undefined ? true : recursive;
+
+	      var targets = name.split('.');
+	      var currentTarget = targets.shift();
+	      var child = this.children[currentTarget];
+
+	      if (recursive && targets.length > 0) {
+	        if (_instanceof(child, Array)) {
+	          var children = [];
+	          var n = child.length;
+
+	          for (var i = 0; i < n; i++) {
+	            var c = child[i];
+
+	            if (_instanceof(c, Element)) {
+	              children.push(c.getChild(targets.join('.')));
+	            } else {
+	              children.push(null);
+	            }
 	          }
-	        }).bind(_this);
-	      })();
-	    }
 
-	    for (var i = 0; i < n; i++) {
-	      var e = m[i];
-
-	      if (e.listener === listener) {
-	        b = false;
-	        break;
+	          if (!(0, _noval2.default)(children, true)) {
+	            return children;
+	          } else {
+	            return null;
+	          }
+	        } else if (_instanceof(child, Element)) {
+	          return child.getChild(targets.join('.'));
+	        } else {
+	          return null;
+	        }
+	      } else if (!(0, _noval2.default)(child, true)) {
+	        return child;
+	      } else {
+	        return null;
 	      }
 	    }
 
-	    if (b) {
-	      m.push({
-	        listener: listener,
-	        useCapture: useCapture
+	    /**
+	     * @see Node#addEventListener
+	     */
+
+	  }, {
+	    key: 'addEventListener',
+	    value: function addEventListener() {
+	      var _this = this;
+
+	      var event = arguments[0];
+	      var listener = arguments[1];
+	      var useCapture = arguments[2] || false;
+
+	      if (this.cachesListeners) {
+	        if (!this._listenerMap) {
+	          Object.defineProperty(this, '_listenerMap', {
+	            value: {},
+	            writable: false
+	          });
+	        }
+
+	        if (!this._listenerMap[event]) {
+	          this._listenerMap[event] = [];
+	        }
+
+	        var m = this._listenerMap[event];
+	        var n = m.length;
+	        var b = true;
+
+	        if (event === _EventType2.default.MOUSE.CLICK_OUTSIDE) {
+	          (function () {
+	            var _listener = listener;
+	            listener = (function (event) {
+	              if (event.target !== this.element && !this.hasChild(event.target)) {
+	                _listener(event);
+	              }
+	            }).bind(_this);
+	          })();
+	        }
+
+	        for (var i = 0; i < n; i++) {
+	          var e = m[i];
+
+	          if (e.listener === listener) {
+	            b = false;
+	            break;
+	          }
+	        }
+
+	        if (b) {
+	          m.push({
+	            listener: listener,
+	            useCapture: useCapture
+	          });
+	        }
+	      }
+
+	      if (window && event === _EventType2.default.MOUSE.CLICK_OUTSIDE) {
+	        window.addEventListener(_EventType2.default.MOUSE.CLICK, listener, useCapture);
+	      } else {
+	        this.element.addEventListener.apply(this.element, arguments);
+	      }
+	    }
+
+	    /**
+	     * Determines if a particular listener (or any listener in the specified
+	     * event) exist in this Element instance. For this to work this Element
+	     * must be configured to have 'cachesListeners' property enabled when event
+	     * listeners were being added.
+	     *
+	     * @param {string}   event    - Event name.
+	     * @param {Function} listener - Listener function.
+	     *
+	     * @return {boolean}
+	     */
+
+	  }, {
+	    key: 'hasEventListener',
+	    value: function hasEventListener(event, listener) {
+	      if (!this._listenerMap) return false;
+	      if (!this._listenerMap[event]) return false;
+
+	      if (listener) {
+	        var m = this._listenerMap[event];
+	        var n = m.length;
+
+	        for (var i = 0; i < n; i++) {
+	          var e = m[i];
+
+	          if (e.listener === listener) return true;
+	        }
+
+	        return false;
+	      } else {
+	        return true;
+	      }
+	    }
+
+	    /**
+	     * @see Node#removeEventListener
+	     */
+
+	  }, {
+	    key: 'removeEventListener',
+	    value: function removeEventListener() {
+	      var event = arguments[0];
+	      var listener = arguments[1];
+	      var useCapture = arguments[2] || false;
+
+	      if (this._listenerMap) {
+	        var m = this._listenerMap[event];
+	        var n = m.length;
+	        var s = -1;
+
+	        if (listener) {
+	          for (var i = 0; i < n; i++) {
+	            var e = m[i];
+
+	            if (e.listener === listener) {
+	              s = i;
+	              break;
+	            }
+	          }
+
+	          if (s > -1) {
+	            m.splice(s, 1);
+
+	            if (m.length === 0) {
+	              this._listenerMap[event] = null;
+	              delete this._listenerMap[event];
+	            }
+	          }
+	        } else {
+	          while (this._listenerMap[event] !== undefined) {
+	            this.removeEventListener(event, this._listenerMap[event][0].listener, this._listenerMap[event][0].useCapture);
+	          }
+	        }
+	      }
+
+	      if (listener) {
+	        if (window && event === _EventType2.default.MOUSE.CLICK_OUTSIDE) {
+	          window.removeEventListener(_EventType2.default.MOUSE.CLICK, listener, useCapture);
+	        } else {
+	          this.element.removeEventListener.apply(this.element, arguments);
+	        }
+	      }
+	    }
+
+	    /**
+	     * Removes all cached event listeners from this Element instance.
+	     */
+
+	  }, {
+	    key: 'removeAllEventListeners',
+	    value: function removeAllEventListeners() {
+	      if (this._listenerMap) {
+	        for (var event in this._listenerMap) {
+	          this.removeEventListener(event);
+	        }
+	      }
+	    }
+
+	    /**
+	     * Dispatches an event.
+	     *
+	     * @param {Event} event
+	     */
+
+	  }, {
+	    key: 'dispatchEvent',
+	    value: function dispatchEvent(event) {
+	      this.element.dispatchEvent(event);
+	    }
+
+	    /**
+	     * Adds class(es) to this Element instance.
+	     *
+	     * @param {Stirng|Array} className
+	     */
+
+	  }, {
+	    key: 'addClass',
+	    value: function addClass(className) {
+	      var classes = [];
+
+	      if (!(0, _assert2.default)(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
+
+	      if (typeof className === 'string') {
+	        classes.push(className);
+	      } else {
+	        classes = className;
+	      }
+
+	      var n = classes.length;
+
+	      for (var i = 0; i < n; i++) {
+	        var c = classes[i];
+
+	        if (!(0, _assert2.default)(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
+	        if (this.hasClass(c)) continue;
+
+	        this.element.className = this.element.className + (this.element.className === '' ? '' : ' ') + c;
+	      }
+	    }
+
+	    /**
+	     * Removes class(es) from this Element instance.
+	     *
+	     * @param {Stirng|Array} className
+	     */
+
+	  }, {
+	    key: 'removeClass',
+	    value: function removeClass(className) {
+	      var classes = [];
+
+	      if (!(0, _assert2.default)(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
+
+	      if (typeof className === 'string') {
+	        classes.push(className);
+	      } else {
+	        classes = className;
+	      }
+
+	      var n = classes.length;
+
+	      for (var i = 0; i < n; i++) {
+	        var c = classes[i];
+
+	        if (!(0, _assert2.default)(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
+	        var regex = new RegExp('^' + c + '\\s+|\\s+' + c + '|^' + c + '$', 'g');
+	        this.element.className = this.element.className.replace(regex, '');
+	      }
+	    }
+
+	    /**
+	     * Determines whether this Element instance has the specified class.
+	     *
+	     * @param {string} className
+	     *
+	     * @return {boolean}
+	     */
+
+	  }, {
+	    key: 'hasClass',
+	    value: function hasClass(className) {
+	      if (!(0, _assert2.default)(typeof className === 'string', 'Invalid class detected: ' + className)) return false;
+
+	      return this.classes.indexOf(className) > -1;
+	    }
+
+	    /**
+	     * Gets the value of the property with the specified name.
+	     *
+	     * @param {string} key - Name of the property.
+	     *
+	     * @return {*} Value of the property.
+	     */
+
+	  }, {
+	    key: 'getProperty',
+	    value: function getProperty(key) {
+	      return this.properties[key];
+	    }
+
+	    /**
+	     * Checks to see if this Element instance has the property of the specified
+	     * name.
+	     *
+	     * @param {string} key - Name of the property.
+	     *
+	     * @return {boolean} True if property exists, false othwerwise.
+	     */
+
+	  }, {
+	    key: 'hasProperty',
+	    value: function hasProperty(key) {
+	      return this.properties.hasOwnProperty(key);
+	    }
+
+	    /**
+	     * Sets the property of the specified name with the specified value. If
+	     * properties does not exist, it will be newly defined.
+	     *
+	     * @param {string} key   - Name of the property.
+	     * @param {*}      value - Value of the property.
+	     */
+
+	  }, {
+	    key: 'setProperty',
+	    value: function setProperty(key, value) {
+	      if (this.hasProperty(key)) {
+	        this.properties[key] = value;
+	      } else {
+	        Element.defineProperty(this, key, {
+	          defaultValue: value,
+	          dirtyType: _DirtyType2.default.DATA,
+	          get: true,
+	          set: true
+	        }, 'properties');
+	      }
+	    }
+
+	    /**
+	     * Defines properties based on the key/value pair in the provided hash.
+	     *
+	     * @param {Object} descriptor - Object literal containing key/value pairs to
+	     *                              be merged into this Element instance's
+	     *                              properties.
+	     */
+
+	  }, {
+	    key: 'setProperties',
+	    value: function setProperties(descriptor) {
+	      (0, _assertType2.default)(descriptor, 'object', false);
+
+	      for (var key in descriptor) {
+	        this.setProperty(key, descriptor[key]);
+	      }
+	    }
+
+	    /**
+	     * Gets the value of the attribute with the specified name.
+	     *
+	     * @param  {string} key - Name of the attribute.
+	     *
+	     * @return {*} Value of the attribute.
+	     */
+
+	  }, {
+	    key: 'getAttribute',
+	    value: function getAttribute(key) {
+	      var value = this.element.getAttribute(key);
+
+	      if (value === '') return true;
+	      if (value === undefined || value === null) return null;
+	      return value;
+	    }
+
+	    /**
+	     * Sets an attribute of this Element instance.
+	     *
+	     * @param {string} key     - Name of the attribute.
+	     * @param {*}      [value] - Value of the attribute. If unspecified, the
+	     *                           attribute will still be present but have no value.
+	     */
+
+	  }, {
+	    key: 'setAttribute',
+	    value: function setAttribute(key, value) {
+	      if (!(0, _assert2.default)((0, _validateAttribute2.default)(key), 'Attribute \'' + key + '\' is reserved')) return;
+
+	      if (value === undefined || value === null || value === false) {
+	        this.element.removeAttribute(key);
+	      } else if (value === true) {
+	        this.element.setAttribute(key, '');
+	      } else {
+	        this.element.setAttribute(key, value);
+	      }
+
+	      if (key === 'disabled') {
+	        this.setDirty(_DirtyType2.default.STATE);
+	      }
+	    }
+
+	    /**
+	     * Removes an attribute from this Element instance.
+	     *
+	     * @param {string} key - Name of the attribute.
+	     */
+
+	  }, {
+	    key: 'removeAttribute',
+	    value: function removeAttribute(key) {
+	      this.element.removeAttribute(key);
+	    }
+
+	    /**
+	     * Checks to see if this Element instance has the attribute of the specified
+	     * name.
+	     *
+	     * @param  {string}  key - Name of the attribute.
+	     *
+	     * @return {boolean} True if attribute with said name exists, false otherwise.
+	     */
+
+	  }, {
+	    key: 'hasAttribute',
+	    value: function hasAttribute(key) {
+	      var value = this.element.getAttribute(key);
+
+	      if (value === '') return true;
+	      return !(0, _noval2.default)(value);
+	    }
+
+	    /**
+	     * Gets the value of an inline CSS rule of this Element instance by its name.
+	     *
+	     * @param {string} key - Name of the CSS rule in camelCase.
+	     *
+	     * @return {string} Value of the style.
+	     */
+
+	  }, {
+	    key: 'getStyle',
+	    value: function getStyle(key) {
+	      var value = this.element.style[key];
+
+	      if (value === '') {
+	        return null;
+	      } else {
+	        return value;
+	      }
+	    }
+
+	    /**
+	     * Sets an inline CSS rule of this Element instance.
+	     *
+	     * @param {string} key   - Name of the CSS rule in camelCase.
+	     * @param {*}      value - Value of the style. If a number is provided, it will
+	     *                         be automatically suffixed with 'px'.
+	     *
+	     * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
+	     */
+
+	  }, {
+	    key: 'setStyle',
+	    value: function setStyle(key, value) {
+	      if (typeof value === 'number') {
+	        value = value + 'px';
+	      }
+
+	      this.element.style[key] = value;
+	    }
+
+	    /**
+	     * Removes an inline CSS rule from this Element instance by its rule name in
+	     * camelCase.
+	     *
+	     * @param {string} key - Name of the CSS rule.
+	     *
+	     * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
+	     */
+
+	  }, {
+	    key: 'removeStyle',
+	    value: function removeStyle(key) {
+	      this.element.style[key] = '';
+	    }
+
+	    /**
+	     * Checks to see if this Element instance has the specified inline CSS rule.
+	     * @param {string} key - Name of the style.
+	     *
+	     * @return {boolean}
+	     */
+
+	  }, {
+	    key: 'hasStyle',
+	    value: function hasStyle(key) {
+	      return this.element.style[key] !== '';
+	    }
+
+	    /**
+	     * Creates the associated DOM element from scratch.
+	     *
+	     * @return {Element}
+	     */
+
+	  }, {
+	    key: 'factory',
+	    value: function factory() {
+	      return document.createElement('div');
+	    }
+
+	    /**
+	     * @see ElementUpdateDelegate#isDirty
+	     */
+
+	  }, {
+	    key: 'isDirty',
+	    value: function isDirty() {
+	      return this.updateDelegate.isDirty.apply(this.updateDelegate, arguments);
+	    }
+
+	    /**
+	     * @see ElementUpdateDelegate#setDirty
+	     */
+
+	  }, {
+	    key: 'setDirty',
+	    value: function setDirty() {
+	      return this.updateDelegate.setDirty.apply(this.updateDelegate, arguments);
+	    }
+
+	    /**
+	     * Gets the string representation of this Element instance.
+	     *
+	     * @return {string}
+	     */
+
+	  }, {
+	    key: 'toString',
+	    value: function toString() {
+	      return '[' + (0, _getFunctionName2.default)(this.constructor) + '{' + this.name + '}]';
+	    }
+
+	    /**
+	     * Defines all properties.
+	     *
+	     * @protected
+	     */
+
+	  }, {
+	    key: '__define_properties',
+	    value: function __define_properties() {
+	      var _this2 = this;
+
+	      /**
+	       * Internal DOM element.
+	       *
+	       * @property {Node}
+	       */
+	      Element.defineProperty(this, 'element', {
+	        get: function get(value) {
+	          if (!_this2.__private__.element) {
+	            var e = _this2.factory();
+	            if (_this2.__validate_element(e)) _this2.__private__.element = e;
+	          }
+	          return _this2.__private__.element;
+	        },
+	        set: function set(value) {
+	          if (_this2.__private__.element) return _this2.__private__.element;
+	          if (_this2.__validate_element(value)) return value;
+	          return null;
+	        }
+	      });
+
+	      /**
+	       * ID of this Element instance.
+	       *
+	       * @property {string}
+	       */
+	      Object.defineProperty(this, 'id', {
+	        get: function get() {
+	          return _this2.element.id;
+	        },
+	        set: function set(value) {
+	          return _this2.element.setAttribute('id', value);
+	        }
+	      });
+
+	      /**
+	       * Instance name of this Element instance. Once set, it cannot be changed.
+	       *
+	       * @property {string}
+	       */
+	      Object.defineProperty(this, 'name', {
+	        get: function get() {
+	          var s = _this2.element.getAttribute(_Directive2.default.INSTANCE) || _this2.element.getAttribute('data-' + _Directive2.default.INSTANCE);
+	          if (!s || s === '') return null;
+	          return s;
+	        },
+	        set: function set(value) {
+	          if (!value || value === '') return;
+	          if (!_this2.name) _this2.element.setAttribute('data-' + _Directive2.default.INSTANCE, value);
+	        }
+	      });
+
+	      /**
+	       * Class list of this Element instance.
+	       *
+	       * @property {Array}
+	       */
+	      Object.defineProperty(this, 'classes', {
+	        get: function get() {
+	          return _this2.element.className.split(' ');
+	        },
+	        set: function set(value) {
+	          return _this2.element.className = value.join(' ');
+	        }
+	      });
+
+	      /**
+	       * Gets the attributes of this Element instance.
+	       *
+	       * @property {NamedNodeMap}
+	       */
+	      Object.defineProperty(this, 'attributes', { get: function get() {
+	          return _this2.element.attributes;
+	        } });
+
+	      /**
+	       * Gets the CSS styles of this Element instance.
+	       *
+	       * @property {ElementCSSInlineStyle}
+	       */
+	      Object.defineProperty(this, 'styles', { get: function get() {
+	          return _this2.element.style;
+	        } });
+
+	      /**
+	       * Current node state of this Element instance.
+	       *
+	       * @property {NodeState}
+	       */
+	      Element.defineProperty(this, 'nodeState', { defaultValue: _NodeState2.default.IDLE, get: true });
+
+	      /**
+	       * State of this Element instance (depicted by Directive.State).
+	       *
+	       * @property {string}
+	       */
+	      Object.defineProperty(this, 'state', {
+	        get: function get() {
+	          var s = _this2.element.getAttribute(_Directive2.default.STATE) || _this2.element.getAttribute('data-' + _Directive2.default.STATE);
+	          if (!s || s === '') return null;
+	          return s;
+	        },
+	        set: function set(value) {
+	          if (_this2.state === value) return;
+
+	          if (value === null || value === undefined) {
+	            _this2.element.removeAttribute(_Directive2.default.STATE);
+	            _this2.element.removeAttribute('data-' + _Directive2.default.STATE);
+	          } else {
+	            _this2.element.setAttribute('data-' + _Directive2.default.STATE, value);
+	          }
+
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.STATE);
+	        }
+	      });
+
+	      /**
+	       * Child elements.
+	       *
+	       * @property {Object}
+	       */
+	      Element.defineProperty(this, 'children', { defaultValue: {}, get: true });
+
+	      /**
+	       * Data attributes.
+	       *
+	       * @property {Object}
+	       */
+	      Element.defineProperty(this, 'data', {
+	        defaultValue: null,
+	        get: true,
+	        set: true,
+	        dirtyType: _DirtyType2.default.DATA,
+	        eventType: _EventType2.default.DATA.DATA_CHANGE
+	      });
+
+	      /**
+	       * Property attributes.
+	       *
+	       * @property {Object}
+	       * @see module:requiem~types.Directive.PROPERTY
+	       */
+	      Element.defineProperty(this, 'properties', { defaultValue: {}, get: true });
+
+	      /**
+	       * ElementUpdateDelegate instance.
+	       *
+	       * @property {ElementUpdateDelegate}
+	       */
+	      Element.defineProperty(this, 'updateDelegate', { defaultValue: new _ElementUpdateDelegate2.default(this), get: true });
+
+	      /**
+	       * Specifies whether this Element instance remembers caches every listener
+	       * that is added to it (via the addEventListener/removeEventListener
+	       * method).
+	       *
+	       * @property {boolean}
+	       */
+	      Element.defineProperty(this, 'cachesListeners', { defaultValue: true, get: true, set: true });
+
+	      /**
+	       * Wrapper for the 'innerHTML' property of the internal element.
+	       *
+	       * @property {string}
+	       */
+	      Object.defineProperty(this, 'content', {
+	        get: function get() {
+	          return _this2.element.innerHTML;
+	        },
+	        set: function set(value) {
+	          return _this2.element.innerHTML = value;
+	        }
+	      });
+
+	      /**
+	       * Specifies whether this Element instance is hidden. This property follows
+	       * the rules of the CSS rule 'display: none'.
+	       *
+	       * @property {boolean}
+	       */
+	      Element.defineProperty(this, 'hidden', {
+	        get: true,
+	        set: function set(value) {
+	          (0, _assertType2.default)(value, 'boolean', false);
+
+	          if (value) {
+	            _this2.setStyle('display', 'none');
+	          } else {
+	            if (_this2.getStyle('display') === 'none') {
+	              _this2.removeStyle('display');
+	            }
+	          }
+
+	          return value;
+	        }
+	      });
+
+	      /**
+	       * Specifies whether this Element instance is invisible. This property follows
+	       * the rules of the CSS rule 'visibility: hidden'.
+	       *
+	       * @property {boolean}
+	       */
+	      Element.defineProperty(this, 'invisible', {
+	        get: true,
+	        set: function set(value) {
+	          (0, _assertType2.default)(value, 'boolean', false);
+
+	          if (value) {
+	            _this2.setStyle('visibility', 'hidden');
+	          } else {
+	            if (_this2.getStyle('visibility') === 'hidden') {
+	              _this2.removeStyle('visibility');
+	            }
+	          }
+
+	          return value;
+	        }
+	      });
+
+	      /**
+	       * Specifies whether this Element instance is disabled.
+	       *
+	       * @property {boolean}
+	       */
+	      Object.defineProperty(this, 'disabled', {
+	        get: function get() {
+	          return _this2.hasAttribute('disabled') ? _this2.getAttribute('disabled') : false;
+	        },
+	        set: function set(value) {
+	          return _this2.setAttribute('disabled', value ? true : false);
+	        }
 	      });
 	    }
-	  }
 
-	  if (window && event === EventType.MOUSE.CLICK_OUTSIDE) {
-	    window.addEventListener(EventType.MOUSE.CLICK, listener, useCapture);
-	  } else {
-	    this.element.addEventListener.apply(this.element, arguments);
-	  }
-	};
+	    /**
+	     * Validates the inner DOM element.
+	     *
+	     * @param  {Node} element - DOM element.
+	     *
+	     * @return {boolean} True if validation passes, false otherwise.
+	     *
+	     * @private
+	     */
 
-	/**
-	 * Determines if a particular listener (or any listener in the specified
-	 * event) exist in this Element instance. For this to work this Element
-	 * must be configured to have 'cachesListeners' property enabled when event
-	 * listeners were being added.
-	 *
-	 * @param {string}   event    - Event name.
-	 * @param {Function} listener - Listener function.
-	 *
-	 * @return {boolean}
-	 */
-	Element.prototype.hasEventListener = function (event, listener) {
-	  if (!this._listenerMap) return false;
-	  if (!this._listenerMap[event]) return false;
-
-	  if (listener) {
-	    var m = this._listenerMap[event];
-	    var n = m.length;
-
-	    for (var i = 0; i < n; i++) {
-	      var e = m[i];
-
-	      if (e.listener === listener) return true;
+	  }, {
+	    key: '__validate_element',
+	    value: function __validate_element(element) {
+	      return (0, _assert2.default)(_instanceof(element, Node), 'Element validation failed');
 	    }
 
-	    return false;
-	  } else {
-	    return true;
-	  }
-	};
+	    /**
+	     * Sets the Element's node state.
+	     *
+	     * @param  {NodeState} nodeState - Node state.
+	     *
+	     * @private
+	     */
 
-	/**
-	 * @see HTMLElement#removeEventListener
-	 */
-	Element.prototype.removeEventListener = function () {
-	  var event = arguments[0];
-	  var listener = arguments[1];
-	  var useCapture = arguments[2] || false;
-
-	  if (this._listenerMap) {
-	    var m = this._listenerMap[event];
-	    var n = m.length;
-	    var s = -1;
-
-	    if (listener) {
-	      for (var i = 0; i < n; i++) {
-	        var e = m[i];
-
-	        if (e.listener === listener) {
-	          s = i;
-	          break;
-	        }
-	      }
-
-	      if (s > -1) {
-	        m.splice(s, 1);
-
-	        if (m.length === 0) {
-	          this._listenerMap[event] = null;
-	          delete this._listenerMap[event];
-	        }
-	      }
-	    } else {
-	      while (this._listenerMap[event] !== undefined) {
-	        this.removeEventListener(event, this._listenerMap[event][0].listener, this._listenerMap[event][0].useCapture);
-	      }
+	  }, {
+	    key: '__set_node_state',
+	    value: function __set_node_state(nodeState) {
+	      this.__private__.nodeState = nodeState;
 	    }
-	  }
+	  }], [{
+	    key: 'defineProperty',
+	    value: function defineProperty(element, propertyName, descriptor, scope) {
+	      (0, _assertType2.default)(element, Element, false, 'Parameter \'element\' must be an Element instance');
+	      (0, _assertType2.default)(descriptor, 'object', false, 'Parameter \'descriptor\' must be an object literal');
+	      (0, _assertType2.default)(descriptor.configurable, 'boolean', true, 'Optional configurable key in descriptor must be a boolean');
+	      (0, _assertType2.default)(descriptor.enumerable, 'boolean', true, 'Optional enumerable key in descriptor must be a boolean');
+	      (0, _assertType2.default)(descriptor.writable, 'boolean', true, 'Optional writable key in descriptor must be a boolean');
+	      (0, _assertType2.default)(descriptor.unique, 'boolean', true, 'Optional unique key in descriptor must be a boolean');
+	      (0, _assertType2.default)(descriptor.dirtyType, 'number', true, 'Optional dirty type must be of DirtyType enum (number)');
+	      (0, _assertType2.default)(descriptor.eventType, 'string', true, 'Optional event type must be a string');
+	      (0, _assertType2.default)(descriptor.attribute, 'string', true, 'Optional attribute must be a string');
+	      (0, _assertType2.default)(descriptor.onChange, 'function', true, 'Optional change handler must be a function');
+	      (0, _assertType2.default)(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
+	      (0, _assert2.default)((0, _validateAttribute2.default)(descriptor.attribute), 'Attribute \'' + descriptor.attribute + '\' is reserved');
 
-	  if (listener) {
-	    if (window && event === EventType.MOUSE.CLICK_OUTSIDE) {
-	      window.removeEventListener(EventType.MOUSE.CLICK, listener, useCapture);
-	    } else {
-	      this.element.removeEventListener.apply(this.element, arguments);
-	    }
-	  }
-	};
+	      var dirtyType = descriptor.dirtyType;
+	      var defaultValue = descriptor.defaultValue;
+	      var attribute = descriptor.attribute;
+	      var eventType = descriptor.eventType;
+	      var unique = descriptor.unique;
 
-	/**
-	 * Removes all cached event listeners from this Element instance.
-	 */
-	Element.prototype.removeAllEventListeners = function () {
-	  if (this._listenerMap) {
-	    for (var event in this._listenerMap) {
-	      this.removeEventListener(event);
-	    }
-	  }
-	};
+	      if (unique === undefined) unique = true;
 
-	/**
-	 * Dispatches an event.
-	 *
-	 * @param {Event} event
-	 */
-	Element.prototype.dispatchEvent = function (event) {
-	  this.element.dispatchEvent(event);
-	};
-
-	/**
-	 * Adds class(es) to this Element instance.
-	 *
-	 * @param {Stirng|Array} className
-	 */
-	Element.prototype.addClass = function (className) {
-	  var classes = [];
-
-	  if (!assert(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
-
-	  if (typeof className === 'string') {
-	    classes.push(className);
-	  } else {
-	    classes = className;
-	  }
-
-	  var n = classes.length;
-
-	  for (var i = 0; i < n; i++) {
-	    var c = classes[i];
-
-	    if (!assert(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
-	    if (this.hasClass(c)) continue;
-
-	    this.element.className = this.element.className + (this.element.className === '' ? '' : ' ') + c;
-	  }
-	};
-
-	/**
-	 * Removes class(es) from this Element instance.
-	 *
-	 * @param {Stirng|Array} className
-	 */
-	Element.prototype.removeClass = function (className) {
-	  var classes = [];
-
-	  if (!assert(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
-
-	  if (typeof className === 'string') {
-	    classes.push(className);
-	  } else {
-	    classes = className;
-	  }
-
-	  var n = classes.length;
-
-	  for (var i = 0; i < n; i++) {
-	    var c = classes[i];
-
-	    if (!assert(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
-	    var regex = new RegExp('^' + c + '\\s+|\\s+' + c + '|^' + c + '$', 'g');
-	    this.element.className = this.element.className.replace(regex, '');
-	  }
-	};
-
-	/**
-	 * Determines whether this Element instance has the specified class.
-	 *
-	 * @param {string} className
-	 *
-	 * @return {boolean}
-	 */
-	Element.prototype.hasClass = function (className) {
-	  if (!assert(typeof className === 'string', 'Invalid class detected: ' + className)) return false;
-
-	  return this.classes.indexOf(className) > -1;
-	};
-
-	/**
-	 * Gets the value of the property with the specified name.
-	 *
-	 * @param {string} key - Name of the property.
-	 *
-	 * @return {*} Value of the property.
-	 */
-	Element.prototype.getProperty = function (key) {
-	  return this.properties[key];
-	};
-
-	/**
-	 * Checks to see if this Element instance has the property of the specified
-	 * name.
-	 *
-	 * @param {string} key - Name of the property.
-	 *
-	 * @return {boolean} True if property exists, false othwerwise.
-	 */
-	Element.prototype.hasProperty = function (key) {
-	  return this.properties.hasOwnProperty(key);
-	};
-
-	/**
-	 * Sets the property of the specified name with the specified value. If
-	 * properties does not exist, it will be newly defined.
-	 *
-	 * @param {string} key   - Name of the property.
-	 * @param {*}      value - Value of the property.
-	 */
-	Element.prototype.setProperty = function (key, value) {
-	  if (this.hasProperty(key)) {
-	    this.properties[key] = value;
-	  } else {
-	    Element.defineProperty(this, key, {
-	      defaultValue: value === '' ? true : value,
-	      attribute: 'data-' + Directive.PROPERTY + '-' + key,
-	      dirtyType: DirtyType.DATA,
-	      get: true,
-	      set: true
-	    }, 'properties');
-	  }
-	};
-
-	/**
-	 * Gets the value of the attribute with the specified name.
-	 *
-	 * @param  {string} key - Name of the attribute.
-	 *
-	 * @return {*} Value of the attribute.
-	 */
-	Element.prototype.getAttribute = function (key) {
-	  var value = this.element.getAttribute(key);
-
-	  if (value === '') return true;
-	  if (value === undefined || value === null) return null;
-	  return value;
-	};
-
-	/**
-	 * Sets an attribute of this Element instance.
-	 *
-	 * @param {string} key     - Name of the attribute.
-	 * @param {*}      [value] - Value of the attribute. If unspecified, the
-	 *                           attribute will still be present but have no value.
-	 */
-	Element.prototype.setAttribute = function (key, value) {
-	  if (!assert(validateAttribute(key), 'Attribute \'' + key + '\' is reserved')) return;
-
-	  if (value === undefined || value === null || value === false) {
-	    this.element.removeAttribute(key);
-	  } else if (value === true) {
-	    this.element.setAttribute(key, '');
-	  } else {
-	    this.element.setAttribute(key, value);
-	  }
-
-	  if (key === 'disabled') {
-	    this.setDirty(DirtyType.STATE);
-	  }
-	};
-
-	/**
-	 * Removes an attribute from this Element instance.
-	 *
-	 * @param {string} key - Name of the attribute.
-	 */
-	Element.prototype.removeAttribute = function (key) {
-	  this.element.removeAttribute(key);
-	};
-
-	/**
-	 * Checks to see if this Element instance has the attribute of the specified
-	 * name.
-	 *
-	 * @param  {string}  key - Name of the attribute.
-	 *
-	 * @return {boolean} True if attribute with said name exists, false otherwise.
-	 */
-	Element.prototype.hasAttribute = function (key) {
-	  var value = this.element.getAttribute(key);
-
-	  if (value === '') return true;
-	  return !noval(value);
-	};
-
-	/**
-	 * Gets the value of an inline CSS rule of this Element instance by its name.
-	 *
-	 * @param {string} key - Name of the CSS rule in camelCase.
-	 *
-	 * @return {string} Value of the style.
-	 */
-	Element.prototype.getStyle = function (key) {
-	  var value = this.element.style[key];
-
-	  if (value === '') {
-	    return null;
-	  } else {
-	    return value;
-	  }
-	};
-
-	/**
-	 * Sets an inline CSS rule of this Element instance.
-	 *
-	 * @param {string} key   - Name of the CSS rule in camelCase.
-	 * @param {*}      value - Value of the style. If a number is provided, it will
-	 *                         be automatically suffixed with 'px'.
-	 *
-	 * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
-	 */
-	Element.prototype.setStyle = function (key, value) {
-	  if (typeof value === 'number') {
-	    value = value + 'px';
-	  }
-
-	  this.element.style[key] = value;
-	};
-
-	/**
-	 * Removes an inline CSS rule from this Element instance by its rule name in
-	 * camelCase.
-	 *
-	 * @param {string} key - Name of the CSS rule.
-	 *
-	 * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
-	 */
-	Element.prototype.removeStyle = function (key) {
-	  this.element.style[key] = '';
-	};
-
-	/**
-	 * Checks to see if this Element instance has the specified inline CSS rule.
-	 * @param {string} key - Name of the style.
-	 *
-	 * @return {boolean}
-	 */
-	Element.prototype.hasStyle = function (key) {
-	  return this.element.style[key] !== '';
-	};
-
-	/**
-	 * Creates the associated DOM element from scratch.
-	 *
-	 * @return {Element}
-	 */
-	Element.prototype.factory = function () {
-	  return document.createElement('div');
-	};
-
-	/**
-	 * @see ElementUpdateDelegate#isDirty
-	 */
-	Element.prototype.isDirty = function () {
-	  return this.updateDelegate.isDirty.apply(this.updateDelegate, arguments);
-	};
-
-	/**
-	 * @see ElementUpdateDelegate#setDirty
-	 */
-	Element.prototype.setDirty = function () {
-	  return this.updateDelegate.setDirty.apply(this.updateDelegate, arguments);
-	};
-
-	/**
-	 * Gets the string representation of this Element instance.
-	 *
-	 * @return {string}
-	 */
-	Element.prototype.toString = function () {
-	  return '[Element{' + this.name + '}]';
-	};
-
-	/**
-	 * Defines all properties.
-	 *
-	 * @protected
-	 */
-	Element.prototype.__define_properties = function () {
-	  /**
-	   * View of this Element instance.
-	   *
-	   * @property {HTMLElement}
-	   */
-	  Object.defineProperty(this, 'element', {
-	    get: function get() {
-	      if (!this._element) {
-	        Object.defineProperty(this, '_element', {
-	          value: this.factory(),
-	          writable: true
-	        });
-	      }
-
-	      return this._element;
-	    },
-	    set: function set(value) {
-	      this.__set_element(value);
-	    }
-	  });
-
-	  /**
-	   * ID of this Element instance.
-	   *
-	   * @property {string}
-	   */
-	  Object.defineProperty(this, 'id', {
-	    get: function get() {
-	      return this.element.id;
-	    },
-	    set: function set(value) {
-	      this.element.setAttribute('id', value);
-	    }
-	  });
-
-	  /**
-	   * Instance name of this Element instance. Once set, it cannot be changed.
-	   *
-	   * @property {string}
-	   */
-	  Object.defineProperty(this, 'name', {
-	    get: function get() {
-	      var s = this.element.getAttribute(Directive.INSTANCE) || this.element.getAttribute('data-' + Directive.INSTANCE);
-
-	      if (!s || s === '') {
-	        return null;
+	      if (scope === undefined) {
+	        scope = element;
 	      } else {
-	        return s;
-	      }
-	    },
-	    set: function set(value) {
-	      if (!value || value === '') return;
-
-	      if (!this.name) {
-	        this.element.setAttribute('data-' + Directive.INSTANCE, value);
-	      }
-	    }
-	  });
-
-	  /**
-	   * Class list of this Element instance.
-	   *
-	   * @property {Array}
-	   */
-	  Object.defineProperty(this, 'classes', {
-	    get: function get() {
-	      return this.element.className.split(' ');
-	    },
-	    set: function set(value) {
-	      this.element.className = value.join(' ');
-	    }
-	  });
-
-	  /**
-	   * Gets the attributes of this Element instance.
-	   *
-	   * @property {NamedNodeMap}
-	   */
-	  Object.defineProperty(this, 'attributes', {
-	    get: function get() {
-	      return this.element.attributes;
-	    }
-	  });
-
-	  /**
-	   * Gets the CSS styles of this Element instance.
-	   *
-	   * @property {ElementCSSInlineStyle}
-	   */
-	  Object.defineProperty(this, 'styles', {
-	    get: function get() {
-	      return this.element.style;
-	    }
-	  });
-
-	  /**
-	   * Current node state of this Element instance.
-	   *
-	   * @property {NodeState}
-	   */
-	  Object.defineProperty(this, 'nodeState', {
-	    get: function get() {
-	      return this._nodeState || NodeState.IDLE;
-	    }
-	  });
-
-	  /**
-	   * State of this Element instance (depicted by Directive.State).
-	   *
-	   * @property {string}
-	   */
-	  Object.defineProperty(this, 'state', {
-	    get: function get() {
-	      var s = this.element.getAttribute(Directive.STATE) || this.element.getAttribute('data-' + Directive.STATE);
-
-	      if (!s || s === '') {
-	        return null;
-	      } else {
-	        return s;
-	      }
-	    },
-	    set: function set(value) {
-	      if (this.state === value) return;
-
-	      if (value === null || value === undefined) {
-	        this.element.removeAttribute(Directive.STATE);
-	        this.element.removeAttribute('data-' + Directive.STATE);
-	      } else {
-	        this.element.setAttribute('data-' + Directive.STATE, value);
+	        (0, _assert2.default)(element.hasOwnProperty(scope), 'The specified Element instance does not have a property called \'' + scope + '\'');
+	        scope = element[scope];
 	      }
 
-	      this.updateDelegate.setDirty(DirtyType.STATE);
+	      if (defaultValue !== undefined) {
+	        scope.__private__ = scope.__private__ || {};
+	        Object.defineProperty(scope.__private__, propertyName, { value: defaultValue, writable: true });
+	      }
+
+	      var newDescriptor = {};
+
+	      if (descriptor.configurable !== undefined) newDescriptor.configurable = descriptor.configurable;
+	      if (descriptor.enumerable !== undefined) newDescriptor.enumerable = descriptor.enumerable;
+	      if (descriptor.value !== undefined) newDescriptor.value = descriptor.value;
+	      if (descriptor.writable !== undefined) newDescriptor.writable = descriptor.writable;
+
+	      if (descriptor.get) {
+	        newDescriptor.get = function () {
+	          return typeof descriptor.get === 'function' ? descriptor.get(scope.__private__[propertyName]) : scope.__private__[propertyName];
+	        };
+	      }
+
+	      if (descriptor.set) {
+	        newDescriptor.set = function (val) {
+	          var oldVal = scope.__private__[propertyName];
+
+	          if (typeof descriptor.set === 'function') val = descriptor.set(val);
+
+	          if (unique && oldVal === val) return;
+
+	          if (oldVal === undefined) {
+	            scope.__private__ = scope.__private__ || {};
+	            Object.defineProperty(scope.__private__, propertyName, { value: val, writable: true });
+	          } else {
+	            scope.__private__[propertyName] = val;
+	          }
+
+	          if (descriptor.onChange !== undefined) descriptor.onChange(oldVal, val);
+	          if (attribute !== undefined) element.setAttribute(attribute, val);
+	          if (dirtyType !== undefined) element.setDirty(dirtyType);
+
+	          if (eventType !== undefined) {
+	            var event = new CustomEvent(eventType, {
+	              detail: {
+	                property: propertyName,
+	                oldValue: oldVal,
+	                newValue: val
+	              }
+	            });
+
+	            element.dispatchEvent(event);
+	          }
+	        };
+	      }
+
+	      Object.defineProperty(scope, propertyName, newDescriptor);
+
+	      if (defaultValue !== undefined && attribute !== undefined) {
+	        element.setAttribute(attribute, defaultValue);
+	      }
 	    }
-	  });
 
-	  /**
-	   * Child elements.
-	   *
-	   * @property {Object}
-	   */
-	  Object.defineProperty(this, 'children', {
-	    value: {},
-	    writable: false
-	  });
+	    /**
+	     * Adds an event listener to an Element instance.
+	     *
+	     * @see module:requiem~ui.Element#addEventListener
+	     */
 
-	  /**
-	   * Data attributes.
-	   *
-	   * @property {Object}
-	   */
-	  Element.defineProperty(this, 'data', {
-	    defaultValue: null,
-	    get: true,
-	    set: true,
-	    dirtyType: DirtyType.DATA,
-	    eventType: EventType.DATA.DATA_CHANGE
-	  });
+	  }, {
+	    key: 'addEventListener',
+	    value: function addEventListener() {
+	      var element = arguments[0];
+	      var event = arguments[1];
+	      var listener = arguments[2];
+	      var useCapture = arguments[3] || false;
 
-	  /**
-	   * Property attributes.
-	   *
-	   * @property {Object}
-	   * @see module:requiem~types.Directive.PROPERTY
-	   */
-	  Object.defineProperty(this, 'properties', {
-	    value: {},
-	    writable: false
-	  });
+	      (0, _assert2.default)(!element || _instanceof(element, Element));
 
-	  /**
-	   * ElementUpdateDelegate instance.
-	   *
-	   * @property {ElementUpdateDelegate}
-	   */
-	  Object.defineProperty(this, 'updateDelegate', {
-	    get: function get() {
-	      if (!this._updateDelegate) {
-	        Object.defineProperty(this, '_updateDelegate', {
-	          value: new ElementUpdateDelegate(this),
-	          writable: false
-	        });
-	      }
+	      if ((0, _noval2.default)(element)) return;
 
-	      return this._updateDelegate;
+	      element.addEventListener(event, listener, useCapture);
 	    }
-	  });
 
-	  /**
-	   * Specifies whether this Element instance remembers caches every listener
-	   * that is added to it (via the addEventListener/removeEventListener
-	   * method).
-	   *
-	   * @property {boolean}
-	   */
-	  Object.defineProperty(this, 'cachesListeners', {
-	    value: true,
-	    writable: true
-	  });
+	    /**
+	     * Removes an event listener from an Element instance.
+	     *
+	     * @see module:requiem~ui.Element#removeEventListener
+	     */
 
-	  /**
-	   * Wrapper for the 'innerHTML' property of the internal element.
-	   *
-	   * @property {string}
-	   */
-	  Object.defineProperty(this, 'content', {
-	    get: function get() {
-	      return this.element.innerHTML;
-	    },
-	    set: function set(value) {
-	      this.element.innerHTML = value;
+	  }, {
+	    key: 'removeEventListener',
+	    value: function removeEventListener() {
+	      var element = arguments[0];
+	      var event = arguments[1];
+	      var listener = arguments[2];
+	      var useCapture = arguments[3] || false;
+
+	      (0, _assert2.default)(!element || _instanceof(element, Element));
+
+	      if ((0, _noval2.default)(element)) return;
+
+	      element.removeEventListener(event, listener, useCapture);
 	    }
-	  });
+	  }]);
 
-	  /**
-	   * Specifies whether this Element instance is hidden. This property follows
-	   * the rules of the CSS rule 'display: none'.
-	   *
-	   * @property {boolean}
-	   */
-	  Element.defineProperty(this, 'hidden', {
-	    get: true,
-	    set: (function (value) {
-	      assertType(value, 'boolean', false);
-
-	      if (value) {
-	        this.setStyle('display', 'none');
-	      } else {
-	        if (this.getStyle('display') === 'none') {
-	          this.removeStyle('display');
-	        }
-	      }
-
-	      return value;
-	    }).bind(this)
-	  });
-
-	  /**
-	   * Specifies whether this Element instance is invisible. This property follows
-	   * the rules of the CSS rule 'visibility: hidden'.
-	   *
-	   * @property {boolean}
-	   */
-	  Element.defineProperty(this, 'invisible', {
-	    get: true,
-	    set: (function (value) {
-	      assertType(value, 'boolean', false);
-
-	      if (value) {
-	        this.setStyle('visibility', 'hidden');
-	      } else {
-	        if (this.getStyle('visibility') === 'hidden') {
-	          this.removeStyle('visibility');
-	        }
-	      }
-
-	      return value;
-	    }).bind(this)
-	  });
-
-	  /**
-	   * Specifies whether this Element instance is disabled.
-	   *
-	   * @property {boolean}
-	   */
-	  Object.defineProperty(this, 'disabled', {
-	    get: (function () {
-	      if (this.hasAttribute('disabled')) {
-	        return this.getAttribute('disabled');
-	      } else {
-	        return false;
-	      }
-	    }).bind(this),
-	    set: (function (value) {
-	      assertType(value, 'boolean', false);
-	      this.setAttribute('disabled', value);
-	    }).bind(this)
-	  });
-	};
-
-	/**
-	 * Stubbed out setter for element property (for overriding purposes).
-	 *
-	 * @param {HTMLElement} value The DOM element.
-	 *
-	 * @protected
-	 */
-	Element.prototype.__set_element = function (value) {
-	  // Ensure that this is not overwritable.
-	  assert(!this._element, 'Element cannot be overwritten.');
-	  assert(_instanceof(value, HTMLElement) || _instanceof(value, Element), 'Invalid element type specified. Must be an instance of HTMLElement or Element.');
-
-	  if (_instanceof(value, Element)) {
-	    Object.defineProperty(this, '_element', {
-	      value: value.element,
-	      writable: true
-	    });
-	  } else {
-	    Object.defineProperty(this, '_element', {
-	      value: value,
-	      writable: true
-	    });
-	  }
-	};
+	  return Element;
+	})();
 
 	module.exports = Element;
 
@@ -2352,6 +2518,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict'
 
 	/**
+	 * Gets the name of a function/class.
+	 *
+	 * @param  {Function} f - The function/class.
+	 *
+	 * @return {string} Name of the function/class.
+	 */
+	;
+	function getFunctionName(f) {
+	  if (!f) return;
+	  if (f.name) return f.name;
+
+	  var regex = /function\s([^(]{1,})\(/;
+	  var name = regex.exec(f.toString());
+
+	  return name && name.length > 1 ? name[1].trim() : '';
+	}
+
+	module.exports = getFunctionName;
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+
+	'use strict'
+
+	/**
 	 * Internal console logger that activates only when VARS_DEBUG flag is present
 	 * in the window.
 	 *
@@ -2361,7 +2561,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	;
 	function log(message) {
-	  if (window && window.VARS_DEBUG && window.console && console.log) {
+	  if (window && window.REQUIEM_DEBUG && window.console && console.log) {
 	    Function.apply.call(console.log, console, arguments);
 	  }
 	}
@@ -2369,7 +2569,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = log;
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2405,7 +2605,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = validateAttribute;
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	/**
@@ -2495,13 +2695,63 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Indicates that everything has changed in the UI.
 	   */
-	  ALL: 0xFFFFFFFF
+	  ALL: 0xFFFFFFFF,
+
+	  /**
+	   * Gets the name of the dirty type.
+	   *
+	   * @param  {DirtyType} dirtyType - Dirty type.
+	   *
+	   * @return {string} - Name of the dirty type.
+	   */
+	  toString: function toString(dirtyType) {
+	    if (dirtyType === DirtyType.NONE) return 'NONE';
+	    if (dirtyType >= DirtyType.ALL) return 'ALL';
+
+	    var o = '';
+	    var n = 8 * 4;
+
+	    for (var i = 0; i < n; i++) {
+	      var bit = dirtyType >> i & 1;
+
+	      if (bit === 0) continue;
+
+	      switch (1 << i) {
+	        case DirtyType.POSITION:
+	          o += 'POSITION';break;
+	        case DirtyType.SIZE:
+	          o += 'SIZE';break;
+	        case DirtyType.LAYOUT:
+	          o += 'LAYOUT';break;
+	        case DirtyType.STATE:
+	          o += 'STATE';break;
+	        case DirtyType.DATA:
+	          o += 'DATA';break;
+	        case DirtyType.LOCALE:
+	          o += 'LOCALE';break;
+	        case DirtyType.DEPTH:
+	          o += 'DEPTH';break;
+	        case DirtyType.CONFIG:
+	          o += 'CONFIG';break;
+	        case DirtyType.STYLE:
+	          o += 'STYLE';break;
+	        case DirtyType.INPUT:
+	          o += 'INPUT';break;
+	        case DirtyType.ORIENTATION:
+	          o += 'ORIENTATION';break;
+	        default:
+	          o += String(1 << i);
+	      }
+	    }
+
+	    return o;
+	  }
 	};
 
 	module.exports = DirtyType;
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	/**
@@ -2546,13 +2796,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Element is destroyed.
 	   */
-	  DESTROYED: 3
+	  DESTROYED: 3,
+
+	  /**
+	   * Gets the name of a node state.
+	   *
+	   * @param  {NodeState} nodeState - Node state.
+	   *
+	   * @return {string} Name of the node state.
+	   */
+	  toString: function toString(nodeState) {
+	    switch (nodeState) {
+	      case NodeState.IDLE:
+	        return 'IDLE';
+	      case NodeState.INITIALIZED:
+	        return 'INITIALIZED';
+	      case NodeState.UPDATED:
+	        return 'UPDATED';
+	      case NodeState.DESTROYED:
+	        return 'DESTROYED';
+	      default:
+	        return 'UNKNOWN';
+	    }
+	  }
 	};
 
 	module.exports = NodeState;
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
 	/**
@@ -2704,7 +2976,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventType;
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2717,12 +2989,29 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _debounce = __webpack_require__(23);
+
+	var _debounce2 = _interopRequireDefault(_debounce);
+
+	var _log = __webpack_require__(17);
+
+	var _log2 = _interopRequireDefault(_log);
+
+	var _DirtyType = __webpack_require__(19);
+
+	var _DirtyType2 = _interopRequireDefault(_DirtyType);
+
+	var _EventType = __webpack_require__(21);
+
+	var _EventType2 = _interopRequireDefault(_EventType);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
-	var debounce = __webpack_require__(22);
-	var log = __webpack_require__(16);
-	var DirtyType = __webpack_require__(18);
-	var EventType = __webpack_require__(20);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
 	 * Default refresh (debounce) rate in milliseconds.
@@ -2737,589 +3026,565 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @class
 	 *
-	 * Delegate for managing update calls of a Requiem modeled element.
-	 *
-	 * @param {Element} delegate - The Requiem Element instance of which this
-	 *                             ElementUpdateDelgate instance will delegate its
-	 *                             methods to.
+	 * Delegate for managing update calls of a Requiem Element.
 	 *
 	 * @alias module:requiem~ui.ElementUpdateDelegate
 	 */
-	function ElementUpdateDelegate(delegate) {
-	  log('[ElementUpdateDelegate]::new(', delegate, ')');
 
-	  this.__define_properties();
-
-	  var mDirtyTable = 0;
-	  var mResizeHandler = null;
-	  var mScrollHandler = null;
-	  var mMouseMoveHandler = null;
-	  var mOrientationChangeHandler = null;
-	  var mMouseWheelHandler = null;
-	  var mKeyUpHandler = null;
-	  var mKeyPressHandler = null;
-	  var mKeyDownHandler = null;
-
-	  this.delegate = delegate;
-
+	var ElementUpdateDelegate = (function () {
 	  /**
-	   * Sets a dirty type as dirty.
+	   * @class
 	   *
-	   * @param {number} dirtyType
+	   * Creates a new ElementUpdateDelegate instance.
+	   *
+	   * @param {Element} delegate - The Requiem Element instance of which this
+	   *                             ElementUpdateDelgate instance manages.
+	   *
+	   * @alias module:requiem~ui.ElementUpdateDelegate
 	   */
-	  this.setDirty = function (dirtyType, validateNow) {
-	    log('[ElementUpdateDelegate]::setDirty(', dirtyType, validateNow, ')');
 
-	    if (this.transmissive !== DirtyType.NONE) {
-	      if (this.delegate.children) {
-	        for (var name in this.delegate.children) {
-	          var children = undefined;
+	  function ElementUpdateDelegate(delegate) {
+	    _classCallCheck(this, ElementUpdateDelegate);
 
-	          if (_instanceof(this.delegate.children[name], Array)) {
-	            children = this.delegate.children[name];
+	    this.__define_properties();
+
+	    var mDirtyTable = 0;
+	    var mResizeHandler = null;
+	    var mScrollHandler = null;
+	    var mMouseMoveHandler = null;
+	    var mOrientationChangeHandler = null;
+	    var mMouseWheelHandler = null;
+	    var mKeyUpHandler = null;
+	    var mKeyPressHandler = null;
+	    var mKeyDownHandler = null;
+
+	    this.delegate = delegate;
+
+	    /**
+	     * Custom requestAnimationFrame implementation.
+	     *
+	     * @param {Function} callback
+	     *
+	     * @private
+	     */
+	    var _requestAnimationFrame = function _requestAnimationFrame(callback) {
+	      var raf = window && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame) || null;
+
+	      if (!raf) {
+	        raf = function (callback) {
+	          if (window) {
+	            return window.setTimeout(callback, 10.0);
 	          } else {
-	            children = [this.delegate.children[name]];
+	            return null;
 	          }
+	        };
+	      }
 
-	          var n = children.length;
+	      return raf(callback);
+	    };
 
-	          for (var i = 0; i < n; i++) {
-	            var child = children[i];
+	    /**
+	     * Custom cancelAnimationFrame implementation.
+	     *
+	     * @return {Function} callback
+	     *
+	     * @private
+	     */
+	    var _cancelAnimationFrame = function _cancelAnimationFrame(callback) {
+	      var caf = window && (window.requestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
 
-	            if (child.updateDelegate && child.updateDelegate.setDirty) {
-	              var transmitted = dirtyType & child.updateDelegate.receptive;
+	      if (!caf) {
+	        caf = function (callback) {
+	          if (window) {
+	            return window.clearTimeout(callback);
+	          } else {
+	            return null;
+	          }
+	        };
+	      }
 
-	              if (transmitted !== DirtyType.NONE) {
-	                child.updateDelegate.setDirty(transmitted, validateNow);
+	      return caf;
+	    };
+
+	    /**
+	     * Handler invoked when the window resizes.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowResize = function _onWindowResize(event) {
+	      this.setDirty(_DirtyType2.default.SIZE);
+	    };
+
+	    /**
+	     * Handler invoked when the window scrolls.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowScroll = function _onWindowScroll(event) {
+	      this.setDirty(_DirtyType2.default.POSITION);
+	    };
+
+	    /**
+	     * Handler invoked when mouse moves in the window.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowMouseMove = function _onWindowMouseMove(event) {
+	      this.mouse.pointerX = event.clientX;
+	      this.mouse.pointerY = event.clientY;
+
+	      this.setDirty(_DirtyType2.default.INPUT);
+	    };
+
+	    /**
+	     * Handler invoked when mouse wheel moves in the window.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowMouseWheel = function _onWindowMouseWheel(event) {
+	      this.mouse.wheelX = event.deltaX;
+	      this.mouse.wheelY = event.deltaY;
+
+	      this.setDirty(_DirtyType2.default.INPUT);
+	    };
+
+	    /**
+	     * Handler invoked when device orientation changes.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowOrientationChange = function _onWindowOrientationChange(event) {
+	      if (!window) return;
+
+	      var x = undefined,
+	          y = undefined,
+	          z = undefined;
+
+	      if (_instanceof(event, window.DeviceOrientationEvent)) {
+	        x = event.beta;
+	        y = event.gamma;
+	        z = event.alpha;
+	      } else if (_instanceof(event, window.DeviceMotionEvent)) {
+	        x = event.acceleration.x * 2;
+	        y = event.acceleration.y * 2;
+	        z = event.acceleration.z * 2;
+	      } else {
+	        x = event.orientation.x * 50;
+	        y = event.orientation.y * 50;
+	        z = event.orientation.z * 50;
+	      }
+
+	      this.orientation.x = x;
+	      this.orientation.y = y;
+	      this.orientation.z = z;
+
+	      this.setDirty(_DirtyType2.default.ORIENTATION);
+	    };
+
+	    /**
+	     * Handler invoked when a key is pressed down.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowKeyDown = function _onWindowKeyDown(event) {
+	      if (!window) return;
+
+	      if (this.keyCode.down === undefined) {
+	        this.keyCode.down = [];
+	      }
+
+	      this.keyCode.down.push(event.keyCode);
+
+	      this.setDirty(_DirtyType2.default.INPUT);
+	    };
+
+	    /**
+	     * Handler invoked when a key is pressed.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowKeyPress = function _onWindowKeyPress(event) {
+	      if (!window) return;
+
+	      if (this.keyCode.press === undefined) {
+	        this.keyCode.press = [];
+	      }
+
+	      this.keyCode.press.push(event.keyCode);
+
+	      this.setDirty(_DirtyType2.default.INPUT);
+	    };
+
+	    /**
+	     * Handler invoked when a key is pressed up.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowKeyUp = function _onWindowKeyUp(event) {
+	      if (!window) return;
+
+	      if (this.keyCode.up === undefined) {
+	        this.keyCode.up = [];
+	      }
+
+	      this.keyCode.up.push(event.keyCode);
+
+	      this.setDirty(_DirtyType2.default.INPUT);
+	    };
+
+	    /**
+	     * Sets a dirty type as dirty.
+	     *
+	     * @param {number} dirtyType
+	     */
+	    this.setDirty = function (dirtyType, validateNow) {
+	      if (this.transmissive !== _DirtyType2.default.NONE) {
+	        if (this.delegate.children) {
+	          for (var name in this.delegate.children) {
+	            var children = undefined;
+
+	            if (_instanceof(this.delegate.children[name], Array)) {
+	              children = this.delegate.children[name];
+	            } else {
+	              children = [this.delegate.children[name]];
+	            }
+
+	            var n = children.length;
+
+	            for (var i = 0; i < n; i++) {
+	              var child = children[i];
+
+	              if (child.updateDelegate && child.updateDelegate.setDirty) {
+	                var transmitted = dirtyType & child.updateDelegate.receptive;
+
+	                if (transmitted !== _DirtyType2.default.NONE) {
+	                  child.updateDelegate.setDirty(transmitted, validateNow);
+	                }
 	              }
 	            }
 	          }
 	        }
 	      }
-	    }
 
-	    if (this.isDirty(dirtyType) && !validateNow) {
-	      return;
-	    }
+	      if (this.isDirty(dirtyType) && !validateNow) return;
 
-	    switch (dirtyType) {
-	      case DirtyType.NONE:
-	      case DirtyType.ALL:
-	        {
+	      switch (dirtyType) {
+	        case _DirtyType2.default.NONE:
+	        case _DirtyType2.default.ALL:
 	          mDirtyTable = dirtyType;
 	          break;
-	        }
 
-	      default:
-	        {
+	        default:
 	          mDirtyTable |= dirtyType;
-	          break;
+	      }
+
+	      if (validateNow) {
+	        this.update();
+	      } else if (!this._pendingAnimationFrame) {
+	        this._pendingAnimationFrame = _requestAnimationFrame(this.update.bind(this));
+	      }
+	    };
+
+	    /**
+	     * Checks dirty status of a given dirty type.
+	     *
+	     * @param {number} dirtyType [description]
+	     *
+	     * @return {boolean}
+	     */
+	    this.isDirty = function (dirtyType) {
+	      switch (dirtyType) {
+	        case _DirtyType2.default.NONE:
+	        case _DirtyType2.default.ALL:
+	          return mDirtyTable === dirtyType;
+
+	        default:
+	          return (dirtyType & mDirtyTable) !== 0;
+	      }
+	    };
+
+	    /**
+	     * Initializes this ElementUpdateDelegate instance. Must manually invoke.
+	     */
+	    this.init = function () {
+	      var conductor = this.conductor || window;
+
+	      if (window && conductor && conductor.addEventListener && (this.responsive === true || _instanceof(this.responsive, Array))) {
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.OBJECT.RESIZE) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.ORIENTATION_CHANGE) > -1) {
+	          mResizeHandler = this.refreshRate === 0.0 ? _onWindowResize.bind(this) : (0, _debounce2.default)(_onWindowResize.bind(this), this.refreshRate);
 	        }
-	    }
 
-	    if (validateNow) {
-	      this.update();
-	    } else if (!this._pendingAnimationFrame) {
-	      this._pendingAnimationFrame = _requestAnimationFrame(this.update.bind(this));
-	    }
-	  };
-
-	  /**
-	   * Checks dirty status of a given dirty type.
-	   *
-	   * @param {number} dirtyType [description]
-	   *
-	   * @return {boolean}
-	   */
-	  this.isDirty = function (dirtyType) {
-	    log('[ElementUpdateDelegate]::isDirty(', dirtyType, mDirtyTable, ')');
-
-	    switch (dirtyType) {
-	      case DirtyType.NONE:
-	      case DirtyType.ALL:
-	        return mDirtyTable === dirtyType;
-
-	      default:
-	        return (dirtyType & mDirtyTable) !== 0;
-	    }
-	  };
-
-	  /**
-	   * Initializes this ElementUpdateDelegate instance. Must manually invoke.
-	   */
-	  this.init = function () {
-	    log('[ElementUpdateDelegate]::init()');
-
-	    var conductor = this.conductor || window;
-
-	    if (window && conductor && conductor.addEventListener && (this.responsive === true || _instanceof(this.responsive, Array))) {
-	      if (this.responsive === true || this.responsive.indexOf(EventType.OBJECT.RESIZE) > -1 || this.responsive.indexOf(EventType.DEVICE.ORIENTATION_CHANGE) > -1) {
-	        mResizeHandler = this.refreshRate === 0.0 ? _onWindowResize.bind(this) : debounce(_onWindowResize.bind(this), this.refreshRate);
-	      }
-
-	      if (this.responsive === true || this.responsive.indexOf(EventType.OBJECT.SCROLL) > -1) {
-	        mScrollHandler = this.refreshRate === 0.0 ? _onWindowScroll.bind(this) : debounce(_onWindowScroll.bind(this), this.refreshRate);
-	      }
-
-	      if (this.responsive === true || this.responsive.indexOf(EventType.MISC.WHEEL) > -1) {
-	        mMouseWheelHandler = this.refreshRate === 0.0 ? _onWindowMouseWheel.bind(this) : debounce(_onWindowMouseWheel.bind(this), this.refreshRate);
-	      }
-
-	      if (this.responsive === true || this.responsive.indexOf(EventType.MOUSE.MOUSE_MOVE) > -1) {
-	        mMouseMoveHandler = this.refreshRate === 0.0 ? _onWindowMouseMove.bind(this) : debounce(_onWindowMouseMove.bind(this), this.refreshRate);
-	      }
-
-	      if (this.responsive === true || this.responsive.indexOf(EventType.DEVICE.DEVICE_ORIENTATION) > -1 || this.responsive.indexOf(EventType.DEVICE.DEVICE_MOTION) > -1 || this.responsive.indexOf(EventType.DEVICE.ORIENTATION) > -1) {
-	        mOrientationChangeHandler = this.refreshRate === 0.0 ? _onWindowOrientationChange.bind(this) : debounce(_onWindowOrientationChange.bind(this), this.refreshRate);
-	      }
-
-	      if (this.responsive === true || this.responsive.indexOf(EventType.KEYBOARD.KEY_DOWN) > -1) {
-	        mKeyDownHandler = _onWindowKeyDown.bind(this);
-	      }
-
-	      if (this.responsive === true || this.responsive.indexOf(EventType.KEYBOARD.KEY_PRESS) > -1) {
-	        mKeyPressHandler = _onWindowKeyPress.bind(this);
-	      }
-
-	      if (this.responsive === true || this.responsive.indexOf(EventType.KEYBOARD.KEY_UP) > -1) {
-	        mKeyUpHandler = _onWindowKeyUp.bind(this);
-	      }
-
-	      if (mResizeHandler) {
-	        window.addEventListener(EventType.OBJECT.RESIZE, mResizeHandler);
-	        window.addEventListener(EventType.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
-	      }
-
-	      if (mScrollHandler) {
-	        conductor.addEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
-	      }
-
-	      if (mMouseWheelHandler) {
-	        conductor.addEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
-	      }
-
-	      if (mMouseMoveHandler) {
-	        conductor.addEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
-	      }
-
-	      if (mOrientationChangeHandler) {
-	        if (window.DeviceOrientationEvent) {
-	          window.addEventListener(EventType.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
-	        } else if (window.DeviceMotionEvent) {
-	          window.addEventListener(EventType.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.OBJECT.SCROLL) > -1) {
+	          mScrollHandler = this.refreshRate === 0.0 ? _onWindowScroll.bind(this) : (0, _debounce2.default)(_onWindowScroll.bind(this), this.refreshRate);
 	        }
-	      }
 
-	      if (mKeyDownHandler) {
-	        window.addEventListener(EventType.KEYBOARD.KEY_DOWN, mKeyDownHandler);
-	      }
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.MISC.WHEEL) > -1) {
+	          mMouseWheelHandler = this.refreshRate === 0.0 ? _onWindowMouseWheel.bind(this) : (0, _debounce2.default)(_onWindowMouseWheel.bind(this), this.refreshRate);
+	        }
 
-	      if (mKeyPressHandler) {
-	        window.addEventListener(EventType.KEYBOARD.KEY_PRESS, mKeyPressHandler);
-	      }
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.MOUSE.MOUSE_MOVE) > -1) {
+	          mMouseMoveHandler = this.refreshRate === 0.0 ? _onWindowMouseMove.bind(this) : (0, _debounce2.default)(_onWindowMouseMove.bind(this), this.refreshRate);
+	        }
 
-	      if (mKeyUpHandler) {
-	        window.addEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
-	      }
-	    }
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.DEVICE.DEVICE_ORIENTATION) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.DEVICE_MOTION) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.ORIENTATION) > -1) {
+	          mOrientationChangeHandler = this.refreshRate === 0.0 ? _onWindowOrientationChange.bind(this) : (0, _debounce2.default)(_onWindowOrientationChange.bind(this), this.refreshRate);
+	        }
 
-	    this.setDirty(DirtyType.ALL);
-	  };
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_DOWN) > -1) {
+	          mKeyDownHandler = _onWindowKeyDown.bind(this);
+	        }
 
-	  /**
-	   * Destroys this ElementUpdateDelegate instance.
-	   */
-	  this.destroy = function () {
-	    log('[ElementUpdateDelegate]::destroy()');
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_PRESS) > -1) {
+	          mKeyPressHandler = _onWindowKeyPress.bind(this);
+	        }
 
-	    _cancelAnimationFrame();
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_UP) > -1) {
+	          mKeyUpHandler = _onWindowKeyUp.bind(this);
+	        }
 
-	    var conductor = this.conductor || window;
+	        if (mResizeHandler) {
+	          window.addEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
+	          window.addEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
+	        }
 
-	    if (window && conductor && conductor.removeEventListener) {
-	      if (mResizeHandler) {
-	        window.removeEventListener(EventType.OBJECT.RESIZE, mResizeHandler);
-	        window.removeEventListener(EventType.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
-	      }
+	        if (mScrollHandler) {
+	          conductor.addEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
+	        }
 
-	      if (mScrollHandler) {
-	        conductor.removeEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
-	      }
+	        if (mMouseWheelHandler) {
+	          conductor.addEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
+	        }
 
-	      if (mMouseWheelHandler) {
-	        conductor.removeEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
-	      }
+	        if (mMouseMoveHandler) {
+	          conductor.addEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+	        }
 
-	      if (mMouseMoveHandler) {
-	        conductor.removeEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
-	      }
+	        if (mOrientationChangeHandler) {
+	          if (window.DeviceOrientationEvent) {
+	            window.addEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
+	          } else if (window.DeviceMotionEvent) {
+	            window.addEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+	          }
+	        }
 
-	      if (mOrientationChangeHandler) {
-	        if (window.DeviceOrientationEvent) {
-	          window.removeEventListener(EventType.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
-	        } else if (window.DeviceMotionEvent) {
-	          window.removeEventListener(EventType.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+	        if (mKeyDownHandler) {
+	          window.addEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
+	        }
+
+	        if (mKeyPressHandler) {
+	          window.addEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
+	        }
+
+	        if (mKeyUpHandler) {
+	          window.addEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
 	        }
 	      }
 
-	      if (mKeyDownHandler) {
-	        window.removeEventListener(EventType.KEYBOARD.KEY_DOWN, mKeyDownHandler);
-	      }
+	      this.setDirty(_DirtyType2.default.ALL);
+	    };
 
-	      if (mKeyPressHandler) {
-	        window.removeEventListener(EventType.KEYBOARD.KEY_PRESS, mKeyPressHandler);
-	      }
+	    /**
+	     * Destroys this ElementUpdateDelegate instance.
+	     */
+	    this.destroy = function () {
+	      _cancelAnimationFrame();
 
-	      if (mKeyUpHandler) {
-	        window.removeEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
-	      }
-	    }
+	      var conductor = this.conductor || window;
 
-	    mResizeHandler = null;
-	    mScrollHandler = null;
-	    mMouseWheelHandler = null;
-	    mMouseMoveHandler = null;
-	    mOrientationChangeHandler = null;
-	    mKeyDownHandler = null;
-	    mKeyPressHandler = null;
-	    mKeyUpHandler = null;
-	  };
-
-	  /**
-	   * Handler invoked whenever a visual update is required.
-	   */
-	  this.update = function () {
-	    log('[ElementUpdateDelegate]::update()');
-
-	    _cancelAnimationFrame(this._pendingAnimationFrame);
-
-	    if (this.delegate && this.delegate.update) {
-	      this.delegate.update.call(this.delegate);
-	    }
-
-	    // Reset the dirty status of all types.
-	    this.setDirty(DirtyType.NONE);
-
-	    delete this.mouse.pointerX;
-	    delete this.mouse.pointerY;
-	    delete this.mouse.wheelX;
-	    delete this.mouse.wheelY;
-	    delete this.orientation.x;
-	    delete this.orientation.y;
-	    delete this.orientation.z;
-	    delete this.keyCode.up;
-	    delete this.keyCode.press;
-	    delete this.keyCode.down;
-
-	    this._pendingAnimationFrame = null;
-	  };
-
-	  /**
-	   * Custom requestAnimationFrame implementation.
-	   *
-	   * @param {Function} callback
-	   *
-	   * @private
-	   */
-	  var _requestAnimationFrame = function _requestAnimationFrame(callback) {
-	    var raf = window && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame) || null;
-
-	    if (!raf) {
-	      raf = function (callback) {
-	        if (window) {
-	          return window.setTimeout(callback, 10.0);
-	        } else {
-	          return null;
+	      if (window && conductor && conductor.removeEventListener) {
+	        if (mResizeHandler) {
+	          window.removeEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
+	          window.removeEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
 	        }
-	      };
-	    }
 
-	    return raf(callback);
-	  };
-
-	  /**
-	   * Custom cancelAnimationFrame implementation.
-	   *
-	   * @return {Function} callback
-	   *
-	   * @private
-	   */
-	  var _cancelAnimationFrame = function _cancelAnimationFrame(callback) {
-	    var caf = window && (window.requestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
-
-	    if (!caf) {
-	      caf = function (callback) {
-	        if (window) {
-	          return window.clearTimeout(callback);
-	        } else {
-	          return null;
+	        if (mScrollHandler) {
+	          conductor.removeEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
 	        }
-	      };
+
+	        if (mMouseWheelHandler) {
+	          conductor.removeEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
+	        }
+
+	        if (mMouseMoveHandler) {
+	          conductor.removeEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+	        }
+
+	        if (mOrientationChangeHandler) {
+	          if (window.DeviceOrientationEvent) {
+	            window.removeEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
+	          } else if (window.DeviceMotionEvent) {
+	            window.removeEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+	          }
+	        }
+
+	        if (mKeyDownHandler) {
+	          window.removeEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
+	        }
+
+	        if (mKeyPressHandler) {
+	          window.removeEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
+	        }
+
+	        if (mKeyUpHandler) {
+	          window.removeEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
+	        }
+	      }
+
+	      mResizeHandler = null;
+	      mScrollHandler = null;
+	      mMouseWheelHandler = null;
+	      mMouseMoveHandler = null;
+	      mOrientationChangeHandler = null;
+	      mKeyDownHandler = null;
+	      mKeyPressHandler = null;
+	      mKeyUpHandler = null;
+	    };
+
+	    /**
+	     * Handler invoked whenever a visual update is required.
+	     */
+	    this.update = function () {
+	      _cancelAnimationFrame(this._pendingAnimationFrame);
+
+	      if (this.delegate && this.delegate.update) {
+	        (0, _log2.default)(this.toString() + '::update(', _DirtyType2.default.toString(mDirtyTable), ')');
+	        this.delegate.update.call(this.delegate);
+	      }
+
+	      // Reset the dirty status of all types.
+	      this.setDirty(_DirtyType2.default.NONE);
+
+	      delete this.mouse.pointerX;
+	      delete this.mouse.pointerY;
+	      delete this.mouse.wheelX;
+	      delete this.mouse.wheelY;
+	      delete this.orientation.x;
+	      delete this.orientation.y;
+	      delete this.orientation.z;
+	      delete this.keyCode.up;
+	      delete this.keyCode.press;
+	      delete this.keyCode.down;
+
+	      this._pendingAnimationFrame = null;
+	    };
+	  }
+
+	  /**
+	   * Gets the string representation of this ElementUpdateDelegate instance.
+	   *
+	   * @return {string}
+	   */
+
+	  _createClass(ElementUpdateDelegate, [{
+	    key: 'toString',
+	    value: function toString() {
+	      return '[ElementUpdateDelegate{' + (this.delegate && this.delegate.name || 'undefined') + '}]';
 	    }
 
-	    return caf;
-	  };
+	    /**
+	     * Defines all properties.
+	     *
+	     * @private
+	     */
 
-	  /**
-	   * Handler invoked when the window resizes.
-	   *
-	   * @param {Event} event
-	   *
-	   * @private
-	   */
-	  var _onWindowResize = function _onWindowResize(event) {
-	    this.setDirty(DirtyType.SIZE);
-	  };
+	  }, {
+	    key: '__define_properties',
+	    value: function __define_properties() {
+	      /**
+	       * Delegate of this ElementUpdateDelegate instance.
+	       *
+	       * @property {Element}
+	       */
+	      Object.defineProperty(this, 'delegate', { value: null, writable: true });
 
-	  /**
-	   * Handler invoked when the window scrolls.
-	   *
-	   * @param {Event} event
-	   *
-	   * @private
-	   */
-	  var _onWindowScroll = function _onWindowScroll(event) {
-	    this.setDirty(DirtyType.POSITION);
-	  };
+	      /**
+	       * Indicates whether this ElementUpdateDelegate auto responds to window
+	       * behaviors (i.e. resizing, scrolling).
+	       *
+	       * @property {boolean}
+	       */
+	      Object.defineProperty(this, 'responsive', { value: false, writable: true });
 
-	  /**
-	   * Handler invoked when mouse moves in the window.
-	   *
-	   * @param {Event} event
-	   *
-	   * @private
-	   */
-	  var _onWindowMouseMove = function _onWindowMouseMove(event) {
-	    this.mouse.pointerX = event.clientX;
-	    this.mouse.pointerY = event.clientY;
+	      /**
+	       * Indicates the debounce rate of this ElementUpdateDelegate instance.
+	       *
+	       * @property {number}
+	       */
+	      Object.defineProperty(this, 'refreshRate', { value: DEFAULT_REFRESH_RATE, writable: true });
 
-	    this.setDirty(DirtyType.INPUT);
-	  };
+	      /**
+	       * Indicates the dirty flags in which ElementUpdateDelgate instance will
+	       * transmit to its child Elements.
+	       *
+	       * @property {number}
+	       */
+	      Object.defineProperty(this, 'transmissive', { value: _DirtyType2.default.NONE, writable: true });
 
-	  /**
-	   * Handler invoked when mouse wheel moves in the window.
-	   *
-	   * @param {Event} event
-	   *
-	   * @private
-	   */
-	  var _onWindowMouseWheel = function _onWindowMouseWheel(event) {
-	    this.mouse.wheelX = event.deltaX;
-	    this.mouse.wheelY = event.deltaY;
+	      /**
+	       * Indicates the dirty flags in which this ElementUpdateDelegate is capable
+	       * of receiving from parent Elements.
+	       *
+	       * @property {number}
+	       */
+	      Object.defineProperty(this, 'receptive', { value: _DirtyType2.default.NONE, writable: true });
 
-	    this.setDirty(DirtyType.INPUT);
-	  };
+	      /**
+	       * Indicates the conductor in which this ElementUpdateDelegate responds to
+	       * (defaults to window).
+	       *
+	       * @property {Node|window}
+	       */
+	      Object.defineProperty(this, 'conductor', { value: window, writable: true });
 
-	  /**
-	   * Handler invoked when device orientation changes.
-	   *
-	   * @param {Event} event
-	   *
-	   * @private
-	   */
-	  var _onWindowOrientationChange = function _onWindowOrientationChange(event) {
-	    if (!window) return;
+	      /**
+	       * Stores mouse properties if this ElementUpdateDelegate responds to mouse
+	       * events.
+	       *
+	       * @property {Object}
+	       */
+	      Object.defineProperty(this, 'mouse', { value: {}, writable: false });
 
-	    var x = undefined,
-	        y = undefined,
-	        z = undefined;
+	      /**
+	       * Stores orientation properties if this ElementUpdateDelgate responds to
+	       * device orientations (i.e. device accelerometer).
+	       *
+	       * @property {Object}
+	       */
+	      Object.defineProperty(this, 'orientation', { value: {}, writable: false });
 
-	    if (_instanceof(event, window.DeviceOrientationEvent)) {
-	      x = event.beta;
-	      y = event.gamma;
-	      z = event.alpha;
-	    } else if (_instanceof(event, window.DeviceMotionEvent)) {
-	      x = event.acceleration.x * 2;
-	      y = event.acceleration.y * 2;
-	      z = event.acceleration.z * 2;
-	    } else {
-	      x = event.orientation.x * 50;
-	      y = event.orientation.y * 50;
-	      z = event.orientation.z * 50;
+	      /**
+	       * Stores pressed keycodes if this ElementUpdateDelegate responds to
+	       * keyboard events.
+	       *
+	       * @property {Object}
+	       */
+	      Object.defineProperty(this, 'keyCode', { value: {}, writable: false });
 	    }
+	  }]);
 
-	    this.orientation.x = x;
-	    this.orientation.y = y;
-	    this.orientation.z = z;
-
-	    this.setDirty(DirtyType.ORIENTATION);
-	  };
-
-	  /**
-	   * Handler invoked when a key is pressed down.
-	   *
-	   * @param {Event} event
-	   *
-	   * @private
-	   */
-	  var _onWindowKeyDown = function _onWindowKeyDown(event) {
-	    if (!window) return;
-
-	    if (this.keyCode.down === undefined) {
-	      this.keyCode.down = [];
-	    }
-
-	    this.keyCode.down.push(event.keyCode);
-
-	    this.setDirty(DirtyType.INPUT);
-	  };
-
-	  /**
-	   * Handler invoked when a key is pressed.
-	   *
-	   * @param {Event} event
-	   *
-	   * @private
-	   */
-	  var _onWindowKeyPress = function _onWindowKeyPress(event) {
-	    if (!window) return;
-
-	    if (this.keyCode.press === undefined) {
-	      this.keyCode.press = [];
-	    }
-
-	    this.keyCode.press.push(event.keyCode);
-
-	    this.setDirty(DirtyType.INPUT);
-	  };
-
-	  /**
-	   * Handler invoked when a key is pressed up.
-	   *
-	   * @param {Event} event
-	   *
-	   * @private
-	   */
-	  var _onWindowKeyUp = function _onWindowKeyUp(event) {
-	    if (!window) return;
-
-	    if (this.keyCode.up === undefined) {
-	      this.keyCode.up = [];
-	    }
-
-	    this.keyCode.up.push(event.keyCode);
-
-	    this.setDirty(DirtyType.INPUT);
-	  };
-	}
-
-	/**
-	 * Defines all properties.
-	 *
-	 * @protected
-	 */
-	ElementUpdateDelegate.prototype.__define_properties = function () {
-	  /**
-	   * Delegate of this ElementUpdateDelegate instance.
-	   *
-	   * @property {Element}
-	   */
-	  Object.defineProperty(this, 'delegate', {
-	    value: null,
-	    writable: true
-	  });
-
-	  /**
-	   * Indicates whether this ElementUpdateDelegate auto responds to window
-	   * behaviors (i.e. resizing, scrolling).
-	   *
-	   * @property {boolean}
-	   */
-	  Object.defineProperty(this, 'responsive', {
-	    value: false,
-	    writable: true
-	  });
-
-	  /**
-	   * Indicates the debounce rate of this ElementUpdateDelegate instance.
-	   *
-	   * @property {number}
-	   */
-	  Object.defineProperty(this, 'refreshRate', {
-	    value: DEFAULT_REFRESH_RATE,
-	    writable: true
-	  });
-
-	  /**
-	   * Indicates the dirty flags in which ElementUpdateDelgate instance will
-	   * transmit to its child Elements.
-	   *
-	   * @property {number}
-	   */
-	  Object.defineProperty(this, 'transmissive', {
-	    value: DirtyType.NONE,
-	    writable: true
-	  });
-
-	  /**
-	   * Indicates the dirty flags in which this ElementUpdateDelegate is capable
-	   * of receiving from parent Elements.
-	   *
-	   * @property {number}
-	   */
-	  Object.defineProperty(this, 'receptive', {
-	    value: DirtyType.NONE,
-	    writable: true
-	  });
-
-	  /**
-	   * Indicates the conductor in which this ElementUpdateDelegate responds to
-	   * (defaults to window).
-	   *
-	   * @property {HTMLElement|window}
-	   */
-	  Object.defineProperty(this, 'conductor', {
-	    value: window,
-	    writable: true
-	  });
-
-	  /**
-	   * Stores mouse properties if this ElementUpdateDelegate responds to mouse
-	   * events.
-	   *
-	   * @property {Object}
-	   */
-	  Object.defineProperty(this, 'mouse', {
-	    value: {},
-	    writable: false
-	  });
-
-	  /**
-	   * Stores orientation properties if this ElementUpdateDelgate responds to
-	   * device orientations (i.e. device accelerometer).
-	   *
-	   * @property {Object}
-	   */
-	  Object.defineProperty(this, 'orientation', {
-	    value: {},
-	    writable: false
-	  });
-
-	  /**
-	   * Stores pressed keycodes if this ElementUpdateDelegate responds to
-	   * keyboard events.
-	   *
-	   * @property {Object}
-	   */
-	  Object.defineProperty(this, 'keyCode', {
-	    value: {},
-	    writable: false
-	  });
-	};
-
-	/**
-	 * Gets the string representation of this ElementUpdateDelegate instance.
-	 *
-	 * @return {string}
-	 */
-	ElementUpdateDelegate.prototype.toString = function () {
-	  return '[ElementUpdateDelegate{' + (this.delegate && this.delegate.name || 'undefined') + '}]';
-	};
+	  return ElementUpdateDelegate;
+	})();
 
 	module.exports = ElementUpdateDelegate;
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3385,251 +3650,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = debounce;
 
 /***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-
-	'use strict';
-
-	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
-	var assert = __webpack_require__(6);
-	var inherit = __webpack_require__(24);
-	var DirtyType = __webpack_require__(18);
-	var Element = __webpack_require__(14);
-
-	/**
-	 * @class
-	 *
-	 * Controller of a DOM 'video' element.
-	 *
-	 * @extends module:requiem~ui.Element
-	 * @alias module:requiem~ui.Video
-	 */
-	function Video() {
-	  Video.__super__.constructor.apply(this, arguments);
-	}inherit(Video, Element);
-
-	/**
-	 * @static
-	 *
-	 * Constants for the 'preload' attribute.
-	 *
-	 * @type {Object}
-	 *
-	 * @see {@link http://www.w3schools.com/tags/tag_video.asp}
-	 */
-	Video.PRELOAD = {
-	  AUTO: 'auto',
-	  METADATA: 'metada',
-	  NONE: 'none'
-	};
-
-	/**
-	 * @inheritdoc
-	 */
-	Video.prototype.update = function () {
-	  if (this.updateDelegate.isDirty(DirtyType.DATA)) {
-	    this._updateSource();
-	  }
-
-	  if (this.updateDelegate.isDirty(DirtyType.CUSTOM)) {}
-
-	  Video.__super__.update.call(this);
-	};
-
-	/**
-	 * @inheritdoc
-	 */
-	Video.prototype.factory = function () {
-	  return document.createElement('video');
-	};
-
-	/**
-	 * Updates the sources in this Video instance.
-	 *
-	 * @private
-	 */
-	Video.prototype._updateSource = function () {
-	  var i = undefined;
-	  var arrlen = undefined;
-
-	  // Update source(s).
-	  var oldSources = this.element.getElementsByTagName('source');
-
-	  arrlen = oldSources.length;
-
-	  for (i = 0; i < arrlen; i++) {
-	    var oldSource = oldSources[i];
-
-	    this.element.removeChild(oldSource);
-	  }
-
-	  if (!this.source) return;
-
-	  arrlen = this.source.length;
-
-	  for (i = 0; i < arrlen; i++) {
-	    var newSource = document.createElement('source');
-	    var path = this.source[i].src;
-	    var type = this.source[i].type;
-	    var ext = path.split('.').pop();
-
-	    newSource.setAttribute('src', path);
-	    newSource.setAttribute('type', type || 'video/' + ext);
-
-	    this.element.appendChild(newSource);
-	  }
-	};
-
-	/**
-	 * @inheritdoc
-	 */
-	Video.prototype.toString = function () {
-	  return '[Video{' + this.name + '}]';
-	};
-
-	/**
-	 * @inheritdoc
-	 */
-	Video.prototype.__define_properties = function () {
-	  /**
-	   * Specifies that the video will start playing as soon as it is ready.
-	   *
-	   * @property {boolean}
-	   */
-	  Object.defineProperty(this, 'autoplay', {
-	    get: function get() {
-	      return this.element.autoplay;
-	    },
-	    set: function set(value) {
-	      this.element.autoplay = value;
-	      this.updateDelegate.setDirty(DirtyType.CUSTOM);
-	    }
-	  });
-
-	  /**
-	   * Specifies that video controls should be displayed (such as a play/pause
-	   * button etc).
-	   *
-	   * @property {boolean}
-	   */
-	  Object.defineProperty(this, 'controls', {
-	    get: function get() {
-	      return this.element.controls;
-	    },
-	    set: function set(value) {
-	      this.element.controls = value;
-	      this.updateDelegate.setDirty(DirtyType.CUSTOM);
-	    }
-	  });
-
-	  /**
-	   * Specifies that the video will start over again, every time it is
-	   * finished.
-	   *
-	   * @property {boolean}
-	   */
-	  Object.defineProperty(this, 'loop', {
-	    get: function get() {
-	      return this.element.loop;
-	    },
-	    set: function set(value) {
-	      this.element.loop = value;
-	      this.updateDelegate.setDirty(DirtyType.CUSTOM);
-	    }
-	  });
-
-	  /**
-	   * Specifies that the audio output of the video should be muted.
-	   *
-	   * @property {boolean}
-	   */
-	  Object.defineProperty(this, 'muted', {
-	    get: function get() {
-	      return this.element.muted;
-	    },
-	    set: function set(value) {
-	      this.element.muted = value;
-	      this.updateDelegate.setDirty(DirtyType.CUSTOM);
-	    }
-	  });
-
-	  /**
-	   * Specifies an image to be shown while the video is downloading, or until
-	   * the user hits the play button.
-	   *
-	   * @property {string}
-	   */
-	  Object.defineProperty(this, 'poster', {
-	    get: function get() {
-	      return this.element.poster;
-	    },
-	    set: function set(value) {
-	      this.element.poster = value;
-	      this.updateDelegate.setDirty(DirtyType.CUSTOM);
-	    }
-	  });
-
-	  /**
-	   * Specifies if and how the author thinks the video should be loaded when
-	   * the page loads
-	   *
-	   * @property {string}
-	   */
-	  Object.defineProperty(this, 'preload', {
-	    get: function get() {
-	      return this.element.preload;
-	    },
-	    set: function set(value) {
-	      this.element.preload = value;
-	      this.updateDelegate.setDirty(DirtyType.CUSTOM);
-	    }
-	  });
-
-	  /**
-	   * Array of sources containing elements in the form of:
-	   * Object {
-	   *   {string} src  - Path of source.
-	   *   {string} type - Type of source.
-	   * }
-	   *
-	   * @property {Object[]}
-	   */
-	  Object.defineProperty(this, 'source', {
-	    get: function get() {
-	      return this._source;
-	    },
-	    set: function set(value) {
-	      Object.defineProperty(this, '_source', {
-	        value: value,
-	        writable: true
-	      });
-	      this.updateDelegate.setDirty(DirtyType.DATA);
-	    }
-	  });
-
-	  Video.__super__.__define_properties.call(this);
-	};
-
-	/**
-	 * @inheritdoc
-	 */
-	Video.prototype.__set_element = function (value) {
-	  assert(_instanceof(value, HTMLVideoElement), 'Invalid element type specified. Must be an instance of HTMLVideoElement.');
-	  Video.__super__.__set_element.call(this, value);
-	};
-
-	module.exports = Video;
-
-/***/ },
 /* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -3643,39 +3663,247 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assertType = __webpack_require__(5);
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _DirtyType = __webpack_require__(19);
+
+	var _DirtyType2 = _interopRequireDefault(_DirtyType);
+
+	var _Element2 = __webpack_require__(14);
+
+	var _Element3 = _interopRequireDefault(_Element2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	/**
-	 * Sets up prototypal inheritance between a child class and a parent class.
+	 * @class
 	 *
-	 * @param {Class} childClass  - Child class.
-	 * @param {Class} parentClass - Parent class.
+	 * Controller of a DOM 'video' element.
 	 *
-	 * @return {Class} Extended child class.
-	 *
-	 * @alias module:requiem~helpers.inherit
+	 * @extends module:requiem~ui.Element
+	 * @alias module:requiem~ui.Video
 	 */
-	function inherit(childClass, parentClass) {
-	  assertType(childClass, 'class', false, 'Invalid parameter: childClass');
-	  assertType(parentClass, 'class', false, 'Invalid parameter: parentClass');
 
-	  for (var key in parentClass) {
-	    if (parentClass.hasOwnProperty(key)) {
-	      childClass[key] = parentClass[key];
+	var Video = (function (_Element) {
+	  _inherits(Video, _Element);
+
+	  function Video() {
+	    _classCallCheck(this, Video);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Video).apply(this, arguments));
+	  }
+
+	  _createClass(Video, [{
+	    key: 'update',
+
+	    /**
+	     * @inheritdoc
+	     */
+	    value: function update() {
+	      if (this.updateDelegate.isDirty(_DirtyType2.default.DATA)) this.__update_source();
+	      _get(Object.getPrototypeOf(Video.prototype), 'update', this).call(this);
 	    }
-	  }
 
-	  function C() {
-	    this.constructor = childClass;
-	  }
+	    /**
+	     * @inheritdoc
+	     */
 
-	  C.prototype = Object.create(parentClass.prototype);
-	  childClass.prototype = new C();
-	  childClass.__super__ = parentClass.prototype;
-	  return childClass;
-	}
+	  }, {
+	    key: 'factory',
+	    value: function factory() {
+	      return document.createElement('video');
+	    }
 
-	module.exports = inherit;
+	    /**
+	     * Updates the sources in this Video instance.
+	     *
+	     * @private
+	     */
+
+	  }, {
+	    key: '__update_source',
+	    value: function __update_source() {
+	      var i = undefined;
+	      var arrlen = undefined;
+
+	      // Update source(s).
+	      var oldSources = this.element.getElementsByTagName('source');
+
+	      arrlen = oldSources.length;
+
+	      for (i = 0; i < arrlen; i++) {
+	        var oldSource = oldSources[i];
+
+	        this.element.removeChild(oldSource);
+	      }
+
+	      if (!this.source) return;
+
+	      arrlen = this.source.length;
+
+	      for (i = 0; i < arrlen; i++) {
+	        var newSource = document.createElement('source');
+	        var path = this.source[i].src;
+	        var type = this.source[i].type;
+	        var ext = path.split('.').pop();
+
+	        newSource.setAttribute('src', path);
+	        newSource.setAttribute('type', type || 'video/' + ext);
+
+	        this.element.appendChild(newSource);
+	      }
+	    }
+
+	    /**
+	     * @inheritdoc
+	     */
+
+	  }, {
+	    key: '__validate_element',
+	    value: function __validate_element(element) {
+	      return (0, _assert2.default)(_instanceof(element, HTMLVideoElement), 'Element validation failed');
+	    }
+
+	    /**
+	     * @inheritdoc
+	     */
+
+	  }, {
+	    key: '__define_properties',
+	    value: function __define_properties() {
+	      var _this2 = this;
+
+	      /**
+	       * Specifies that the video will start playing as soon as it is ready.
+	       *
+	       * @property {boolean}
+	       */
+	      Object.defineProperty(this, 'autoplay', {
+	        get: function get() {
+	          return _this2.element.autoplay;
+	        },
+	        set: function set(value) {
+	          _this2.element.autoplay = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+
+	      /**
+	       * Specifies that video controls should be displayed (such as a play/pause
+	       * button etc).
+	       *
+	       * @property {boolean}
+	       */
+	      Object.defineProperty(this, 'controls', {
+	        get: function get() {
+	          return _this2.element.controls;
+	        },
+	        set: function set(value) {
+	          _this2.element.controls = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+
+	      /**
+	       * Specifies that the video will start over again, every time it is
+	       * finished.
+	       *
+	       * @property {boolean}
+	       */
+	      Object.defineProperty(this, 'loop', {
+	        get: function get() {
+	          return _this2.element.loop;
+	        },
+	        set: function set(value) {
+	          _this2.element.loop = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+
+	      /**
+	       * Specifies that the audio output of the video should be muted.
+	       *
+	       * @property {boolean}
+	       */
+	      Object.defineProperty(this, 'muted', {
+	        get: function get() {
+	          return _this2.element.muted;
+	        },
+	        set: function set(value) {
+	          _this2.element.muted = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+
+	      /**
+	       * Specifies an image to be shown while the video is downloading, or until
+	       * the user hits the play button.
+	       *
+	       * @property {string}
+	       */
+	      Object.defineProperty(this, 'poster', {
+	        get: function get() {
+	          return _this2.element.poster;
+	        },
+	        set: function set(value) {
+	          _this2.element.poster = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+
+	      /**
+	       * Specifies if and how the author thinks the video should be loaded when
+	       * the page loads
+	       *
+	       * @property {string}
+	       */
+	      Object.defineProperty(this, 'preload', {
+	        get: function get() {
+	          return _this2.element.preload;
+	        },
+	        set: function set(value) {
+	          _this2.element.preload = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+
+	      /**
+	       * Array of sources containing elements in the form of:
+	       * Object {
+	       *   {string} src  - Path of source.
+	       *   {string} type - Type of source.
+	       * }
+	       *
+	       * @property {Object[]}
+	       */
+	      _Element3.default.defineProperty(this, 'source', {
+	        get: true,
+	        set: true,
+	        dirtyType: _DirtyType2.default.DATA
+	      });
+
+	      _get(Object.getPrototypeOf(Video.prototype), '__define_properties', this).call(this);
+	    }
+	  }]);
+
+	  return Video;
+	})(_Element3.default);
+
+	module.exports = Video;
 
 /***/ },
 /* 25 */
@@ -3691,15 +3919,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assert = __webpack_require__(6);
-	var toElementArray = __webpack_require__(26);
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _toElementArray = __webpack_require__(26);
+
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * Checks if specified parent contains specified child.
 	 *
-	 * @param {HTMLElement|Element} parent - HTMLElement, Requiem Element, or jQuery
+	 * @param {Node|Element} parent - Node, Requiem Element, or jQuery
 	 *                                       object.
-	 * @param {HTMLElement|Element} child  - HTMLElement, Requiem Element, or jQuery
+	 * @param {Node|Element} child  - Node, Requiem Element, or jQuery
 	 *                                       object.
 	 *
 	 * @return {boolean} True if parent has given child, false otherwise.
@@ -3707,12 +3942,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~utils.hasChild
 	 */
 	function hasChild(parent, child) {
-	  var ps = toElementArray(parent);
-	  var cs = toElementArray(child);
+	  var ps = (0, _toElementArray2.default)(parent);
+	  var cs = (0, _toElementArray2.default)(child);
 
-	  if (!assert(ps.length === 1, 'Invalid parent specified. Parent must be a single HTMLElement, Requiem Element, or jQuery object.')) return false;
-	  if (!assert(cs.length === 1, 'Invalid child specified. Child must be a single HTMLElement, Requiem Element, or jQuery object.')) return false;
-	  if (!assert(document, 'Document not found. This method requires document to be valid.')) return false;
+	  if (!(0, _assert2.default)(ps.length === 1, 'Invalid parent specified. Parent must be a single Node, Requiem Element, or jQuery object.')) return false;
+	  if (!(0, _assert2.default)(cs.length === 1, 'Invalid child specified. Child must be a single Node, Requiem Element, or jQuery object.')) return false;
+	  if (!(0, _assert2.default)(document, 'Document not found. This method requires document to be valid.')) return false;
 
 	  var p = ps[0];
 	  var c = cs[0];
@@ -3772,7 +4007,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else if (element.jquery) {
 	    elements = element.get();
 	  } else {
-	    // if (!assert((element instanceof HTMLElement) || (element instanceof Element), 'Invalid element specified. Element must be an instance of HTMLElement or Requiem Element.')) return null;
+	    // if (!assert((element instanceof Node) || (element instanceof Element), 'Invalid element specified. Element must be an instance of Node or Requiem Element.')) return null;
 
 	    if (_instanceof(element, Element)) {
 	      elements = [element.element];
@@ -3786,7 +4021,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  for (var i = 0; i < n; i++) {
 	    var e = elements[i];
 
-	    // if (!assert((e instanceof HTMLElement) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of HTMLElement or Requiem Element.')) return null;
+	    // if (!assert((e instanceof Node) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of Node or Requiem Element.')) return null;
 
 	    if (!keepElement && _instanceof(e, Element)) {
 	      elements[i] = e.element;
@@ -3812,21 +4047,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assertType = __webpack_require__(5);
+	var _assertType = __webpack_require__(5);
+
+	var _assertType2 = _interopRequireDefault(_assertType);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * Creates a DOM element from the provided string.
 	 *
 	 * @param {string} value - String describing the DOM element.
 	 *
-	 * @return {HTMLElement} DOM element.
+	 * @return {Node} DOM element.
 	 *
 	 * @alias module:requiem~dom.createElement
 	 */
 	function createElement(value) {
 	  if (!document) return null;
 
-	  assertType(value, 'string', true, 'Value must be a string');
+	  (0, _assertType2.default)(value, 'string', true, 'Value must be a string');
 
 	  var div = document.createElement('div');
 	  div.innerHTML = value;
@@ -3875,127 +4114,170 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assert = __webpack_require__(6);
-	var assertType = __webpack_require__(5);
-	var log = __webpack_require__(16);
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _assertType = __webpack_require__(5);
+
+	var _assertType2 = _interopRequireDefault(_assertType);
+
+	var _log = __webpack_require__(17);
+
+	var _log2 = _interopRequireDefault(_log);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	/**
 	 * @class
 	 *
-	 * Creates a new EventDispatcher instance.
+	 * Custom event dispatcher object.
 	 *
 	 * @alias module:requiem~events.EventDispatcher
 	 */
-	function EventDispatcher() {
-	  this.__define_properties();
-	}
 
-	/**
-	 * Adds an event listener to this EventDispatcher instance.
-	 *
-	 * @param {string}   type
-	 * @param {Function} listener
-	 */
-	EventDispatcher.prototype.addEventListener = function (type, listener) {
-	  if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
-	  if (!assertType(listener, 'function', false, 'Invalid parameter: listener')) return;
+	var EventDispatcher = (function () {
+	  /**
+	   * Creates a new EventDispatcher instance.
+	   *
+	   * @return {EventDispatcher} A new EventDispatcher instance.
+	   */
 
-	  log('[EventDispatcher]::addEventListener(' + type + ')');
+	  function EventDispatcher() {
+	    _classCallCheck(this, EventDispatcher);
 
-	  if (!this._listenerMap) {
-	    Object.defineProperty(this, '_listenerMap', {
-	      value: {},
-	      writable: true
-	    });
+	    this.__define_properties();
 	  }
 
-	  if (!this._listenerMap[type]) {
-	    this._listenerMap[type] = [];
-	  }
+	  /**
+	   * Adds an event listener to this EventDispatcher instance.
+	   *
+	   * @param {string}   type
+	   * @param {Function} listener
+	   */
 
-	  this._listenerMap[type].push(listener);
-	};
+	  _createClass(EventDispatcher, [{
+	    key: 'addEventListener',
+	    value: function addEventListener(type, listener) {
+	      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
+	      if (!(0, _assertType2.default)(listener, 'function', false, 'Invalid parameter: listener')) return;
 
-	/**
-	 * Removes an event listener from this EventDispatcher instance. If no
-	 * listener method is specified, all the listeners of the specified type
-	 * will be removed.
-	 *
-	 * @param {string}   type
-	 * @param {Function} listener:undefined
-	 */
-	EventDispatcher.prototype.removeEventListener = function (type, listener) {
-	  if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
-	  if (!assertType(listener, 'function', true, 'Invalid parameter: listener')) return;
-	  if (!assert(this._listenerMap, 'Listener map is null.')) return;
-	  if (!assert(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+	      (0, _log2.default)('[EventDispatcher]::addEventListener(' + type + ')');
 
-	  log('[EventDispatcher]::removeEventListener(' + type + ')');
+	      if (!this._listenerMap) {
+	        Object.defineProperty(this, '_listenerMap', {
+	          value: {},
+	          writable: true
+	        });
+	      }
 
-	  if (listener) {
-	    var index = this._listenerMap[type].indexOf(listener);
+	      if (!this._listenerMap[type]) {
+	        this._listenerMap[type] = [];
+	      }
 
-	    if (index > -1) {
-	      this._listenerMap[type].splice(index, 1);
+	      this._listenerMap[type].push(listener);
 	    }
-	  } else {
-	    delete this._listenerMap[type];
-	  }
-	};
 
-	/**
-	 * Determines whether this EventDispatcher instance has a specific event
-	 * listener registered. If no listener is specified, it will check if any
-	 * listener of the specified event type is registered.
-	 *
-	 * @param {string}   type
-	 * @param {Function} [listener]
-	 *
-	 * @return {boolean}
-	 */
-	EventDispatcher.prototype.hasEventListener = function (type, listener) {
-	  if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
-	  if (!assertType(listener, 'function', true, 'Invalid parameter: listener')) return;
-	  if (!assert(this._listenerMap, 'Listener map is null.')) return;
-	  if (!assert(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+	    /**
+	     * Removes an event listener from this EventDispatcher instance. If no
+	     * listener method is specified, all the listeners of the specified type
+	     * will be removed.
+	     *
+	     * @param {string}   type
+	     * @param {Function} listener:undefined
+	     */
 
-	  if (listener) {
-	    var index = this._listenerMap[type].indexOf(listener);
+	  }, {
+	    key: 'removeEventListener',
+	    value: function removeEventListener(type, listener) {
+	      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
+	      if (!(0, _assertType2.default)(listener, 'function', true, 'Invalid parameter: listener')) return;
+	      if (!(0, _assert2.default)(this._listenerMap, 'Listener map is null.')) return;
+	      if (!(0, _assert2.default)(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
 
-	    return index > -1;
-	  } else {
-	    return true;
-	  }
-	};
+	      (0, _log2.default)('[EventDispatcher]::removeEventListener(' + type + ')');
 
-	/**
-	 * Dispatches the specified event.
-	 *
-	 * @param {Event} event
-	 */
-	EventDispatcher.prototype.dispatchEvent = function (event) {
-	  if (!assertType(event, Event, false, 'Event must be specified.')) return;
-	  if (!assert(this._listenerMap, 'Listener map is null.')) return;
+	      if (listener) {
+	        var index = this._listenerMap[type].indexOf(listener);
 
-	  if (!this._listenerMap[event.type]) return;
+	        if (index > -1) {
+	          this._listenerMap[type].splice(index, 1);
+	        }
+	      } else {
+	        delete this._listenerMap[type];
+	      }
+	    }
 
-	  log('[EventDispatcher]::dispatchEvent(' + event.type + ')');
+	    /**
+	     * Determines whether this EventDispatcher instance has a specific event
+	     * listener registered. If no listener is specified, it will check if any
+	     * listener of the specified event type is registered.
+	     *
+	     * @param {string}   type
+	     * @param {Function} [listener]
+	     *
+	     * @return {boolean}
+	     */
 
-	  var arrlen = this._listenerMap[event.type].length;
+	  }, {
+	    key: 'hasEventListener',
+	    value: function hasEventListener(type, listener) {
+	      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
+	      if (!(0, _assertType2.default)(listener, 'function', true, 'Invalid parameter: listener')) return;
+	      if (!(0, _assert2.default)(this._listenerMap, 'Listener map is null.')) return;
+	      if (!(0, _assert2.default)(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
 
-	  for (var i = 0; i < arrlen; i++) {
-	    var listener = this._listenerMap[event.type][i];
+	      if (listener) {
+	        var index = this._listenerMap[type].indexOf(listener);
 
-	    listener.call(this, event);
-	  }
-	};
+	        return index > -1;
+	      } else {
+	        return true;
+	      }
+	    }
 
-	/**
-	 * Defines all properties.
-	 *
-	 * @private
-	 */
-	EventDispatcher.prototype.__define_properties = function () {};
+	    /**
+	     * Dispatches the specified event.
+	     *
+	     * @param {Event} event
+	     */
+
+	  }, {
+	    key: 'dispatchEvent',
+	    value: function dispatchEvent(event) {
+	      if (!(0, _assertType2.default)(event, Event, false, 'Event must be specified.')) return;
+	      if (!(0, _assert2.default)(this._listenerMap, 'Listener map is null.')) return;
+
+	      if (!this._listenerMap[event.type]) return;
+
+	      (0, _log2.default)('[EventDispatcher]::dispatchEvent(' + event.type + ')');
+
+	      var arrlen = this._listenerMap[event.type].length;
+
+	      for (var i = 0; i < arrlen; i++) {
+	        var listener = this._listenerMap[event.type][i];
+
+	        listener.call(this, event);
+	      }
+	    }
+
+	    /**
+	     * Defines all properties.
+	     *
+	     * @private
+	     */
+
+	  }, {
+	    key: '__define_properties',
+	    value: function __define_properties() {}
+	  }]);
+
+	  return EventDispatcher;
+	})();
 
 	module.exports = EventDispatcher;
 
@@ -4039,13 +4321,39 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _inherit = __webpack_require__(32);
+
+	var _inherit2 = _interopRequireDefault(_inherit);
+
+	var _log = __webpack_require__(17);
+
+	var _log2 = _interopRequireDefault(_log);
+
+	var _EventDispatcher2 = __webpack_require__(29);
+
+	var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
+
+	var _EventType = __webpack_require__(21);
+
+	var _EventType2 = _interopRequireDefault(_EventType);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
-	var assert = __webpack_require__(6);
-	var inherit = __webpack_require__(24);
-	var log = __webpack_require__(16);
-	var EventDispatcher = __webpack_require__(29);
-	var EventType = __webpack_require__(20);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	/**
 	 * Common image file extensions.
@@ -4119,9 +4427,571 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @extends module:requiem~events.EventDispatcher
 	 */
-	function AssetLoader() {
-	  AssetLoader.__super__.constructor.apply(this, arguments);
-	}inherit(AssetLoader, EventDispatcher);
+
+	var AssetLoader = (function (_EventDispatcher) {
+	  _inherits(AssetLoader, _EventDispatcher);
+
+	  function AssetLoader() {
+	    _classCallCheck(this, AssetLoader);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AssetLoader).call(this));
+	  }
+
+	  /**
+	   * Initializes this AssetLoader instance and begins loading assets in the
+	   * queue.
+	   */
+
+	  _createClass(AssetLoader, [{
+	    key: 'init',
+	    value: function init() {
+	      if (this.queue.length < 1) return;
+
+	      (0, _log2.default)('[AssetLoader]::init()');
+
+	      var arrlen = this.queue.length;
+
+	      this._xhrs = [];
+	      this._pending = arrlen;
+
+	      for (var i = 0; i < arrlen; i++) {
+	        var target = this.queue[i];
+
+	        (0, _log2.default)('[AssetLoader]::Started loading: ' + target.path);
+
+	        var xhr = this.getXHR({
+	          id: i,
+	          path: target.path,
+	          type: target.type
+	        });
+	        xhr.send();
+
+	        this._xhrs.push(xhr);
+	      }
+	    }
+
+	    /**
+	     * Destroys this AssetLoader instance and resets its state to idle for
+	     * recyclable use.
+	     */
+
+	  }, {
+	    key: 'destroy',
+	    value: function destroy() {
+	      if (this._xhrs) {
+	        var arrlen = this._xhrs.length;
+
+	        for (var i = 0; i < arrlen; i++) {
+	          var xhr = this._xhrs[i];
+	          xhr.abort();
+	          this._xhrs[i] = null;
+	        }
+
+	        this._queue = null;
+	        this._assets = null;
+	        this._bytesLoaded = null;
+	        this._bytesTotal = null;
+	      }
+
+	      this._state = AssetLoader.STATE.IDLE;
+	    }
+
+	    /**
+	     * Adds target loading assets to the queue. Assumes each parameter is as
+	     * follows:
+	     * Object {
+	     *  {string} path  Path of asset.
+	     *  {string} type  Type of asset (can only be 'image', 'video', or
+	     *                 'audio').
+	     * }
+	     */
+
+	  }, {
+	    key: 'enqueue',
+	    value: function enqueue() {
+	      (0, _assert2.default)(arguments && arguments.length > 0, 'There are no arguments specified.');
+	      (0, _assert2.default)(this.state !== AssetLoader.STATE.IN_PROGRESS, 'Enqueueing is prohibited when the state is in progress.');
+
+	      if (!arguments) return;
+	      if (arguments.length <= 0) return;
+	      if (this.state === AssetLoader.STATE.IN_PROGRESS) return;
+
+	      (0, _log2.default)('[AssetLoader]::enqueue(' + arguments + ')');
+
+	      var arrlen = arguments.length;
+
+	      for (var i = 0; i < arrlen; i++) {
+	        var arg = arguments[i];
+
+	        (0, _assert2.default)(typeof arg === 'string' || (typeof arg === 'undefined' ? 'undefined' : _typeof(arg)) === 'object', 'Each item to be enqueued must be a string of the target path or an object containing a "path" key and/or a "type" key');
+	        (0, _assert2.default)(typeof arg === 'string' || typeof arg.path === 'string', 'Invalid path specified: ' + arg.path + '.');
+
+	        var path = typeof arg === 'string' ? arg : arg.path;
+	        var type = arg.type;
+
+	        if (!type) {
+	          var ext = path.split('.').pop().toLowerCase();
+
+	          if (IMAGE_EXTENSIONS.indexOf(ext) > -1) {
+	            type = AssetLoader.TYPE.IMAGE;
+	          } else if (VIDEO_EXTENSIONS.indexOf(ext) > -1) {
+	            type = AssetLoader.TYPE.VIDEO;
+	          } else if (AUDIO_EXTENSIONS.indexOf(ext) > -1) {
+	            type = AssetLoader.TYPE.AUDIO;
+	          } else {
+	            throw '[AssetLoader]::Unsupported asset format: ' + path;
+	          }
+	        }
+
+	        if (type) {
+	          this.queue.push({
+	            path: path,
+	            type: type
+	          });
+
+	          if (!this._bytesLoaded) this._bytesLoaded = [];
+	          if (!this._bytesTotal) this._bytesTotal = [];
+
+	          this._bytesLoaded.push(0.0);
+	          this._bytesTotal.push(0.0);
+	        }
+	      }
+	    }
+
+	    /**
+	     * Removes loading targets from the queue. Each parameter is a path that
+	     * must match one that is already in the queue.
+	     */
+
+	  }, {
+	    key: 'dequeue',
+	    value: function dequeue() {
+	      (0, _assert2.default)(arguments && arguments.length > 0, 'There are no arguments specified.');
+	      (0, _assert2.default)(this.state !== AssetLoader.STATE.IN_PROGRESS, 'Dequeueing is prohibited when the state is in progress.');
+
+	      if (!arguments) return;
+	      if (arguments.length <= 0) return;
+	      if (this.state === AssetLoader.STATE.IN_PROGRESS) return;
+
+	      var arrlen = arguments.length;
+
+	      for (var i = 0; i < arrlen; i++) {
+	        var arg = arguments[i];
+
+	        (0, _assert2.default)(typeof arg === 'string', 'Expecting path to be a string.');
+
+	        var n = this.queue.length;
+
+	        for (var j = 0; j < n; j++) {
+	          var target = this.queue[j];
+
+	          if (target.path === arg) {
+	            this.queue.splice(j, 1);
+	            this.bytesLoaded.splice(j, 1);
+	            this.bytesTotal.splice(j, 1);
+
+	            break;
+	          }
+	        }
+	      }
+	    }
+
+	    /**
+	     * Creates and returns a new XHR instance with prepopulated configurations.
+	     *
+	     * @param {Object} data
+	     *
+	     * @return {Object} XHR instance.
+	     */
+
+	  }, {
+	    key: 'getXHR',
+	    value: function getXHR(data) {
+	      var ext = data.path.split('.').pop().toLowerCase();
+	      var mimeType = MIME_TYPES[data.type.toUpperCase()][ext];
+
+	      if (!mimeType) {
+	        throw '[AssetLoader]:: Unsupported asset format: ' + data.path;
+	      }
+
+	      var xhr = new XMLHttpRequest();
+	      xhr.addEventListener('progress', this._onXHRProgress.bind(this), false);
+	      xhr.addEventListener('load', this._onXHRLoadComplete.bind(this), false);
+	      xhr.addEventListener('error', this._onXHRLoadError.bind(this), false);
+	      xhr.addEventListener('abort', this._onXHRAbort.bind(this), false);
+
+	      xhr.open('GET', data.path, this.async);
+	      if (xhr.overrideMimeType) xhr.overrideMimeType(mimeType);
+	      xhr.data = data;
+
+	      return xhr;
+	    }
+
+	    /**
+	     * Handler invoked when an XHR instance is in progress.
+	     *
+	     * @param {Object} event
+	     *
+	     * @private
+	     */
+
+	  }, {
+	    key: '_onXHRProgress',
+	    value: function _onXHRProgress(event) {
+	      if (!event.lengthComputable) return;
+
+	      var xhr = event.currentTarget;
+	      var id = xhr.data.id;
+	      var path = xhr.data.path;
+	      var type = xhr.data.type;
+	      var bytesLoaded = event.loaded;
+	      var bytesTotal = event.total;
+
+	      // Hash progress into XHR data.
+	      xhr.data.bytesLoaded = bytesLoaded;
+	      xhr.data.bytesTotal = bytesTotal;
+
+	      this._bytesLoaded[id] = bytesLoaded;
+	      this._bytesTotal[id] = bytesTotal;
+
+	      if (!this._bytesLoaded) this._bytesLoaded = [];
+
+	      (0, _log2.default)('[AssetLoader]::_onXHRProgress("' + path + '":' + bytesLoaded + '/' + bytesTotal + ')');
+
+	      var progressEvent = new CustomEvent(_EventType2.default.OBJECT.PROGRESS, {
+	        bubbles: true,
+	        cancelable: true,
+	        detail: {
+	          id: id,
+	          path: path,
+	          type: type,
+	          pending: this._pending,
+	          loaded: this.bytesLoaded,
+	          total: this.bytesTotal
+	        }
+	      });
+
+	      this.dispatchEvent(progressEvent);
+	    }
+
+	    /**
+	     * Handler invoked when an XHR instance completes its operation.
+	     *
+	     * @param {Object} event
+	     *
+	     * @private
+	     */
+
+	  }, {
+	    key: '_onXHRLoadComplete',
+	    value: function _onXHRLoadComplete(event) {
+	      var xhr = event.currentTarget;
+	      var id = xhr.data.id;
+	      var path = xhr.data.path;
+	      var type = xhr.data.type;
+
+	      (0, _log2.default)('[AssetLoader]::_onXHRLoadComplete("' + path + '"")');
+
+	      this._pending--;
+
+	      var loadEvent = new CustomEvent(_EventType2.default.OBJECT.LOAD, {
+	        bubbles: true,
+	        cancelable: true,
+	        detail: {
+	          id: id,
+	          path: path,
+	          type: type,
+	          pending: this._pending,
+	          loaded: this.bytesLoaded,
+	          total: this.bytesTotal
+	        }
+	      });
+
+	      this.dispatchEvent(loadEvent);
+	    }
+
+	    /**
+	     * Handler invoked when an XHR instance fails its operation.
+	     *
+	     * @param {Object} event
+	     *
+	     * @private
+	     */
+
+	  }, {
+	    key: '_onXHRLoadError',
+	    value: function _onXHRLoadError(event) {
+	      var xhr = event.currentTarget;
+	      var id = xhr.data.id;
+	      var path = xhr.data.path;
+	      var type = xhr.data.type;
+
+	      (0, _log2.default)('[AssetLoader]::_onXHRLoadError("' + path + '"")');
+
+	      this._pending--;
+
+	      var errorEvent = new CustomEvent(_EventType2.default.OBJECT.ERROR, {
+	        bubbles: true,
+	        cancelable: true,
+	        detail: {
+	          id: id,
+	          path: path,
+	          type: type,
+	          pending: this._pending,
+	          loaded: this.bytesLoaded,
+	          total: this.bytesTotal
+	        }
+	      });
+
+	      this.dispatchEvent(errorEvent);
+
+	      if (this._pending === 0) {
+	        var loadEvent = new CustomEvent(_EventType2.default.OBJECT.LOAD, {
+	          bubbles: true,
+	          cancelable: true,
+	          detail: {
+	            id: id,
+	            path: path,
+	            type: type,
+	            pending: this._pending,
+	            loaded: this.bytesLoaded,
+	            total: this.bytesTotal
+	          }
+	        });
+
+	        this.dispatchEvent(loadEvent);
+	      }
+	    }
+
+	    /**
+	     * Handler invoked when an XHR aborts its operation.
+	     *
+	     * @param {Object} event
+	     *
+	     * @private
+	     */
+
+	  }, {
+	    key: '_onXHRAbort',
+	    value: function _onXHRAbort(event) {
+	      var xhr = event.currentTarget;
+	      var id = xhr.data.id;
+	      var path = xhr.data.path;
+	      var type = xhr.data.type;
+
+	      (0, _log2.default)('[AssetLoader]::_onXHRLoadError("' + path + '"")');
+
+	      this._pending--;
+
+	      var abortEvent = new CustomEvent(_EventType2.default.OBJECT.ABORT, {
+	        bubbles: true,
+	        cancelable: true,
+	        detail: {
+	          id: id,
+	          path: path,
+	          type: type,
+	          pending: this._pending,
+	          loaded: this.bytesLoaded,
+	          total: this.bytesTotal
+	        }
+	      });
+
+	      this.dispatchEvent(abortEvent);
+
+	      if (this._pending === 0) {
+	        var loadEvent = new CustomEvent(_EventType2.default.OBJECT.LOAD, {
+	          bubbles: true,
+	          cancelable: true,
+	          detail: {
+	            id: id,
+	            path: path,
+	            type: type,
+	            pending: this._pending,
+	            loaded: this.bytesLoaded,
+	            total: this.bytesTotal
+	          }
+	        });
+
+	        this.dispatchEvent(loadEvent);
+	      }
+	    }
+
+	    /**
+	     * @inheritdoc
+	     */
+
+	  }, {
+	    key: '__define_properties',
+	    value: function __define_properties() {
+	      /**
+	       * @property
+	       *
+	       * Specifies the current state of this AssetLoader instance.
+	       *
+	       * @type {number}
+	       */
+	      Object.defineProperty(this, 'state', {
+	        get: function get() {
+	          if (!this._state) {
+	            Object.defineProperty(this, '_state', {
+	              value: AssetLoader.STATE.IDLE,
+	              writable: true
+	            });
+	          }
+
+	          return this._state;
+	        }
+	      });
+
+	      /**
+	       * @property
+	       *
+	       * View of this AssetLoader instance.
+	       *
+	       * @type {Object}
+	       */
+	      Object.defineProperty(this, 'queue', {
+	        get: function get() {
+	          if (!this._queue) {
+	            Object.defineProperty(this, '_queue', {
+	              value: [],
+	              writable: true
+	            });
+	          }
+
+	          return this._queue;
+	        }
+	      });
+
+	      /**
+	       * @property
+	       *
+	       * Loaded assets.
+	       *
+	       * @type {Object}
+	       */
+	      Object.defineProperty(this, 'assets', {
+	        get: function get() {
+	          if (!this._assets) {
+	            Object.defineProperty(this, '_assets', {
+	              value: {},
+	              writable: true
+	            });
+	          }
+
+	          return this._assets;
+	        }
+	      });
+
+	      /**
+	       * @property
+	       *
+	       * Specifies whether the XHR operations run in async.
+	       *
+	       * @type {boolean}
+	       */
+	      Object.defineProperty(this, 'async', {
+	        get: function get() {
+	          if (this._async === undefined) {
+	            return true;
+	          } else {
+	            return this._async;
+	          }
+	        },
+	        set: function set(value) {
+	          (0, _assert2.default)(this.state !== AssetLoader.STATE.IN_PROGRESS, 'Cannot change the async mode while it is in progress.');
+
+	          if (this.state !== AssetLoader.STATE.IN_PROGRESS) {
+	            Object.defineProperty(this, '_async', {
+	              value: value,
+	              writable: true
+	            });
+	          }
+	        }
+	      });
+
+	      /**
+	       * @property
+	       *
+	       * Specifies the total bytes loaded for all assets in the queue.
+	       *
+	       * @type {number}
+	       */
+	      Object.defineProperty(this, 'bytesLoaded', {
+	        get: function get() {
+	          if (!this._bytesLoaded) {
+	            return 0.0;
+	          } else {
+	            var total = 0;
+	            var arrlen = this._bytesLoaded.length;
+
+	            for (var i = 0; i < arrlen; i++) {
+	              total += this._bytesLoaded[i];
+	            }
+
+	            return total;
+	          }
+	        }
+	      });
+
+	      /**
+	       * @property
+	       *
+	       * Specifies the total bytes for all assets in the queue.
+	       *
+	       * @type {number}
+	       */
+	      Object.defineProperty(this, 'bytesTotal', {
+	        get: function get() {
+	          if (!this._bytesTotal) {
+	            return 0.0;
+	          } else {
+	            var total = 0;
+	            var arrlen = this._bytesTotal.length;
+
+	            for (var i = 0; i < arrlen; i++) {
+	              total += this._bytesTotal[i];
+	            }
+
+	            return total;
+	          }
+	        }
+	      });
+
+	      /**
+	       * @property
+	       *
+	       * Specifies the current progress (in decimals) of the entire operation.
+	       *
+	       * @return {number}
+	       */
+	      Object.defineProperty(this, 'progress', {
+	        get: function get() {
+	          if (!this._bytesTotal || !this._bytesLoaded) return 0.0;
+	          if (this._bytesTotal.length !== this._bytesLoaded.length) return 0.0;
+
+	          var arrlen = this._bytesTotal.length;
+	          var sum = 0.0;
+
+	          for (var i = 0; i < arrlen; i++) {
+	            var loaded = this._bytesLoaded[i];
+	            var total = this._bytesTotal[i];
+
+	            if (total > 0.0) {
+	              sum += loaded / total;
+	            }
+	          }
+
+	          return sum / arrlen;
+	        }
+	      });
+
+	      _get(Object.getPrototypeOf(AssetLoader.prototype), '__define_properties', this).call(this);
+	    }
+	  }]);
+
+	  return AssetLoader;
+	})(_EventDispatcher3.default);
 
 	/**
 	 * @static
@@ -4130,6 +5000,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @enum {number}
 	 */
+
 	AssetLoader.STATE = {
 	  IDLE: 0,
 	  IN_PROGRESS: 1,
@@ -4151,532 +5022,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	  AUDIO: 'audio'
 	};
 
-	/**
-	 * Initializes this AssetLoader instance and begins loading assets in the
-	 * queue.
-	 */
-	AssetLoader.prototype.init = function () {
-	  if (this.queue.length < 1) return;
-
-	  log('[AssetLoader]::init()');
-
-	  var arrlen = this.queue.length;
-
-	  this._xhrs = [];
-	  this._pending = arrlen;
-
-	  for (var i = 0; i < arrlen; i++) {
-	    var target = this.queue[i];
-
-	    log('[AssetLoader]::Started loading: ' + target.path);
-
-	    var xhr = this.getXHR({
-	      id: i,
-	      path: target.path,
-	      type: target.type
-	    });
-	    xhr.send();
-
-	    this._xhrs.push(xhr);
-	  }
-	};
-
-	/**
-	 * Destroys this AssetLoader instance and resets its state to idle for
-	 * recyclable use.
-	 */
-	AssetLoader.prototype.destroy = function () {
-	  if (this._xhrs) {
-	    var arrlen = this._xhrs.length;
-
-	    for (var i = 0; i < arrlen; i++) {
-	      var xhr = this._xhrs[i];
-	      xhr.abort();
-	      this._xhrs[i] = null;
-	    }
-
-	    this._queue = null;
-	    this._assets = null;
-	    this._bytesLoaded = null;
-	    this._bytesTotal = null;
-	  }
-
-	  this._state = AssetLoader.STATE.IDLE;
-	};
-
-	/**
-	 * Adds target loading assets to the queue. Assumes each parameter is as
-	 * follows:
-	 * Object {
-	 *  {string} path  Path of asset.
-	 *  {string} type  Type of asset (can only be 'image', 'video', or
-	 *                 'audio').
-	 * }
-	 */
-	AssetLoader.prototype.enqueue = function () {
-	  assert(arguments && arguments.length > 0, 'There are no arguments specified.');
-	  assert(this.state !== AssetLoader.STATE.IN_PROGRESS, 'Enqueueing is prohibited when the state is in progress.');
-
-	  if (!arguments) return;
-	  if (arguments.length <= 0) return;
-	  if (this.state === AssetLoader.STATE.IN_PROGRESS) return;
-
-	  log('[AssetLoader]::enqueue(' + arguments + ')');
-
-	  var arrlen = arguments.length;
-
-	  for (var i = 0; i < arrlen; i++) {
-	    var arg = arguments[i];
-
-	    assert(typeof arg === 'string' || (typeof arg === 'undefined' ? 'undefined' : _typeof(arg)) === 'object', 'Each item to be enqueued must be a string of the target path or an object containing a "path" key and/or a "type" key');
-	    assert(typeof arg === 'string' || typeof arg.path === 'string', 'Invalid path specified: ' + arg.path + '.');
-
-	    var path = typeof arg === 'string' ? arg : arg.path;
-	    var type = arg.type;
-
-	    if (!type) {
-	      var ext = path.split('.').pop().toLowerCase();
-
-	      if (IMAGE_EXTENSIONS.indexOf(ext) > -1) {
-	        type = AssetLoader.TYPE.IMAGE;
-	      } else if (VIDEO_EXTENSIONS.indexOf(ext) > -1) {
-	        type = AssetLoader.TYPE.VIDEO;
-	      } else if (AUDIO_EXTENSIONS.indexOf(ext) > -1) {
-	        type = AssetLoader.TYPE.AUDIO;
-	      } else {
-	        throw '[AssetLoader]::Unsupported asset format: ' + path;
-	      }
-	    }
-
-	    if (type) {
-	      this.queue.push({
-	        path: path,
-	        type: type
-	      });
-
-	      if (!this._bytesLoaded) this._bytesLoaded = [];
-	      if (!this._bytesTotal) this._bytesTotal = [];
-
-	      this._bytesLoaded.push(0.0);
-	      this._bytesTotal.push(0.0);
-	    }
-	  }
-	};
-
-	/**
-	 * Removes loading targets from the queue. Each parameter is a path that
-	 * must match one that is already in the queue.
-	 */
-	AssetLoader.prototype.dequeue = function () {
-	  assert(arguments && arguments.length > 0, 'There are no arguments specified.');
-	  assert(this.state !== AssetLoader.STATE.IN_PROGRESS, 'Dequeueing is prohibited when the state is in progress.');
-
-	  if (!arguments) return;
-	  if (arguments.length <= 0) return;
-	  if (this.state === AssetLoader.STATE.IN_PROGRESS) return;
-
-	  var arrlen = arguments.length;
-
-	  for (var i = 0; i < arrlen; i++) {
-	    var arg = arguments[i];
-
-	    assert(typeof arg === 'string', 'Expecting path to be a string.');
-
-	    var n = this.queue.length;
-
-	    for (var j = 0; j < n; j++) {
-	      var target = this.queue[j];
-
-	      if (target.path === arg) {
-	        this.queue.splice(j, 1);
-	        this.bytesLoaded.splice(j, 1);
-	        this.bytesTotal.splice(j, 1);
-
-	        break;
-	      }
-	    }
-	  }
-	};
-
-	/**
-	 * Creates and returns a new XHR instance with prepopulated configurations.
-	 *
-	 * @param {Object} data
-	 *
-	 * @return {Object} XHR instance.
-	 */
-	AssetLoader.prototype.getXHR = function (data) {
-	  var ext = data.path.split('.').pop().toLowerCase();
-	  var mimeType = MIME_TYPES[data.type.toUpperCase()][ext];
-
-	  if (!mimeType) {
-	    throw '[AssetLoader]:: Unsupported asset format: ' + data.path;
-	  }
-
-	  var xhr = new XMLHttpRequest();
-	  xhr.addEventListener('progress', this._onXHRProgress.bind(this), false);
-	  xhr.addEventListener('load', this._onXHRLoadComplete.bind(this), false);
-	  xhr.addEventListener('error', this._onXHRLoadError.bind(this), false);
-	  xhr.addEventListener('abort', this._onXHRAbort.bind(this), false);
-
-	  xhr.open('GET', data.path, this.async);
-	  if (xhr.overrideMimeType) xhr.overrideMimeType(mimeType);
-	  xhr.data = data;
-
-	  return xhr;
-	};
-
-	/**
-	 * Handler invoked when an XHR instance is in progress.
-	 *
-	 * @param {Object} event
-	 *
-	 * @private
-	 */
-	AssetLoader.prototype._onXHRProgress = function (event) {
-	  if (!event.lengthComputable) return;
-
-	  var xhr = event.currentTarget;
-	  var id = xhr.data.id;
-	  var path = xhr.data.path;
-	  var type = xhr.data.type;
-	  var bytesLoaded = event.loaded;
-	  var bytesTotal = event.total;
-
-	  // Hash progress into XHR data.
-	  xhr.data.bytesLoaded = bytesLoaded;
-	  xhr.data.bytesTotal = bytesTotal;
-
-	  this._bytesLoaded[id] = bytesLoaded;
-	  this._bytesTotal[id] = bytesTotal;
-
-	  if (!this._bytesLoaded) this._bytesLoaded = [];
-
-	  log('[AssetLoader]::_onXHRProgress("' + path + '":' + bytesLoaded + '/' + bytesTotal + ')');
-
-	  var progressEvent = new CustomEvent(EventType.OBJECT.PROGRESS, {
-	    bubbles: true,
-	    cancelable: true,
-	    detail: {
-	      id: id,
-	      path: path,
-	      type: type,
-	      pending: this._pending,
-	      loaded: this.bytesLoaded,
-	      total: this.bytesTotal
-	    }
-	  });
-
-	  this.dispatchEvent(progressEvent);
-	};
-
-	/**
-	 * Handler invoked when an XHR instance completes its operation.
-	 *
-	 * @param {Object} event
-	 *
-	 * @private
-	 */
-	AssetLoader.prototype._onXHRLoadComplete = function (event) {
-	  var xhr = event.currentTarget;
-	  var id = xhr.data.id;
-	  var path = xhr.data.path;
-	  var type = xhr.data.type;
-
-	  log('[AssetLoader]::_onXHRLoadComplete("' + path + '"")');
-
-	  this._pending--;
-
-	  var loadEvent = new CustomEvent(EventType.OBJECT.LOAD, {
-	    bubbles: true,
-	    cancelable: true,
-	    detail: {
-	      id: id,
-	      path: path,
-	      type: type,
-	      pending: this._pending,
-	      loaded: this.bytesLoaded,
-	      total: this.bytesTotal
-	    }
-	  });
-
-	  this.dispatchEvent(loadEvent);
-	};
-
-	/**
-	 * Handler invoked when an XHR instance fails its operation.
-	 *
-	 * @param {Object} event
-	 *
-	 * @private
-	 */
-	AssetLoader.prototype._onXHRLoadError = function (event) {
-	  var xhr = event.currentTarget;
-	  var id = xhr.data.id;
-	  var path = xhr.data.path;
-	  var type = xhr.data.type;
-
-	  log('[AssetLoader]::_onXHRLoadError("' + path + '"")');
-
-	  this._pending--;
-
-	  var errorEvent = new CustomEvent(EventType.OBJECT.ERROR, {
-	    bubbles: true,
-	    cancelable: true,
-	    detail: {
-	      id: id,
-	      path: path,
-	      type: type,
-	      pending: this._pending,
-	      loaded: this.bytesLoaded,
-	      total: this.bytesTotal
-	    }
-	  });
-
-	  this.dispatchEvent(errorEvent);
-
-	  if (this._pending === 0) {
-	    var loadEvent = new CustomEvent(EventType.OBJECT.LOAD, {
-	      bubbles: true,
-	      cancelable: true,
-	      detail: {
-	        id: id,
-	        path: path,
-	        type: type,
-	        pending: this._pending,
-	        loaded: this.bytesLoaded,
-	        total: this.bytesTotal
-	      }
-	    });
-
-	    this.dispatchEvent(loadEvent);
-	  }
-	};
-
-	/**
-	 * Handler invoked when an XHR aborts its operation.
-	 *
-	 * @param {Object} event
-	 *
-	 * @private
-	 */
-	AssetLoader.prototype._onXHRAbort = function (event) {
-	  var xhr = event.currentTarget;
-	  var id = xhr.data.id;
-	  var path = xhr.data.path;
-	  var type = xhr.data.type;
-
-	  log('[AssetLoader]::_onXHRLoadError("' + path + '"")');
-
-	  this._pending--;
-
-	  var abortEvent = new CustomEvent(EventType.OBJECT.ABORT, {
-	    bubbles: true,
-	    cancelable: true,
-	    detail: {
-	      id: id,
-	      path: path,
-	      type: type,
-	      pending: this._pending,
-	      loaded: this.bytesLoaded,
-	      total: this.bytesTotal
-	    }
-	  });
-
-	  this.dispatchEvent(abortEvent);
-
-	  if (this._pending === 0) {
-	    var loadEvent = new CustomEvent(EventType.OBJECT.LOAD, {
-	      bubbles: true,
-	      cancelable: true,
-	      detail: {
-	        id: id,
-	        path: path,
-	        type: type,
-	        pending: this._pending,
-	        loaded: this.bytesLoaded,
-	        total: this.bytesTotal
-	      }
-	    });
-
-	    this.dispatchEvent(loadEvent);
-	  }
-	};
-
-	/**
-	 * @inheritdoc
-	 */
-	AssetLoader.prototype.__define_properties = function () {
-	  /**
-	   * @property
-	   *
-	   * Specifies the current state of this AssetLoader instance.
-	   *
-	   * @type {number}
-	   */
-	  Object.defineProperty(this, 'state', {
-	    get: function get() {
-	      if (!this._state) {
-	        Object.defineProperty(this, '_state', {
-	          value: AssetLoader.STATE.IDLE,
-	          writable: true
-	        });
-	      }
-
-	      return this._state;
-	    }
-	  });
-
-	  /**
-	   * @property
-	   *
-	   * View of this AssetLoader instance.
-	   *
-	   * @type {Object}
-	   */
-	  Object.defineProperty(this, 'queue', {
-	    get: function get() {
-	      if (!this._queue) {
-	        Object.defineProperty(this, '_queue', {
-	          value: [],
-	          writable: true
-	        });
-	      }
-
-	      return this._queue;
-	    }
-	  });
-
-	  /**
-	   * @property
-	   *
-	   * Loaded assets.
-	   *
-	   * @type {Object}
-	   */
-	  Object.defineProperty(this, 'assets', {
-	    get: function get() {
-	      if (!this._assets) {
-	        Object.defineProperty(this, '_assets', {
-	          value: {},
-	          writable: true
-	        });
-	      }
-
-	      return this._assets;
-	    }
-	  });
-
-	  /**
-	   * @property
-	   *
-	   * Specifies whether the XHR operations run in async.
-	   *
-	   * @type {boolean}
-	   */
-	  Object.defineProperty(this, 'async', {
-	    get: function get() {
-	      if (this._async === undefined) {
-	        return true;
-	      } else {
-	        return this._async;
-	      }
-	    },
-	    set: function set(value) {
-	      assert(this.state !== AssetLoader.STATE.IN_PROGRESS, 'Cannot change the async mode while it is in progress.');
-
-	      if (this.state !== AssetLoader.STATE.IN_PROGRESS) {
-	        Object.defineProperty(this, '_async', {
-	          value: value,
-	          writable: true
-	        });
-	      }
-	    }
-	  });
-
-	  /**
-	   * @property
-	   *
-	   * Specifies the total bytes loaded for all assets in the queue.
-	   *
-	   * @type {number}
-	   */
-	  Object.defineProperty(this, 'bytesLoaded', {
-	    get: function get() {
-	      if (!this._bytesLoaded) {
-	        return 0.0;
-	      } else {
-	        var total = 0;
-	        var arrlen = this._bytesLoaded.length;
-
-	        for (var i = 0; i < arrlen; i++) {
-	          total += this._bytesLoaded[i];
-	        }
-
-	        return total;
-	      }
-	    }
-	  });
-
-	  /**
-	   * @property
-	   *
-	   * Specifies the total bytes for all assets in the queue.
-	   *
-	   * @type {number}
-	   */
-	  Object.defineProperty(this, 'bytesTotal', {
-	    get: function get() {
-	      if (!this._bytesTotal) {
-	        return 0.0;
-	      } else {
-	        var total = 0;
-	        var arrlen = this._bytesTotal.length;
-
-	        for (var i = 0; i < arrlen; i++) {
-	          total += this._bytesTotal[i];
-	        }
-
-	        return total;
-	      }
-	    }
-	  });
-
-	  /**
-	   * @property
-	   *
-	   * Specifies the current progress (in decimals) of the entire operation.
-	   *
-	   * @return {number}
-	   */
-	  Object.defineProperty(this, 'progress', {
-	    get: function get() {
-	      if (!this._bytesTotal || !this._bytesLoaded) return 0.0;
-	      if (this._bytesTotal.length !== this._bytesLoaded.length) return 0.0;
-
-	      var arrlen = this._bytesTotal.length;
-	      var sum = 0.0;
-
-	      for (var i = 0; i < arrlen; i++) {
-	        var loaded = this._bytesLoaded[i];
-	        var total = this._bytesTotal[i];
-
-	        if (total > 0.0) {
-	          sum += loaded / total;
-	        }
-	      }
-
-	      return sum / arrlen;
-	    }
-	  });
-
-	  AssetLoader.__super__.__define_properties.call(this);
-	};
-
 	module.exports = AssetLoader;
 
 /***/ },
 /* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+
+	'use strict';
+
+	var assertType = __webpack_require__(5);
+
+	/**
+	 * Sets up prototypal inheritance between a child class and a parent class.
+	 *
+	 * @param {Class} childClass  - Child class.
+	 * @param {Class} parentClass - Parent class.
+	 *
+	 * @return {Class} Extended child class.
+	 *
+	 * @alias module:requiem~helpers.inherit
+	 */
+	function inherit(childClass, parentClass) {
+	  assertType(childClass, 'class', false, 'Invalid parameter: childClass');
+	  assertType(parentClass, 'class', false, 'Invalid parameter: parentClass');
+
+	  for (var key in parentClass) {
+	    if (parentClass.hasOwnProperty(key)) {
+	      childClass[key] = parentClass[key];
+	    }
+	  }
+
+	  function C() {
+	    this.constructor = childClass;
+	  }
+
+	  C.prototype = Object.create(parentClass.prototype);
+	  childClass.prototype = new C();
+	  childClass.__super__ = parentClass.prototype;
+	  return childClass;
+	}
+
+	module.exports = inherit;
+
+/***/ },
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4698,15 +5095,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	var types = {};
 
 	Object.defineProperty(types, 'Directive', { value: __webpack_require__(11), writable: false, enumerable: true });
-	Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(18), writable: false, enumerable: true });
-	Object.defineProperty(types, 'EventType', { value: __webpack_require__(20), writable: false, enumerable: true });
-	Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(33), writable: false, enumerable: true });
-	Object.defineProperty(types, 'NodeState', { value: __webpack_require__(19), writable: false, enumerable: true });
+	Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(19), writable: false, enumerable: true });
+	Object.defineProperty(types, 'EventType', { value: __webpack_require__(21), writable: false, enumerable: true });
+	Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(34), writable: false, enumerable: true });
+	Object.defineProperty(types, 'NodeState', { value: __webpack_require__(20), writable: false, enumerable: true });
 
 	module.exports = types;
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports) {
 
 	/**
@@ -4833,7 +5230,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4855,13 +5252,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ui = {};
 
 	Object.defineProperty(ui, 'Element', { value: __webpack_require__(14), writable: false, enumerable: true });
-	Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(21), writable: false, enumerable: true });
-	Object.defineProperty(ui, 'Video', { value: __webpack_require__(23), writable: false, enumerable: true });
+	Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(22), writable: false, enumerable: true });
+	Object.defineProperty(ui, 'Video', { value: __webpack_require__(24), writable: false, enumerable: true });
 
 	module.exports = ui;
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4882,82 +5279,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var utils = {};
 
-	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(36), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(39), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(37), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(37), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(40), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(38), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(25), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(38), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(40), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(41), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(42), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(43), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(44), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(45), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(46), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate', { value: __webpack_require__(47), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(48), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'transform', { value: __webpack_require__(49), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(39), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(41), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(42), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(43), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(44), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(45), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(46), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(47), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate', { value: __webpack_require__(48), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(49), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'transform', { value: __webpack_require__(50), writable: false, enumerable: true });
 
 	module.exports = utils;
-
-/***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-
-	'use strict';
-
-	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
-	var assert = __webpack_require__(6);
-	var toElementArray = __webpack_require__(26);
-	var hasClass = __webpack_require__(37);
-
-	/**
-	 * Adds a class(es) to DOM element(s).
-	 *
-	 * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
-	 * @param {string|string[]}                             className
-	 *
-	 * @alias module:requiem~utils.addClass
-	 */
-	function addClass(element, className) {
-	  var elements = toElementArray(element);
-	  var classes = [];
-	  var n = elements.length;
-
-	  if (!assert(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
-
-	  if (typeof className === 'string') {
-	    classes.push(className);
-	  } else {
-	    classes = className;
-	  }
-
-	  var nClasses = classes.length;
-
-	  for (var i = 0; i < n; i++) {
-	    var e = elements[i];
-
-	    for (var j = 0; j < nClasses; j++) {
-	      var c = classes[j];
-
-	      if (!assert(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
-	      if (hasClass(e, c)) continue;
-
-	      e.className = e.className + (e.className === '' ? '' : ' ') + c;
-	    }
-	  }
-	}
-
-	module.exports = addClass;
 
 /***/ },
 /* 37 */
@@ -4973,35 +5311,60 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assert = __webpack_require__(6);
-	var toElementArray = __webpack_require__(26);
-	var getClassIndex = __webpack_require__(38);
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _toElementArray = __webpack_require__(26);
+
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+
+	var _hasClass = __webpack_require__(38);
+
+	var _hasClass2 = _interopRequireDefault(_hasClass);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
 	/**
-	 * Verifies that the specified element(s) has the specified class.
+	 * Adds a class(es) to DOM element(s).
 	 *
-	 * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
-	 * @param {string}                                      className
+	 * @param {Node|Node[]|Element|Element[]} element
+	 * @param {string|string[]}                             className
 	 *
-	 * @return {boolean} True if element(s) has given class, false otherwise.
-	 *
-	 * @alias module:requiem~utils.hasClass
+	 * @alias module:requiem~utils.addClass
 	 */
-	function hasClass(element, className) {
-	  if (!assert(className && typeof className === 'string', 'Invalid class name: ' + className)) return false;
-
-	  var elements = toElementArray(element);
+	function addClass(element, className) {
+	  var elements = (0, _toElementArray2.default)(element);
+	  var classes = [];
 	  var n = elements.length;
+
+	  if (!(0, _assert2.default)(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
+
+	  if (typeof className === 'string') {
+	    classes.push(className);
+	  } else {
+	    classes = className;
+	  }
+
+	  var nClasses = classes.length;
 
 	  for (var i = 0; i < n; i++) {
 	    var e = elements[i];
-	    if (getClassIndex(e, className) < 0) return false;
-	  }
 
-	  return true;
+	    for (var j = 0; j < nClasses; j++) {
+	      var c = classes[j];
+
+	      if (!(0, _assert2.default)(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
+	      if ((0, _hasClass2.default)(e, c)) continue;
+
+	      e.className = e.className + (e.className === '' ? '' : ' ') + c;
+	    }
+	  }
 	}
 
-	module.exports = hasClass;
+	module.exports = addClass;
 
 /***/ },
 /* 38 */
@@ -5017,34 +5380,45 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+	var _assert = __webpack_require__(6);
 
-	var assert = __webpack_require__(6);
-	var Element = __webpack_require__(14);
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _toElementArray = __webpack_require__(26);
+
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+
+	var _getClassIndex = __webpack_require__(39);
+
+	var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * Gets the index of a specified class in a DOM element,
+	 * Verifies that the specified element(s) has the specified class.
 	 *
-	 * @param {HTMLElement|Element} element
-	 * @param {string}              className
+	 * @param {Node|Node[]|Element|Element[]} element
+	 * @param {string}                                      className
 	 *
-	 * @return {number} Index of given class name. -1 if not found.
+	 * @return {boolean} True if element(s) has given class, false otherwise.
 	 *
-	 * @alias module:requiem~utils.getClassIndex
+	 * @alias module:requiem~utils.hasClass
 	 */
-	function getClassIndex(element, className) {
-	  if (!assert(element && (_instanceof(element, HTMLElement) || _instanceof(element, Element) || element.jquery), 'Invalid element specified. Element must be an instance of HTMLElement or Element.')) return null;
-	  if (_instanceof(element, Element)) element = element.element;
-	  if (element.jquery) element = element.get(0);
+	function hasClass(element, className) {
+	  if (!(0, _assert2.default)(className && typeof className === 'string', 'Invalid class name: ' + className)) return false;
 
-	  if (!assert(className && typeof className === 'string', 'Invalid class name: ' + className)) return -1;
+	  var elements = (0, _toElementArray2.default)(element);
+	  var n = elements.length;
 
-	  var classList = element.className.split(' ');
+	  for (var i = 0; i < n; i++) {
+	    var e = elements[i];
+	    if ((0, _getClassIndex2.default)(e, className) < 0) return false;
+	  }
 
-	  return classList.indexOf(className);
+	  return true;
 	}
 
-	module.exports = getClassIndex;
+	module.exports = hasClass;
 
 /***/ },
 /* 39 */
@@ -5060,43 +5434,41 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _Element = __webpack_require__(14);
+
+	var _Element2 = _interopRequireDefault(_Element);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
-	var toElementArray = __webpack_require__(26);
-	var getElementState = __webpack_require__(40);
-	var Directive = __webpack_require__(11);
-	var Element = __webpack_require__(14);
-
 	/**
-	 * Changes the state of DOM element(s), assumes that state classes are prefixed
-	 * with 'state-'.
+	 * Gets the index of a specified class in a DOM element,
 	 *
-	 * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
-	 * @param {string}                                      state
+	 * @param {Node|Element} element
+	 * @param {string}              className
 	 *
-	 * @alias module:requiem~utils.changeElementState
+	 * @return {number} Index of given class name. -1 if not found.
+	 *
+	 * @alias module:requiem~utils.getClassIndex
 	 */
-	function changeElementState(element, state) {
-	  var elements = toElementArray(element, true);
+	function getClassIndex(element, className) {
+	  if (!(0, _assert2.default)(element && (_instanceof(element, Node) || _instanceof(element, _Element2.default) || element.jquery), 'Invalid element specified. Element must be an instance of Node or Element.')) return null;
+	  if (_instanceof(element, _Element2.default)) element = element.element;
+	  if (element.jquery) element = element.get(0);
 
-	  if (!elements) return;
+	  if (!(0, _assert2.default)(className && typeof className === 'string', 'Invalid class name: ' + className)) return -1;
 
-	  var n = elements.length;
+	  var classList = element.className.split(' ');
 
-	  for (var i = 0; i < n; i++) {
-	    var e = elements[i];
-
-	    if (getElementState(e) === state) continue;
-
-	    if (_instanceof(e, Element)) {
-	      e.state = state;
-	    } else {
-	      e.setAttribute('data-' + Directive.STATE, state);
-	    }
-	  }
+	  return classList.indexOf(className);
 	}
 
-	module.exports = changeElementState;
+	module.exports = getClassIndex;
 
 /***/ },
 /* 40 */
@@ -5112,43 +5484,56 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _toElementArray = __webpack_require__(26);
+
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+
+	var _getElementState = __webpack_require__(41);
+
+	var _getElementState2 = _interopRequireDefault(_getElementState);
+
+	var _Directive = __webpack_require__(11);
+
+	var _Directive2 = _interopRequireDefault(_Directive);
+
+	var _Element = __webpack_require__(14);
+
+	var _Element2 = _interopRequireDefault(_Element);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
-	var assert = __webpack_require__(6);
-	var Directive = __webpack_require__(11);
-	var Element = __webpack_require__(14);
-
 	/**
-	 * Gets the state of a DOM element, assumes that state classes are prefixed with
-	 * 'state-'.
+	 * Changes the state of DOM element(s), assumes that state classes are prefixed
+	 * with 'state-'.
 	 *
-	 * @param {HTMLElement|Element} element
+	 * @param {Node|Node[]|Element|Element[]} element
+	 * @param {string}                                      state
 	 *
-	 * @return {string} State of the given element ('state-' prefix is omitted).
-	 *
-	 * @alias module:requiem~utils.getElementState
+	 * @alias module:requiem~utils.changeElementState
 	 */
-	function getElementState(element) {
-	  if (!assert(element && (_instanceof(element, HTMLElement) || _instanceof(element, Element) || element.jquery), 'Invalid element specified.')) return null;
+	function changeElementState(element, state) {
+	  var elements = (0, _toElementArray2.default)(element, true);
 
-	  if (element.jquery) element = element.get(0);
+	  if (!elements) return;
 
-	  var s = undefined;
+	  var n = elements.length;
 
-	  if (_instanceof(element, Element)) {
-	    s = element.state;
-	  } else {
-	    s = element.getAttribute(Directive.STATE) || element.getAttribute('data-' + Directive.STATE);
-	  }
+	  for (var i = 0; i < n; i++) {
+	    var e = elements[i];
 
-	  if (!s || s === '') {
-	    return null;
-	  } else {
-	    return s;
+	    if ((0, _getElementState2.default)(e) === state) continue;
+
+	    if (_instanceof(e, _Element2.default)) {
+	      e.state = state;
+	    } else {
+	      e.setAttribute('data-' + _Directive2.default.STATE, state);
+	    }
 	  }
 	}
 
-	module.exports = getElementState;
+	module.exports = changeElementState;
 
 /***/ },
 /* 41 */
@@ -5164,44 +5549,113 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assert = __webpack_require__(6);
-	var getRect = __webpack_require__(42);
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _Directive = __webpack_require__(11);
+
+	var _Directive2 = _interopRequireDefault(_Directive);
+
+	var _Element = __webpack_require__(14);
+
+	var _Element2 = _interopRequireDefault(_Element);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+
+	/**
+	 * Gets the state of a DOM element, assumes that state classes are prefixed with
+	 * 'state-'.
+	 *
+	 * @param {Node|Element} element
+	 *
+	 * @return {string} State of the given element ('state-' prefix is omitted).
+	 *
+	 * @alias module:requiem~utils.getElementState
+	 */
+	function getElementState(element) {
+	  if (!(0, _assert2.default)(element && (_instanceof(element, Node) || _instanceof(element, _Element2.default) || element.jquery), 'Invalid element specified.')) return null;
+
+	  if (element.jquery) element = element.get(0);
+
+	  var s = undefined;
+
+	  if (_instanceof(element, _Element2.default)) {
+	    s = element.state;
+	  } else {
+	    s = element.getAttribute(_Directive2.default.STATE) || element.getAttribute('data-' + _Directive2.default.STATE);
+	  }
+
+	  if (!s || s === '') {
+	    return null;
+	  } else {
+	    return s;
+	  }
+	}
+
+	module.exports = getElementState;
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+
+	'use strict';
+
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _getRect = __webpack_require__(43);
+
+	var _getRect2 = _interopRequireDefault(_getRect);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * Computes the intersecting rect of 2 given elements. If only 1 element is
 	 * specified, the other element will default to the current viewport.
 	 *
-	 * @param {...HTMLElement|...Element} element
+	 * @param {...Node|...Element} element
 	 *
 	 * @return {Object} Object containing width, height.
 	 *
 	 * @alias module:requiem~utils.getIntersectRect
 	 */
 	function getIntersectRect(element) {
-	  if (!assert(window, 'This method relies on the window object, which is undefined.')) return null;
+	  if (!(0, _assert2.default)(window, 'This method relies on the window object, which is undefined.')) return null;
 
 	  var n = arguments.length;
 
-	  if (!assert(n > 0, 'This method requires at least 1 argument specified.')) return null;
+	  if (!(0, _assert2.default)(n > 0, 'This method requires at least 1 argument specified.')) return null;
 
 	  var rect = {};
 	  var currRect = undefined,
 	      nextRect = undefined;
 
 	  for (var i = 0; i < n; i++) {
-	    if (!currRect) currRect = getRect(arguments[i]);
+	    if (!currRect) currRect = (0, _getRect2.default)(arguments[i]);
 
-	    if (!assert(currRect, 'Invalid computed rect.')) return null;
+	    if (!(0, _assert2.default)(currRect, 'Invalid computed rect.')) return null;
 
 	    if (i === 0 && i + 1 === n) {
-	      nextRect = getRect(window);
+	      nextRect = (0, _getRect2.default)(window);
 	    } else if (i + 1 < n) {
-	      nextRect = getRect(arguments[i + 1]);
+	      nextRect = (0, _getRect2.default)(arguments[i + 1]);
 	    } else {
 	      break;
 	    }
 
-	    if (!assert(nextRect, 'Invalid computed rect.')) return null;
+	    if (!(0, _assert2.default)(nextRect, 'Invalid computed rect.')) return null;
 
 	    rect.width = Math.max(0.0, Math.min(currRect.right, nextRect.right) - Math.max(currRect.left, nextRect.left));
 	    rect.height = Math.max(0.0, Math.min(currRect.bottom, nextRect.bottom) - Math.max(currRect.top, nextRect.top));
@@ -5228,7 +5682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getIntersectRect;
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5241,14 +5695,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assert = __webpack_require__(6);
-	var toElementArray = __webpack_require__(26);
-	var getViewportRect = __webpack_require__(43);
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _toElementArray = __webpack_require__(26);
+
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+
+	var _getViewportRect = __webpack_require__(44);
+
+	var _getViewportRect2 = _interopRequireDefault(_getViewportRect);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * Gets the rect of a given element or the overall rect of an array of elements.
 	 *
-	 * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
+	 * @param {Node|Node[]|Element|Element[]} element
 	 * @param {Object}                                      [reference=window]
 	 *
 	 * @return {Object} Object containing top, left, bottom, right, width, height.
@@ -5256,19 +5720,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~utils.getRect
 	 */
 	function getRect(element, reference) {
-	  if (!assert(window, 'This method relies on the window object, which is undefined.')) return null;
-	  if (element === window) return getViewportRect();
+	  if (!(0, _assert2.default)(window, 'This method relies on the window object, which is undefined.')) return null;
+	  if (element === window) return (0, _getViewportRect2.default)();
 
 	  if (!reference) reference = window;
 
-	  var elements = toElementArray(element);
+	  var elements = (0, _toElementArray2.default)(element);
 	  var n = elements.length;
 
 	  if (n <= 0) return null;
 
 	  var refRect = getRect(reference);
 
-	  if (!assert(refRect, 'Cannot determine reference FOV.')) return null;
+	  if (!(0, _assert2.default)(refRect, 'Cannot determine reference FOV.')) return null;
 
 	  var winRect = getRect(window);
 	  var rect = {};
@@ -5320,7 +5784,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getRect;
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5333,7 +5797,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assert = __webpack_require__(6);
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * Gets the rect of the viewport (FOV).
@@ -5344,7 +5812,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~utils.getViewportRect
 	 */
 	function getViewportRect() {
-	  if (!assert(window && document, 'Window or document undefined.')) return null;
+	  if (!(0, _assert2.default)(window && document, 'Window or document undefined.')) return null;
 
 	  var rect = {};
 
@@ -5361,71 +5829,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getViewportRect;
 
 /***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-
-	'use strict';
-
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
-	var assert = __webpack_require__(6);
-	var getIntersectRect = __webpack_require__(41);
-	var getRect = __webpack_require__(42);
-
-	/**
-	 * Hit tests a vector or element against other elements.
-	 *
-	 * @param {Object|HTMLElement|Element} obj
-	 * @param {number}                     obj.x
-	 * @param {number}                     obj.y
-	 * @param {...(HTMLElement|Element)}   elements
-	 *
-	 * @return {boolean} True if test passes, false otherwise.
-	 *
-	 * @alias module:requiem~utils.hitTestElement
-	 */
-	function hitTestElement(obj, elements) {
-	  if (!assert(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
-
-	  var args = Array.prototype.slice.call(arguments);
-	  var isVector = _typeof(args[0]) === 'object' && args[0].hasOwnProperty('x') && args[0].hasOwnProperty('y');
-
-	  if (isVector) {
-	    var vector = args.shift();
-	    var n = args.length;
-	    var pass = false;
-
-	    for (var i = 0; i < n; i++) {
-	      var rect = getRect(args[i]);
-	      var clampedX = vector.x >= rect.left && vector.x <= rect.right;
-	      var clampedY = vector.y >= rect.top && vector.x <= rect.bottom;
-
-	      if (clampedX && clampedY) {
-	        pass = true;
-	      }
-	    }
-
-	    return pass;
-	  } else {
-	    var intersectRect = getIntersectRect.apply(null, arguments);
-
-	    if (!assert(intersectRect, 'Invalid elements specified.')) return false;
-
-	    return intersectRect.width * intersectRect.height !== 0;
-	  }
-	}
-
-	module.exports = hitTestElement;
-
-/***/ },
 /* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -5439,29 +5842,36 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+	var _assert = __webpack_require__(6);
 
-	var assert = __webpack_require__(6);
-	var getIntersectRect = __webpack_require__(41);
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _getIntersectRect = __webpack_require__(42);
+
+	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
+
+	var _getRect = __webpack_require__(43);
+
+	var _getRect2 = _interopRequireDefault(_getRect);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	/**
 	 * Hit tests a vector or element against other elements.
 	 *
-	 * @param {Object|HTMLElement|Element} obj
+	 * @param {Object|Node|Element} obj
 	 * @param {number}                     obj.x
 	 * @param {number}                     obj.y
-	 * @param {...Object}                  rects
-	 * @param {number}                     rects.top
-	 * @param {number}                     rects.right
-	 * @param {number}                     rects.bottom
-	 * @param {number}                     rects.left
+	 * @param {...(Node|Element)}   elements
 	 *
 	 * @return {boolean} True if test passes, false otherwise.
 	 *
-	 * @alias module:requiem~utils.hitTestRect
+	 * @alias module:requiem~utils.hitTestElement
 	 */
-	function hitTestRect(obj, rects) {
-	  if (!assert(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
+	function hitTestElement(obj, elements) {
+	  if (!(0, _assert2.default)(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
 
 	  var args = Array.prototype.slice.call(arguments);
 	  var isVector = _typeof(args[0]) === 'object' && args[0].hasOwnProperty('x') && args[0].hasOwnProperty('y');
@@ -5472,10 +5882,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var pass = false;
 
 	    for (var i = 0; i < n; i++) {
-	      var rect = args[i];
-
-	      if (!assert(rect.top !== undefined && !isNaN(rect.top) && rect.right !== undefined && !isNaN(rect.right) && rect.bottom !== undefined && !isNaN(rect.bottom) && rect.left !== undefined && !isNaN(rect.left), 'Invalid rect supplied. Rect must be an object containing "top", "right", "bottom", and "left" key values.')) return false;
-
+	      var rect = (0, _getRect2.default)(args[i]);
 	      var clampedX = vector.x >= rect.left && vector.x <= rect.right;
 	      var clampedY = vector.y >= rect.top && vector.x <= rect.bottom;
 
@@ -5486,15 +5893,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    return pass;
 	  } else {
-	    var intersectRect = getIntersectRect.apply(null, arguments);
+	    var intersectRect = _getIntersectRect2.default.apply(null, arguments);
 
-	    if (!assert(intersectRect, 'Invalid elements specified.')) return false;
+	    if (!(0, _assert2.default)(intersectRect, 'Invalid elements specified.')) return false;
 
 	    return intersectRect.width * intersectRect.height !== 0;
 	  }
 	}
 
-	module.exports = hitTestRect;
+	module.exports = hitTestElement;
 
 /***/ },
 /* 46 */
@@ -5510,49 +5917,69 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+	var _assert = __webpack_require__(6);
 
-	var assert = __webpack_require__(6);
-	var toElementArray = __webpack_require__(26);
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _getIntersectRect = __webpack_require__(42);
+
+	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 
 	/**
-	 * Removes a class(es) from DOM element(s).
+	 * Hit tests a vector or element against other elements.
 	 *
-	 * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
-	 * @param {string|string[]}                             className
+	 * @param {Object|Node|Element} obj
+	 * @param {number}                     obj.x
+	 * @param {number}                     obj.y
+	 * @param {...Object}                  rects
+	 * @param {number}                     rects.top
+	 * @param {number}                     rects.right
+	 * @param {number}                     rects.bottom
+	 * @param {number}                     rects.left
 	 *
-	 * @alias module:requiem~utils.removeClass
+	 * @return {boolean} True if test passes, false otherwise.
+	 *
+	 * @alias module:requiem~utils.hitTestRect
 	 */
-	function removeClass(element, className) {
-	  var elements = toElementArray(element);
-	  var classes = [];
-	  var n = elements.length;
+	function hitTestRect(obj, rects) {
+	  if (!(0, _assert2.default)(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
 
-	  if (!assert(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
+	  var args = Array.prototype.slice.call(arguments);
+	  var isVector = _typeof(args[0]) === 'object' && args[0].hasOwnProperty('x') && args[0].hasOwnProperty('y');
 
-	  if (typeof className === 'string') {
-	    classes.push(className);
-	  } else {
-	    classes = className;
-	  }
+	  if (isVector) {
+	    var vector = args.shift();
+	    var n = args.length;
+	    var pass = false;
 
-	  var nClasses = classes.length;
+	    for (var i = 0; i < n; i++) {
+	      var rect = args[i];
 
-	  for (var i = 0; i < n; i++) {
-	    var e = elements[i];
+	      if (!(0, _assert2.default)(rect.top !== undefined && !isNaN(rect.top) && rect.right !== undefined && !isNaN(rect.right) && rect.bottom !== undefined && !isNaN(rect.bottom) && rect.left !== undefined && !isNaN(rect.left), 'Invalid rect supplied. Rect must be an object containing "top", "right", "bottom", and "left" key values.')) return false;
 
-	    for (var j = 0; j < nClasses; j++) {
-	      var c = classes[j];
+	      var clampedX = vector.x >= rect.left && vector.x <= rect.right;
+	      var clampedY = vector.y >= rect.top && vector.x <= rect.bottom;
 
-	      if (!assert(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
-
-	      var regex = new RegExp('^' + c + '\\s+|\\s+' + c, 'g');
-	      e.className = e.className.replace(regex, '');
+	      if (clampedX && clampedY) {
+	        pass = true;
+	      }
 	    }
+
+	    return pass;
+	  } else {
+	    var intersectRect = _getIntersectRect2.default.apply(null, arguments);
+
+	    if (!(0, _assert2.default)(intersectRect, 'Invalid elements specified.')) return false;
+
+	    return intersectRect.width * intersectRect.height !== 0;
 	  }
 	}
 
-	module.exports = removeClass;
+	module.exports = hitTestRect;
 
 /***/ },
 /* 47 */
@@ -5568,13 +5995,85 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assert = __webpack_require__(6);
-	var toElementArray = __webpack_require__(26);
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _toElementArray = __webpack_require__(26);
+
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+
+	/**
+	 * Removes a class(es) from DOM element(s).
+	 *
+	 * @param {Node|Node[]|Element|Element[]} element
+	 * @param {string|string[]}                             className
+	 *
+	 * @alias module:requiem~utils.removeClass
+	 */
+	function removeClass(element, className) {
+	  var elements = (0, _toElementArray2.default)(element);
+	  var classes = [];
+	  var n = elements.length;
+
+	  if (!(0, _assert2.default)(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
+
+	  if (typeof className === 'string') {
+	    classes.push(className);
+	  } else {
+	    classes = className;
+	  }
+
+	  var nClasses = classes.length;
+
+	  for (var i = 0; i < n; i++) {
+	    var e = elements[i];
+
+	    for (var j = 0; j < nClasses; j++) {
+	      var c = classes[j];
+
+	      if (!(0, _assert2.default)(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
+
+	      var regex = new RegExp('^' + c + '\\s+|\\s+' + c, 'g');
+	      e.className = e.className.replace(regex, '');
+	    }
+	  }
+	}
+
+	module.exports = removeClass;
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+
+	'use strict';
+
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _toElementArray = __webpack_require__(26);
+
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * Translates a DOM element.
 	 *
-	 * @param {HTMLElement|HTMLElement[]|Element|Element[]} element - Element(s) to
+	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to
 	 *                                                                perform the
 	 *                                                                translate on.
 	 * @param {Object} [properties] - Translation properties. (if unspecified, all
@@ -5595,22 +6094,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~utils.translate
 	 */
 	function translate(element, properties, constraints) {
-	  var elements = toElementArray(element);
+	  var elements = (0, _toElementArray2.default)(element);
 	  var n = elements.length;
 
 	  if (properties) {
-	    if (!assert(properties.top === undefined || !isNaN(properties.top), 'Top property must be a number.')) return null;
-	    if (!assert(properties.right === undefined || !isNaN(properties.right), 'Right property must be a number.')) return null;
-	    if (!assert(properties.bottom === undefined || !isNaN(properties.bottom), 'Bottom property must be a number.')) return null;
-	    if (!assert(properties.left === undefined || !isNaN(properties.left), 'Left property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.top === undefined || !isNaN(properties.top), 'Top property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.right === undefined || !isNaN(properties.right), 'Right property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.bottom === undefined || !isNaN(properties.bottom), 'Bottom property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.left === undefined || !isNaN(properties.left), 'Left property must be a number.')) return null;
 
 	    var units = properties.units || 'px';
 
 	    if (constraints) {
-	      if (!assert(constraints.top === undefined || !isNaN(constraints.top), 'Top constraint must be a number.')) return null;
-	      if (!assert(constraints.right === undefined || !isNaN(constraints.right), 'Right constraint must be a number.')) return null;
-	      if (!assert(constraints.bottom === undefined || !isNaN(constraints.bottom), 'Bottom constraint must be a number.')) return null;
-	      if (!assert(constraints.left === undefined || !isNaN(constraints.left), 'Left constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.top === undefined || !isNaN(constraints.top), 'Top constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.right === undefined || !isNaN(constraints.right), 'Right constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.bottom === undefined || !isNaN(constraints.bottom), 'Bottom constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.left === undefined || !isNaN(constraints.left), 'Left constraint must be a number.')) return null;
 	    }
 
 	    var top = constraints && constraints.top !== undefined ? Math.min(properties.top, constraints.top) : properties.top;
@@ -5653,7 +6152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = translate;
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5666,13 +6165,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assert = __webpack_require__(6);
-	var toElementArray = __webpack_require__(26);
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _toElementArray = __webpack_require__(26);
+
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * Translates a DOM element.
 	 *
-	 * @param {HTMLElement|HTMLElement[]|Element|Element[]} element - Element(s) to
+	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to
 	 *                                                                perform the
 	 *                                                                3D translation.
 	 * @param {Object} [properties] - Translation properties (if unspecified, all
@@ -5691,20 +6197,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~utils.translate3d
 	 */
 	function translate3d(element, properties, constraints) {
-	  var elements = toElementArray(element);
+	  var elements = (0, _toElementArray2.default)(element);
 	  var n = elements.length;
 
 	  if (properties) {
-	    if (!assert(properties.x === undefined || !isNaN(properties.x), 'X property must be a number.')) return null;
-	    if (!assert(properties.y === undefined || !isNaN(properties.y), 'Y property must be a number.')) return null;
-	    if (!assert(properties.z === undefined || !isNaN(properties.z), 'Z property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.x === undefined || !isNaN(properties.x), 'X property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.y === undefined || !isNaN(properties.y), 'Y property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.z === undefined || !isNaN(properties.z), 'Z property must be a number.')) return null;
 
 	    var units = properties.units || 'px';
 
 	    if (constraints) {
-	      if (!assert(constraints.x === undefined || !isNaN(constraints.x), 'X constraint must be a number.')) return null;
-	      if (!assert(constraints.y === undefined || !isNaN(constraints.y), 'Y constraint must be a number.')) return null;
-	      if (!assert(constraints.z === undefined || !isNaN(constraints.z), 'Z constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.x === undefined || !isNaN(constraints.x), 'X constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.y === undefined || !isNaN(constraints.y), 'Y constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.z === undefined || !isNaN(constraints.z), 'Z constraint must be a number.')) return null;
 	    }
 
 	    var x = constraints && constraints.x !== undefined ? Math.min(properties.x, constraints.x) : properties.x;
@@ -5747,7 +6253,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = translate3d;
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5760,14 +6266,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assert = __webpack_require__(6);
-	var toElementArray = __webpack_require__(26);
-	var getRect = __webpack_require__(42);
+	var _assert = __webpack_require__(6);
+
+	var _assert2 = _interopRequireDefault(_assert);
+
+	var _toElementArray = __webpack_require__(26);
+
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+
+	var _getRect = __webpack_require__(43);
+
+	var _getRect2 = _interopRequireDefault(_getRect);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
 	 * Transforms a DOM element.
 	 *
-	 * @param {HTMLElement|HTMLElement[]|Element|Element[]} element - Element(s) to
+	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to
 	 *                                                                perform the
 	 *                                                                transform on.
 	 * @param {Object} [properties] - Transformation properties. (If unspecified,
@@ -5790,15 +6306,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~utils.transform
 	 */
 	function transform(element, properties, constraints) {
-	  var elements = toElementArray(element);
+	  var elements = (0, _toElementArray2.default)(element);
 	  var n = elements.length;
 
 	  if (properties) {
-	    if (!assert(properties.width === undefined || !isNaN(properties.width), 'Width property must be a number.')) return null;
-	    if (!assert(properties.height === undefined || !isNaN(properties.height), 'Height property must be a number.')) return null;
-	    if (!assert(properties.aspectRatio === undefined || !isNaN(properties.aspectRatio), 'Aspect ratio property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.width === undefined || !isNaN(properties.width), 'Width property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.height === undefined || !isNaN(properties.height), 'Height property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.aspectRatio === undefined || !isNaN(properties.aspectRatio), 'Aspect ratio property must be a number.')) return null;
 
-	    var rect = getRect(element);
+	    var rect = (0, _getRect2.default)(element);
 	    var units = properties.units || 'px';
 	    var aspectRatio = properties.aspectRatio !== undefined ? Number(properties.aspectRatio) : rect.width / rect.height;
 	    var maxW = properties.width;
@@ -5808,8 +6324,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var type = properties.type || 'default';
 
 	    if (constraints && type !== 'default') {
-	      assert(constraints.width === undefined || !isNaN(constraints.width), 'Width constraint must be a number.');
-	      assert(constraints.height === undefined || !isNaN(constraints.height), 'Height constraint must be a number.');
+	      (0, _assert2.default)(constraints.width === undefined || !isNaN(constraints.width), 'Width constraint must be a number.');
+	      (0, _assert2.default)(constraints.height === undefined || !isNaN(constraints.height), 'Height constraint must be a number.');
 
 	      if (type && type === 'cover') {
 	        if (constraints.width !== undefined) minW = Math.min(constraints.width, minW);

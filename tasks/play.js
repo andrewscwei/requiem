@@ -35,11 +35,7 @@ gulp.task('clean:play', function(done) {
  */
 gulp.task('styles:play', function() {
   return gulp.src(config.tasks.play.styles.input)
-    .pipe($sass(config.tasks.play.styles.sass)
-    .on('error', function(err) {
-      $util.log($util.colors.red('[sass] ' + err.message));
-      this.emit('end');
-    }))
+    .pipe($sass(config.tasks.play.styles.sass).on('error', $sass.logError))
     .pipe($postcss([autoprefixer()]))
     .pipe(gulp.dest(config.tasks.play.styles.output));
 });

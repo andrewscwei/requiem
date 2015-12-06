@@ -8,16 +8,16 @@
 
 'use strict';
 
-let toElementArray = require('../helpers/toElementArray');
-let getElementState = require('./getElementState');
-let Directive = require('../types/Directive');
-let Element = require('../ui/Element');
+import toElementArray from '../helpers/toElementArray';
+import getElementState from './getElementState';
+import Directive from '../types/Directive';
+import Element from '../ui/Element';
 
 /**
  * Changes the state of DOM element(s), assumes that state classes are prefixed
  * with 'state-'.
  *
- * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
+ * @param {Node|Node[]|Element|Element[]} element
  * @param {string}                                      state
  *
  * @alias module:requiem~utils.changeElementState

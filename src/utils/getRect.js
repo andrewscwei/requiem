@@ -8,14 +8,14 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let toElementArray = require('../helpers/toElementArray');
-let getViewportRect = require('./getViewportRect');
+import assert from '../helpers/assert';
+import toElementArray from '../helpers/toElementArray';
+import getViewportRect from './getViewportRect';
 
 /**
  * Gets the rect of a given element or the overall rect of an array of elements.
  *
- * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
+ * @param {Node|Node[]|Element|Element[]} element
  * @param {Object}                                      [reference=window]
  *
  * @return {Object} Object containing top, left, bottom, right, width, height.

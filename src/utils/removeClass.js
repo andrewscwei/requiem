@@ -8,13 +8,13 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let toElementArray = require('../helpers/toElementArray');
+import assert from '../helpers/assert';
+import toElementArray from '../helpers/toElementArray';
 
 /**
  * Removes a class(es) from DOM element(s).
  *
- * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
+ * @param {Node|Node[]|Element|Element[]} element
  * @param {string|string[]}                             className
  *
  * @alias module:requiem~utils.removeClass

@@ -8,13 +8,13 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let toElementArray = require('../helpers/toElementArray');
+import assert from '../helpers/assert';
+import toElementArray from '../helpers/toElementArray';
 
 /**
  * Translates a DOM element.
  *
- * @param {HTMLElement|HTMLElement[]|Element|Element[]} element - Element(s) to
+ * @param {Node|Node[]|Element|Element[]} element - Element(s) to
  *                                                                perform the
  *                                                                translate on.
  * @param {Object} [properties] - Translation properties. (if unspecified, all

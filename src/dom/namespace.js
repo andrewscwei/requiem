@@ -8,7 +8,7 @@
 
 'use strict';
 
-let assertType = require('../helpers/assertType');
+import assertType from '../helpers/assertType';
 
 /**
  * Generates a nested namespace in the specified scope, as described by the dot-

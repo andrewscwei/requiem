@@ -8,14 +8,14 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let toElementArray = require('../helpers/toElementArray');
-let hasClass = require('./hasClass');
+import assert from '../helpers/assert';
+import toElementArray from '../helpers/toElementArray';
+import hasClass from './hasClass';
 
 /**
  * Adds a class(es) to DOM element(s).
  *
- * @param {HTMLElement|HTMLElement[]|Element|Element[]} element
+ * @param {Node|Node[]|Element|Element[]} element
  * @param {string|string[]}                             className
  *
  * @alias module:requiem~utils.addClass

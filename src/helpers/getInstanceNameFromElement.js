@@ -13,7 +13,7 @@ let Directive = require('../types/Directive');
 /**
  * Gets the instance name from a DOM element.
  *
- * @param  {HTMLElement} element - The DOM element.
+ * @param  {Node} element - The DOM element.
  *
  * @return {string} The instance name.
  *

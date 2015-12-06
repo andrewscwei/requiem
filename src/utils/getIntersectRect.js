@@ -8,14 +8,14 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let getRect = require('./getRect');
+import assert from '../helpers/assert';
+import getRect from './getRect';
 
 /**
  * Computes the intersecting rect of 2 given elements. If only 1 element is
  * specified, the other element will default to the current viewport.
  *
- * @param {...HTMLElement|...Element} element
+ * @param {...Node|...Element} element
  *
  * @return {Object} Object containing width, height.
  *

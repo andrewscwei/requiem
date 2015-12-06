@@ -8,7 +8,7 @@
 
 'use strict';
 
-let assertType = require('../helpers/assertType');
+import assertType from '../helpers/assertType';
 
 /**
  * Invokes a callback when the DOM is ready.

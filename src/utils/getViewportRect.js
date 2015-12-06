@@ -8,7 +8,7 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
+import assert from '../helpers/assert';
 
 /**
  * Gets the rect of the viewport (FOV).

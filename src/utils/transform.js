@@ -8,14 +8,14 @@
 
 'use strict';
 
-let assert = require('../helpers/assert');
-let toElementArray = require('../helpers/toElementArray');
-let getRect = require('./getRect');
+import assert from '../helpers/assert';
+import toElementArray from '../helpers/toElementArray';
+import getRect from './getRect';
 
 /**
  * Transforms a DOM element.
  *
- * @param {HTMLElement|HTMLElement[]|Element|Element[]} element - Element(s) to
+ * @param {Node|Node[]|Element|Element[]} element - Element(s) to
  *                                                                perform the
  *                                                                transform on.
  * @param {Object} [properties] - Transformation properties. (If unspecified,
