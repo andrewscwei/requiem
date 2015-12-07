@@ -32,7 +32,7 @@ class Video extends Element {
   /**
    * @inheritdoc
    */
-  factory() {
+  render() {
     return document.createElement('video');
   }
 

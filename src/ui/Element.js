@@ -415,7 +415,7 @@ class Element {
    *                          exists another child with the same name, the added
    *                          child will be grouped together with the existing
    *                          child.
-   * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
+   * @param {Object} [classRegistry=window] - Look-up dictionary (object literal)
    *                                           that provides all controller
    *                                           classes when sightreading
    *                                           encounters a controller marked
@@ -423,11 +423,11 @@ class Element {
    *
    * @return {Element|Element[]} The added element(s).
    */
-  addChild(child, name, controllerDict) {
+  addChild(child, name, classRegistry) {
     if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
-    if (!assertType(controllerDict, 'object', true, 'Parameter \'controllerDict\' is invalid')) return null;
+    if (!assertType(classRegistry, 'object', true, 'Parameter \'classRegistry\' is invalid')) return null;
 
-    if (!controllerDict) controllerDict = window;
+    if (!classRegistry) classRegistry = window._classRegistry;
 
     if (child.jquery) {
       return this.addChild(child.get(), name);
@@ -454,7 +454,7 @@ class Element {
         child.removeAttribute(Directive.INSTANCE);
         child.removeAttribute('data-'+Directive.INSTANCE);
         child.setAttribute('data-'+Directive.INSTANCE, name);
-        child = sightread(child, controllerDict);
+        child = sightread(child, classRegistry);
       }
       else {
         if (noval(name)) name = child.name;
@@ -1004,7 +1004,13 @@ class Element {
 
     if (value === '') return true;
     if (value === undefined || value === null) return null;
-    return value;
+
+    try {
+      return JSON.parse(value);
+    }
+    catch (err) {
+      return value;
+    }
   }
 
   /**
@@ -1117,7 +1123,7 @@ class Element {
    *
    * @return {Element}
    */
-  factory() {
+  render() {
     return document.createElement('div');
   }
 
@@ -1158,7 +1164,7 @@ class Element {
     Element.defineProperty(this, 'element', {
       get: (value) => {
         if (!this.__private__.element) {
-          let e = this.factory();
+          let e = this.render();
           if (this.__validate_element(e)) this.__private__.element = e;
         }
         return this.__private__.element;

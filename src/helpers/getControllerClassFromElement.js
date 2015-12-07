@@ -15,20 +15,22 @@ let namespace = require('../dom/namespace');
 /**
  * Gets the controller class from the DOM element.
  *
- * @param  {Node} element
- * @param  {Object}      [controllerDict] - Look-up dictionary (object literal)
- *                                          that provides all controller classes
- *                                          when sightreading encounters a
- *                                          controller marked element.
+ * @param  {Node}   element
+ * @param  {Object} [classRegistry] - Look-up dictionary (object literal) that
+ *                                    provides all controller classes when
+ *                                    sightreading encounters a controller
+ *                                    marked element.
  *
  * @return {Class} The controller class.
  *
  * @alias module:requiem~helpers.getControllerClassFromElement
  */
-function getControllerClassFromElement(element, controllerDict) {
+function getControllerClassFromElement(element, classRegistry) {
+  if (!classRegistry) classRegistry = window._classRegistry;
+
   let controllerClassName = getControllerClassNameFromElement(element);
   let instanceName = getInstanceNameFromElement(element);
-  let controllerClass = (controllerClassName) ? namespace(controllerClassName, controllerDict) : undefined;
+  let controllerClass = (controllerClassName) ? namespace(controllerClassName, classRegistry) : undefined;
 
   // If no controller class is specified but element is marked as an instance,
   // default the controller class to Element.

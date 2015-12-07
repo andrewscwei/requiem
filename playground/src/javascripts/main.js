@@ -7,10 +7,8 @@ import Playground from './components/Playground';
 import Foo from './components/Foo';
 import Bar from './components/Bar';
 
-dom.ready(() => {
-  dom.namespace().Playground = Playground;
-  dom.namespace().Foo = Foo;
-  dom.namespace().Bar = Bar;
+Requiem.register(Playground);
 
+dom.ready(() => {
   let nodes = dom.sightread();
 });

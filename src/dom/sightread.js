@@ -22,9 +22,9 @@ import hasChild from '../utils/hasChild';
  * instance names. Transformations are also applied to the specified DOM node,
  * not just its children.
  *
- * @param {Node}   [element=document]      - Target element for sightreading. By
+ * @param {Node}   [element=document]     - Target element for sightreading. By
  *                                           default this will be the document.
- * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
+ * @param {Object} [classRegistry=window] - Look-up dictionary (object literal)
  *                                           that provides all controller
  *                                           classes when sightreading
  *                                           encounters a controller marked
@@ -40,7 +40,7 @@ import hasChild from '../utils/hasChild';
  */
 function sightread() {
   let element = document;
-  let controllerDict = window;
+  let classRegistry = window._classRegistry;
 
   if (arguments.length === 1) {
     let obj = arguments[0];
@@ -49,7 +49,7 @@ function sightread() {
       element = obj;
     }
     else if (typeof obj === 'object') {
-      controllerDict = obj;
+      classRegistry = obj;
     }
   }
   else if (arguments.length === 2) {
@@ -57,22 +57,22 @@ function sightread() {
     let arg2 = arguments[1];
 
     if (arg1) element = arg1;
-    if (arg2) controllerDict = arg2;
+    if (arg2) classRegistry = arg2;
   }
 
   if (element === document) {
-    return _getChildElements(element, controllerDict);
+    return _getChildElements(element, classRegistry);
   }
   else {
     let instanceName = getInstanceNameFromElement(element);
-    let ControllerClass = getControllerClassFromElement(element, controllerDict);
+    let ControllerClass = getControllerClassFromElement(element, classRegistry);
 
-    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + controllerDict);
+    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + classRegistry);
 
     return new ControllerClass({
       element: element,
       name: instanceName,
-      children: _getChildElements(element, controllerDict)
+      children: _getChildElements(element, classRegistry)
     });
   }
 }
@@ -86,12 +86,12 @@ function sightread() {
  * Element.
  *
  * @param {Node|Element} [element=document]
- * @param {Object}              [controllerDict=window]
+ * @param {Object}       [classRegistry=window]
  *
  * @private
  * @alias module:requiem~dom._getChildElements
  */
-function _getChildElements(element, controllerDict) {
+function _getChildElements(element, classRegistry) {
   let Element = require('../ui/Element');
   let children = null;
 
@@ -107,14 +107,14 @@ function _getChildElements(element, controllerDict) {
   for (let i = 0; i < n; i++) {
     let child = qualifiedChildren[i];
     let instanceName = getInstanceNameFromElement(child);
-    let ControllerClass = getControllerClassFromElement(child, controllerDict);
+    let ControllerClass = getControllerClassFromElement(child, classRegistry);
 
-    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + controllerDict);
+    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + classRegistry);
 
     let m = new ControllerClass({
       element: child,
       name: instanceName,
-      children: _getChildElements(child, controllerDict)
+      children: _getChildElements(child, classRegistry)
     });
 
     if (instanceName && instanceName.length > 0) {

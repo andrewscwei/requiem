@@ -17,7 +17,7 @@ class Foo extends Element {
     super.update();
   }
 
-  factory() {
+  render() {
     return dom.createElement('<div><div data-r-controller="Bar"></div></div>');
   }
 }

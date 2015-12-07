@@ -1,10 +1,11 @@
 extends ../layouts/base
 
 block content
+  - var a = { a: 1, b: 2 }
   main#playground(
     data-r-controller='Playground'
     data-r-instance='playground'
-    data-r-foo='abc'
+    data-r-foo=a
     disabled
   )
     div(data-r-instance='bar')

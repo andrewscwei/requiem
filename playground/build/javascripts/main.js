@@ -64,11 +64,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	_requiem.dom.ready(function () {
-	  _requiem.dom.namespace().Playground = _Playground2.default;
-	  _requiem.dom.namespace().Foo = _Foo2.default;
-	  _requiem.dom.namespace().Bar = _Bar2.default;
+	_requiem2.default.register(_Playground2.default);
 	
+	_requiem.dom.ready(function () {
 	  var nodes = _requiem.dom.sightread();
 	});
 
@@ -165,14 +163,14 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.19.2', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.19.3', writable: false });
 	
 		(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
-		(0, _injectModule2.default)(requiem, 'events', __webpack_require__(28));
-		(0, _injectModule2.default)(requiem, 'net', __webpack_require__(30));
-		(0, _injectModule2.default)(requiem, 'types', __webpack_require__(33));
-		(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(35));
-		(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(36));
+		(0, _injectModule2.default)(requiem, 'events', __webpack_require__(29));
+		(0, _injectModule2.default)(requiem, 'net', __webpack_require__(31));
+		(0, _injectModule2.default)(requiem, 'types', __webpack_require__(34));
+		(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(36));
+		(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(37));
 	
 		(0, _polyfill2.default)();
 	
@@ -282,10 +280,11 @@
 		;
 		var dom = {};
 	
-		Object.defineProperty(dom, 'namespace', { value: __webpack_require__(4), writable: false, enumerable: true });
-		Object.defineProperty(dom, 'ready', { value: __webpack_require__(8), writable: false, enumerable: true });
-		Object.defineProperty(dom, 'sightread', { value: __webpack_require__(9), writable: false, enumerable: true });
-		Object.defineProperty(dom, 'createElement', { value: __webpack_require__(27), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'createElement', { value: __webpack_require__(4), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'namespace', { value: __webpack_require__(8), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'ready', { value: __webpack_require__(9), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'register', { value: __webpack_require__(10), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'sightread', { value: __webpack_require__(12), writable: false, enumerable: true });
 	
 		module.exports = dom;
 	
@@ -310,40 +309,25 @@
 		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 		/**
-		 * Generates a nested namespace in the specified scope, as described by the dot-
-		 * notated namespace path.
+		 * Creates a DOM element from the provided string.
 		 *
-		 * @param {string}        [path]            - Namespace path with keywords
-		 *                                            separated by dots.
-		 * @param {Object|window} [scope=window|{}] - Scope/object to create the nested
-		 *                                            namespace in. If browser
-		 *                                            environment is detected, this
-		 *                                            param will default to window.
-		 *                                            Otherwise it will be an empty
-		 *                                            object literal.
+		 * @param {string} value - String describing the DOM element.
 		 *
-		 * @return {Object} The generated namespace.
+		 * @return {Node} DOM element.
 		 *
-		 * @alias module:requiem~dom.namespace
+		 * @alias module:requiem~dom.createElement
 		 */
-		function namespace(path, scope) {
-		  (0, _assertType2.default)(path, 'string', true, 'Invalid parameter: path');
-		  (0, _assertType2.default)(scope, 'object', true, 'Invalid optional parameter: scope');
+		function createElement(value) {
+		  if (!document) return null;
 	
-		  if (!scope) scope = window ? window : {};
-		  if (path === undefined || path === '') return scope;
+		  (0, _assertType2.default)(value, 'string', true, 'Value must be a string');
 	
-		  var groups = path.split('.');
-		  var currentScope = scope;
-	
-		  for (var i = 0; i < groups.length; i++) {
-		    currentScope = currentScope[groups[i]] || (currentScope[groups[i]] = {});
-		  }
-	
-		  return currentScope;
+		  var div = document.createElement('div');
+		  div.innerHTML = value;
+		  return div.firstChild;
 		}
 	
-		module.exports = namespace;
+		module.exports = createElement;
 	
 	/***/ },
 	/* 5 */
@@ -534,6 +518,62 @@
 		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 		/**
+		 * Generates a nested namespace in the specified scope, as described by the dot-
+		 * notated namespace path.
+		 *
+		 * @param {string}        [path]            - Namespace path with keywords
+		 *                                            separated by dots.
+		 * @param {Object|window} [scope=window|{}] - Scope/object to create the nested
+		 *                                            namespace in. If browser
+		 *                                            environment is detected, this
+		 *                                            param will default to window.
+		 *                                            Otherwise it will be an empty
+		 *                                            object literal.
+		 *
+		 * @return {Object} The generated namespace.
+		 *
+		 * @alias module:requiem~dom.namespace
+		 */
+		function namespace(path, scope) {
+		  (0, _assertType2.default)(path, 'string', true, 'Invalid parameter: path');
+		  (0, _assertType2.default)(scope, 'object', true, 'Invalid optional parameter: scope');
+	
+		  if (!scope) scope = window ? window : {};
+		  if (path === undefined || path === '') return scope;
+	
+		  var groups = path.split('.');
+		  var currentScope = scope;
+	
+		  for (var i = 0; i < groups.length; i++) {
+		    currentScope = currentScope[groups[i]] || (currentScope[groups[i]] = {});
+		  }
+	
+		  return currentScope;
+		}
+	
+		module.exports = namespace;
+	
+	/***/ },
+	/* 9 */
+	/***/ function(module, exports, __webpack_require__) {
+	
+		/**
+		 * Requiem
+		 * (c) VARIANTE (http://variante.io)
+		 *
+		 * This software is released under the MIT License:
+		 * http://www.opensource.org/licenses/mit-license.php
+		 */
+	
+		'use strict';
+	
+		var _assertType = __webpack_require__(5);
+	
+		var _assertType2 = _interopRequireDefault(_assertType);
+	
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+		/**
 		 * Invokes a callback when the DOM is ready.
 		 *
 		 * @param {Function} callback - Function invoked when the DOM is ready.
@@ -575,7 +615,101 @@
 		module.exports = ready;
 	
 	/***/ },
-	/* 9 */
+	/* 10 */
+	/***/ function(module, exports, __webpack_require__) {
+	
+		/**
+		 * Requiem
+		 * (c) VARIANTE (http://variante.io)
+		 *
+		 * This software is released under the MIT License:
+		 * http://www.opensource.org/licenses/mit-license.php
+		 */
+	
+		'use strict';
+	
+		var _namespace = __webpack_require__(8);
+	
+		var _namespace2 = _interopRequireDefault(_namespace);
+	
+		var _assert = __webpack_require__(6);
+	
+		var _assert2 = _interopRequireDefault(_assert);
+	
+		var _assertType = __webpack_require__(5);
+	
+		var _assertType2 = _interopRequireDefault(_assertType);
+	
+		var _getFunctionName = __webpack_require__(11);
+	
+		var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
+	
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+		/**
+		 * Registers a controller class with Requiem to be used for instantiating
+		 * custom elements during the sighreading process.
+		 *
+		 * @param {Class}  c   - Class to be registered.
+		 * @param {string} [n] - Namespace of class.
+		 *
+		 * @return {Class} The registered class.
+		 *
+		 * @alias module:requiem~dom.register
+		 */
+		function register(c, n) {
+		  (0, _assertType2.default)(c, 'function', false, 'Invalid class provided');
+		  (0, _assertType2.default)(n, 'string', true, 'Invalid optional parameter: namespace');
+	
+		  if (window._classRegistry === undefined) window._classRegistry = {};
+	
+		  var className = (0, _getFunctionName2.default)(c);
+	
+		  if (!(0, _assert2.default)((0, _namespace2.default)(n, window._classRegistry)[className] === undefined, 'Class name ' + className + ' is already registered')) return;
+	
+		  (0, _namespace2.default)(n, window._classRegistry)[className] = c;
+	
+		  return c;
+		}
+	
+		module.exports = register;
+	
+	/***/ },
+	/* 11 */
+	/***/ function(module, exports) {
+	
+		/**
+		 * Requiem
+		 * (c) VARIANTE (http://variante.io)
+		 *
+		 * This software is released under the MIT License:
+		 * http://www.opensource.org/licenses/mit-license.php
+		 */
+	
+		'use strict'
+	
+		/**
+		 * Gets the name of a function/class.
+		 *
+		 * @param  {Function} f - The function/class.
+		 *
+		 * @return {string} Name of the function/class.
+		 */
+		;
+		function getFunctionName(f) {
+		  if (!f) return;
+		  if (f.name) return f.name;
+	
+		  var regex = /function\s([^(]{1,})\(/;
+		  var name = regex.exec(f.toString());
+	
+		  return name && name.length > 1 ? name[1].trim() : '';
+		}
+	
+		module.exports = getFunctionName;
+	
+	/***/ },
+	/* 12 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -596,23 +730,23 @@
 	
 		var _assertType2 = _interopRequireDefault(_assertType);
 	
-		var _getInstanceNameFromElement = __webpack_require__(10);
+		var _getInstanceNameFromElement = __webpack_require__(13);
 	
 		var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
 	
-		var _getControllerClassFromElement = __webpack_require__(12);
+		var _getControllerClassFromElement = __webpack_require__(15);
 	
 		var _getControllerClassFromElement2 = _interopRequireDefault(_getControllerClassFromElement);
 	
-		var _getControllerClassNameFromElement = __webpack_require__(13);
+		var _getControllerClassNameFromElement = __webpack_require__(16);
 	
 		var _getControllerClassNameFromElement2 = _interopRequireDefault(_getControllerClassNameFromElement);
 	
-		var _Directive = __webpack_require__(11);
+		var _Directive = __webpack_require__(14);
 	
 		var _Directive2 = _interopRequireDefault(_Directive);
 	
-		var _hasChild = __webpack_require__(25);
+		var _hasChild = __webpack_require__(27);
 	
 		var _hasChild2 = _interopRequireDefault(_hasChild);
 	
@@ -628,9 +762,9 @@
 		 * instance names. Transformations are also applied to the specified DOM node,
 		 * not just its children.
 		 *
-		 * @param {Node}   [element=document]      - Target element for sightreading. By
+		 * @param {Node}   [element=document]     - Target element for sightreading. By
 		 *                                           default this will be the document.
-		 * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
+		 * @param {Object} [classRegistry=window] - Look-up dictionary (object literal)
 		 *                                           that provides all controller
 		 *                                           classes when sightreading
 		 *                                           encounters a controller marked
@@ -646,7 +780,7 @@
 		 */
 		function sightread() {
 		  var element = document;
-		  var controllerDict = window;
+		  var classRegistry = window._classRegistry;
 	
 		  if (arguments.length === 1) {
 		    var obj = arguments[0];
@@ -654,28 +788,28 @@
 		    if (_instanceof(obj, Node)) {
 		      element = obj;
 		    } else if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object') {
-		      controllerDict = obj;
+		      classRegistry = obj;
 		    }
 		  } else if (arguments.length === 2) {
 		    var arg1 = arguments[0];
 		    var arg2 = arguments[1];
 	
 		    if (arg1) element = arg1;
-		    if (arg2) controllerDict = arg2;
+		    if (arg2) classRegistry = arg2;
 		  }
 	
 		  if (element === document) {
-		    return _getChildElements(element, controllerDict);
+		    return _getChildElements(element, classRegistry);
 		  } else {
 		    var instanceName = (0, _getInstanceNameFromElement2.default)(element);
-		    var ControllerClass = (0, _getControllerClassFromElement2.default)(element, controllerDict);
+		    var ControllerClass = (0, _getControllerClassFromElement2.default)(element, classRegistry);
 	
-		    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(element) + '\' is not found in specified controller scope: ' + controllerDict);
+		    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(element) + '\' is not found in specified controller scope: ' + classRegistry);
 	
 		    return new ControllerClass({
 		      element: element,
 		      name: instanceName,
-		      children: _getChildElements(element, controllerDict)
+		      children: _getChildElements(element, classRegistry)
 		    });
 		  }
 		}
@@ -689,13 +823,13 @@
 		 * Element.
 		 *
 		 * @param {Node|Element} [element=document]
-		 * @param {Object}              [controllerDict=window]
+		 * @param {Object}       [classRegistry=window]
 		 *
 		 * @private
 		 * @alias module:requiem~dom._getChildElements
 		 */
-		function _getChildElements(element, controllerDict) {
-		  var Element = __webpack_require__(14);
+		function _getChildElements(element, classRegistry) {
+		  var Element = __webpack_require__(17);
 		  var children = null;
 	
 		  if (!element) element = document;
@@ -710,14 +844,14 @@
 		  for (var i = 0; i < n; i++) {
 		    var child = qualifiedChildren[i];
 		    var instanceName = (0, _getInstanceNameFromElement2.default)(child);
-		    var ControllerClass = (0, _getControllerClassFromElement2.default)(child, controllerDict);
+		    var ControllerClass = (0, _getControllerClassFromElement2.default)(child, classRegistry);
 	
-		    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(child) + '\' is not found in specified controller scope: ' + controllerDict);
+		    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(child) + '\' is not found in specified controller scope: ' + classRegistry);
 	
 		    var m = new ControllerClass({
 		      element: child,
 		      name: instanceName,
-		      children: _getChildElements(child, controllerDict)
+		      children: _getChildElements(child, classRegistry)
 		    });
 	
 		    if (instanceName && instanceName.length > 0) {
@@ -781,7 +915,7 @@
 		module.exports = sightread;
 	
 	/***/ },
-	/* 10 */
+	/* 13 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -794,7 +928,7 @@
 	
 		'use strict';
 	
-		var Directive = __webpack_require__(11);
+		var Directive = __webpack_require__(14);
 	
 		/**
 		 * Gets the instance name from a DOM element.
@@ -812,7 +946,7 @@
 		module.exports = getInstanceNameFromElement;
 	
 	/***/ },
-	/* 11 */
+	/* 14 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -861,7 +995,7 @@
 		module.exports = Directive;
 	
 	/***/ },
-	/* 12 */
+	/* 15 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -874,42 +1008,44 @@
 	
 		'use strict';
 	
-		var getControllerClassNameFromElement = __webpack_require__(13);
-		var getInstanceNameFromElement = __webpack_require__(10);
-		var namespace = __webpack_require__(4);
+		var getControllerClassNameFromElement = __webpack_require__(16);
+		var getInstanceNameFromElement = __webpack_require__(13);
+		var namespace = __webpack_require__(8);
 	
 		/**
 		 * Gets the controller class from the DOM element.
 		 *
-		 * @param  {Node} element
-		 * @param  {Object}      [controllerDict] - Look-up dictionary (object literal)
-		 *                                          that provides all controller classes
-		 *                                          when sightreading encounters a
-		 *                                          controller marked element.
+		 * @param  {Node}   element
+		 * @param  {Object} [classRegistry] - Look-up dictionary (object literal) that
+		 *                                    provides all controller classes when
+		 *                                    sightreading encounters a controller
+		 *                                    marked element.
 		 *
 		 * @return {Class} The controller class.
 		 *
 		 * @alias module:requiem~helpers.getControllerClassFromElement
 		 */
-		function getControllerClassFromElement(element, controllerDict) {
+		function getControllerClassFromElement(element, classRegistry) {
+		  if (!classRegistry) classRegistry = window._classRegistry;
+	
 		  var controllerClassName = getControllerClassNameFromElement(element);
 		  var instanceName = getInstanceNameFromElement(element);
-		  var controllerClass = controllerClassName ? namespace(controllerClassName, controllerDict) : undefined;
+		  var controllerClass = controllerClassName ? namespace(controllerClassName, classRegistry) : undefined;
 	
 		  // If no controller class is specified but element is marked as an instance,
 		  // default the controller class to Element.
 		  if (!controllerClass && instanceName && instanceName.length > 0) {
-		    controllerClass = __webpack_require__(14);
+		    controllerClass = __webpack_require__(17);
 		  } else if (typeof controllerClass !== 'function') {
 		    switch (controllerClassName) {
 		      case 'Video':
 		        {
-		          controllerClass = __webpack_require__(24);
+		          controllerClass = __webpack_require__(26);
 		          break;
 		        }
 		      case 'Element':
 		        {
-		          controllerClass = __webpack_require__(14);
+		          controllerClass = __webpack_require__(17);
 		          break;
 		        }
 		      default:
@@ -926,7 +1062,7 @@
 		module.exports = getControllerClassFromElement;
 	
 	/***/ },
-	/* 13 */
+	/* 16 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -939,7 +1075,7 @@
 	
 		'use strict';
 	
-		var Directive = __webpack_require__(11);
+		var Directive = __webpack_require__(14);
 	
 		/**
 		 * Gets the controller class name from the DOM element.
@@ -957,7 +1093,7 @@
 		module.exports = getControllerClassNameFromElement;
 	
 	/***/ },
-	/* 14 */
+	/* 17 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -980,47 +1116,47 @@
 	
 		var _assertType2 = _interopRequireDefault(_assertType);
 	
-		var _noval = __webpack_require__(15);
+		var _noval = __webpack_require__(18);
 	
 		var _noval2 = _interopRequireDefault(_noval);
 	
-		var _getFunctionName = __webpack_require__(16);
+		var _getFunctionName = __webpack_require__(11);
 	
 		var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
 	
-		var _log = __webpack_require__(17);
+		var _log = __webpack_require__(19);
 	
 		var _log2 = _interopRequireDefault(_log);
 	
-		var _validateAttribute = __webpack_require__(18);
+		var _validateAttribute = __webpack_require__(20);
 	
 		var _validateAttribute2 = _interopRequireDefault(_validateAttribute);
 	
-		var _getInstanceNameFromElement = __webpack_require__(10);
+		var _getInstanceNameFromElement = __webpack_require__(13);
 	
 		var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
 	
-		var _DirtyType = __webpack_require__(19);
+		var _DirtyType = __webpack_require__(21);
 	
 		var _DirtyType2 = _interopRequireDefault(_DirtyType);
 	
-		var _NodeState = __webpack_require__(20);
+		var _NodeState = __webpack_require__(22);
 	
 		var _NodeState2 = _interopRequireDefault(_NodeState);
 	
-		var _EventType = __webpack_require__(21);
+		var _EventType = __webpack_require__(23);
 	
 		var _EventType2 = _interopRequireDefault(_EventType);
 	
-		var _Directive = __webpack_require__(11);
+		var _Directive = __webpack_require__(14);
 	
 		var _Directive2 = _interopRequireDefault(_Directive);
 	
-		var _ElementUpdateDelegate = __webpack_require__(22);
+		var _ElementUpdateDelegate = __webpack_require__(24);
 	
 		var _ElementUpdateDelegate2 = _interopRequireDefault(_ElementUpdateDelegate);
 	
-		var _sightread = __webpack_require__(9);
+		var _sightread = __webpack_require__(12);
 	
 		var _sightread2 = _interopRequireDefault(_sightread);
 	
@@ -1317,7 +1453,7 @@
 		     *                          exists another child with the same name, the added
 		     *                          child will be grouped together with the existing
 		     *                          child.
-		     * @param {Object} [controllerDict=window] - Look-up dictionary (object literal)
+		     * @param {Object} [classRegistry=window] - Look-up dictionary (object literal)
 		     *                                           that provides all controller
 		     *                                           classes when sightreading
 		     *                                           encounters a controller marked
@@ -1328,11 +1464,11 @@
 	
 		  }, {
 		    key: 'addChild',
-		    value: function addChild(child, name, controllerDict) {
+		    value: function addChild(child, name, classRegistry) {
 		      if (!(0, _assert2.default)(child !== undefined, 'Parameter \'child\' must be specified')) return null;
-		      if (!(0, _assertType2.default)(controllerDict, 'object', true, 'Parameter \'controllerDict\' is invalid')) return null;
+		      if (!(0, _assertType2.default)(classRegistry, 'object', true, 'Parameter \'classRegistry\' is invalid')) return null;
 	
-		      if (!controllerDict) controllerDict = window;
+		      if (!classRegistry) classRegistry = window._classRegistry;
 	
 		      if (child.jquery) {
 		        return this.addChild(child.get(), name);
@@ -1357,7 +1493,7 @@
 		          child.removeAttribute(_Directive2.default.INSTANCE);
 		          child.removeAttribute('data-' + _Directive2.default.INSTANCE);
 		          child.setAttribute('data-' + _Directive2.default.INSTANCE, name);
-		          child = (0, _sightread2.default)(child, controllerDict);
+		          child = (0, _sightread2.default)(child, classRegistry);
 		        } else {
 		          if ((0, _noval2.default)(name)) name = child.name;
 		          if (!(0, _assert2.default)(!(0, _noval2.default)(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
@@ -1933,7 +2069,12 @@
 	
 		      if (value === '') return true;
 		      if (value === undefined || value === null) return null;
-		      return value;
+	
+		      try {
+		        return JSON.parse(value);
+		      } catch (err) {
+		        return value;
+		      }
 		    }
 	
 		    /**
@@ -2067,8 +2208,8 @@
 		     */
 	
 		  }, {
-		    key: 'factory',
-		    value: function factory() {
+		    key: 'render',
+		    value: function render() {
 		      return document.createElement('div');
 		    }
 	
@@ -2123,7 +2264,7 @@
 		      Element.defineProperty(this, 'element', {
 		        get: function get(value) {
 		          if (!_this2.__private__.element) {
-		            var e = _this2.factory();
+		            var e = _this2.render();
 		            if (_this2.__validate_element(e)) _this2.__private__.element = e;
 		          }
 		          return _this2.__private__.element;
@@ -2297,7 +2438,7 @@
 		      Element.defineProperty(this, 'hidden', {
 		        get: true,
 		        set: function set(value) {
-		          (0, _assertType2.default)(value, 'boolean', false);
+		          (0, _assertType2.default)(value, 'boolean', true);
 	
 		          if (value) {
 		            _this2.setStyle('display', 'none');
@@ -2516,7 +2657,7 @@
 		module.exports = Element;
 	
 	/***/ },
-	/* 15 */
+	/* 18 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -2584,41 +2725,7 @@
 		module.exports = noval;
 	
 	/***/ },
-	/* 16 */
-	/***/ function(module, exports) {
-	
-		/**
-		 * Requiem
-		 * (c) VARIANTE (http://variante.io)
-		 *
-		 * This software is released under the MIT License:
-		 * http://www.opensource.org/licenses/mit-license.php
-		 */
-	
-		'use strict'
-	
-		/**
-		 * Gets the name of a function/class.
-		 *
-		 * @param  {Function} f - The function/class.
-		 *
-		 * @return {string} Name of the function/class.
-		 */
-		;
-		function getFunctionName(f) {
-		  if (!f) return;
-		  if (f.name) return f.name;
-	
-		  var regex = /function\s([^(]{1,})\(/;
-		  var name = regex.exec(f.toString());
-	
-		  return name && name.length > 1 ? name[1].trim() : '';
-		}
-	
-		module.exports = getFunctionName;
-	
-	/***/ },
-	/* 17 */
+	/* 19 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -2649,7 +2756,7 @@
 		module.exports = log;
 	
 	/***/ },
-	/* 18 */
+	/* 20 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -2662,7 +2769,7 @@
 	
 		'use strict';
 	
-		var Directive = __webpack_require__(11);
+		var Directive = __webpack_require__(14);
 	
 		/**
 		 * Validates whether an attribute can be used (could be reserved by Requiem).
@@ -2685,7 +2792,7 @@
 		module.exports = validateAttribute;
 	
 	/***/ },
-	/* 19 */
+	/* 21 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -2831,7 +2938,7 @@
 		module.exports = DirtyType;
 	
 	/***/ },
-	/* 20 */
+	/* 22 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -2904,7 +3011,7 @@
 		module.exports = NodeState;
 	
 	/***/ },
-	/* 21 */
+	/* 23 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -3056,7 +3163,7 @@
 		module.exports = EventType;
 	
 	/***/ },
-	/* 22 */
+	/* 24 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -3071,19 +3178,19 @@
 	
 		var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-		var _debounce = __webpack_require__(23);
+		var _debounce = __webpack_require__(25);
 	
 		var _debounce2 = _interopRequireDefault(_debounce);
 	
-		var _log = __webpack_require__(17);
+		var _log = __webpack_require__(19);
 	
 		var _log2 = _interopRequireDefault(_log);
 	
-		var _DirtyType = __webpack_require__(19);
+		var _DirtyType = __webpack_require__(21);
 	
 		var _DirtyType2 = _interopRequireDefault(_DirtyType);
 	
-		var _EventType = __webpack_require__(21);
+		var _EventType = __webpack_require__(23);
 	
 		var _EventType2 = _interopRequireDefault(_EventType);
 	
@@ -3664,7 +3771,7 @@
 		module.exports = ElementUpdateDelegate;
 	
 	/***/ },
-	/* 23 */
+	/* 25 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -3730,7 +3837,7 @@
 		module.exports = debounce;
 	
 	/***/ },
-	/* 24 */
+	/* 26 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -3751,11 +3858,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _DirtyType = __webpack_require__(19);
+		var _DirtyType = __webpack_require__(21);
 	
 		var _DirtyType2 = _interopRequireDefault(_DirtyType);
 	
-		var _Element2 = __webpack_require__(14);
+		var _Element2 = __webpack_require__(17);
 	
 		var _Element3 = _interopRequireDefault(_Element2);
 	
@@ -3803,8 +3910,8 @@
 		     */
 	
 		  }, {
-		    key: 'factory',
-		    value: function factory() {
+		    key: 'render',
+		    value: function render() {
 		      return document.createElement('video');
 		    }
 	
@@ -3986,7 +4093,7 @@
 		module.exports = Video;
 	
 	/***/ },
-	/* 25 */
+	/* 27 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4003,7 +4110,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(26);
+		var _toElementArray = __webpack_require__(28);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -4046,7 +4153,7 @@
 		module.exports = hasChild;
 	
 	/***/ },
-	/* 26 */
+	/* 28 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4074,7 +4181,7 @@
 		function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 	
 		function toElementArray(element, keepElement) {
-		  var Element = __webpack_require__(14);
+		  var Element = __webpack_require__(17);
 	
 		  if (!element) return null;
 	
@@ -4114,48 +4221,7 @@
 		module.exports = toElementArray;
 	
 	/***/ },
-	/* 27 */
-	/***/ function(module, exports, __webpack_require__) {
-	
-		/**
-		 * Requiem
-		 * (c) VARIANTE (http://variante.io)
-		 *
-		 * This software is released under the MIT License:
-		 * http://www.opensource.org/licenses/mit-license.php
-		 */
-	
-		'use strict';
-	
-		var _assertType = __webpack_require__(5);
-	
-		var _assertType2 = _interopRequireDefault(_assertType);
-	
-		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-		/**
-		 * Creates a DOM element from the provided string.
-		 *
-		 * @param {string} value - String describing the DOM element.
-		 *
-		 * @return {Node} DOM element.
-		 *
-		 * @alias module:requiem~dom.createElement
-		 */
-		function createElement(value) {
-		  if (!document) return null;
-	
-		  (0, _assertType2.default)(value, 'string', true, 'Value must be a string');
-	
-		  var div = document.createElement('div');
-		  div.innerHTML = value;
-		  return div.firstChild;
-		}
-	
-		module.exports = createElement;
-	
-	/***/ },
-	/* 28 */
+	/* 29 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4176,12 +4242,12 @@
 		;
 		var events = {};
 	
-		Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(29), writable: false, enumerable: true });
+		Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(30), writable: false, enumerable: true });
 	
 		module.exports = events;
 	
 	/***/ },
-	/* 29 */
+	/* 30 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4204,7 +4270,7 @@
 	
 		var _assertType2 = _interopRequireDefault(_assertType);
 	
-		var _log = __webpack_require__(17);
+		var _log = __webpack_require__(19);
 	
 		var _log2 = _interopRequireDefault(_log);
 	
@@ -4362,7 +4428,7 @@
 		module.exports = EventDispatcher;
 	
 	/***/ },
-	/* 30 */
+	/* 31 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4383,12 +4449,12 @@
 		;
 		var net = {};
 	
-		Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(31), writable: false, enumerable: true });
+		Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(32), writable: false, enumerable: true });
 	
 		module.exports = net;
 	
 	/***/ },
-	/* 31 */
+	/* 32 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4409,19 +4475,19 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _inherit = __webpack_require__(32);
+		var _inherit = __webpack_require__(33);
 	
 		var _inherit2 = _interopRequireDefault(_inherit);
 	
-		var _log = __webpack_require__(17);
+		var _log = __webpack_require__(19);
 	
 		var _log2 = _interopRequireDefault(_log);
 	
-		var _EventDispatcher2 = __webpack_require__(29);
+		var _EventDispatcher2 = __webpack_require__(30);
 	
 		var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
 	
-		var _EventType = __webpack_require__(21);
+		var _EventType = __webpack_require__(23);
 	
 		var _EventType2 = _interopRequireDefault(_EventType);
 	
@@ -5105,7 +5171,7 @@
 		module.exports = AssetLoader;
 	
 	/***/ },
-	/* 32 */
+	/* 33 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5153,7 +5219,7 @@
 		module.exports = inherit;
 	
 	/***/ },
-	/* 33 */
+	/* 34 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5174,16 +5240,16 @@
 		;
 		var types = {};
 	
-		Object.defineProperty(types, 'Directive', { value: __webpack_require__(11), writable: false, enumerable: true });
-		Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(19), writable: false, enumerable: true });
-		Object.defineProperty(types, 'EventType', { value: __webpack_require__(21), writable: false, enumerable: true });
-		Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(34), writable: false, enumerable: true });
-		Object.defineProperty(types, 'NodeState', { value: __webpack_require__(20), writable: false, enumerable: true });
+		Object.defineProperty(types, 'Directive', { value: __webpack_require__(14), writable: false, enumerable: true });
+		Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(21), writable: false, enumerable: true });
+		Object.defineProperty(types, 'EventType', { value: __webpack_require__(23), writable: false, enumerable: true });
+		Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(35), writable: false, enumerable: true });
+		Object.defineProperty(types, 'NodeState', { value: __webpack_require__(22), writable: false, enumerable: true });
 	
 		module.exports = types;
 	
 	/***/ },
-	/* 34 */
+	/* 35 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -5310,7 +5376,7 @@
 		module.exports = KeyCode;
 	
 	/***/ },
-	/* 35 */
+	/* 36 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5331,14 +5397,14 @@
 		;
 		var ui = {};
 	
-		Object.defineProperty(ui, 'Element', { value: __webpack_require__(14), writable: false, enumerable: true });
-		Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(22), writable: false, enumerable: true });
-		Object.defineProperty(ui, 'Video', { value: __webpack_require__(24), writable: false, enumerable: true });
+		Object.defineProperty(ui, 'Element', { value: __webpack_require__(17), writable: false, enumerable: true });
+		Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(24), writable: false, enumerable: true });
+		Object.defineProperty(ui, 'Video', { value: __webpack_require__(26), writable: false, enumerable: true });
 	
 		module.exports = ui;
 	
 	/***/ },
-	/* 36 */
+	/* 37 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5359,26 +5425,26 @@
 		;
 		var utils = {};
 	
-		Object.defineProperty(utils, 'addClass', { value: __webpack_require__(37), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(40), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(38), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(25), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(39), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(41), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(42), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getRect', { value: __webpack_require__(43), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(44), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(45), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(46), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(47), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'translate', { value: __webpack_require__(48), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(49), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'transform', { value: __webpack_require__(50), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'addClass', { value: __webpack_require__(38), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(41), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(39), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(27), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(40), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(42), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(43), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getRect', { value: __webpack_require__(44), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(45), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(46), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(47), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(48), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'translate', { value: __webpack_require__(49), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(50), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'transform', { value: __webpack_require__(51), writable: false, enumerable: true });
 	
 		module.exports = utils;
 	
 	/***/ },
-	/* 37 */
+	/* 38 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5395,11 +5461,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(26);
+		var _toElementArray = __webpack_require__(28);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-		var _hasClass = __webpack_require__(38);
+		var _hasClass = __webpack_require__(39);
 	
 		var _hasClass2 = _interopRequireDefault(_hasClass);
 	
@@ -5447,7 +5513,7 @@
 		module.exports = addClass;
 	
 	/***/ },
-	/* 38 */
+	/* 39 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5464,11 +5530,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(26);
+		var _toElementArray = __webpack_require__(28);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-		var _getClassIndex = __webpack_require__(39);
+		var _getClassIndex = __webpack_require__(40);
 	
 		var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
 	
@@ -5501,7 +5567,7 @@
 		module.exports = hasClass;
 	
 	/***/ },
-	/* 39 */
+	/* 40 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5518,7 +5584,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _Element = __webpack_require__(14);
+		var _Element = __webpack_require__(17);
 	
 		var _Element2 = _interopRequireDefault(_Element);
 	
@@ -5551,7 +5617,7 @@
 		module.exports = getClassIndex;
 	
 	/***/ },
-	/* 40 */
+	/* 41 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5564,19 +5630,19 @@
 	
 		'use strict';
 	
-		var _toElementArray = __webpack_require__(26);
+		var _toElementArray = __webpack_require__(28);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-		var _getElementState = __webpack_require__(41);
+		var _getElementState = __webpack_require__(42);
 	
 		var _getElementState2 = _interopRequireDefault(_getElementState);
 	
-		var _Directive = __webpack_require__(11);
+		var _Directive = __webpack_require__(14);
 	
 		var _Directive2 = _interopRequireDefault(_Directive);
 	
-		var _Element = __webpack_require__(14);
+		var _Element = __webpack_require__(17);
 	
 		var _Element2 = _interopRequireDefault(_Element);
 	
@@ -5616,7 +5682,7 @@
 		module.exports = changeElementState;
 	
 	/***/ },
-	/* 41 */
+	/* 42 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5633,11 +5699,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _Directive = __webpack_require__(11);
+		var _Directive = __webpack_require__(14);
 	
 		var _Directive2 = _interopRequireDefault(_Directive);
 	
-		var _Element = __webpack_require__(14);
+		var _Element = __webpack_require__(17);
 	
 		var _Element2 = _interopRequireDefault(_Element);
 	
@@ -5678,7 +5744,7 @@
 		module.exports = getElementState;
 	
 	/***/ },
-	/* 42 */
+	/* 43 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5695,7 +5761,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _getRect = __webpack_require__(43);
+		var _getRect = __webpack_require__(44);
 	
 		var _getRect2 = _interopRequireDefault(_getRect);
 	
@@ -5762,7 +5828,7 @@
 		module.exports = getIntersectRect;
 	
 	/***/ },
-	/* 43 */
+	/* 44 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5779,11 +5845,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(26);
+		var _toElementArray = __webpack_require__(28);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-		var _getViewportRect = __webpack_require__(44);
+		var _getViewportRect = __webpack_require__(45);
 	
 		var _getViewportRect2 = _interopRequireDefault(_getViewportRect);
 	
@@ -5864,7 +5930,7 @@
 		module.exports = getRect;
 	
 	/***/ },
-	/* 44 */
+	/* 45 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5909,7 +5975,7 @@
 		module.exports = getViewportRect;
 	
 	/***/ },
-	/* 45 */
+	/* 46 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5926,11 +5992,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _getIntersectRect = __webpack_require__(42);
+		var _getIntersectRect = __webpack_require__(43);
 	
 		var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
-		var _getRect = __webpack_require__(43);
+		var _getRect = __webpack_require__(44);
 	
 		var _getRect2 = _interopRequireDefault(_getRect);
 	
@@ -5984,7 +6050,7 @@
 		module.exports = hitTestElement;
 	
 	/***/ },
-	/* 46 */
+	/* 47 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6001,7 +6067,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _getIntersectRect = __webpack_require__(42);
+		var _getIntersectRect = __webpack_require__(43);
 	
 		var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
@@ -6062,7 +6128,7 @@
 		module.exports = hitTestRect;
 	
 	/***/ },
-	/* 47 */
+	/* 48 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6079,7 +6145,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(26);
+		var _toElementArray = __webpack_require__(28);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -6127,7 +6193,7 @@
 		module.exports = removeClass;
 	
 	/***/ },
-	/* 48 */
+	/* 49 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6144,7 +6210,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(26);
+		var _toElementArray = __webpack_require__(28);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -6232,7 +6298,7 @@
 		module.exports = translate;
 	
 	/***/ },
-	/* 49 */
+	/* 50 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6249,7 +6315,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(26);
+		var _toElementArray = __webpack_require__(28);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -6333,7 +6399,7 @@
 		module.exports = translate3d;
 	
 	/***/ },
-	/* 50 */
+	/* 51 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6350,11 +6416,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(26);
+		var _toElementArray = __webpack_require__(28);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-		var _getRect = __webpack_require__(43);
+		var _getRect = __webpack_require__(44);
 	
 		var _getRect2 = _interopRequireDefault(_getRect);
 	
@@ -6529,10 +6595,8 @@
 	      this.respondsTo(10.0, _requiem.EventType.OBJECT.SCROLL);
 	      this.addChild(foo);
 	
-	      this.setProperties({ foo: 'foo', bar: 'bar' });
-	
+	      console.log(this.properties.foo);
 	      var bar = {};
-	      console.log(this.constructor === Object);
 	
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
 	    }
@@ -6599,8 +6663,8 @@
 	      _get(Object.getPrototypeOf(Foo.prototype), 'update', this).call(this);
 	    }
 	  }, {
-	    key: 'factory',
-	    value: function factory() {
+	    key: 'render',
+	    value: function render() {
 	      return _requiem.dom.createElement('<div><div data-r-controller="Bar"></div></div>');
 	    }
 	  }]);
