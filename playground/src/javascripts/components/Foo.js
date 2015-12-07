@@ -10,6 +10,7 @@ class Foo extends Element {
     this.setStyle('backgroundColor', '#000');
 
     this.addEventListener(EventType.MOUSE.CLICK, (event) => this.dispatchEvent(new Event(EventType.DATA.DATA_CHANGE)));
+
     super.init();
   }
 
@@ -18,7 +19,7 @@ class Foo extends Element {
   }
 
   render() {
-    return dom.createElement('<div><div data-r-controller="Bar"></div></div>');
+    return dom.createElement('<div><div data-class="Bar"></div></div>');
   }
 }
 

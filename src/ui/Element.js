@@ -83,7 +83,7 @@ class Element {
     // and generate properties from them.
     let attributes = this.element.attributes;
     let nAtributes = attributes.length;
-    let regex = new RegExp('^' + Directive.PROPERTY + '-' + '|^data-' + Directive.PROPERTY + '-', 'i');
+    let regex = new RegExp('^' + Directive.PROPERTY + '-', 'i');
 
     for (let i = 0; i < nAtributes; i++) {
       let attribute = attributes[i];
@@ -415,19 +415,11 @@ class Element {
    *                          exists another child with the same name, the added
    *                          child will be grouped together with the existing
    *                          child.
-   * @param {Object} [classRegistry=window] - Look-up dictionary (object literal)
-   *                                           that provides all controller
-   *                                           classes when sightreading
-   *                                           encounters a controller marked
-   *                                           element.
    *
    * @return {Element|Element[]} The added element(s).
    */
-  addChild(child, name, classRegistry) {
+  addChild(child, name) {
     if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
-    if (!assertType(classRegistry, 'object', true, 'Parameter \'classRegistry\' is invalid')) return null;
-
-    if (!classRegistry) classRegistry = window._classRegistry;
 
     if (child.jquery) {
       return this.addChild(child.get(), name);
@@ -452,9 +444,8 @@ class Element {
         if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
 
         child.removeAttribute(Directive.INSTANCE);
-        child.removeAttribute('data-'+Directive.INSTANCE);
-        child.setAttribute('data-'+Directive.INSTANCE, name);
-        child = sightread(child, classRegistry);
+        child.setAttribute(Directive.INSTANCE, name);
+        child = sightread(child);
       }
       else {
         if (noval(name)) name = child.name;
@@ -1165,7 +1156,14 @@ class Element {
       get: (value) => {
         if (!this.__private__.element) {
           let e = this.render();
+
           if (this.__validate_element(e)) this.__private__.element = e;
+
+          let children = sightread(e, true);
+
+          for (let childName in children) {
+            this.addChild(children[childName], childName);
+          }
         }
         return this.__private__.element;
       },
@@ -1193,13 +1191,13 @@ class Element {
      */
     Object.defineProperty(this, 'name', {
       get: () => {
-        let s = this.element.getAttribute(Directive.INSTANCE) || this.element.getAttribute('data-' + Directive.INSTANCE);
+        let s = this.element.getAttribute(Directive.INSTANCE);
         if (!s || s === '') return null;
         return s;
       },
       set: (value) => {
         if (!value || value === '') return;
-        if (!this.name) this.element.setAttribute('data-' + Directive.INSTANCE, value);
+        if (!this.name) this.element.setAttribute(Directive.INSTANCE, value);
       }
     });
 
@@ -1241,7 +1239,7 @@ class Element {
      */
     Object.defineProperty(this, 'state', {
       get: () => {
-        let s = this.element.getAttribute(Directive.STATE) || this.element.getAttribute('data-' + Directive.STATE);
+        let s = this.element.getAttribute(Directive.STATE);
         if (!s || s === '') return null;
         return s;
       },
@@ -1250,10 +1248,9 @@ class Element {
 
         if (value === null || value === undefined) {
           this.element.removeAttribute(Directive.STATE);
-          this.element.removeAttribute('data-' + Directive.STATE);
         }
         else {
-          this.element.setAttribute('data-' + Directive.STATE, value);
+          this.element.setAttribute(Directive.STATE, value);
         }
 
         this.updateDelegate.setDirty(DirtyType.STATE);

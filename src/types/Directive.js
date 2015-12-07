@@ -22,22 +22,22 @@ let Directive = {
    * Controller classes are automatically instantiated during the sightreading
    * process.
    */
-  CONTROLLER: 'r-controller',
+  CLASS: 'data-class',
 
   /**
    * Use this directive for assigning an instance name to a DOM element.
    */
-  INSTANCE: 'r-instance',
+  INSTANCE: 'data-instance',
 
   /**
    * Use this directive for managing DOM element states.
    */
-  STATE: 'r-state',
+  STATE: 'data-state',
 
   /**
    * Use this directive to map any property from the DOM to the controller.
    */
-  PROPERTY: 'r'
+  PROPERTY: 'data'
 };
 
 module.exports = Directive;

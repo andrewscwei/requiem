@@ -20,7 +20,7 @@ let Directive = require('../types/Directive');
  * @alias module:requiem~helpers.getInstanceNameFromElement
  */
 function getInstanceNameFromElement(element) {
-  return element.getAttribute(Directive.INSTANCE) || element.getAttribute('data-' + Directive.INSTANCE);
+  return element.getAttribute(Directive.INSTANCE);
 }
 
 module.exports = getInstanceNameFromElement;

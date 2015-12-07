@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.19.3', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.20.0', writable: false });
 
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(29));
@@ -676,8 +676,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
 	/**
@@ -686,13 +684,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * instance names. Transformations are also applied to the specified DOM node,
 	 * not just its children.
 	 *
-	 * @param {Node}   [element=document]     - Target element for sightreading. By
-	 *                                           default this will be the document.
-	 * @param {Object} [classRegistry=window] - Look-up dictionary (object literal)
-	 *                                           that provides all controller
-	 *                                           classes when sightreading
-	 *                                           encounters a controller marked
-	 *                                           element.
+	 * @param {Node}   [element=document] - Target element for sightreading. By
+	 *                                      default this will be the document.
+	 * @param {Object} [exclusive=false]  - Specifies whether the root node should
+	 *                                      be excluded from the sightread.
 	 *
 	 * @return {Object|Element} Either a dictionary (object literal) containing
 	 *                          all instantiated Requiem Element instances (if the
@@ -705,97 +700,86 @@ return /******/ (function(modules) { // webpackBootstrap
 	function sightread() {
 	  var element = document;
 	  var classRegistry = window._classRegistry;
+	  var exclusive = false;
 
 	  if (arguments.length === 1) {
-	    var obj = arguments[0];
+	    var arg = arguments[0];
 
-	    if (_instanceof(obj, Node)) {
-	      element = obj;
-	    } else if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object') {
-	      classRegistry = obj;
+	    (0, _assertType2.default)(arg, [Node, 'boolean'], true);
+
+	    if (_instanceof(arg, Node)) {
+	      element = arg;
+	    } else if (typeof obj === 'boolean') {
+	      exclusive = arg;
 	    }
 	  } else if (arguments.length === 2) {
 	    var arg1 = arguments[0];
 	    var arg2 = arguments[1];
 
-	    if (arg1) element = arg1;
-	    if (arg2) classRegistry = arg2;
+	    (0, _assertType2.default)(arg1, Node, true);
+	    (0, _assertType2.default)(arg2, 'boolean', true);
+
+	    if (arg1 !== undefined) element = arg1;
+	    if (arg2 !== undefined) exclusive = arg2;
 	  }
 
-	  if (element === document) {
-	    return _getChildElements(element, classRegistry);
-	  } else {
+	  if (element === document) exclusive = true;
+
+	  if (!exclusive) {
 	    var instanceName = (0, _getInstanceNameFromElement2.default)(element);
-	    var ControllerClass = (0, _getControllerClassFromElement2.default)(element, classRegistry);
+	    var ControllerClass = (0, _getControllerClassFromElement2.default)(element);
 
 	    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(element) + '\' is not found in specified controller scope: ' + classRegistry);
 
 	    return new ControllerClass({
 	      element: element,
 	      name: instanceName,
-	      children: _getChildElements(element, classRegistry)
+	      children: sightread(element, true)
 	    });
-	  }
-	}
+	  } else {
+	    var Element = __webpack_require__(17);
+	    var children = null;
 
-	/**
-	 * Transforms all the DOM elements inside the specified element marked with
-	 * custom Requiem attributes into an instance of either its specified controller
-	 * class or a generic Requiem Element. If a marked DOM element is a child of
-	 * another marked DOM element, it will be passed into the parent element's
-	 * children tree as its specified controller class instance or a generic Requiem
-	 * Element.
-	 *
-	 * @param {Node|Element} [element=document]
-	 * @param {Object}       [classRegistry=window]
-	 *
-	 * @private
-	 * @alias module:requiem~dom._getChildElements
-	 */
-	function _getChildElements(element, classRegistry) {
-	  var Element = __webpack_require__(17);
-	  var children = null;
+	    if (element.jquery) element = element.get(0);
+	    if (!(0, _assert2.default)(_instanceof(element, Node) || _instanceof(element, Element) || document && element === document, 'Element must be an instance of an Node or the DOM itself.')) return null;
+	    if (_instanceof(element, Element)) element = element.element;
 
-	  if (!element) element = document;
-	  if (element.jquery) element = element.get(0);
-	  if (!(0, _assert2.default)(_instanceof(element, Node) || _instanceof(element, Element) || document && element === document, 'Element must be an instance of an Node or the DOM itself.')) return null;
-	  if (_instanceof(element, Element)) element = element.element;
+	    var nodeList = element.querySelectorAll('[' + _Directive2.default.CLASS + '], [' + _Directive2.default.INSTANCE + ']');
+	    var qualifiedChildren = _filterParentElements(nodeList);
+	    var n = qualifiedChildren.length;
 
-	  var nodeList = element.querySelectorAll('[' + _Directive2.default.CONTROLLER + '], [data-' + _Directive2.default.CONTROLLER + '], [' + _Directive2.default.INSTANCE + '], [data-' + _Directive2.default.INSTANCE + ']');
-	  var qualifiedChildren = _filterParentElements(nodeList);
-	  var n = qualifiedChildren.length;
+	    for (var i = 0; i < n; i++) {
+	      var child = qualifiedChildren[i];
+	      var instanceName = (0, _getInstanceNameFromElement2.default)(child);
+	      var ControllerClass = (0, _getControllerClassFromElement2.default)(child, classRegistry);
 
-	  for (var i = 0; i < n; i++) {
-	    var child = qualifiedChildren[i];
-	    var instanceName = (0, _getInstanceNameFromElement2.default)(child);
-	    var ControllerClass = (0, _getControllerClassFromElement2.default)(child, classRegistry);
+	      (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(child) + '\' is not found in specified controller scope: ' + classRegistry);
 
-	    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(child) + '\' is not found in specified controller scope: ' + classRegistry);
+	      var m = new ControllerClass({
+	        element: child,
+	        name: instanceName,
+	        children: sightread(child, true)
+	      });
 
-	    var m = new ControllerClass({
-	      element: child,
-	      name: instanceName,
-	      children: _getChildElements(child, classRegistry)
-	    });
+	      if (instanceName && instanceName.length > 0) {
+	        if (!children) children = {};
 
-	    if (instanceName && instanceName.length > 0) {
-	      if (!children) children = {};
-
-	      if (!children[instanceName]) {
-	        children[instanceName] = m;
-	      } else {
-	        if (_instanceof(children[instanceName], Array)) {
-	          children[instanceName].push(m);
+	        if (!children[instanceName]) {
+	          children[instanceName] = m;
 	        } else {
-	          var a = [children[instanceName]];
-	          a.push(m);
-	          children[instanceName] = a;
+	          if (_instanceof(children[instanceName], Array)) {
+	            children[instanceName].push(m);
+	          } else {
+	            var a = [children[instanceName]];
+	            a.push(m);
+	            children[instanceName] = a;
+	          }
 	        }
 	      }
 	    }
-	  }
 
-	  return children;
+	    return children;
+	  }
 	}
 
 	/**
@@ -864,7 +848,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~helpers.getInstanceNameFromElement
 	 */
 	function getInstanceNameFromElement(element) {
-	  return element.getAttribute(Directive.INSTANCE) || element.getAttribute('data-' + Directive.INSTANCE);
+	  return element.getAttribute(Directive.INSTANCE);
 	}
 
 	module.exports = getInstanceNameFromElement;
@@ -898,22 +882,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Controller classes are automatically instantiated during the sightreading
 	   * process.
 	   */
-	  CONTROLLER: 'r-controller',
+	  CLASS: 'data-class',
 
 	  /**
 	   * Use this directive for assigning an instance name to a DOM element.
 	   */
-	  INSTANCE: 'r-instance',
+	  INSTANCE: 'data-instance',
 
 	  /**
 	   * Use this directive for managing DOM element states.
 	   */
-	  STATE: 'r-state',
+	  STATE: 'data-state',
 
 	  /**
 	   * Use this directive to map any property from the DOM to the controller.
 	   */
-	  PROPERTY: 'r'
+	  PROPERTY: 'data'
 	};
 
 	module.exports = Directive;
@@ -940,17 +924,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Gets the controller class from the DOM element.
 	 *
 	 * @param  {Node}   element
-	 * @param  {Object} [classRegistry] - Look-up dictionary (object literal) that
-	 *                                    provides all controller classes when
-	 *                                    sightreading encounters a controller
-	 *                                    marked element.
 	 *
 	 * @return {Class} The controller class.
 	 *
 	 * @alias module:requiem~helpers.getControllerClassFromElement
 	 */
-	function getControllerClassFromElement(element, classRegistry) {
-	  if (!classRegistry) classRegistry = window._classRegistry;
+	function getControllerClassFromElement(element) {
+	  var classRegistry = window._classRegistry;
 
 	  var controllerClassName = getControllerClassNameFromElement(element);
 	  var instanceName = getInstanceNameFromElement(element);
@@ -1011,7 +991,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~helpers.getControllerClassNameFromElement
 	 */
 	function getControllerClassNameFromElement(element) {
-	  return element.getAttribute(Directive.CONTROLLER) || element.getAttribute('data-' + Directive.CONTROLLER);
+	  return element.getAttribute(Directive.CLASS);
 	}
 
 	module.exports = getControllerClassNameFromElement;
@@ -1157,7 +1137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // and generate properties from them.
 	    var attributes = this.element.attributes;
 	    var nAtributes = attributes.length;
-	    var regex = new RegExp('^' + _Directive2.default.PROPERTY + '-' + '|^data-' + _Directive2.default.PROPERTY + '-', 'i');
+	    var regex = new RegExp('^' + _Directive2.default.PROPERTY + '-', 'i');
 
 	    for (var i = 0; i < nAtributes; i++) {
 	      var attribute = attributes[i];
@@ -1377,22 +1357,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *                          exists another child with the same name, the added
 	     *                          child will be grouped together with the existing
 	     *                          child.
-	     * @param {Object} [classRegistry=window] - Look-up dictionary (object literal)
-	     *                                           that provides all controller
-	     *                                           classes when sightreading
-	     *                                           encounters a controller marked
-	     *                                           element.
 	     *
 	     * @return {Element|Element[]} The added element(s).
 	     */
 
 	  }, {
 	    key: 'addChild',
-	    value: function addChild(child, name, classRegistry) {
+	    value: function addChild(child, name) {
 	      if (!(0, _assert2.default)(child !== undefined, 'Parameter \'child\' must be specified')) return null;
-	      if (!(0, _assertType2.default)(classRegistry, 'object', true, 'Parameter \'classRegistry\' is invalid')) return null;
-
-	      if (!classRegistry) classRegistry = window._classRegistry;
 
 	      if (child.jquery) {
 	        return this.addChild(child.get(), name);
@@ -1415,9 +1387,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (!(0, _assert2.default)(!(0, _noval2.default)(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
 
 	          child.removeAttribute(_Directive2.default.INSTANCE);
-	          child.removeAttribute('data-' + _Directive2.default.INSTANCE);
-	          child.setAttribute('data-' + _Directive2.default.INSTANCE, name);
-	          child = (0, _sightread2.default)(child, classRegistry);
+	          child.setAttribute(_Directive2.default.INSTANCE, name);
+	          child = (0, _sightread2.default)(child);
 	        } else {
 	          if ((0, _noval2.default)(name)) name = child.name;
 	          if (!(0, _assert2.default)(!(0, _noval2.default)(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
@@ -2189,7 +2160,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get(value) {
 	          if (!_this2.__private__.element) {
 	            var e = _this2.render();
+
 	            if (_this2.__validate_element(e)) _this2.__private__.element = e;
+
+	            var children = (0, _sightread2.default)(e, true);
+
+	            for (var childName in children) {
+	              _this2.addChild(children[childName], childName);
+	            }
 	          }
 	          return _this2.__private__.element;
 	        },
@@ -2221,13 +2199,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	       */
 	      Object.defineProperty(this, 'name', {
 	        get: function get() {
-	          var s = _this2.element.getAttribute(_Directive2.default.INSTANCE) || _this2.element.getAttribute('data-' + _Directive2.default.INSTANCE);
+	          var s = _this2.element.getAttribute(_Directive2.default.INSTANCE);
 	          if (!s || s === '') return null;
 	          return s;
 	        },
 	        set: function set(value) {
 	          if (!value || value === '') return;
-	          if (!_this2.name) _this2.element.setAttribute('data-' + _Directive2.default.INSTANCE, value);
+	          if (!_this2.name) _this2.element.setAttribute(_Directive2.default.INSTANCE, value);
 	        }
 	      });
 
@@ -2277,7 +2255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       */
 	      Object.defineProperty(this, 'state', {
 	        get: function get() {
-	          var s = _this2.element.getAttribute(_Directive2.default.STATE) || _this2.element.getAttribute('data-' + _Directive2.default.STATE);
+	          var s = _this2.element.getAttribute(_Directive2.default.STATE);
 	          if (!s || s === '') return null;
 	          return s;
 	        },
@@ -2286,9 +2264,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          if (value === null || value === undefined) {
 	            _this2.element.removeAttribute(_Directive2.default.STATE);
-	            _this2.element.removeAttribute('data-' + _Directive2.default.STATE);
 	          } else {
-	            _this2.element.setAttribute('data-' + _Directive2.default.STATE, value);
+	            _this2.element.setAttribute(_Directive2.default.STATE, value);
 	          }
 
 	          _this2.updateDelegate.setDirty(_DirtyType2.default.STATE);
@@ -2707,7 +2684,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function validateAttribute(attribute) {
 	  for (var d in Directive) {
 	    if (attribute === d) return false;
-	    if (attribute === 'data-' + d) return false;
 	  }
 
 	  return true;
@@ -5598,7 +5574,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (_instanceof(e, _Element2.default)) {
 	      e.state = state;
 	    } else {
-	      e.setAttribute('data-' + _Directive2.default.STATE, state);
+	      e.setAttribute(_Directive2.default.STATE, state);
 	    }
 	  }
 	}
@@ -5655,7 +5631,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (_instanceof(element, _Element2.default)) {
 	    s = element.state;
 	  } else {
-	    s = element.getAttribute(_Directive2.default.STATE) || element.getAttribute('data-' + _Directive2.default.STATE);
+	    s = element.getAttribute(_Directive2.default.STATE);
 	  }
 
 	  if (!s || s === '') {

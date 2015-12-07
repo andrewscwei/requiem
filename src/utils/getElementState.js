@@ -33,7 +33,7 @@ function getElementState(element) {
     s = element.state;
   }
   else {
-    s = element.getAttribute(Directive.STATE) || element.getAttribute('data-' + Directive.STATE);
+    s = element.getAttribute(Directive.STATE);
   }
 
   if (!s || s === '') {

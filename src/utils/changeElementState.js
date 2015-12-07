@@ -38,7 +38,7 @@ function changeElementState(element, state) {
       e.state = state;
     }
     else {
-      e.setAttribute('data-' + Directive.STATE, state);
+      e.setAttribute(Directive.STATE, state);
     }
   }
 }

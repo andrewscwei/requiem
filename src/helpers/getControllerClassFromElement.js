@@ -16,17 +16,13 @@ let namespace = require('../dom/namespace');
  * Gets the controller class from the DOM element.
  *
  * @param  {Node}   element
- * @param  {Object} [classRegistry] - Look-up dictionary (object literal) that
- *                                    provides all controller classes when
- *                                    sightreading encounters a controller
- *                                    marked element.
  *
  * @return {Class} The controller class.
  *
  * @alias module:requiem~helpers.getControllerClassFromElement
  */
-function getControllerClassFromElement(element, classRegistry) {
-  if (!classRegistry) classRegistry = window._classRegistry;
+function getControllerClassFromElement(element) {
+  let classRegistry = window._classRegistry;
 
   let controllerClassName = getControllerClassNameFromElement(element);
   let instanceName = getInstanceNameFromElement(element);

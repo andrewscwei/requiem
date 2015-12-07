@@ -22,13 +22,10 @@ import hasChild from '../utils/hasChild';
  * instance names. Transformations are also applied to the specified DOM node,
  * not just its children.
  *
- * @param {Node}   [element=document]     - Target element for sightreading. By
- *                                           default this will be the document.
- * @param {Object} [classRegistry=window] - Look-up dictionary (object literal)
- *                                           that provides all controller
- *                                           classes when sightreading
- *                                           encounters a controller marked
- *                                           element.
+ * @param {Node}   [element=document] - Target element for sightreading. By
+ *                                      default this will be the document.
+ * @param {Object} [exclusive=false]  - Specifies whether the root node should
+ *                                      be excluded from the sightread.
  *
  * @return {Object|Element} Either a dictionary (object literal) containing
  *                          all instantiated Requiem Element instances (if the
@@ -41,102 +38,91 @@ import hasChild from '../utils/hasChild';
 function sightread() {
   let element = document;
   let classRegistry = window._classRegistry;
+  let exclusive = false;
 
   if (arguments.length === 1) {
-    let obj = arguments[0];
+    let arg = arguments[0];
 
-    if (obj instanceof Node) {
-      element = obj;
+    assertType(arg, [Node, 'boolean'], true);
+
+    if (arg instanceof Node) {
+      element = arg;
     }
-    else if (typeof obj === 'object') {
-      classRegistry = obj;
+    else if (typeof obj === 'boolean') {
+      exclusive = arg;
     }
   }
   else if (arguments.length === 2) {
     let arg1 = arguments[0];
     let arg2 = arguments[1];
 
-    if (arg1) element = arg1;
-    if (arg2) classRegistry = arg2;
+    assertType(arg1, Node, true);
+    assertType(arg2, 'boolean', true);
+
+    if (arg1 !== undefined) element = arg1;
+    if (arg2 !== undefined) exclusive = arg2;
   }
 
-  if (element === document) {
-    return _getChildElements(element, classRegistry);
-  }
-  else {
+  if (element === document) exclusive = true;
+
+  if (!exclusive) {
     let instanceName = getInstanceNameFromElement(element);
-    let ControllerClass = getControllerClassFromElement(element, classRegistry);
+    let ControllerClass = getControllerClassFromElement(element);
 
     assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + classRegistry);
 
     return new ControllerClass({
       element: element,
       name: instanceName,
-      children: _getChildElements(element, classRegistry)
+      children: sightread(element, true)
     });
   }
-}
+  else {
+    let Element = require('../ui/Element');
+    let children = null;
 
-/**
- * Transforms all the DOM elements inside the specified element marked with
- * custom Requiem attributes into an instance of either its specified controller
- * class or a generic Requiem Element. If a marked DOM element is a child of
- * another marked DOM element, it will be passed into the parent element's
- * children tree as its specified controller class instance or a generic Requiem
- * Element.
- *
- * @param {Node|Element} [element=document]
- * @param {Object}       [classRegistry=window]
- *
- * @private
- * @alias module:requiem~dom._getChildElements
- */
-function _getChildElements(element, classRegistry) {
-  let Element = require('../ui/Element');
-  let children = null;
+    if (element.jquery) element = element.get(0);
+    if (!assert((element instanceof Node) || (element instanceof Element) || (document && element === document), 'Element must be an instance of an Node or the DOM itself.')) return null;
+    if (element instanceof Element) element = element.element;
 
-  if (!element) element = document;
-  if (element.jquery) element = element.get(0);
-  if (!assert((element instanceof Node) || (element instanceof Element) || (document && element === document), 'Element must be an instance of an Node or the DOM itself.')) return null;
-  if (element instanceof Element) element = element.element;
+    let nodeList = element.querySelectorAll('[' + Directive.CLASS + '], [' + Directive.INSTANCE + ']');
+    let qualifiedChildren = _filterParentElements(nodeList);
+    let n = qualifiedChildren.length;
 
-  let nodeList = element.querySelectorAll('[' + Directive.CONTROLLER + '], [data-' + Directive.CONTROLLER + '], [' + Directive.INSTANCE + '], [data-' + Directive.INSTANCE + ']');
-  let qualifiedChildren = _filterParentElements(nodeList);
-  let n = qualifiedChildren.length;
+    for (let i = 0; i < n; i++) {
+      let child = qualifiedChildren[i];
+      let instanceName = getInstanceNameFromElement(child);
+      let ControllerClass = getControllerClassFromElement(child, classRegistry);
 
-  for (let i = 0; i < n; i++) {
-    let child = qualifiedChildren[i];
-    let instanceName = getInstanceNameFromElement(child);
-    let ControllerClass = getControllerClassFromElement(child, classRegistry);
+      assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + classRegistry);
 
-    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + classRegistry);
+      let m = new ControllerClass({
+        element: child,
+        name: instanceName,
+        children: sightread(child, true)
+      });
 
-    let m = new ControllerClass({
-      element: child,
-      name: instanceName,
-      children: _getChildElements(child, classRegistry)
-    });
+      if (instanceName && instanceName.length > 0) {
+        if (!children) children = {};
 
-    if (instanceName && instanceName.length > 0) {
-      if (!children) children = {};
-
-      if (!children[instanceName]) {
-        children[instanceName] = m;
-      }
-      else {
-        if (children[instanceName] instanceof Array) {
-          children[instanceName].push(m);
+        if (!children[instanceName]) {
+          children[instanceName] = m;
         }
         else {
-          let a = [children[instanceName]];
-          a.push(m);
-          children[instanceName] = a;
+          if (children[instanceName] instanceof Array) {
+            children[instanceName].push(m);
+          }
+          else {
+            let a = [children[instanceName]];
+            a.push(m);
+            children[instanceName] = a;
+          }
         }
       }
     }
-  }
 
-  return children;
+    return children;
+  }
 }
 
 /**

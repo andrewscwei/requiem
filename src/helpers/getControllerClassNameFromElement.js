@@ -20,7 +20,7 @@ let Directive = require('../types/Directive');
  * @alias module:requiem~helpers.getControllerClassNameFromElement
  */
 function getControllerClassNameFromElement(element) {
-  return element.getAttribute(Directive.CONTROLLER) || element.getAttribute('data-' + Directive.CONTROLLER);
+  return element.getAttribute(Directive.CLASS);
 }
 
 module.exports = getControllerClassNameFromElement;

@@ -8,8 +8,6 @@ class Bar extends Element {
     this.setStyle('width', 100);
     this.setStyle('height', 50);
     this.setStyle('backgroundColor', '#ff0');
-
-    console.log('Bar');
     super.init();
   }
 

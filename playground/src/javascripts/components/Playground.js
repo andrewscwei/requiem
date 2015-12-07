@@ -13,7 +13,6 @@ class Playground extends Element {
     this.respondsTo(10.0, EventType.OBJECT.SCROLL);
     this.addChild(foo);
 
-    console.log(this.properties.foo);
     let bar = {};
 
     super.init();

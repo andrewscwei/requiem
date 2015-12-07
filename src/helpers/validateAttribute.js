@@ -22,7 +22,6 @@ let Directive = require('../types/Directive');
 function validateAttribute(attribute) {
   for (var d in Directive) {
     if (attribute === d) return false;
-    if (attribute === 'data-'+d) return false;
   }
 
   return true;
