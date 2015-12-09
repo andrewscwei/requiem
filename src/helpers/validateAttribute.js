@@ -20,8 +20,8 @@ let Directive = require('../types/Directive');
  * @alias module:requiem~helpers.validateAttribute
  */
 function validateAttribute(attribute) {
-  for (var d in Directive) {
-    if (attribute === d) return false;
+  for (let d in Directive) {
+    if (attribute === Directive[d]) return false;
   }
 
   return true;

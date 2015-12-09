@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: requiem</title>
+    <title>JSDoc: Source: dom/getDataRegistry.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,72 +17,41 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: requiem</h1>
+    <h1 class="page-title">Source: dom/getDataRegistry.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Requiem
+ * (c) VARIANTE (http://variante.io)
+ *
+ * This software is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ */
 
-<article>
-    <div class="container-overview">
-    
-        
+'use strict';
 
-        
-    
-    </div>
+/**
+ * Gets the data registry.
+ *
+ * @return {Object} The data registry.
+ *
+ * @alias module:requiem~dom.getDataRegistry
+ */
+function getDataRegistry() {
+  if (window._dataRegistry === undefined) window._dataRegistry = {};
+  return window._dataRegistry;
+}
 
-    
-
-    
-
-    
-
-     
-
-    
-        <h3 class="subsection-title">Namespaces</h3>
-
-        <dl>
-            <dt><a href="module-requiem-dom.html">dom</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-requiem-events.html">events</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-requiem-net.html">net</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-requiem-types.html">types</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-requiem-ui.html">ui</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-requiem-utils.html">utils</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+module.exports = getDataRegistry;
+</code></pre>
+        </article>
+    </section>
 
 
 

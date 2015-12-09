@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: requiem</title>
+    <title>JSDoc: Source: dom/register.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,72 +17,59 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: requiem</h1>
+    <h1 class="page-title">Source: dom/register.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Requiem
+ * (c) VARIANTE (http://variante.io)
+ *
+ * This software is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ */
 
-<article>
-    <div class="container-overview">
-    
-        
+'use strict';
 
-        
-    
-    </div>
+import getClassRegistry from './getClassRegistry';
+import namespace from './namespace';
+import assert from '../helpers/assert';
+import assertType from '../helpers/assertType';
+import getFunctionName from '../helpers/getFunctionName';
 
-    
+/**
+ * Registers a controller class with Requiem to be used for instantiating
+ * custom elements during the sighreading process.
+ *
+ * @param {Class}  c   - Class to be registered.
+ * @param {string} [n] - Namespace of class.
+ *
+ * @return {Class} The registered class.
+ *
+ * @alias module:requiem~dom.register
+ */
+function register(c, n) {
+  assertType(c, 'function', false, 'Invalid class provided');
+  assertType(n, 'string', true, 'Invalid optional parameter: namespace');
 
-    
+  let className = getFunctionName(c);
 
-    
+  if (!assert(namespace(n, getClassRegistry())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
 
-     
+  namespace(n, getClassRegistry())[className] = c;
 
-    
-        <h3 class="subsection-title">Namespaces</h3>
+  return c;
+}
 
-        <dl>
-            <dt><a href="module-requiem-dom.html">dom</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-requiem-events.html">events</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-requiem-net.html">net</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-requiem-types.html">types</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-requiem-ui.html">ui</a></dt>
-            <dd></dd>
-        
-            <dt><a href="module-requiem-utils.html">utils</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+module.exports = register;
+</code></pre>
+        </article>
+    </section>
 
 
 

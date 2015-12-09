@@ -8,6 +8,7 @@
 
 'use strict';
 
+import getClassRegistry from '../dom/getClassRegistry';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
 import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
@@ -37,7 +38,7 @@ import hasChild from '../utils/hasChild';
  */
 function sightread() {
   let element = document;
-  let classRegistry = window._classRegistry;
+  let classRegistry = getClassRegistry();
   let exclusive = false;
 
   if (arguments.length === 1) {

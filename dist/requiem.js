@@ -87,14 +87,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.20.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.21.0', writable: false });
 
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
-	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(29));
-	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(31));
-	(0, _injectModule2.default)(requiem, 'types', __webpack_require__(34));
-	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(36));
-	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(37));
+	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(31));
+	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(33));
+	(0, _injectModule2.default)(requiem, 'types', __webpack_require__(36));
+	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(38));
+	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(39));
 
 	(0, _polyfill2.default)();
 
@@ -205,10 +205,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var dom = {};
 
 	Object.defineProperty(dom, 'createElement', { value: __webpack_require__(4), writable: false, enumerable: true });
-	Object.defineProperty(dom, 'namespace', { value: __webpack_require__(8), writable: false, enumerable: true });
-	Object.defineProperty(dom, 'ready', { value: __webpack_require__(9), writable: false, enumerable: true });
-	Object.defineProperty(dom, 'register', { value: __webpack_require__(10), writable: false, enumerable: true });
-	Object.defineProperty(dom, 'sightread', { value: __webpack_require__(12), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'getClassRegistry', { value: __webpack_require__(8), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'getDataRegistry', { value: __webpack_require__(9), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'namespace', { value: __webpack_require__(10), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'ready', { value: __webpack_require__(11), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'register', { value: __webpack_require__(12), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'sightread', { value: __webpack_require__(14), writable: false, enumerable: true });
 
 	module.exports = dom;
 
@@ -423,6 +425,64 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 8 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+
+	'use strict'
+
+	/**
+	 * Gets the class registry.
+	 *
+	 * @return {Object} The class registry.
+	 *
+	 * @alias module:requiem~dom.getClassRegistry
+	 */
+	;
+	function getClassRegistry() {
+	  if (window._classRegistry === undefined) window._classRegistry = {};
+	  return window._classRegistry;
+	}
+
+	module.exports = getClassRegistry;
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+
+	'use strict'
+
+	/**
+	 * Gets the data registry.
+	 *
+	 * @return {Object} The data registry.
+	 *
+	 * @alias module:requiem~dom.getDataRegistry
+	 */
+	;
+	function getDataRegistry() {
+	  if (window._dataRegistry === undefined) window._dataRegistry = {};
+	  return window._dataRegistry;
+	}
+
+	module.exports = getDataRegistry;
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -478,7 +538,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = namespace;
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -539,7 +599,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ready;
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -552,7 +612,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _namespace = __webpack_require__(8);
+	var _getClassRegistry = __webpack_require__(8);
+
+	var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
+
+	var _namespace = __webpack_require__(10);
 
 	var _namespace2 = _interopRequireDefault(_namespace);
 
@@ -564,7 +628,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assertType2 = _interopRequireDefault(_assertType);
 
-	var _getFunctionName = __webpack_require__(11);
+	var _getFunctionName = __webpack_require__(13);
 
 	var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
 
@@ -585,13 +649,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  (0, _assertType2.default)(c, 'function', false, 'Invalid class provided');
 	  (0, _assertType2.default)(n, 'string', true, 'Invalid optional parameter: namespace');
 
-	  if (window._classRegistry === undefined) window._classRegistry = {};
-
 	  var className = (0, _getFunctionName2.default)(c);
 
-	  if (!(0, _assert2.default)((0, _namespace2.default)(n, window._classRegistry)[className] === undefined, 'Class name ' + className + ' is already registered')) return;
+	  if (!(0, _assert2.default)((0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
 
-	  (0, _namespace2.default)(n, window._classRegistry)[className] = c;
+	  (0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] = c;
 
 	  return c;
 	}
@@ -599,7 +661,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = register;
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports) {
 
 	/**
@@ -633,7 +695,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getFunctionName;
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -646,6 +708,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _getClassRegistry = __webpack_require__(8);
+
+	var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
+
 	var _assert = __webpack_require__(6);
 
 	var _assert2 = _interopRequireDefault(_assert);
@@ -654,23 +720,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assertType2 = _interopRequireDefault(_assertType);
 
-	var _getInstanceNameFromElement = __webpack_require__(13);
+	var _getInstanceNameFromElement = __webpack_require__(15);
 
 	var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
 
-	var _getControllerClassFromElement = __webpack_require__(15);
+	var _getControllerClassFromElement = __webpack_require__(17);
 
 	var _getControllerClassFromElement2 = _interopRequireDefault(_getControllerClassFromElement);
 
-	var _getControllerClassNameFromElement = __webpack_require__(16);
+	var _getControllerClassNameFromElement = __webpack_require__(18);
 
 	var _getControllerClassNameFromElement2 = _interopRequireDefault(_getControllerClassNameFromElement);
 
-	var _Directive = __webpack_require__(14);
+	var _Directive = __webpack_require__(16);
 
 	var _Directive2 = _interopRequireDefault(_Directive);
 
-	var _hasChild = __webpack_require__(27);
+	var _hasChild = __webpack_require__(29);
 
 	var _hasChild2 = _interopRequireDefault(_hasChild);
 
@@ -699,7 +765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function sightread() {
 	  var element = document;
-	  var classRegistry = window._classRegistry;
+	  var classRegistry = (0, _getClassRegistry2.default)();
 	  var exclusive = false;
 
 	  if (arguments.length === 1) {
@@ -737,7 +803,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      children: sightread(element, true)
 	    });
 	  } else {
-	    var Element = __webpack_require__(17);
+	    var Element = __webpack_require__(19);
 	    var children = null;
 
 	    if (element.jquery) element = element.get(0);
@@ -823,7 +889,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = sightread;
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -836,7 +902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Directive = __webpack_require__(14);
+	var Directive = __webpack_require__(16);
 
 	/**
 	 * Gets the instance name from a DOM element.
@@ -854,7 +920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getInstanceNameFromElement;
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports) {
 
 	/**
@@ -895,15 +961,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  STATE: 'data-state',
 
 	  /**
+	   * Use this directive for referencing global shared data.
+	   */
+	  REF: 'data-ref',
+
+	  /**
 	   * Use this directive to map any property from the DOM to the controller.
 	   */
-	  PROPERTY: 'data'
+	  PROPERTY: 'data-'
 	};
 
 	module.exports = Directive;
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -916,9 +987,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var getControllerClassNameFromElement = __webpack_require__(16);
-	var getInstanceNameFromElement = __webpack_require__(13);
-	var namespace = __webpack_require__(8);
+	var getControllerClassNameFromElement = __webpack_require__(18);
+	var getInstanceNameFromElement = __webpack_require__(15);
+	var getClassRegistry = __webpack_require__(8);
+	var namespace = __webpack_require__(10);
 
 	/**
 	 * Gets the controller class from the DOM element.
@@ -930,7 +1002,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~helpers.getControllerClassFromElement
 	 */
 	function getControllerClassFromElement(element) {
-	  var classRegistry = window._classRegistry;
+	  var classRegistry = getClassRegistry();
 
 	  var controllerClassName = getControllerClassNameFromElement(element);
 	  var instanceName = getInstanceNameFromElement(element);
@@ -939,17 +1011,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // If no controller class is specified but element is marked as an instance,
 	  // default the controller class to Element.
 	  if (!controllerClass && instanceName && instanceName.length > 0) {
-	    controllerClass = __webpack_require__(17);
+	    controllerClass = __webpack_require__(19);
 	  } else if (typeof controllerClass !== 'function') {
 	    switch (controllerClassName) {
 	      case 'Video':
 	        {
-	          controllerClass = __webpack_require__(26);
+	          controllerClass = __webpack_require__(28);
 	          break;
 	        }
 	      case 'Element':
 	        {
-	          controllerClass = __webpack_require__(17);
+	          controllerClass = __webpack_require__(19);
 	          break;
 	        }
 	      default:
@@ -966,7 +1038,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getControllerClassFromElement;
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -979,7 +1051,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Directive = __webpack_require__(14);
+	var Directive = __webpack_require__(16);
 
 	/**
 	 * Gets the controller class name from the DOM element.
@@ -997,7 +1069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getControllerClassNameFromElement;
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1012,6 +1084,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+	var _getDataRegistry = __webpack_require__(9);
+
+	var _getDataRegistry2 = _interopRequireDefault(_getDataRegistry);
+
 	var _assert = __webpack_require__(6);
 
 	var _assert2 = _interopRequireDefault(_assert);
@@ -1020,47 +1096,47 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assertType2 = _interopRequireDefault(_assertType);
 
-	var _noval = __webpack_require__(18);
+	var _noval = __webpack_require__(20);
 
 	var _noval2 = _interopRequireDefault(_noval);
 
-	var _getFunctionName = __webpack_require__(11);
+	var _getFunctionName = __webpack_require__(13);
 
 	var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
 
-	var _log = __webpack_require__(19);
+	var _log = __webpack_require__(21);
 
 	var _log2 = _interopRequireDefault(_log);
 
-	var _validateAttribute = __webpack_require__(20);
+	var _validateAttribute = __webpack_require__(22);
 
 	var _validateAttribute2 = _interopRequireDefault(_validateAttribute);
 
-	var _getInstanceNameFromElement = __webpack_require__(13);
+	var _getInstanceNameFromElement = __webpack_require__(15);
 
 	var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
 
-	var _DirtyType = __webpack_require__(21);
+	var _DirtyType = __webpack_require__(23);
 
 	var _DirtyType2 = _interopRequireDefault(_DirtyType);
 
-	var _NodeState = __webpack_require__(22);
+	var _NodeState = __webpack_require__(24);
 
 	var _NodeState2 = _interopRequireDefault(_NodeState);
 
-	var _EventType = __webpack_require__(23);
+	var _EventType = __webpack_require__(25);
 
 	var _EventType2 = _interopRequireDefault(_EventType);
 
-	var _Directive = __webpack_require__(14);
+	var _Directive = __webpack_require__(16);
 
 	var _Directive2 = _interopRequireDefault(_Directive);
 
-	var _ElementUpdateDelegate = __webpack_require__(24);
+	var _ElementUpdateDelegate = __webpack_require__(26);
 
 	var _ElementUpdateDelegate2 = _interopRequireDefault(_ElementUpdateDelegate);
 
-	var _sightread = __webpack_require__(12);
+	var _sightread = __webpack_require__(14);
 
 	var _sightread2 = _interopRequireDefault(_sightread);
 
@@ -1083,6 +1159,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Element = (function () {
 	  /**
 	   * Creates a new Element instance with optional initial properties.
+	   *
 	   * @param  {string|Node|Object} [init] - Initial properties. If this is a
 	   *                                       string, it will be used as this
 	   *                                       Element's instance name. If this is
@@ -1133,11 +1210,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	    }
 
+	    // Check if this Element needs seed data from the data registry.
+	    if (this.hasAttribute(_Directive2.default.REF)) {
+	      var ref = this.getAttribute(_Directive2.default.REF);
+	      var data = (0, _getDataRegistry2.default)()[ref];
+
+	      if (data) this.setProperties(data);
+	    }
+
 	    // Scan for internal DOM element attributes prefixed with Directive.PROPERTY
 	    // and generate properties from them.
 	    var attributes = this.element.attributes;
 	    var nAtributes = attributes.length;
-	    var regex = new RegExp('^' + _Directive2.default.PROPERTY + '-', 'i');
+	    var regex = new RegExp('^' + _Directive2.default.PROPERTY, 'i');
 
 	    for (var i = 0; i < nAtributes; i++) {
 	      var attribute = attributes[i];
@@ -1151,7 +1236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      Element.defineProperty(this, propertyName, {
 	        defaultValue: this.getAttribute(attribute.name),
-	        attribute: attribute.name,
+	        attribute: true,
 	        dirtyType: _DirtyType2.default.DATA,
 	        get: true,
 	        set: true
@@ -1190,8 +1275,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	   *                                                      EventType to dispatch
 	   *                                                      whenever a new value
 	   *                                                      is set.
-	   * @param {string}           [descriptor.attribute]   - Specifies the DOM
-	   *                                                      attribute to update
+	   * @param {boolean}          [descriptor.attribute]   - Specifies whether the
+	   *                                                      a corresponding DOM
+	   *                                                      attribute will update
 	   *                                                      whenever a new value
 	   *                                                      is set.
 	   * @param {Function}         [descriptor.onChange]    - Method invoked when
@@ -1341,14 +1427,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * transformed into a Requiem Element. A child is automatically appended
 	     * to the DOM tree of this instance.
 	     *
-	     * @param {Element|Element[]|Node|Node[]} child  - Single child or
-	     *                                                               an array of
-	     *                                                               children. Child
-	     *                                                               elements can be
-	     *                                                               instance(s) of
-	     *                                                               Requiem Elements,
-	     *                                                               jQuery Elements
-	     *                                                               or HTMLElements.
+	     * @param {Element|Element[]|Node|Node[]} child  - Single child or an array of
+	     *                                                 children. Child elements
+	     *                                                 can be instance(s) of
+	     *                                                 Requiem Elements, jQuery
+	     *                                                 Elements or HTMLElements.
 	     * @param {string} [name] - The name of the child/children to be added.
 	     *                          Typically a name is required. If it is not
 	     *                          specified, this method will attempt to deduct the
@@ -1481,11 +1564,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Removes a child or multiple children from this Element instance.
 	     *
 	     * @param {Node|Element|Array|string} child - A single child is a Requiem
-	     *                                                   Element, jQuery element or
-	     *                                                   Node. It can also be
-	     *                                                   a string of child name(s)
-	     *                                                   separated by '.', or an
-	     *                                                   array of child elements.
+	     *                                            Element, jQuery element or Node.
+	     *                                            It can also be a string of child
+	     *                                            name(s) separated by '.', or an
+	     *                                            array of child elements.
 	     *
 	     * @return {Element|Element[]} The removed element(s).
 	     */
@@ -1912,13 +1994,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Sets the property of the specified name with the specified value. If
 	     * properties does not exist, it will be newly defined.
 	     *
-	     * @param {string} key   - Name of the property.
-	     * @param {*}      value - Value of the property.
+	     * @param {string}  key                - Name of the property.
+	     * @param {*}       value              - Value of the property.
+	     * @param {boolean} [attributed=false] - Specifies whether property should
+	     *                                       also be an attribute of the element.
 	     */
 
 	  }, {
 	    key: 'setProperty',
-	    value: function setProperty(key, value) {
+	    value: function setProperty(key, value, attributed) {
 	      if (this.hasProperty(key)) {
 	        this.properties[key] = value;
 	      } else {
@@ -1926,7 +2010,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          defaultValue: value,
 	          dirtyType: _DirtyType2.default.DATA,
 	          get: true,
-	          set: true
+	          set: true,
+	          attribute: attributed
 	        }, 'properties');
 	      }
 	    }
@@ -1943,6 +2028,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'setProperties',
 	    value: function setProperties(descriptor) {
 	      (0, _assertType2.default)(descriptor, 'object', false);
+
+	      if (!descriptor) return;
 
 	      for (var key in descriptor) {
 	        this.setProperty(key, descriptor[key]);
@@ -2431,7 +2518,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      (0, _assertType2.default)(descriptor.unique, 'boolean', true, 'Optional unique key in descriptor must be a boolean');
 	      (0, _assertType2.default)(descriptor.dirtyType, 'number', true, 'Optional dirty type must be of DirtyType enum (number)');
 	      (0, _assertType2.default)(descriptor.eventType, 'string', true, 'Optional event type must be a string');
-	      (0, _assertType2.default)(descriptor.attribute, 'string', true, 'Optional attribute must be a string');
+	      (0, _assertType2.default)(descriptor.attribute, 'boolean', true, 'Optional attribute must be a boolean');
 	      (0, _assertType2.default)(descriptor.onChange, 'function', true, 'Optional change handler must be a function');
 	      (0, _assertType2.default)(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
 	      (0, _assert2.default)((0, _validateAttribute2.default)(descriptor.attribute), 'Attribute \'' + descriptor.attribute + '\' is reserved');
@@ -2439,6 +2526,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var dirtyType = descriptor.dirtyType;
 	      var defaultValue = descriptor.defaultValue;
 	      var attribute = descriptor.attribute;
+	      var attributeName = _Directive2.default.PROPERTY + propertyName.replace(/([A-Z])/g, function ($1) {
+	        return '-' + $1.toLowerCase();
+	      });
 	      var eventType = descriptor.eventType;
 	      var unique = descriptor.unique;
 
@@ -2485,7 +2575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 
 	          if (descriptor.onChange !== undefined) descriptor.onChange(oldVal, val);
-	          if (attribute !== undefined) element.setAttribute(attribute, val);
+	          if (attribute === true) element.setAttribute(attributeName, val);
 	          if (dirtyType !== undefined) element.setDirty(dirtyType);
 
 	          if (eventType !== undefined) {
@@ -2504,8 +2594,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      Object.defineProperty(scope, propertyName, newDescriptor);
 
-	      if (defaultValue !== undefined && attribute !== undefined) {
-	        element.setAttribute(attribute, defaultValue);
+	      if (defaultValue !== undefined && attribute === true) {
+	        element.setAttribute(attributeName, defaultValue);
 	      }
 	    }
 
@@ -2558,7 +2648,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Element;
 
 /***/ },
-/* 18 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2626,7 +2716,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = noval;
 
 /***/ },
-/* 19 */
+/* 21 */
 /***/ function(module, exports) {
 
 	/**
@@ -2657,7 +2747,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = log;
 
 /***/ },
-/* 20 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2670,7 +2760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Directive = __webpack_require__(14);
+	var Directive = __webpack_require__(16);
 
 	/**
 	 * Validates whether an attribute can be used (could be reserved by Requiem).
@@ -2683,7 +2773,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function validateAttribute(attribute) {
 	  for (var d in Directive) {
-	    if (attribute === d) return false;
+	    if (attribute === Directive[d]) return false;
 	  }
 
 	  return true;
@@ -2692,7 +2782,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = validateAttribute;
 
 /***/ },
-/* 21 */
+/* 23 */
 /***/ function(module, exports) {
 
 	/**
@@ -2838,7 +2928,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = DirtyType;
 
 /***/ },
-/* 22 */
+/* 24 */
 /***/ function(module, exports) {
 
 	/**
@@ -2911,7 +3001,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = NodeState;
 
 /***/ },
-/* 23 */
+/* 25 */
 /***/ function(module, exports) {
 
 	/**
@@ -3063,7 +3153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventType;
 
 /***/ },
-/* 24 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3078,19 +3168,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _debounce = __webpack_require__(25);
+	var _debounce = __webpack_require__(27);
 
 	var _debounce2 = _interopRequireDefault(_debounce);
 
-	var _log = __webpack_require__(19);
+	var _log = __webpack_require__(21);
 
 	var _log2 = _interopRequireDefault(_log);
 
-	var _DirtyType = __webpack_require__(21);
+	var _DirtyType = __webpack_require__(23);
 
 	var _DirtyType2 = _interopRequireDefault(_DirtyType);
 
-	var _EventType = __webpack_require__(23);
+	var _EventType = __webpack_require__(25);
 
 	var _EventType2 = _interopRequireDefault(_EventType);
 
@@ -3671,7 +3761,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ElementUpdateDelegate;
 
 /***/ },
-/* 25 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3737,7 +3827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = debounce;
 
 /***/ },
-/* 26 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3758,11 +3848,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _DirtyType = __webpack_require__(21);
+	var _DirtyType = __webpack_require__(23);
 
 	var _DirtyType2 = _interopRequireDefault(_DirtyType);
 
-	var _Element2 = __webpack_require__(17);
+	var _Element2 = __webpack_require__(19);
 
 	var _Element3 = _interopRequireDefault(_Element2);
 
@@ -3993,7 +4083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Video;
 
 /***/ },
-/* 27 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4010,7 +4100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _toElementArray = __webpack_require__(28);
+	var _toElementArray = __webpack_require__(30);
 
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 
@@ -4053,7 +4143,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hasChild;
 
 /***/ },
-/* 28 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4081,7 +4171,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 
 	function toElementArray(element, keepElement) {
-	  var Element = __webpack_require__(17);
+	  var Element = __webpack_require__(19);
 
 	  if (!element) return null;
 
@@ -4121,7 +4211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = toElementArray;
 
 /***/ },
-/* 29 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4142,12 +4232,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var events = {};
 
-	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(30), writable: false, enumerable: true });
+	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(32), writable: false, enumerable: true });
 
 	module.exports = events;
 
 /***/ },
-/* 30 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4170,7 +4260,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assertType2 = _interopRequireDefault(_assertType);
 
-	var _log = __webpack_require__(19);
+	var _log = __webpack_require__(21);
 
 	var _log2 = _interopRequireDefault(_log);
 
@@ -4328,7 +4418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventDispatcher;
 
 /***/ },
-/* 31 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4349,12 +4439,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var net = {};
 
-	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(32), writable: false, enumerable: true });
+	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(34), writable: false, enumerable: true });
 
 	module.exports = net;
 
 /***/ },
-/* 32 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4375,19 +4465,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _inherit = __webpack_require__(33);
+	var _inherit = __webpack_require__(35);
 
 	var _inherit2 = _interopRequireDefault(_inherit);
 
-	var _log = __webpack_require__(19);
+	var _log = __webpack_require__(21);
 
 	var _log2 = _interopRequireDefault(_log);
 
-	var _EventDispatcher2 = __webpack_require__(30);
+	var _EventDispatcher2 = __webpack_require__(32);
 
 	var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
 
-	var _EventType = __webpack_require__(23);
+	var _EventType = __webpack_require__(25);
 
 	var _EventType2 = _interopRequireDefault(_EventType);
 
@@ -5071,7 +5161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = AssetLoader;
 
 /***/ },
-/* 33 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5119,7 +5209,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = inherit;
 
 /***/ },
-/* 34 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5140,16 +5230,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var types = {};
 
-	Object.defineProperty(types, 'Directive', { value: __webpack_require__(14), writable: false, enumerable: true });
-	Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(21), writable: false, enumerable: true });
-	Object.defineProperty(types, 'EventType', { value: __webpack_require__(23), writable: false, enumerable: true });
-	Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(35), writable: false, enumerable: true });
-	Object.defineProperty(types, 'NodeState', { value: __webpack_require__(22), writable: false, enumerable: true });
+	Object.defineProperty(types, 'Directive', { value: __webpack_require__(16), writable: false, enumerable: true });
+	Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(23), writable: false, enumerable: true });
+	Object.defineProperty(types, 'EventType', { value: __webpack_require__(25), writable: false, enumerable: true });
+	Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(37), writable: false, enumerable: true });
+	Object.defineProperty(types, 'NodeState', { value: __webpack_require__(24), writable: false, enumerable: true });
 
 	module.exports = types;
 
 /***/ },
-/* 35 */
+/* 37 */
 /***/ function(module, exports) {
 
 	/**
@@ -5276,7 +5366,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 36 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5297,14 +5387,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var ui = {};
 
-	Object.defineProperty(ui, 'Element', { value: __webpack_require__(17), writable: false, enumerable: true });
-	Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(24), writable: false, enumerable: true });
-	Object.defineProperty(ui, 'Video', { value: __webpack_require__(26), writable: false, enumerable: true });
+	Object.defineProperty(ui, 'Element', { value: __webpack_require__(19), writable: false, enumerable: true });
+	Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(26), writable: false, enumerable: true });
+	Object.defineProperty(ui, 'Video', { value: __webpack_require__(28), writable: false, enumerable: true });
 
 	module.exports = ui;
 
 /***/ },
-/* 37 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5325,26 +5415,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var utils = {};
 
-	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(38), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(41), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(39), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(27), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(40), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(42), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(43), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(44), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(45), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(46), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(47), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(48), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate', { value: __webpack_require__(49), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(50), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'transform', { value: __webpack_require__(51), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(40), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(43), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(41), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(29), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(42), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(44), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(45), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(46), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(47), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(48), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(49), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(50), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate', { value: __webpack_require__(51), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(52), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'transform', { value: __webpack_require__(53), writable: false, enumerable: true });
 
 	module.exports = utils;
 
 /***/ },
-/* 38 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5361,11 +5451,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _toElementArray = __webpack_require__(28);
+	var _toElementArray = __webpack_require__(30);
 
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 
-	var _hasClass = __webpack_require__(39);
+	var _hasClass = __webpack_require__(41);
 
 	var _hasClass2 = _interopRequireDefault(_hasClass);
 
@@ -5413,7 +5503,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = addClass;
 
 /***/ },
-/* 39 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5430,11 +5520,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _toElementArray = __webpack_require__(28);
+	var _toElementArray = __webpack_require__(30);
 
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 
-	var _getClassIndex = __webpack_require__(40);
+	var _getClassIndex = __webpack_require__(42);
 
 	var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
 
@@ -5467,7 +5557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hasClass;
 
 /***/ },
-/* 40 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5484,7 +5574,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _Element = __webpack_require__(17);
+	var _Element = __webpack_require__(19);
 
 	var _Element2 = _interopRequireDefault(_Element);
 
@@ -5517,7 +5607,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getClassIndex;
 
 /***/ },
-/* 41 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5530,19 +5620,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _toElementArray = __webpack_require__(28);
+	var _toElementArray = __webpack_require__(30);
 
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 
-	var _getElementState = __webpack_require__(42);
+	var _getElementState = __webpack_require__(44);
 
 	var _getElementState2 = _interopRequireDefault(_getElementState);
 
-	var _Directive = __webpack_require__(14);
+	var _Directive = __webpack_require__(16);
 
 	var _Directive2 = _interopRequireDefault(_Directive);
 
-	var _Element = __webpack_require__(17);
+	var _Element = __webpack_require__(19);
 
 	var _Element2 = _interopRequireDefault(_Element);
 
@@ -5582,7 +5672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = changeElementState;
 
 /***/ },
-/* 42 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5599,11 +5689,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _Directive = __webpack_require__(14);
+	var _Directive = __webpack_require__(16);
 
 	var _Directive2 = _interopRequireDefault(_Directive);
 
-	var _Element = __webpack_require__(17);
+	var _Element = __webpack_require__(19);
 
 	var _Element2 = _interopRequireDefault(_Element);
 
@@ -5644,7 +5734,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getElementState;
 
 /***/ },
-/* 43 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5661,7 +5751,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _getRect = __webpack_require__(44);
+	var _getRect = __webpack_require__(46);
 
 	var _getRect2 = _interopRequireDefault(_getRect);
 
@@ -5728,7 +5818,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getIntersectRect;
 
 /***/ },
-/* 44 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5745,11 +5835,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _toElementArray = __webpack_require__(28);
+	var _toElementArray = __webpack_require__(30);
 
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 
-	var _getViewportRect = __webpack_require__(45);
+	var _getViewportRect = __webpack_require__(47);
 
 	var _getViewportRect2 = _interopRequireDefault(_getViewportRect);
 
@@ -5830,7 +5920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getRect;
 
 /***/ },
-/* 45 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5875,7 +5965,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getViewportRect;
 
 /***/ },
-/* 46 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5892,11 +5982,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _getIntersectRect = __webpack_require__(43);
+	var _getIntersectRect = __webpack_require__(45);
 
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 
-	var _getRect = __webpack_require__(44);
+	var _getRect = __webpack_require__(46);
 
 	var _getRect2 = _interopRequireDefault(_getRect);
 
@@ -5950,7 +6040,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hitTestElement;
 
 /***/ },
-/* 47 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5967,7 +6057,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _getIntersectRect = __webpack_require__(43);
+	var _getIntersectRect = __webpack_require__(45);
 
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 
@@ -6028,7 +6118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hitTestRect;
 
 /***/ },
-/* 48 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6045,7 +6135,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _toElementArray = __webpack_require__(28);
+	var _toElementArray = __webpack_require__(30);
 
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 
@@ -6093,7 +6183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = removeClass;
 
 /***/ },
-/* 49 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6110,7 +6200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _toElementArray = __webpack_require__(28);
+	var _toElementArray = __webpack_require__(30);
 
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 
@@ -6198,7 +6288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = translate;
 
 /***/ },
-/* 50 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6215,7 +6305,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _toElementArray = __webpack_require__(28);
+	var _toElementArray = __webpack_require__(30);
 
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 
@@ -6299,7 +6389,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = translate3d;
 
 /***/ },
-/* 51 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6316,11 +6406,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _assert2 = _interopRequireDefault(_assert);
 
-	var _toElementArray = __webpack_require__(28);
+	var _toElementArray = __webpack_require__(30);
 
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 
-	var _getRect = __webpack_require__(44);
+	var _getRect = __webpack_require__(46);
 
 	var _getRect2 = _interopRequireDefault(_getRect);
 

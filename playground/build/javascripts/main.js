@@ -54,20 +54,26 @@
 	
 	var _Playground2 = _interopRequireDefault(_Playground);
 	
+	var _Foo = __webpack_require__(3);
+	
+	var _Foo2 = _interopRequireDefault(_Foo);
+	
 	var _Bar = __webpack_require__(4);
 	
 	var _Bar2 = _interopRequireDefault(_Bar);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	_requiem2.default.register(_Playground2.default);
-	// import Foo from './components/Foo';
+	_requiem.dom.getDataRegistry().playground = {
+	  foo: '1',
+	  bar: '2'
+	};
 	
+	_requiem2.default.register(_Playground2.default);
+	_requiem2.default.register(_Foo2.default);
 	_requiem2.default.register(_Bar2.default);
 	
-	_requiem.dom.ready(function () {
-	  var nodes = _requiem.dom.sightread(document.getElementById('playground'));
-	});
+	_requiem2.default.sightread();
 
 /***/ },
 /* 1 */
@@ -162,7 +168,7 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.20.0', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.21.0', writable: false });
 	
 		(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 		(0, _injectModule2.default)(requiem, 'events', __webpack_require__(29));
@@ -280,6 +286,8 @@
 		var dom = {};
 	
 		Object.defineProperty(dom, 'createElement', { value: __webpack_require__(4), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'getClassRegistry', { value: __webpack_require__(52), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'getDataRegistry', { value: __webpack_require__(53), writable: false, enumerable: true });
 		Object.defineProperty(dom, 'namespace', { value: __webpack_require__(8), writable: false, enumerable: true });
 		Object.defineProperty(dom, 'ready', { value: __webpack_require__(9), writable: false, enumerable: true });
 		Object.defineProperty(dom, 'register', { value: __webpack_require__(10), writable: false, enumerable: true });
@@ -627,6 +635,10 @@
 	
 		'use strict';
 	
+		var _getClassRegistry = __webpack_require__(52);
+	
+		var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
+	
 		var _namespace = __webpack_require__(8);
 	
 		var _namespace2 = _interopRequireDefault(_namespace);
@@ -660,13 +672,11 @@
 		  (0, _assertType2.default)(c, 'function', false, 'Invalid class provided');
 		  (0, _assertType2.default)(n, 'string', true, 'Invalid optional parameter: namespace');
 	
-		  if (window._classRegistry === undefined) window._classRegistry = {};
-	
 		  var className = (0, _getFunctionName2.default)(c);
 	
-		  if (!(0, _assert2.default)((0, _namespace2.default)(n, window._classRegistry)[className] === undefined, 'Class name ' + className + ' is already registered')) return;
+		  if (!(0, _assert2.default)((0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
 	
-		  (0, _namespace2.default)(n, window._classRegistry)[className] = c;
+		  (0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] = c;
 	
 		  return c;
 		}
@@ -721,6 +731,10 @@
 	
 		'use strict';
 	
+		var _getClassRegistry = __webpack_require__(52);
+	
+		var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
+	
 		var _assert = __webpack_require__(6);
 	
 		var _assert2 = _interopRequireDefault(_assert);
@@ -774,7 +788,7 @@
 		 */
 		function sightread() {
 		  var element = document;
-		  var classRegistry = window._classRegistry;
+		  var classRegistry = (0, _getClassRegistry2.default)();
 		  var exclusive = false;
 	
 		  if (arguments.length === 1) {
@@ -970,9 +984,14 @@
 		  STATE: 'data-state',
 	
 		  /**
+		   * Use this directive for referencing global shared data.
+		   */
+		  REF: 'data-ref',
+	
+		  /**
 		   * Use this directive to map any property from the DOM to the controller.
 		   */
-		  PROPERTY: 'data'
+		  PROPERTY: 'data-'
 		};
 	
 		module.exports = Directive;
@@ -993,6 +1012,7 @@
 	
 		var getControllerClassNameFromElement = __webpack_require__(16);
 		var getInstanceNameFromElement = __webpack_require__(13);
+		var getClassRegistry = __webpack_require__(52);
 		var namespace = __webpack_require__(8);
 	
 		/**
@@ -1005,7 +1025,7 @@
 		 * @alias module:requiem~helpers.getControllerClassFromElement
 		 */
 		function getControllerClassFromElement(element) {
-		  var classRegistry = window._classRegistry;
+		  var classRegistry = getClassRegistry();
 	
 		  var controllerClassName = getControllerClassNameFromElement(element);
 		  var instanceName = getInstanceNameFromElement(element);
@@ -1087,6 +1107,10 @@
 	
 		var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
+		var _getDataRegistry = __webpack_require__(53);
+	
+		var _getDataRegistry2 = _interopRequireDefault(_getDataRegistry);
+	
 		var _assert = __webpack_require__(6);
 	
 		var _assert2 = _interopRequireDefault(_assert);
@@ -1158,6 +1182,7 @@
 		var Element = (function () {
 		  /**
 		   * Creates a new Element instance with optional initial properties.
+		   *
 		   * @param  {string|Node|Object} [init] - Initial properties. If this is a
 		   *                                       string, it will be used as this
 		   *                                       Element's instance name. If this is
@@ -1208,11 +1233,19 @@
 		          }
 		    }
 	
+		    // Check if this Element needs seed data from the data registry.
+		    if (this.hasAttribute(_Directive2.default.REF)) {
+		      var ref = this.getAttribute(_Directive2.default.REF);
+		      var data = (0, _getDataRegistry2.default)()[ref];
+	
+		      if (data) this.setProperties(data);
+		    }
+	
 		    // Scan for internal DOM element attributes prefixed with Directive.PROPERTY
 		    // and generate properties from them.
 		    var attributes = this.element.attributes;
 		    var nAtributes = attributes.length;
-		    var regex = new RegExp('^' + _Directive2.default.PROPERTY + '-', 'i');
+		    var regex = new RegExp('^' + _Directive2.default.PROPERTY, 'i');
 	
 		    for (var i = 0; i < nAtributes; i++) {
 		      var attribute = attributes[i];
@@ -1226,7 +1259,7 @@
 	
 		      Element.defineProperty(this, propertyName, {
 		        defaultValue: this.getAttribute(attribute.name),
-		        attribute: attribute.name,
+		        attribute: true,
 		        dirtyType: _DirtyType2.default.DATA,
 		        get: true,
 		        set: true
@@ -1265,8 +1298,9 @@
 		   *                                                      EventType to dispatch
 		   *                                                      whenever a new value
 		   *                                                      is set.
-		   * @param {string}           [descriptor.attribute]   - Specifies the DOM
-		   *                                                      attribute to update
+		   * @param {boolean}          [descriptor.attribute]   - Specifies whether the
+		   *                                                      a corresponding DOM
+		   *                                                      attribute will update
 		   *                                                      whenever a new value
 		   *                                                      is set.
 		   * @param {Function}         [descriptor.onChange]    - Method invoked when
@@ -1416,14 +1450,11 @@
 		     * transformed into a Requiem Element. A child is automatically appended
 		     * to the DOM tree of this instance.
 		     *
-		     * @param {Element|Element[]|Node|Node[]} child  - Single child or
-		     *                                                               an array of
-		     *                                                               children. Child
-		     *                                                               elements can be
-		     *                                                               instance(s) of
-		     *                                                               Requiem Elements,
-		     *                                                               jQuery Elements
-		     *                                                               or HTMLElements.
+		     * @param {Element|Element[]|Node|Node[]} child  - Single child or an array of
+		     *                                                 children. Child elements
+		     *                                                 can be instance(s) of
+		     *                                                 Requiem Elements, jQuery
+		     *                                                 Elements or HTMLElements.
 		     * @param {string} [name] - The name of the child/children to be added.
 		     *                          Typically a name is required. If it is not
 		     *                          specified, this method will attempt to deduct the
@@ -1556,11 +1587,10 @@
 		     * Removes a child or multiple children from this Element instance.
 		     *
 		     * @param {Node|Element|Array|string} child - A single child is a Requiem
-		     *                                                   Element, jQuery element or
-		     *                                                   Node. It can also be
-		     *                                                   a string of child name(s)
-		     *                                                   separated by '.', or an
-		     *                                                   array of child elements.
+		     *                                            Element, jQuery element or Node.
+		     *                                            It can also be a string of child
+		     *                                            name(s) separated by '.', or an
+		     *                                            array of child elements.
 		     *
 		     * @return {Element|Element[]} The removed element(s).
 		     */
@@ -1987,13 +2017,15 @@
 		     * Sets the property of the specified name with the specified value. If
 		     * properties does not exist, it will be newly defined.
 		     *
-		     * @param {string} key   - Name of the property.
-		     * @param {*}      value - Value of the property.
+		     * @param {string}  key                - Name of the property.
+		     * @param {*}       value              - Value of the property.
+		     * @param {boolean} [attributed=false] - Specifies whether property should
+		     *                                       also be an attribute of the element.
 		     */
 	
 		  }, {
 		    key: 'setProperty',
-		    value: function setProperty(key, value) {
+		    value: function setProperty(key, value, attributed) {
 		      if (this.hasProperty(key)) {
 		        this.properties[key] = value;
 		      } else {
@@ -2001,7 +2033,8 @@
 		          defaultValue: value,
 		          dirtyType: _DirtyType2.default.DATA,
 		          get: true,
-		          set: true
+		          set: true,
+		          attribute: attributed
 		        }, 'properties');
 		      }
 		    }
@@ -2018,6 +2051,8 @@
 		    key: 'setProperties',
 		    value: function setProperties(descriptor) {
 		      (0, _assertType2.default)(descriptor, 'object', false);
+	
+		      if (!descriptor) return;
 	
 		      for (var key in descriptor) {
 		        this.setProperty(key, descriptor[key]);
@@ -2506,7 +2541,7 @@
 		      (0, _assertType2.default)(descriptor.unique, 'boolean', true, 'Optional unique key in descriptor must be a boolean');
 		      (0, _assertType2.default)(descriptor.dirtyType, 'number', true, 'Optional dirty type must be of DirtyType enum (number)');
 		      (0, _assertType2.default)(descriptor.eventType, 'string', true, 'Optional event type must be a string');
-		      (0, _assertType2.default)(descriptor.attribute, 'string', true, 'Optional attribute must be a string');
+		      (0, _assertType2.default)(descriptor.attribute, 'boolean', true, 'Optional attribute must be a boolean');
 		      (0, _assertType2.default)(descriptor.onChange, 'function', true, 'Optional change handler must be a function');
 		      (0, _assertType2.default)(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
 		      (0, _assert2.default)((0, _validateAttribute2.default)(descriptor.attribute), 'Attribute \'' + descriptor.attribute + '\' is reserved');
@@ -2514,6 +2549,9 @@
 		      var dirtyType = descriptor.dirtyType;
 		      var defaultValue = descriptor.defaultValue;
 		      var attribute = descriptor.attribute;
+		      var attributeName = _Directive2.default.PROPERTY + propertyName.replace(/([A-Z])/g, function ($1) {
+		        return '-' + $1.toLowerCase();
+		      });
 		      var eventType = descriptor.eventType;
 		      var unique = descriptor.unique;
 	
@@ -2560,7 +2598,7 @@
 		          }
 	
 		          if (descriptor.onChange !== undefined) descriptor.onChange(oldVal, val);
-		          if (attribute !== undefined) element.setAttribute(attribute, val);
+		          if (attribute === true) element.setAttribute(attributeName, val);
 		          if (dirtyType !== undefined) element.setDirty(dirtyType);
 	
 		          if (eventType !== undefined) {
@@ -2579,8 +2617,8 @@
 	
 		      Object.defineProperty(scope, propertyName, newDescriptor);
 	
-		      if (defaultValue !== undefined && attribute !== undefined) {
-		        element.setAttribute(attribute, defaultValue);
+		      if (defaultValue !== undefined && attribute === true) {
+		        element.setAttribute(attributeName, defaultValue);
 		      }
 		    }
 	
@@ -2758,7 +2796,7 @@
 		 */
 		function validateAttribute(attribute) {
 		  for (var d in Directive) {
-		    if (attribute === d) return false;
+		    if (attribute === Directive[d]) return false;
 		  }
 	
 		  return true;
@@ -6515,6 +6553,64 @@
 	
 		module.exports = transform;
 	
+	/***/ },
+	/* 52 */
+	/***/ function(module, exports) {
+	
+		/**
+		 * Requiem
+		 * (c) VARIANTE (http://variante.io)
+		 *
+		 * This software is released under the MIT License:
+		 * http://www.opensource.org/licenses/mit-license.php
+		 */
+	
+		'use strict'
+	
+		/**
+		 * Gets the class registry.
+		 *
+		 * @return {Object} The class registry.
+		 *
+		 * @alias module:requiem~dom.getClassRegistry
+		 */
+		;
+		function getClassRegistry() {
+		  if (window._classRegistry === undefined) window._classRegistry = {};
+		  return window._classRegistry;
+		}
+	
+		module.exports = getClassRegistry;
+	
+	/***/ },
+	/* 53 */
+	/***/ function(module, exports) {
+	
+		/**
+		 * Requiem
+		 * (c) VARIANTE (http://variante.io)
+		 *
+		 * This software is released under the MIT License:
+		 * http://www.opensource.org/licenses/mit-license.php
+		 */
+	
+		'use strict'
+	
+		/**
+		 * Gets the data registry.
+		 *
+		 * @return {Object} The data registry.
+		 *
+		 * @alias module:requiem~dom.getDataRegistry
+		 */
+		;
+		function getDataRegistry() {
+		  if (window._dataRegistry === undefined) window._dataRegistry = {};
+		  return window._dataRegistry;
+		}
+	
+		module.exports = getDataRegistry;
+	
 	/***/ }
 	/******/ ])
 	});
@@ -6560,18 +6656,7 @@
 	  _createClass(Playground, [{
 	    key: 'init',
 	    value: function init() {
-	      var _this2 = this;
-	
-	      var foo = new _Foo2.default('foo');
-	      foo.addEventListener(_requiem.EventType.DATA.DATA_CHANGE, function (event) {
-	        _this2.setProperty('foo', 'abc');
-	      });
-	
-	      this.respondsTo(10.0, _requiem.EventType.OBJECT.SCROLL);
-	      this.addChild(foo);
-	
-	      var bar = {};
-	
+	      console.log(this);
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
 	    }
 	  }, {

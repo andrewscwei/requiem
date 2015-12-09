@@ -7,14 +7,7 @@ import Foo from './Foo';
 
 class Playground extends Element {
   init() {
-    let foo = new Foo('foo');
-    foo.addEventListener(EventType.DATA.DATA_CHANGE, (event) => { this.setProperty('foo', 'abc'); });
-
-    this.respondsTo(10.0, EventType.OBJECT.SCROLL);
-    this.addChild(foo);
-
-    let bar = {};
-
+    console.log(this);
     super.init();
   }
 

@@ -35,9 +35,14 @@ let Directive = {
   STATE: 'data-state',
 
   /**
+   * Use this directive for referencing global shared data.
+   */
+  REF: 'data-ref',
+
+  /**
    * Use this directive to map any property from the DOM to the controller.
    */
-  PROPERTY: 'data'
+  PROPERTY: 'data-'
 };
 
 module.exports = Directive;

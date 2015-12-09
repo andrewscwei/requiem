@@ -8,6 +8,7 @@
 
 'use strict';
 
+import getClassRegistry from './getClassRegistry';
 import namespace from './namespace';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
@@ -28,13 +29,11 @@ function register(c, n) {
   assertType(c, 'function', false, 'Invalid class provided');
   assertType(n, 'string', true, 'Invalid optional parameter: namespace');
 
-  if (window._classRegistry === undefined) window._classRegistry = {};
-
   let className = getFunctionName(c);
 
-  if (!assert(namespace(n, window._classRegistry)[className] === undefined, 'Class name ' + className + ' is already registered')) return;
+  if (!assert(namespace(n, getClassRegistry())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
 
-  namespace(n, window._classRegistry)[className] = c;
+  namespace(n, getClassRegistry())[className] = c;
 
   return c;
 }

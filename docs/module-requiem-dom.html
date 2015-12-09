@@ -262,6 +262,214 @@
 
     
 
+    <h4 class="name" id=".getClassRegistry"><span class="type-signature">(static) </span>getClassRegistry<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Gets the class registry.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dom_getClassRegistry.js.html">dom/getClassRegistry.js</a>, <a href="dom_getClassRegistry.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The class registry.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getDataRegistry"><span class="type-signature">(static) </span>getDataRegistry<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Gets the data registry.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dom_getDataRegistry.js.html">dom/getDataRegistry.js</a>, <a href="dom_getDataRegistry.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The data registry.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id=".namespace"><span class="type-signature">(static) </span>namespace<span class="signature">(path<span class="signature-attributes">opt</span>, scope<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
@@ -613,7 +821,204 @@ notated namespace path.
 
     
 
-    <h4 class="name" id=".sightread"><span class="type-signature">(static) </span>sightread<span class="signature">(element<span class="signature-attributes">opt</span>, controllerDict<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object|Element}</span></h4>
+    <h4 class="name" id=".register"><span class="type-signature">(static) </span>register<span class="signature">(c, n<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Class}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Registers a controller class with Requiem to be used for instantiating
+custom elements during the sighreading process.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>c</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Class</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Class to be registered.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>n</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Namespace of class.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dom_register.js.html">dom/register.js</a>, <a href="dom_register.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The registered class.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Class</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".sightread"><span class="type-signature">(static) </span>sightread<span class="signature">(element<span class="signature-attributes">opt</span>, exclusive<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object|Element}</span></h4>
 
     
 
@@ -695,16 +1100,15 @@ not just its children.
                 </td>
             
 
-            <td class="description last">Target element for
-                                               sightreading. By default this
-                                               will be the document.</td>
+            <td class="description last">Target element for sightreading. By
+                                     default this will be the document.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>controllerDict</code></td>
+                <td class="name"><code>exclusive</code></td>
             
 
             <td class="type">
@@ -731,16 +1135,13 @@ not just its children.
             
                 <td class="default">
                 
-                    window
+                    false
                 
                 </td>
             
 
-            <td class="description last">Look-up dictionary (object
-                                               literal) that provides all
-                                               controller classes when
-                                               sightreading encounters a
-                                               controller marked element.</td>
+            <td class="description last">Specifies whether the root node should
+                                     be excluded from the sightread.</td>
         </tr>
 
     
@@ -781,7 +1182,7 @@ not just its children.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dom_sightread.js.html">dom/sightread.js</a>, <a href="dom_sightread.js.html#line42">line 42</a>
+        <a href="dom_sightread.js.html">dom/sightread.js</a>, <a href="dom_sightread.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -858,7 +1259,7 @@ not just its children.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Dec 04 2015 21:41:09 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue Dec 08 2015 17:02:08 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

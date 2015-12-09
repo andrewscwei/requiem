@@ -8,6 +8,7 @@
 
 'use strict';
 
+import getDataRegistry from '../dom/getDataRegistry';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
 import noval from '../helpers/noval';
@@ -32,6 +33,7 @@ import sightread from '../dom/sightread';
 class Element {
   /**
    * Creates a new Element instance with optional initial properties.
+   *
    * @param  {string|Node|Object} [init] - Initial properties. If this is a
    *                                       string, it will be used as this
    *                                       Element's instance name. If this is
@@ -79,11 +81,19 @@ class Element {
       }
     }
 
+    // Check if this Element needs seed data from the data registry.
+    if (this.hasAttribute(Directive.REF)) {
+      let ref = this.getAttribute(Directive.REF);
+      let data = getDataRegistry()[ref];
+
+      if (data) this.setProperties(data);
+    }
+
     // Scan for internal DOM element attributes prefixed with Directive.PROPERTY
     // and generate properties from them.
     let attributes = this.element.attributes;
     let nAtributes = attributes.length;
-    let regex = new RegExp('^' + Directive.PROPERTY + '-', 'i');
+    let regex = new RegExp('^' + Directive.PROPERTY, 'i');
 
     for (let i = 0; i < nAtributes; i++) {
       let attribute = attributes[i];
@@ -95,7 +105,7 @@ class Element {
 
       Element.defineProperty(this, propertyName, {
         defaultValue: this.getAttribute(attribute.name),
-        attribute: attribute.name,
+        attribute: true,
         dirtyType: DirtyType.DATA,
         get: true,
         set: true
@@ -134,8 +144,9 @@ class Element {
    *                                                      EventType to dispatch
    *                                                      whenever a new value
    *                                                      is set.
-   * @param {string}           [descriptor.attribute]   - Specifies the DOM
-   *                                                      attribute to update
+   * @param {boolean}          [descriptor.attribute]   - Specifies whether the
+   *                                                      a corresponding DOM
+   *                                                      attribute will update
    *                                                      whenever a new value
    *                                                      is set.
    * @param {Function}         [descriptor.onChange]    - Method invoked when
@@ -175,7 +186,7 @@ class Element {
     assertType(descriptor.unique, 'boolean', true, 'Optional unique key in descriptor must be a boolean');
     assertType(descriptor.dirtyType, 'number', true, 'Optional dirty type must be of DirtyType enum (number)');
     assertType(descriptor.eventType, 'string', true, 'Optional event type must be a string');
-    assertType(descriptor.attribute, 'string', true, 'Optional attribute must be a string');
+    assertType(descriptor.attribute, 'boolean', true, 'Optional attribute must be a boolean');
     assertType(descriptor.onChange, 'function', true, 'Optional change handler must be a function');
     assertType(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
     assert(validateAttribute(descriptor.attribute), 'Attribute \'' + descriptor.attribute + '\' is reserved');
@@ -183,6 +194,7 @@ class Element {
     let dirtyType = descriptor.dirtyType;
     let defaultValue = descriptor.defaultValue;
     let attribute = descriptor.attribute;
+    let attributeName = Directive.PROPERTY+propertyName.replace(/([A-Z])/g, ($1) => ('-'+$1.toLowerCase()));
     let eventType = descriptor.eventType;
     let unique = descriptor.unique;
 
@@ -229,7 +241,7 @@ class Element {
         }
 
         if (descriptor.onChange !== undefined) descriptor.onChange(oldVal, val);
-        if (attribute !== undefined) element.setAttribute(attribute, val);
+        if (attribute === true) element.setAttribute(attributeName, val);
         if (dirtyType !== undefined) element.setDirty(dirtyType);
 
         if (eventType !== undefined) {
@@ -248,8 +260,8 @@ class Element {
 
     Object.defineProperty(scope, propertyName, newDescriptor);
 
-    if (defaultValue !== undefined && attribute !== undefined) {
-      element.setAttribute(attribute, defaultValue);
+    if (defaultValue !== undefined && attribute === true) {
+      element.setAttribute(attributeName, defaultValue);
     }
   }
 
@@ -399,14 +411,11 @@ class Element {
    * transformed into a Requiem Element. A child is automatically appended
    * to the DOM tree of this instance.
    *
-   * @param {Element|Element[]|Node|Node[]} child  - Single child or
-   *                                                               an array of
-   *                                                               children. Child
-   *                                                               elements can be
-   *                                                               instance(s) of
-   *                                                               Requiem Elements,
-   *                                                               jQuery Elements
-   *                                                               or HTMLElements.
+   * @param {Element|Element[]|Node|Node[]} child  - Single child or an array of
+   *                                                 children. Child elements
+   *                                                 can be instance(s) of
+   *                                                 Requiem Elements, jQuery
+   *                                                 Elements or HTMLElements.
    * @param {string} [name] - The name of the child/children to be added.
    *                          Typically a name is required. If it is not
    *                          specified, this method will attempt to deduct the
@@ -541,11 +550,10 @@ class Element {
    * Removes a child or multiple children from this Element instance.
    *
    * @param {Node|Element|Array|string} child - A single child is a Requiem
-   *                                                   Element, jQuery element or
-   *                                                   Node. It can also be
-   *                                                   a string of child name(s)
-   *                                                   separated by '.', or an
-   *                                                   array of child elements.
+   *                                            Element, jQuery element or Node.
+   *                                            It can also be a string of child
+   *                                            name(s) separated by '.', or an
+   *                                            array of child elements.
    *
    * @return {Element|Element[]} The removed element(s).
    */
@@ -951,10 +959,12 @@ class Element {
    * Sets the property of the specified name with the specified value. If
    * properties does not exist, it will be newly defined.
    *
-   * @param {string} key   - Name of the property.
-   * @param {*}      value - Value of the property.
+   * @param {string}  key                - Name of the property.
+   * @param {*}       value              - Value of the property.
+   * @param {boolean} [attributed=false] - Specifies whether property should
+   *                                       also be an attribute of the element.
    */
-  setProperty(key, value) {
+  setProperty(key, value, attributed) {
     if (this.hasProperty(key)) {
       this.properties[key] = value;
     }
@@ -963,7 +973,8 @@ class Element {
         defaultValue: value,
         dirtyType: DirtyType.DATA,
         get: true,
-        set: true
+        set: true,
+        attribute: attributed
       }, 'properties');
     }
   }
@@ -977,6 +988,8 @@ class Element {
    */
   setProperties(descriptor) {
     assertType(descriptor, 'object', false);
+
+    if (!descriptor) return;
 
     for (let key in descriptor) {
       this.setProperty(key, descriptor[key]);

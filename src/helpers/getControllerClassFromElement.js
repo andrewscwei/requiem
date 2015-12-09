@@ -10,6 +10,7 @@
 
 let getControllerClassNameFromElement = require('./getControllerClassNameFromElement');
 let getInstanceNameFromElement = require('./getInstanceNameFromElement');
+let getClassRegistry = require('../dom/getClassRegistry');
 let namespace = require('../dom/namespace');
 
 /**
@@ -22,7 +23,7 @@ let namespace = require('../dom/namespace');
  * @alias module:requiem~helpers.getControllerClassFromElement
  */
 function getControllerClassFromElement(element) {
-  let classRegistry = window._classRegistry;
+  let classRegistry = getClassRegistry();
 
   let controllerClassName = getControllerClassNameFromElement(element);
   let instanceName = getInstanceNameFromElement(element);
