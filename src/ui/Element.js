@@ -267,6 +267,10 @@ class Element {
     if (defaultValue !== undefined && attribute === true) {
       element.setAttribute(attributeName, defaultValue);
     }
+
+    if (defaultValue !== undefined && dirtyType !== undefined) {
+      element.setDirty(dirtyType);
+    }
   }
 
   /**

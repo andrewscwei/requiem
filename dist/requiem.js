@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.21.1', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.21.2', writable: false });
 
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(31));
@@ -2600,6 +2600,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      if (defaultValue !== undefined && attribute === true) {
 	        element.setAttribute(attributeName, defaultValue);
+	      }
+
+	      if (defaultValue !== undefined && dirtyType !== undefined) {
+	        element.setDirty(dirtyType);
 	      }
 	    }
 
