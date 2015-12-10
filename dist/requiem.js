@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.21.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.21.1', writable: false });
 
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(31));
@@ -1200,6 +1200,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    for (var name in children) {
 	                      this.addChild(children[name], name);
 	                    }
+	                    break;
+
+	                  case 'properties':
+	                    this.setProperties(init.properties);
 	                    break;
 
 	                  default:

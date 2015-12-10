@@ -73,6 +73,10 @@ class Element {
                 }
                 break;
 
+              case 'properties':
+                this.setProperties(init.properties);
+                break;
+
               default:
                 this[key] = init[key];
             }
