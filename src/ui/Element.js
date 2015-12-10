@@ -268,7 +268,7 @@ class Element {
       element.setAttribute(attributeName, defaultValue);
     }
 
-    if (defaultValue !== undefined && dirtyType !== undefined && this.nodeState >= NodeState.UPDATED) {
+    if (defaultValue !== undefined && dirtyType !== undefined && element.nodeState >= NodeState.UPDATED) {
       element.setDirty(dirtyType);
     }
   }
