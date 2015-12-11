@@ -35,6 +35,7 @@ var tasks = {
     webpack: {
       pretty: {
         context: paths.src,
+        devtool: 'sourcemap',
         entry: {
           requiem: './requiem.js'
         },

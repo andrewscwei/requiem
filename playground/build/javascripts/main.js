@@ -58,7 +58,7 @@
 	
 	var _Foo2 = _interopRequireDefault(_Foo);
 	
-	var _Bar = __webpack_require__(4);
+	var _Bar = __webpack_require__(5);
 	
 	var _Bar2 = _interopRequireDefault(_Bar);
 	
@@ -168,14 +168,14 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.21.0', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.21.4', writable: false });
 	
 		(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
-		(0, _injectModule2.default)(requiem, 'events', __webpack_require__(29));
-		(0, _injectModule2.default)(requiem, 'net', __webpack_require__(31));
-		(0, _injectModule2.default)(requiem, 'types', __webpack_require__(34));
-		(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(36));
-		(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(37));
+		(0, _injectModule2.default)(requiem, 'events', __webpack_require__(31));
+		(0, _injectModule2.default)(requiem, 'net', __webpack_require__(33));
+		(0, _injectModule2.default)(requiem, 'types', __webpack_require__(36));
+		(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(38));
+		(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(39));
 	
 		(0, _polyfill2.default)();
 	
@@ -286,12 +286,12 @@
 		var dom = {};
 	
 		Object.defineProperty(dom, 'createElement', { value: __webpack_require__(4), writable: false, enumerable: true });
-		Object.defineProperty(dom, 'getClassRegistry', { value: __webpack_require__(52), writable: false, enumerable: true });
-		Object.defineProperty(dom, 'getDataRegistry', { value: __webpack_require__(53), writable: false, enumerable: true });
-		Object.defineProperty(dom, 'namespace', { value: __webpack_require__(8), writable: false, enumerable: true });
-		Object.defineProperty(dom, 'ready', { value: __webpack_require__(9), writable: false, enumerable: true });
-		Object.defineProperty(dom, 'register', { value: __webpack_require__(10), writable: false, enumerable: true });
-		Object.defineProperty(dom, 'sightread', { value: __webpack_require__(12), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'getClassRegistry', { value: __webpack_require__(8), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'getDataRegistry', { value: __webpack_require__(9), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'namespace', { value: __webpack_require__(10), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'ready', { value: __webpack_require__(11), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'register', { value: __webpack_require__(12), writable: false, enumerable: true });
+		Object.defineProperty(dom, 'sightread', { value: __webpack_require__(14), writable: false, enumerable: true });
 	
 		module.exports = dom;
 	
@@ -506,6 +506,64 @@
 	
 	/***/ },
 	/* 8 */
+	/***/ function(module, exports) {
+	
+		/**
+		 * Requiem
+		 * (c) VARIANTE (http://variante.io)
+		 *
+		 * This software is released under the MIT License:
+		 * http://www.opensource.org/licenses/mit-license.php
+		 */
+	
+		'use strict'
+	
+		/**
+		 * Gets the class registry.
+		 *
+		 * @return {Object} The class registry.
+		 *
+		 * @alias module:requiem~dom.getClassRegistry
+		 */
+		;
+		function getClassRegistry() {
+		  if (window._classRegistry === undefined) window._classRegistry = {};
+		  return window._classRegistry;
+		}
+	
+		module.exports = getClassRegistry;
+	
+	/***/ },
+	/* 9 */
+	/***/ function(module, exports) {
+	
+		/**
+		 * Requiem
+		 * (c) VARIANTE (http://variante.io)
+		 *
+		 * This software is released under the MIT License:
+		 * http://www.opensource.org/licenses/mit-license.php
+		 */
+	
+		'use strict'
+	
+		/**
+		 * Gets the data registry.
+		 *
+		 * @return {Object} The data registry.
+		 *
+		 * @alias module:requiem~dom.getDataRegistry
+		 */
+		;
+		function getDataRegistry() {
+		  if (window._dataRegistry === undefined) window._dataRegistry = {};
+		  return window._dataRegistry;
+		}
+	
+		module.exports = getDataRegistry;
+	
+	/***/ },
+	/* 10 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -561,7 +619,7 @@
 		module.exports = namespace;
 	
 	/***/ },
-	/* 9 */
+	/* 11 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -622,7 +680,7 @@
 		module.exports = ready;
 	
 	/***/ },
-	/* 10 */
+	/* 12 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -635,11 +693,11 @@
 	
 		'use strict';
 	
-		var _getClassRegistry = __webpack_require__(52);
+		var _getClassRegistry = __webpack_require__(8);
 	
 		var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
 	
-		var _namespace = __webpack_require__(8);
+		var _namespace = __webpack_require__(10);
 	
 		var _namespace2 = _interopRequireDefault(_namespace);
 	
@@ -651,7 +709,7 @@
 	
 		var _assertType2 = _interopRequireDefault(_assertType);
 	
-		var _getFunctionName = __webpack_require__(11);
+		var _getFunctionName = __webpack_require__(13);
 	
 		var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
 	
@@ -684,7 +742,7 @@
 		module.exports = register;
 	
 	/***/ },
-	/* 11 */
+	/* 13 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -718,7 +776,7 @@
 		module.exports = getFunctionName;
 	
 	/***/ },
-	/* 12 */
+	/* 14 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -731,7 +789,7 @@
 	
 		'use strict';
 	
-		var _getClassRegistry = __webpack_require__(52);
+		var _getClassRegistry = __webpack_require__(8);
 	
 		var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
 	
@@ -743,23 +801,23 @@
 	
 		var _assertType2 = _interopRequireDefault(_assertType);
 	
-		var _getInstanceNameFromElement = __webpack_require__(13);
+		var _getInstanceNameFromElement = __webpack_require__(15);
 	
 		var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
 	
-		var _getControllerClassFromElement = __webpack_require__(15);
+		var _getControllerClassFromElement = __webpack_require__(17);
 	
 		var _getControllerClassFromElement2 = _interopRequireDefault(_getControllerClassFromElement);
 	
-		var _getControllerClassNameFromElement = __webpack_require__(16);
+		var _getControllerClassNameFromElement = __webpack_require__(18);
 	
 		var _getControllerClassNameFromElement2 = _interopRequireDefault(_getControllerClassNameFromElement);
 	
-		var _Directive = __webpack_require__(14);
+		var _Directive = __webpack_require__(16);
 	
 		var _Directive2 = _interopRequireDefault(_Directive);
 	
-		var _hasChild = __webpack_require__(27);
+		var _hasChild = __webpack_require__(29);
 	
 		var _hasChild2 = _interopRequireDefault(_hasChild);
 	
@@ -826,7 +884,7 @@
 		      children: sightread(element, true)
 		    });
 		  } else {
-		    var Element = __webpack_require__(17);
+		    var Element = __webpack_require__(19);
 		    var children = null;
 	
 		    if (element.jquery) element = element.get(0);
@@ -912,7 +970,7 @@
 		module.exports = sightread;
 	
 	/***/ },
-	/* 13 */
+	/* 15 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -925,7 +983,7 @@
 	
 		'use strict';
 	
-		var Directive = __webpack_require__(14);
+		var Directive = __webpack_require__(16);
 	
 		/**
 		 * Gets the instance name from a DOM element.
@@ -943,7 +1001,7 @@
 		module.exports = getInstanceNameFromElement;
 	
 	/***/ },
-	/* 14 */
+	/* 16 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -997,7 +1055,7 @@
 		module.exports = Directive;
 	
 	/***/ },
-	/* 15 */
+	/* 17 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -1010,10 +1068,10 @@
 	
 		'use strict';
 	
-		var getControllerClassNameFromElement = __webpack_require__(16);
-		var getInstanceNameFromElement = __webpack_require__(13);
-		var getClassRegistry = __webpack_require__(52);
-		var namespace = __webpack_require__(8);
+		var getControllerClassNameFromElement = __webpack_require__(18);
+		var getInstanceNameFromElement = __webpack_require__(15);
+		var getClassRegistry = __webpack_require__(8);
+		var namespace = __webpack_require__(10);
 	
 		/**
 		 * Gets the controller class from the DOM element.
@@ -1034,17 +1092,17 @@
 		  // If no controller class is specified but element is marked as an instance,
 		  // default the controller class to Element.
 		  if (!controllerClass && instanceName && instanceName.length > 0) {
-		    controllerClass = __webpack_require__(17);
+		    controllerClass = __webpack_require__(19);
 		  } else if (typeof controllerClass !== 'function') {
 		    switch (controllerClassName) {
 		      case 'Video':
 		        {
-		          controllerClass = __webpack_require__(26);
+		          controllerClass = __webpack_require__(28);
 		          break;
 		        }
 		      case 'Element':
 		        {
-		          controllerClass = __webpack_require__(17);
+		          controllerClass = __webpack_require__(19);
 		          break;
 		        }
 		      default:
@@ -1061,7 +1119,7 @@
 		module.exports = getControllerClassFromElement;
 	
 	/***/ },
-	/* 16 */
+	/* 18 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -1074,7 +1132,7 @@
 	
 		'use strict';
 	
-		var Directive = __webpack_require__(14);
+		var Directive = __webpack_require__(16);
 	
 		/**
 		 * Gets the controller class name from the DOM element.
@@ -1092,7 +1150,7 @@
 		module.exports = getControllerClassNameFromElement;
 	
 	/***/ },
-	/* 17 */
+	/* 19 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -1107,7 +1165,7 @@
 	
 		var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-		var _getDataRegistry = __webpack_require__(53);
+		var _getDataRegistry = __webpack_require__(9);
 	
 		var _getDataRegistry2 = _interopRequireDefault(_getDataRegistry);
 	
@@ -1119,47 +1177,47 @@
 	
 		var _assertType2 = _interopRequireDefault(_assertType);
 	
-		var _noval = __webpack_require__(18);
+		var _noval = __webpack_require__(20);
 	
 		var _noval2 = _interopRequireDefault(_noval);
 	
-		var _getFunctionName = __webpack_require__(11);
+		var _getFunctionName = __webpack_require__(13);
 	
 		var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
 	
-		var _log = __webpack_require__(19);
+		var _log = __webpack_require__(21);
 	
 		var _log2 = _interopRequireDefault(_log);
 	
-		var _validateAttribute = __webpack_require__(20);
+		var _validateAttribute = __webpack_require__(22);
 	
 		var _validateAttribute2 = _interopRequireDefault(_validateAttribute);
 	
-		var _getInstanceNameFromElement = __webpack_require__(13);
+		var _getInstanceNameFromElement = __webpack_require__(15);
 	
 		var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
 	
-		var _DirtyType = __webpack_require__(21);
+		var _DirtyType = __webpack_require__(23);
 	
 		var _DirtyType2 = _interopRequireDefault(_DirtyType);
 	
-		var _NodeState = __webpack_require__(22);
+		var _NodeState = __webpack_require__(24);
 	
 		var _NodeState2 = _interopRequireDefault(_NodeState);
 	
-		var _EventType = __webpack_require__(23);
+		var _EventType = __webpack_require__(25);
 	
 		var _EventType2 = _interopRequireDefault(_EventType);
 	
-		var _Directive = __webpack_require__(14);
+		var _Directive = __webpack_require__(16);
 	
 		var _Directive2 = _interopRequireDefault(_Directive);
 	
-		var _ElementUpdateDelegate = __webpack_require__(24);
+		var _ElementUpdateDelegate = __webpack_require__(26);
 	
 		var _ElementUpdateDelegate2 = _interopRequireDefault(_ElementUpdateDelegate);
 	
-		var _sightread = __webpack_require__(12);
+		var _sightread = __webpack_require__(14);
 	
 		var _sightread2 = _interopRequireDefault(_sightread);
 	
@@ -1223,6 +1281,10 @@
 		                    for (var name in children) {
 		                      this.addChild(children[name], name);
 		                    }
+		                    break;
+	
+		                  case 'properties':
+		                    this.setProperties(init.properties);
 		                    break;
 	
 		                  default:
@@ -2620,6 +2682,10 @@
 		      if (defaultValue !== undefined && attribute === true) {
 		        element.setAttribute(attributeName, defaultValue);
 		      }
+	
+		      if (defaultValue !== undefined && dirtyType !== undefined && element.nodeState >= _NodeState2.default.UPDATED) {
+		        element.setDirty(dirtyType);
+		      }
 		    }
 	
 		    /**
@@ -2671,7 +2737,7 @@
 		module.exports = Element;
 	
 	/***/ },
-	/* 18 */
+	/* 20 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -2739,7 +2805,7 @@
 		module.exports = noval;
 	
 	/***/ },
-	/* 19 */
+	/* 21 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -2770,7 +2836,7 @@
 		module.exports = log;
 	
 	/***/ },
-	/* 20 */
+	/* 22 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -2783,7 +2849,7 @@
 	
 		'use strict';
 	
-		var Directive = __webpack_require__(14);
+		var Directive = __webpack_require__(16);
 	
 		/**
 		 * Validates whether an attribute can be used (could be reserved by Requiem).
@@ -2805,7 +2871,7 @@
 		module.exports = validateAttribute;
 	
 	/***/ },
-	/* 21 */
+	/* 23 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -2951,7 +3017,7 @@
 		module.exports = DirtyType;
 	
 	/***/ },
-	/* 22 */
+	/* 24 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -3024,7 +3090,7 @@
 		module.exports = NodeState;
 	
 	/***/ },
-	/* 23 */
+	/* 25 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -3176,7 +3242,7 @@
 		module.exports = EventType;
 	
 	/***/ },
-	/* 24 */
+	/* 26 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -3191,19 +3257,19 @@
 	
 		var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-		var _debounce = __webpack_require__(25);
+		var _debounce = __webpack_require__(27);
 	
 		var _debounce2 = _interopRequireDefault(_debounce);
 	
-		var _log = __webpack_require__(19);
+		var _log = __webpack_require__(21);
 	
 		var _log2 = _interopRequireDefault(_log);
 	
-		var _DirtyType = __webpack_require__(21);
+		var _DirtyType = __webpack_require__(23);
 	
 		var _DirtyType2 = _interopRequireDefault(_DirtyType);
 	
-		var _EventType = __webpack_require__(23);
+		var _EventType = __webpack_require__(25);
 	
 		var _EventType2 = _interopRequireDefault(_EventType);
 	
@@ -3784,7 +3850,7 @@
 		module.exports = ElementUpdateDelegate;
 	
 	/***/ },
-	/* 25 */
+	/* 27 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -3850,7 +3916,7 @@
 		module.exports = debounce;
 	
 	/***/ },
-	/* 26 */
+	/* 28 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -3871,11 +3937,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _DirtyType = __webpack_require__(21);
+		var _DirtyType = __webpack_require__(23);
 	
 		var _DirtyType2 = _interopRequireDefault(_DirtyType);
 	
-		var _Element2 = __webpack_require__(17);
+		var _Element2 = __webpack_require__(19);
 	
 		var _Element3 = _interopRequireDefault(_Element2);
 	
@@ -4106,7 +4172,7 @@
 		module.exports = Video;
 	
 	/***/ },
-	/* 27 */
+	/* 29 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4123,7 +4189,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(28);
+		var _toElementArray = __webpack_require__(30);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -4166,7 +4232,7 @@
 		module.exports = hasChild;
 	
 	/***/ },
-	/* 28 */
+	/* 30 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4194,7 +4260,7 @@
 		function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
 	
 		function toElementArray(element, keepElement) {
-		  var Element = __webpack_require__(17);
+		  var Element = __webpack_require__(19);
 	
 		  if (!element) return null;
 	
@@ -4234,7 +4300,7 @@
 		module.exports = toElementArray;
 	
 	/***/ },
-	/* 29 */
+	/* 31 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4255,12 +4321,12 @@
 		;
 		var events = {};
 	
-		Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(30), writable: false, enumerable: true });
+		Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(32), writable: false, enumerable: true });
 	
 		module.exports = events;
 	
 	/***/ },
-	/* 30 */
+	/* 32 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4283,7 +4349,7 @@
 	
 		var _assertType2 = _interopRequireDefault(_assertType);
 	
-		var _log = __webpack_require__(19);
+		var _log = __webpack_require__(21);
 	
 		var _log2 = _interopRequireDefault(_log);
 	
@@ -4441,7 +4507,7 @@
 		module.exports = EventDispatcher;
 	
 	/***/ },
-	/* 31 */
+	/* 33 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4462,12 +4528,12 @@
 		;
 		var net = {};
 	
-		Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(32), writable: false, enumerable: true });
+		Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(34), writable: false, enumerable: true });
 	
 		module.exports = net;
 	
 	/***/ },
-	/* 32 */
+	/* 34 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -4488,19 +4554,19 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _inherit = __webpack_require__(33);
+		var _inherit = __webpack_require__(35);
 	
 		var _inherit2 = _interopRequireDefault(_inherit);
 	
-		var _log = __webpack_require__(19);
+		var _log = __webpack_require__(21);
 	
 		var _log2 = _interopRequireDefault(_log);
 	
-		var _EventDispatcher2 = __webpack_require__(30);
+		var _EventDispatcher2 = __webpack_require__(32);
 	
 		var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
 	
-		var _EventType = __webpack_require__(23);
+		var _EventType = __webpack_require__(25);
 	
 		var _EventType2 = _interopRequireDefault(_EventType);
 	
@@ -5184,7 +5250,7 @@
 		module.exports = AssetLoader;
 	
 	/***/ },
-	/* 33 */
+	/* 35 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5232,7 +5298,7 @@
 		module.exports = inherit;
 	
 	/***/ },
-	/* 34 */
+	/* 36 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5253,16 +5319,16 @@
 		;
 		var types = {};
 	
-		Object.defineProperty(types, 'Directive', { value: __webpack_require__(14), writable: false, enumerable: true });
-		Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(21), writable: false, enumerable: true });
-		Object.defineProperty(types, 'EventType', { value: __webpack_require__(23), writable: false, enumerable: true });
-		Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(35), writable: false, enumerable: true });
-		Object.defineProperty(types, 'NodeState', { value: __webpack_require__(22), writable: false, enumerable: true });
+		Object.defineProperty(types, 'Directive', { value: __webpack_require__(16), writable: false, enumerable: true });
+		Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(23), writable: false, enumerable: true });
+		Object.defineProperty(types, 'EventType', { value: __webpack_require__(25), writable: false, enumerable: true });
+		Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(37), writable: false, enumerable: true });
+		Object.defineProperty(types, 'NodeState', { value: __webpack_require__(24), writable: false, enumerable: true });
 	
 		module.exports = types;
 	
 	/***/ },
-	/* 35 */
+	/* 37 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -5389,7 +5455,7 @@
 		module.exports = KeyCode;
 	
 	/***/ },
-	/* 36 */
+	/* 38 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5410,14 +5476,14 @@
 		;
 		var ui = {};
 	
-		Object.defineProperty(ui, 'Element', { value: __webpack_require__(17), writable: false, enumerable: true });
-		Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(24), writable: false, enumerable: true });
-		Object.defineProperty(ui, 'Video', { value: __webpack_require__(26), writable: false, enumerable: true });
+		Object.defineProperty(ui, 'Element', { value: __webpack_require__(19), writable: false, enumerable: true });
+		Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(26), writable: false, enumerable: true });
+		Object.defineProperty(ui, 'Video', { value: __webpack_require__(28), writable: false, enumerable: true });
 	
 		module.exports = ui;
 	
 	/***/ },
-	/* 37 */
+	/* 39 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5438,26 +5504,26 @@
 		;
 		var utils = {};
 	
-		Object.defineProperty(utils, 'addClass', { value: __webpack_require__(38), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(41), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(39), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(27), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(40), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(42), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(43), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getRect', { value: __webpack_require__(44), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(45), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(46), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(47), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(48), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'translate', { value: __webpack_require__(49), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(50), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'transform', { value: __webpack_require__(51), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'addClass', { value: __webpack_require__(40), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(43), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(41), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(29), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(42), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(44), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(45), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getRect', { value: __webpack_require__(46), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(47), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(48), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(49), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(50), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'translate', { value: __webpack_require__(51), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(52), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'transform', { value: __webpack_require__(53), writable: false, enumerable: true });
 	
 		module.exports = utils;
 	
 	/***/ },
-	/* 38 */
+	/* 40 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5474,11 +5540,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(28);
+		var _toElementArray = __webpack_require__(30);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-		var _hasClass = __webpack_require__(39);
+		var _hasClass = __webpack_require__(41);
 	
 		var _hasClass2 = _interopRequireDefault(_hasClass);
 	
@@ -5526,7 +5592,7 @@
 		module.exports = addClass;
 	
 	/***/ },
-	/* 39 */
+	/* 41 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5543,11 +5609,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(28);
+		var _toElementArray = __webpack_require__(30);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-		var _getClassIndex = __webpack_require__(40);
+		var _getClassIndex = __webpack_require__(42);
 	
 		var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
 	
@@ -5580,7 +5646,7 @@
 		module.exports = hasClass;
 	
 	/***/ },
-	/* 40 */
+	/* 42 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5597,7 +5663,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _Element = __webpack_require__(17);
+		var _Element = __webpack_require__(19);
 	
 		var _Element2 = _interopRequireDefault(_Element);
 	
@@ -5630,7 +5696,7 @@
 		module.exports = getClassIndex;
 	
 	/***/ },
-	/* 41 */
+	/* 43 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5643,19 +5709,19 @@
 	
 		'use strict';
 	
-		var _toElementArray = __webpack_require__(28);
+		var _toElementArray = __webpack_require__(30);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-		var _getElementState = __webpack_require__(42);
+		var _getElementState = __webpack_require__(44);
 	
 		var _getElementState2 = _interopRequireDefault(_getElementState);
 	
-		var _Directive = __webpack_require__(14);
+		var _Directive = __webpack_require__(16);
 	
 		var _Directive2 = _interopRequireDefault(_Directive);
 	
-		var _Element = __webpack_require__(17);
+		var _Element = __webpack_require__(19);
 	
 		var _Element2 = _interopRequireDefault(_Element);
 	
@@ -5695,7 +5761,7 @@
 		module.exports = changeElementState;
 	
 	/***/ },
-	/* 42 */
+	/* 44 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5712,11 +5778,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _Directive = __webpack_require__(14);
+		var _Directive = __webpack_require__(16);
 	
 		var _Directive2 = _interopRequireDefault(_Directive);
 	
-		var _Element = __webpack_require__(17);
+		var _Element = __webpack_require__(19);
 	
 		var _Element2 = _interopRequireDefault(_Element);
 	
@@ -5757,7 +5823,7 @@
 		module.exports = getElementState;
 	
 	/***/ },
-	/* 43 */
+	/* 45 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5774,7 +5840,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _getRect = __webpack_require__(44);
+		var _getRect = __webpack_require__(46);
 	
 		var _getRect2 = _interopRequireDefault(_getRect);
 	
@@ -5841,7 +5907,7 @@
 		module.exports = getIntersectRect;
 	
 	/***/ },
-	/* 44 */
+	/* 46 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5858,11 +5924,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(28);
+		var _toElementArray = __webpack_require__(30);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-		var _getViewportRect = __webpack_require__(45);
+		var _getViewportRect = __webpack_require__(47);
 	
 		var _getViewportRect2 = _interopRequireDefault(_getViewportRect);
 	
@@ -5943,7 +6009,7 @@
 		module.exports = getRect;
 	
 	/***/ },
-	/* 45 */
+	/* 47 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5988,7 +6054,7 @@
 		module.exports = getViewportRect;
 	
 	/***/ },
-	/* 46 */
+	/* 48 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6005,11 +6071,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _getIntersectRect = __webpack_require__(43);
+		var _getIntersectRect = __webpack_require__(45);
 	
 		var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
-		var _getRect = __webpack_require__(44);
+		var _getRect = __webpack_require__(46);
 	
 		var _getRect2 = _interopRequireDefault(_getRect);
 	
@@ -6063,7 +6129,7 @@
 		module.exports = hitTestElement;
 	
 	/***/ },
-	/* 47 */
+	/* 49 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6080,7 +6146,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _getIntersectRect = __webpack_require__(43);
+		var _getIntersectRect = __webpack_require__(45);
 	
 		var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
@@ -6141,7 +6207,7 @@
 		module.exports = hitTestRect;
 	
 	/***/ },
-	/* 48 */
+	/* 50 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6158,7 +6224,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(28);
+		var _toElementArray = __webpack_require__(30);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -6206,7 +6272,7 @@
 		module.exports = removeClass;
 	
 	/***/ },
-	/* 49 */
+	/* 51 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6223,7 +6289,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(28);
+		var _toElementArray = __webpack_require__(30);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -6311,7 +6377,7 @@
 		module.exports = translate;
 	
 	/***/ },
-	/* 50 */
+	/* 52 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6328,7 +6394,7 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(28);
+		var _toElementArray = __webpack_require__(30);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -6412,7 +6478,7 @@
 		module.exports = translate3d;
 	
 	/***/ },
-	/* 51 */
+	/* 53 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6429,11 +6495,11 @@
 	
 		var _assert2 = _interopRequireDefault(_assert);
 	
-		var _toElementArray = __webpack_require__(28);
+		var _toElementArray = __webpack_require__(30);
 	
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-		var _getRect = __webpack_require__(44);
+		var _getRect = __webpack_require__(46);
 	
 		var _getRect2 = _interopRequireDefault(_getRect);
 	
@@ -6553,64 +6619,6 @@
 	
 		module.exports = transform;
 	
-	/***/ },
-	/* 52 */
-	/***/ function(module, exports) {
-	
-		/**
-		 * Requiem
-		 * (c) VARIANTE (http://variante.io)
-		 *
-		 * This software is released under the MIT License:
-		 * http://www.opensource.org/licenses/mit-license.php
-		 */
-	
-		'use strict'
-	
-		/**
-		 * Gets the class registry.
-		 *
-		 * @return {Object} The class registry.
-		 *
-		 * @alias module:requiem~dom.getClassRegistry
-		 */
-		;
-		function getClassRegistry() {
-		  if (window._classRegistry === undefined) window._classRegistry = {};
-		  return window._classRegistry;
-		}
-	
-		module.exports = getClassRegistry;
-	
-	/***/ },
-	/* 53 */
-	/***/ function(module, exports) {
-	
-		/**
-		 * Requiem
-		 * (c) VARIANTE (http://variante.io)
-		 *
-		 * This software is released under the MIT License:
-		 * http://www.opensource.org/licenses/mit-license.php
-		 */
-	
-		'use strict'
-	
-		/**
-		 * Gets the data registry.
-		 *
-		 * @return {Object} The data registry.
-		 *
-		 * @alias module:requiem~dom.getDataRegistry
-		 */
-		;
-		function getDataRegistry() {
-		  if (window._dataRegistry === undefined) window._dataRegistry = {};
-		  return window._dataRegistry;
-		}
-	
-		module.exports = getDataRegistry;
-	
 	/***/ }
 	/******/ ])
 	});
@@ -6656,7 +6664,15 @@
 	  _createClass(Playground, [{
 	    key: 'init',
 	    value: function init() {
-	      console.log(this);
+	      this.addChild(new _Foo2.default('foo'));
+	
+	      var a = {
+	        a: 'asdf',
+	        b: 'qwer'
+	      };
+	      var b = JSON.stringify(a);
+	      var j = !(function webpackMissingModule() { var e = new Error("Cannot find module \".\""); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+	      console.log(j);
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
 	    }
 	  }, {
@@ -6735,7 +6751,8 @@
 	exports.default = Foo;
 
 /***/ },
-/* 4 */
+/* 4 */,
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6784,6 +6801,21 @@
 	})(_requiem.Element);
 	
 	exports.default = Bar;
+
+/***/ },
+/* 6 */,
+/* 7 */,
+/* 8 */
+/***/ function(module, exports) {
+
+	function webpackContext(req) {
+		throw new Error("Cannot find module '" + req + "'.");
+	}
+	webpackContext.keys = function() { return []; };
+	webpackContext.resolve = webpackContext;
+	module.exports = webpackContext;
+	webpackContext.id = 8;
+
 
 /***/ }
 /******/ ]);

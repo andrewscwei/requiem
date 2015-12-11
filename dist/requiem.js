@@ -11,41 +11,41 @@
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
@@ -61,43 +61,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _injectModule = __webpack_require__(1);
-
+	
 	var _injectModule2 = _interopRequireDefault(_injectModule);
-
+	
 	var _polyfill = __webpack_require__(2);
-
+	
 	var _polyfill2 = _interopRequireDefault(_polyfill);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * @module requiem
 	 */
 	var requiem = {};
-
+	
 	/**
 	 * @property {string} name - Module name.
 	 */
 	Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-
+	
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.21.4', writable: false });
-
+	Object.defineProperty(requiem, 'version', { value: '0.21.5', writable: false });
+	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(31));
 	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(33));
 	(0, _injectModule2.default)(requiem, 'types', __webpack_require__(36));
 	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(38));
 	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(39));
-
+	
 	(0, _polyfill2.default)();
-
+	
 	module.exports = requiem;
 
 /***/ },
@@ -111,9 +111,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Injects a module and all of its sub-modules into a target module.
 	 *
@@ -131,7 +131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: module,
 	    writable: false
 	  });
-
+	
 	  for (var key in module) {
 	    if (module.hasOwnProperty(key)) {
 	      Object.defineProperty(target, key, {
@@ -141,7 +141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 	}
-
+	
 	module.exports = injectModule;
 
 /***/ },
@@ -155,9 +155,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Applies special polyfills to the browser window (i.e. IE happiness).
 	 *
@@ -166,7 +166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	function polyfill() {
 	  if (!window) return;
-
+	
 	  // Create CustomEvent class.
 	  function CustomEvent(event, params) {
 	    params = params || { bubbles: false, cancelable: false, detail: undefined };
@@ -174,12 +174,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
 	    return evt;
 	  }
-
+	
 	  CustomEvent.prototype = window.Event.prototype;
-
+	
 	  window.CustomEvent = CustomEvent;
 	}
-
+	
 	module.exports = polyfill;
 
 /***/ },
@@ -193,9 +193,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Collection of DOM manipulation methods.
 	 *
@@ -203,7 +203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	;
 	var dom = {};
-
+	
 	Object.defineProperty(dom, 'createElement', { value: __webpack_require__(4), writable: false, enumerable: true });
 	Object.defineProperty(dom, 'getClassRegistry', { value: __webpack_require__(8), writable: false, enumerable: true });
 	Object.defineProperty(dom, 'getDataRegistry', { value: __webpack_require__(9), writable: false, enumerable: true });
@@ -211,7 +211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(dom, 'ready', { value: __webpack_require__(11), writable: false, enumerable: true });
 	Object.defineProperty(dom, 'register', { value: __webpack_require__(12), writable: false, enumerable: true });
 	Object.defineProperty(dom, 'sightread', { value: __webpack_require__(14), writable: false, enumerable: true });
-
+	
 	module.exports = dom;
 
 /***/ },
@@ -225,15 +225,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assertType = __webpack_require__(5);
-
+	
 	var _assertType2 = _interopRequireDefault(_assertType);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Creates a DOM element from the provided string.
 	 *
@@ -245,14 +245,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function createElement(value) {
 	  if (!document) return null;
-
+	
 	  (0, _assertType2.default)(value, 'string', true, 'Value must be a string');
-
+	
 	  var div = document.createElement('div');
 	  div.innerHTML = value;
 	  return div.firstChild;
 	}
-
+	
 	module.exports = createElement;
 
 /***/ },
@@ -266,14 +266,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	var assert = __webpack_require__(6);
 	var checkType = __webpack_require__(7);
-
+	
 	/**
 	 * Asserts the specified condition and throws a warning if assertion fails.
 	 * Internal use only.
@@ -304,16 +304,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!assert(type !== undefined, 'Paremeter \'type\' must be a string or a class')) return;
 	  if (!assert(allowUndefined === undefined || typeof allowUndefined === 'boolean', 'Paremeter \'allowUndefined\', if specified, must be a boolean')) return;
 	  if (!assert(message === undefined || typeof message === 'string', 'Parameter \'message\', if specified, must be a string')) return;
-
+	
 	  allowUndefined = allowUndefined === undefined ? false : allowUndefined;
-
+	
 	  var ok = false;
-
+	
 	  if (allowUndefined && value === undefined) {
 	    ok = true;
 	  } else if (_instanceof(type, Array)) {
 	    var n = type.length;
-
+	
 	    for (var i = 0; i < n; i++) {
 	      if (checkType(value, type[i])) {
 	        ok = true;
@@ -323,14 +323,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else {
 	    ok = checkType(value, type);
 	  }
-
+	
 	  if (!ok) {
 	    throw new Error(message || 'AssertType failed');
 	  }
-
+	
 	  return ok;
 	}
-
+	
 	module.exports = assertType;
 
 /***/ },
@@ -344,9 +344,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Asserts the specified condition and throws a warning if assertion fails.
 	 *
@@ -364,7 +364,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!condition) throw new Error(message || 'Assert failed');
 	  return condition;
 	}
-
+	
 	module.exports = assert;
 
 /***/ },
@@ -378,9 +378,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Verifies that a given is of the given type.
 	 *
@@ -392,11 +392,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~helpers.checkType
 	 */
 	;
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
+	
 	function checkType(value, type) {
 	  if (typeof type === 'string') {
 	    switch (type) {
@@ -406,13 +406,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      case 'boolean':
 	      case 'function':
 	        return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === type;
-
+	
 	      case 'class':
 	        return typeof value === 'function';
-
+	
 	      case 'array':
 	        return _instanceof(value, Array);
-
+	
 	      default:
 	        return false;
 	    }
@@ -420,7 +420,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _instanceof(value, type);
 	  }
 	}
-
+	
 	module.exports = checkType;
 
 /***/ },
@@ -434,9 +434,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Gets the class registry.
 	 *
@@ -449,7 +449,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (window._classRegistry === undefined) window._classRegistry = {};
 	  return window._classRegistry;
 	}
-
+	
 	module.exports = getClassRegistry;
 
 /***/ },
@@ -463,9 +463,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Gets the data registry.
 	 *
@@ -478,7 +478,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (window._dataRegistry === undefined) window._dataRegistry = {};
 	  return window._dataRegistry;
 	}
-
+	
 	module.exports = getDataRegistry;
 
 /***/ },
@@ -492,15 +492,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assertType = __webpack_require__(5);
-
+	
 	var _assertType2 = _interopRequireDefault(_assertType);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Generates a nested namespace in the specified scope, as described by the dot-
 	 * notated namespace path.
@@ -521,20 +521,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	function namespace(path, scope) {
 	  (0, _assertType2.default)(path, 'string', true, 'Invalid parameter: path');
 	  (0, _assertType2.default)(scope, 'object', true, 'Invalid optional parameter: scope');
-
+	
 	  if (!scope) scope = window ? window : {};
 	  if (path === undefined || path === '') return scope;
-
+	
 	  var groups = path.split('.');
 	  var currentScope = scope;
-
+	
 	  for (var i = 0; i < groups.length; i++) {
 	    currentScope = currentScope[groups[i]] || (currentScope[groups[i]] = {});
 	  }
-
+	
 	  return currentScope;
 	}
-
+	
 	module.exports = namespace;
 
 /***/ },
@@ -548,15 +548,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assertType = __webpack_require__(5);
-
+	
 	var _assertType2 = _interopRequireDefault(_assertType);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Invokes a callback when the DOM is ready.
 	 *
@@ -566,9 +566,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function ready(callback) {
 	  (0, _assertType2.default)(callback, 'function', false, 'Invalid parameter: callback');
-
+	
 	  if (!document) return null;
-
+	
 	  var onLoaded = function onLoaded(event) {
 	    if (document.addEventListener) {
 	      document.removeEventListener('DOMContentLoaded', onLoaded, false);
@@ -577,14 +577,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      document.detachEvent('onreadystatechange', onLoaded);
 	      window.detachEvent('onload', onLoaded);
 	    }
-
+	
 	    setTimeout(callback, 1);
 	  };
-
+	
 	  if (document.readyState === 'complete') {
 	    return setTimeout(callback, 1);
 	  }
-
+	
 	  if (document.addEventListener) {
 	    document.addEventListener('DOMContentLoaded', onLoaded, false);
 	    window.addEventListener('load', onLoaded, false);
@@ -592,10 +592,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    document.attachEvent('onreadystatechange', onLoaded);
 	    window.attachEvent('onload', onLoaded);
 	  }
-
+	
 	  return null;
 	}
-
+	
 	module.exports = ready;
 
 /***/ },
@@ -609,31 +609,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _getClassRegistry = __webpack_require__(8);
-
+	
 	var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
-
+	
 	var _namespace = __webpack_require__(10);
-
+	
 	var _namespace2 = _interopRequireDefault(_namespace);
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _assertType = __webpack_require__(5);
-
+	
 	var _assertType2 = _interopRequireDefault(_assertType);
-
+	
 	var _getFunctionName = __webpack_require__(13);
-
+	
 	var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Registers a controller class with Requiem to be used for instantiating
 	 * custom elements during the sighreading process.
@@ -648,16 +648,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	function register(c, n) {
 	  (0, _assertType2.default)(c, 'function', false, 'Invalid class provided');
 	  (0, _assertType2.default)(n, 'string', true, 'Invalid optional parameter: namespace');
-
+	
 	  var className = (0, _getFunctionName2.default)(c);
-
+	
 	  if (!(0, _assert2.default)((0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
-
+	
 	  (0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] = c;
-
+	
 	  return c;
 	}
-
+	
 	module.exports = register;
 
 /***/ },
@@ -671,9 +671,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Gets the name of a function/class.
 	 *
@@ -685,13 +685,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	function getFunctionName(f) {
 	  if (!f) return;
 	  if (f.name) return f.name;
-
+	
 	  var regex = /function\s([^(]{1,})\(/;
 	  var name = regex.exec(f.toString());
-
+	
 	  return name && name.length > 1 ? name[1].trim() : '';
 	}
-
+	
 	module.exports = getFunctionName;
 
 /***/ },
@@ -705,45 +705,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _getClassRegistry = __webpack_require__(8);
-
+	
 	var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _assertType = __webpack_require__(5);
-
+	
 	var _assertType2 = _interopRequireDefault(_assertType);
-
+	
 	var _getInstanceNameFromElement = __webpack_require__(15);
-
+	
 	var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
-
+	
 	var _getControllerClassFromElement = __webpack_require__(17);
-
+	
 	var _getControllerClassFromElement2 = _interopRequireDefault(_getControllerClassFromElement);
-
+	
 	var _getControllerClassNameFromElement = __webpack_require__(18);
-
+	
 	var _getControllerClassNameFromElement2 = _interopRequireDefault(_getControllerClassNameFromElement);
-
+	
 	var _Directive = __webpack_require__(16);
-
+	
 	var _Directive2 = _interopRequireDefault(_Directive);
-
+	
 	var _hasChild = __webpack_require__(29);
-
+	
 	var _hasChild2 = _interopRequireDefault(_hasChild);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	/**
 	 * Crawls a DOM node and performs transformations on child nodes marked with
 	 * Requiem attributes, such as instantiating controller classes and assigning
@@ -767,12 +767,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var element = document;
 	  var classRegistry = (0, _getClassRegistry2.default)();
 	  var exclusive = false;
-
+	
 	  if (arguments.length === 1) {
 	    var arg = arguments[0];
-
+	
 	    (0, _assertType2.default)(arg, [Node, 'boolean'], true);
-
+	
 	    if (_instanceof(arg, Node)) {
 	      element = arg;
 	    } else if (typeof obj === 'boolean') {
@@ -781,22 +781,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else if (arguments.length === 2) {
 	    var arg1 = arguments[0];
 	    var arg2 = arguments[1];
-
+	
 	    (0, _assertType2.default)(arg1, Node, true);
 	    (0, _assertType2.default)(arg2, 'boolean', true);
-
+	
 	    if (arg1 !== undefined) element = arg1;
 	    if (arg2 !== undefined) exclusive = arg2;
 	  }
-
+	
 	  if (element === document) exclusive = true;
-
+	
 	  if (!exclusive) {
 	    var instanceName = (0, _getInstanceNameFromElement2.default)(element);
 	    var ControllerClass = (0, _getControllerClassFromElement2.default)(element);
-
+	
 	    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(element) + '\' is not found in specified controller scope: ' + classRegistry);
-
+	
 	    return new ControllerClass({
 	      element: element,
 	      name: instanceName,
@@ -805,31 +805,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else {
 	    var Element = __webpack_require__(19);
 	    var children = null;
-
+	
 	    if (element.jquery) element = element.get(0);
 	    if (!(0, _assert2.default)(_instanceof(element, Node) || _instanceof(element, Element) || document && element === document, 'Element must be an instance of an Node or the DOM itself.')) return null;
 	    if (_instanceof(element, Element)) element = element.element;
-
+	
 	    var nodeList = element.querySelectorAll('[' + _Directive2.default.CLASS + '], [' + _Directive2.default.INSTANCE + ']');
 	    var qualifiedChildren = _filterParentElements(nodeList);
 	    var n = qualifiedChildren.length;
-
+	
 	    for (var i = 0; i < n; i++) {
 	      var child = qualifiedChildren[i];
 	      var instanceName = (0, _getInstanceNameFromElement2.default)(child);
 	      var ControllerClass = (0, _getControllerClassFromElement2.default)(child, classRegistry);
-
+	
 	      (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(child) + '\' is not found in specified controller scope: ' + classRegistry);
-
+	
 	      var m = new ControllerClass({
 	        element: child,
 	        name: instanceName,
 	        children: sightread(child, true)
 	      });
-
+	
 	      if (instanceName && instanceName.length > 0) {
 	        if (!children) children = {};
-
+	
 	        if (!children[instanceName]) {
 	          children[instanceName] = m;
 	        } else {
@@ -843,11 +843,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	    }
-
+	
 	    return children;
 	  }
 	}
-
+	
 	/**
 	 * Scans the provided node list and returns a new node list with only parent
 	 * nodes.
@@ -862,30 +862,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _filterParentElements(nodeList) {
 	  var n = nodeList.length;
 	  var o = [];
-
+	
 	  for (var i = 0; i < n; i++) {
 	    var isParent = true;
 	    var child = nodeList[i];
-
+	
 	    for (var j = 0; j < n; j++) {
 	      if (i === j) continue;
-
+	
 	      var parent = nodeList[j];
-
+	
 	      if ((0, _hasChild2.default)(parent, child)) {
 	        isParent = false;
 	        break;
 	      }
 	    }
-
+	
 	    if (isParent) {
 	      o.push(child);
 	    }
 	  }
-
+	
 	  return o;
 	}
-
+	
 	module.exports = sightread;
 
 /***/ },
@@ -899,11 +899,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var Directive = __webpack_require__(16);
-
+	
 	/**
 	 * Gets the instance name from a DOM element.
 	 *
@@ -916,7 +916,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function getInstanceNameFromElement(element) {
 	  return element.getAttribute(Directive.INSTANCE);
 	}
-
+	
 	module.exports = getInstanceNameFromElement;
 
 /***/ },
@@ -930,9 +930,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Enum for custom DOM directives/attributes.
 	 *
@@ -949,28 +949,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * process.
 	   */
 	  CLASS: 'data-class',
-
+	
 	  /**
 	   * Use this directive for assigning an instance name to a DOM element.
 	   */
 	  INSTANCE: 'data-instance',
-
+	
 	  /**
 	   * Use this directive for managing DOM element states.
 	   */
 	  STATE: 'data-state',
-
+	
 	  /**
 	   * Use this directive for referencing global shared data.
 	   */
 	  REF: 'data-ref',
-
+	
 	  /**
 	   * Use this directive to map any property from the DOM to the controller.
 	   */
 	  PROPERTY: 'data-'
 	};
-
+	
 	module.exports = Directive;
 
 /***/ },
@@ -984,14 +984,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var getControllerClassNameFromElement = __webpack_require__(18);
 	var getInstanceNameFromElement = __webpack_require__(15);
 	var getClassRegistry = __webpack_require__(8);
 	var namespace = __webpack_require__(10);
-
+	
 	/**
 	 * Gets the controller class from the DOM element.
 	 *
@@ -1003,11 +1003,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function getControllerClassFromElement(element) {
 	  var classRegistry = getClassRegistry();
-
+	
 	  var controllerClassName = getControllerClassNameFromElement(element);
 	  var instanceName = getInstanceNameFromElement(element);
 	  var controllerClass = controllerClassName ? namespace(controllerClassName, classRegistry) : undefined;
-
+	
 	  // If no controller class is specified but element is marked as an instance,
 	  // default the controller class to Element.
 	  if (!controllerClass && instanceName && instanceName.length > 0) {
@@ -1031,10 +1031,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 	  }
-
+	
 	  return controllerClass;
 	}
-
+	
 	module.exports = getControllerClassFromElement;
 
 /***/ },
@@ -1048,11 +1048,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var Directive = __webpack_require__(16);
-
+	
 	/**
 	 * Gets the controller class name from the DOM element.
 	 *
@@ -1065,7 +1065,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function getControllerClassNameFromElement(element) {
 	  return element.getAttribute(Directive.CLASS);
 	}
-
+	
 	module.exports = getControllerClassNameFromElement;
 
 /***/ },
@@ -1079,75 +1079,75 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
+	
 	var _getDataRegistry = __webpack_require__(9);
-
+	
 	var _getDataRegistry2 = _interopRequireDefault(_getDataRegistry);
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _assertType = __webpack_require__(5);
-
+	
 	var _assertType2 = _interopRequireDefault(_assertType);
-
+	
 	var _noval = __webpack_require__(20);
-
+	
 	var _noval2 = _interopRequireDefault(_noval);
-
+	
 	var _getFunctionName = __webpack_require__(13);
-
+	
 	var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
-
+	
 	var _log = __webpack_require__(21);
-
+	
 	var _log2 = _interopRequireDefault(_log);
-
+	
 	var _validateAttribute = __webpack_require__(22);
-
+	
 	var _validateAttribute2 = _interopRequireDefault(_validateAttribute);
-
+	
 	var _getInstanceNameFromElement = __webpack_require__(15);
-
+	
 	var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
-
+	
 	var _DirtyType = __webpack_require__(23);
-
+	
 	var _DirtyType2 = _interopRequireDefault(_DirtyType);
-
+	
 	var _NodeState = __webpack_require__(24);
-
+	
 	var _NodeState2 = _interopRequireDefault(_NodeState);
-
+	
 	var _EventType = __webpack_require__(25);
-
+	
 	var _EventType2 = _interopRequireDefault(_EventType);
-
+	
 	var _Directive = __webpack_require__(16);
-
+	
 	var _Directive2 = _interopRequireDefault(_Directive);
-
+	
 	var _ElementUpdateDelegate = __webpack_require__(26);
-
+	
 	var _ElementUpdateDelegate2 = _interopRequireDefault(_ElementUpdateDelegate);
-
+	
 	var _sightread = __webpack_require__(14);
-
+	
 	var _sightread2 = _interopRequireDefault(_sightread);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	/**
 	 * @class
 	 *
@@ -1155,7 +1155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @alias module:requiem~ui.Element
 	 */
-
+	
 	var Element = (function () {
 	  /**
 	   * Creates a new Element instance with optional initial properties.
@@ -1172,13 +1172,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	   *
 	   * @return {Element} A new Element instance.
 	   */
-
+	
 	  function Element(init) {
 	    _classCallCheck(this, Element);
-
+	
 	    // Define instance properties.
 	    this.__define_properties();
-
+	
 	    // Scan init object and set instance properties as per object body.
 	    if (init !== undefined && init !== null) {
 	      // If init value is a Node, simply assign it to the internal DOM element.
@@ -1201,11 +1201,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                      this.addChild(children[name], name);
 	                    }
 	                    break;
-
+	
 	                  case 'properties':
 	                    this.setProperties(init.properties);
 	                    break;
-
+	
 	                  default:
 	                    this[key] = init[key];
 	                }
@@ -1213,31 +1213,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	          }
 	    }
-
+	
 	    // Check if this Element needs seed data from the data registry.
 	    if (this.hasAttribute(_Directive2.default.REF)) {
 	      var ref = this.getAttribute(_Directive2.default.REF);
 	      var data = (0, _getDataRegistry2.default)()[ref];
-
+	
 	      if (data) this.setProperties(data);
 	    }
-
+	
 	    // Scan for internal DOM element attributes prefixed with Directive.PROPERTY
 	    // and generate properties from them.
 	    var attributes = this.element.attributes;
 	    var nAtributes = attributes.length;
 	    var regex = new RegExp('^' + _Directive2.default.PROPERTY, 'i');
-
+	
 	    for (var i = 0; i < nAtributes; i++) {
 	      var attribute = attributes[i];
-
+	
 	      if (!(0, _validateAttribute2.default)(attribute.name) || !regex.test(attribute.name)) continue;
-
+	
 	      // Generate camel case property name from the attribute.
 	      var propertyName = attribute.name.replace(regex, '').replace(/-([a-z])/g, function (g) {
 	        return g[1].toUpperCase();
 	      });
-
+	
 	      Element.defineProperty(this, propertyName, {
 	        defaultValue: this.getAttribute(attribute.name),
 	        attribute: true,
@@ -1246,12 +1246,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        set: true
 	      }, 'properties');
 	    }
-
+	
 	    (0, _log2.default)(this.toString() + ':new(', init, ')');
-
+	
 	    this.init();
 	  }
-
+	
 	  /**
 	   * Defines a property in an Element instance.
 	   *
@@ -1312,28 +1312,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	   *                                                      property must be
 	   *                                                      enumerable.
 	   */
-
+	
 	  _createClass(Element, [{
 	    key: 'init',
-
+	
 	    /**
 	     * Initializes this Element instance. Must manually invoke.
 	     */
 	    value: function init() {
 	      (0, _log2.default)(this.toString() + '::init()');
-
+	
 	      this.__set_node_state(_NodeState2.default.INITIALIZED);
 	      this.updateDelegate.init();
-
+	
 	      for (var key in this.children) {
 	        var child = this.children[key];
-
+	
 	        if (_instanceof(child, Array)) {
 	          var n = child.length;
-
+	
 	          for (var i = 0; i < n; i++) {
 	            var c = child[i];
-
+	
 	            if (c.nodeState === _NodeState2.default.IDLE || c.nodeState === _NodeState2.default.DESTROYED) {
 	              c.init();
 	            }
@@ -1345,26 +1345,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	    }
-
+	
 	    /**
 	     * Destroys this Element instance.
 	     */
-
+	
 	  }, {
 	    key: 'destroy',
 	    value: function destroy() {
 	      (0, _log2.default)(this.toString() + '::destroy()');
-
+	
 	      // Destroy all children first.
 	      for (var key in this.children) {
 	        var child = this.children[key];
-
+	
 	        if (_instanceof(child, Array)) {
 	          var n = child.length;
-
+	
 	          for (var i = 0; i < n; i++) {
 	            var c = child[i];
-
+	
 	            if (c.nodeState !== _NodeState2.default.DESTROYED) {
 	              c.destroy();
 	            }
@@ -1375,23 +1375,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        }
 	      }
-
+	
 	      this.removeAllEventListeners();
 	      this.updateDelegate.destroy();
-
+	
 	      this.__set_node_state(_NodeState2.default.DESTROYED);
 	    }
-
+	
 	    /**
 	     * Handler invoked whenever a visual update is required.
 	     */
-
+	
 	  }, {
 	    key: 'update',
 	    value: function update() {
 	      this.__set_node_state(_NodeState2.default.UPDATED);
 	    }
-
+	
 	    /**
 	     * Sets up the responsiveness of the internal ElementUpdateDelegate
 	     * instance.
@@ -1401,30 +1401,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {number}         Refresh rate.
 	     * @param {...args}        EventType(s) which this element will respond to.
 	     */
-
+	
 	  }, {
 	    key: 'respondsTo',
 	    value: function respondsTo() {
 	      var args = Array.prototype.slice.call(arguments);
 	      var n = args.length;
-
+	
 	      if (!(0, _assert2.default)(n > 0, 'Too few arguments')) return;
 	      if (!(0, _assert2.default)(this.nodeState === _NodeState2.default.IDLE, 'Responsiveness must be defined when the node state of this element is IDLE')) return;
-
+	
 	      if (isNaN(args[0])) {
 	        this.updateDelegate.conductor = args.shift();
 	        this.updateDelegate.refreshRate = args.shift();
 	      } else {
 	        this.updateDelegate.refreshRate = args.shift();
 	      }
-
+	
 	      if (args.length === 0) {
 	        this.updateDelegate.responsive = true;
 	      } else {
 	        this.updateDelegate.responsive = args;
 	      }
 	    }
-
+	
 	    /**
 	     * Adds a child or multiple children to this Element instance. Any added
 	     * must be a Requiem Element. If an Node is provided, it will be
@@ -1447,42 +1447,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {Element|Element[]} The added element(s).
 	     */
-
+	
 	  }, {
 	    key: 'addChild',
 	    value: function addChild(child, name) {
 	      if (!(0, _assert2.default)(child !== undefined, 'Parameter \'child\' must be specified')) return null;
-
+	
 	      if (child.jquery) {
 	        return this.addChild(child.get(), name);
 	      } else if (_instanceof(child, Array)) {
 	        var n = child.length;
 	        var children = [];
-
+	
 	        for (var i = 0; i < n; i++) {
 	          var c = child[i];
-
+	
 	          children.push(this.addChild(c, name));
 	        }
-
+	
 	        return children;
 	      } else {
 	        if (!(0, _assertType2.default)(child, [Node, Element], false, 'Invalid child specified. Child must be an instance of Node or Requiem Element.')) return null;
-
+	
 	        if (_instanceof(child, Node)) {
 	          if ((0, _noval2.default)(name)) name = (0, _getInstanceNameFromElement2.default)(child);
 	          if (!(0, _assert2.default)(!(0, _noval2.default)(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
-
+	
 	          child.removeAttribute(_Directive2.default.INSTANCE);
 	          child.setAttribute(_Directive2.default.INSTANCE, name);
 	          child = (0, _sightread2.default)(child);
 	        } else {
 	          if ((0, _noval2.default)(name)) name = child.name;
 	          if (!(0, _assert2.default)(!(0, _noval2.default)(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
-
+	
 	          child.name = name;
 	        }
-
+	
 	        if (this.children[name]) {
 	          if (_instanceof(this.children[name], Array)) {
 	            this.children[name].push(child);
@@ -1494,34 +1494,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	          this.children[name] = child;
 	        }
-
+	
 	        if (child.nodeState === _NodeState2.default.IDLE || child.nodeState === _NodeState2.default.DESTROYED) {
 	          child.init();
 	        }
-
+	
 	        var shouldAddChild = true;
-
+	
 	        if (child.element.parentNode && document) {
 	          var e = child.element;
-
+	
 	          while (e !== null && e !== undefined && e !== document) {
 	            e = e.parentNode;
-
+	
 	            if (e === this.element) {
 	              shouldAddChild = false;
 	              break;
 	            }
 	          }
 	        }
-
+	
 	        if (shouldAddChild) {
 	          this.element.appendChild(child.element);
 	        }
-
+	
 	        return child;
 	      }
 	    }
-
+	
 	    /**
 	     * Determines if this Element instance contains the specified child.
 	     *
@@ -1533,17 +1533,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @return {boolean} True if this Element instance has the specified child,
 	     *                   false otherwise.
 	     */
-
+	
 	  }, {
 	    key: 'hasChild',
 	    value: function hasChild(child) {
 	      if (!(0, _assert2.default)(child !== undefined, 'Child is undefined')) return false;
-
+	
 	      if (typeof child === 'string') {
 	        return !(0, _noval2.default)(this.getChild(child));
 	      } else {
 	        var e = undefined;
-
+	
 	        if (child.jquery && child.length === 1) {
 	          e = child.get(0);
 	        } else if (_instanceof(child, Element)) {
@@ -1551,19 +1551,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	          e = child;
 	        }
-
+	
 	        while (!(0, _noval2.default)(e) && e !== document) {
 	          e = e.parentNode;
-
+	
 	          if (e === this.element) {
 	            return true;
 	          }
 	        }
-
+	
 	        return false;
 	      }
 	    }
-
+	
 	    /**
 	     * Removes a child or multiple children from this Element instance.
 	     *
@@ -1575,12 +1575,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {Element|Element[]} The removed element(s).
 	     */
-
+	
 	  }, {
 	    key: 'removeChild',
 	    value: function removeChild(child) {
 	      if (!(0, _assert2.default)(!(0, _noval2.default)(child, true), 'No valid child specified')) return;
-
+	
 	      // If child is a string, treat each entry separated by '.' as a child name.
 	      if (typeof child === 'string') {
 	        this.removeChild(this.getChild(child));
@@ -1598,7 +1598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // First extract the DOM element.
 	            var e = undefined;
 	            var a = [];
-
+	
 	            if (child.jquery && child.length === 1) {
 	              e = child.get(0);
 	            } else if (_instanceof(child, Element)) {
@@ -1606,21 +1606,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else if (_instanceof(child, Node)) {
 	              e = child;
 	            }
-
+	
 	            // No valid DOM element found? Terminate.
 	            if ((0, _noval2.default)(e)) return null;
-
+	
 	            for (var key in this.children) {
 	              var c = this.children[key];
-
+	
 	              if (_instanceof(c, Array)) {
 	                var n = c.length;
 	                var t = 0;
-
+	
 	                for (var i = 0; i < n; i++) {
 	                  var element = c[i];
 	                  t = i;
-
+	
 	                  if (element.element === e) {
 	                    a.push(element);
 	                    element.destroy();
@@ -1628,9 +1628,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    break;
 	                  }
 	                }
-
+	
 	                c.splice(t, 1);
-
+	
 	                if (c.length === 0) {
 	                  delete this.children[key];
 	                }
@@ -1645,7 +1645,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	              }
 	            }
-
+	
 	            if (a.length === 0) {
 	              return null;
 	            } else if (a.length === 1) {
@@ -1655,7 +1655,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	          }
 	    }
-
+	
 	    /**
 	     * Gets a child by its name. If child is an array, it will be returned
 	     * immediately.
@@ -1667,34 +1667,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {Object|Array} The fetched child.
 	     */
-
+	
 	  }, {
 	    key: 'getChild',
 	    value: function getChild(name, recursive) {
 	      if (!(0, _assertType2.default)(name, 'string', false, 'Child name must be specified')) return null;
 	      if (!(0, _assertType2.default)(recursive, 'boolean', true, 'Parameter \'recursive\', if specified, must be a boolean')) return null;
-
+	
 	      recursive = recursive === undefined ? true : recursive;
-
+	
 	      var targets = name.split('.');
 	      var currentTarget = targets.shift();
 	      var child = this.children[currentTarget];
-
+	
 	      if (recursive && targets.length > 0) {
 	        if (_instanceof(child, Array)) {
 	          var children = [];
 	          var n = child.length;
-
+	
 	          for (var i = 0; i < n; i++) {
 	            var c = child[i];
-
+	
 	            if (_instanceof(c, Element)) {
 	              children.push(c.getChild(targets.join('.')));
 	            } else {
 	              children.push(null);
 	            }
 	          }
-
+	
 	          if (!(0, _noval2.default)(children, true)) {
 	            return children;
 	          } else {
@@ -1713,20 +1713,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return null;
 	      }
 	    }
-
+	
 	    /**
 	     * @see Node#addEventListener
 	     */
-
+	
 	  }, {
 	    key: 'addEventListener',
 	    value: function addEventListener() {
 	      var _this = this;
-
+	
 	      var event = arguments[0];
 	      var listener = arguments[1];
 	      var useCapture = arguments[2] || false;
-
+	
 	      if (this.cachesListeners) {
 	        if (!this._listenerMap) {
 	          Object.defineProperty(this, '_listenerMap', {
@@ -1734,15 +1734,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            writable: false
 	          });
 	        }
-
+	
 	        if (!this._listenerMap[event]) {
 	          this._listenerMap[event] = [];
 	        }
-
+	
 	        var m = this._listenerMap[event];
 	        var n = m.length;
 	        var b = true;
-
+	
 	        if (event === _EventType2.default.MOUSE.CLICK_OUTSIDE) {
 	          (function () {
 	            var _listener = listener;
@@ -1753,16 +1753,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }).bind(_this);
 	          })();
 	        }
-
+	
 	        for (var i = 0; i < n; i++) {
 	          var e = m[i];
-
+	
 	          if (e.listener === listener) {
 	            b = false;
 	            break;
 	          }
 	        }
-
+	
 	        if (b) {
 	          m.push({
 	            listener: listener,
@@ -1770,14 +1770,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	          });
 	        }
 	      }
-
+	
 	      if (window && event === _EventType2.default.MOUSE.CLICK_OUTSIDE) {
 	        window.addEventListener(_EventType2.default.MOUSE.CLICK, listener, useCapture);
 	      } else {
 	        this.element.addEventListener.apply(this.element, arguments);
 	      }
 	    }
-
+	
 	    /**
 	     * Determines if a particular listener (or any listener in the specified
 	     * event) exist in this Element instance. For this to work this Element
@@ -1789,58 +1789,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {boolean}
 	     */
-
+	
 	  }, {
 	    key: 'hasEventListener',
 	    value: function hasEventListener(event, listener) {
 	      if (!this._listenerMap) return false;
 	      if (!this._listenerMap[event]) return false;
-
+	
 	      if (listener) {
 	        var m = this._listenerMap[event];
 	        var n = m.length;
-
+	
 	        for (var i = 0; i < n; i++) {
 	          var e = m[i];
-
+	
 	          if (e.listener === listener) return true;
 	        }
-
+	
 	        return false;
 	      } else {
 	        return true;
 	      }
 	    }
-
+	
 	    /**
 	     * @see Node#removeEventListener
 	     */
-
+	
 	  }, {
 	    key: 'removeEventListener',
 	    value: function removeEventListener() {
 	      var event = arguments[0];
 	      var listener = arguments[1];
 	      var useCapture = arguments[2] || false;
-
+	
 	      if (this._listenerMap) {
 	        var m = this._listenerMap[event];
 	        var n = m.length;
 	        var s = -1;
-
+	
 	        if (listener) {
 	          for (var i = 0; i < n; i++) {
 	            var e = m[i];
-
+	
 	            if (e.listener === listener) {
 	              s = i;
 	              break;
 	            }
 	          }
-
+	
 	          if (s > -1) {
 	            m.splice(s, 1);
-
+	
 	            if (m.length === 0) {
 	              this._listenerMap[event] = null;
 	              delete this._listenerMap[event];
@@ -1852,7 +1852,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        }
 	      }
-
+	
 	      if (listener) {
 	        if (window && event === _EventType2.default.MOUSE.CLICK_OUTSIDE) {
 	          window.removeEventListener(_EventType2.default.MOUSE.CLICK, listener, useCapture);
@@ -1861,11 +1861,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	    }
-
+	
 	    /**
 	     * Removes all cached event listeners from this Element instance.
 	     */
-
+	
 	  }, {
 	    key: 'removeAllEventListeners',
 	    value: function removeAllEventListeners() {
@@ -1875,80 +1875,80 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	    }
-
+	
 	    /**
 	     * Dispatches an event.
 	     *
 	     * @param {Event} event
 	     */
-
+	
 	  }, {
 	    key: 'dispatchEvent',
 	    value: function dispatchEvent(event) {
 	      this.element.dispatchEvent(event);
 	    }
-
+	
 	    /**
 	     * Adds class(es) to this Element instance.
 	     *
 	     * @param {Stirng|Array} className
 	     */
-
+	
 	  }, {
 	    key: 'addClass',
 	    value: function addClass(className) {
 	      var classes = [];
-
+	
 	      if (!(0, _assert2.default)(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
-
+	
 	      if (typeof className === 'string') {
 	        classes.push(className);
 	      } else {
 	        classes = className;
 	      }
-
+	
 	      var n = classes.length;
-
+	
 	      for (var i = 0; i < n; i++) {
 	        var c = classes[i];
-
+	
 	        if (!(0, _assert2.default)(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
 	        if (this.hasClass(c)) continue;
-
+	
 	        this.element.className = this.element.className + (this.element.className === '' ? '' : ' ') + c;
 	      }
 	    }
-
+	
 	    /**
 	     * Removes class(es) from this Element instance.
 	     *
 	     * @param {Stirng|Array} className
 	     */
-
+	
 	  }, {
 	    key: 'removeClass',
 	    value: function removeClass(className) {
 	      var classes = [];
-
+	
 	      if (!(0, _assert2.default)(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
-
+	
 	      if (typeof className === 'string') {
 	        classes.push(className);
 	      } else {
 	        classes = className;
 	      }
-
+	
 	      var n = classes.length;
-
+	
 	      for (var i = 0; i < n; i++) {
 	        var c = classes[i];
-
+	
 	        if (!(0, _assert2.default)(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
 	        var regex = new RegExp('^' + c + '\\s+|\\s+' + c + '|^' + c + '$', 'g');
 	        this.element.className = this.element.className.replace(regex, '');
 	      }
 	    }
-
+	
 	    /**
 	     * Determines whether this Element instance has the specified class.
 	     *
@@ -1956,15 +1956,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {boolean}
 	     */
-
+	
 	  }, {
 	    key: 'hasClass',
 	    value: function hasClass(className) {
 	      if (!(0, _assert2.default)(typeof className === 'string', 'Invalid class detected: ' + className)) return false;
-
+	
 	      return this.classes.indexOf(className) > -1;
 	    }
-
+	
 	    /**
 	     * Gets the value of the property with the specified name.
 	     *
@@ -1972,13 +1972,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {*} Value of the property.
 	     */
-
+	
 	  }, {
 	    key: 'getProperty',
 	    value: function getProperty(key) {
 	      return this.properties[key];
 	    }
-
+	
 	    /**
 	     * Checks to see if this Element instance has the property of the specified
 	     * name.
@@ -1987,13 +1987,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {boolean} True if property exists, false othwerwise.
 	     */
-
+	
 	  }, {
 	    key: 'hasProperty',
 	    value: function hasProperty(key) {
 	      return this.properties.hasOwnProperty(key);
 	    }
-
+	
 	    /**
 	     * Sets the property of the specified name with the specified value. If
 	     * properties does not exist, it will be newly defined.
@@ -2003,7 +2003,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {boolean} [attributed=false] - Specifies whether property should
 	     *                                       also be an attribute of the element.
 	     */
-
+	
 	  }, {
 	    key: 'setProperty',
 	    value: function setProperty(key, value, attributed) {
@@ -2019,7 +2019,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }, 'properties');
 	      }
 	    }
-
+	
 	    /**
 	     * Defines properties based on the key/value pair in the provided hash.
 	     *
@@ -2027,19 +2027,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *                              be merged into this Element instance's
 	     *                              properties.
 	     */
-
+	
 	  }, {
 	    key: 'setProperties',
 	    value: function setProperties(descriptor) {
 	      (0, _assertType2.default)(descriptor, 'object', false);
-
+	
 	      if (!descriptor) return;
-
+	
 	      for (var key in descriptor) {
 	        this.setProperty(key, descriptor[key]);
 	      }
 	    }
-
+	
 	    /**
 	     * Gets the value of the attribute with the specified name.
 	     *
@@ -2047,22 +2047,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {*} Value of the attribute.
 	     */
-
+	
 	  }, {
 	    key: 'getAttribute',
 	    value: function getAttribute(key) {
 	      var value = this.element.getAttribute(key);
-
+	
 	      if (value === '') return true;
 	      if (value === undefined || value === null) return null;
-
+	
 	      try {
 	        return JSON.parse(value);
 	      } catch (err) {
 	        return value;
 	      }
 	    }
-
+	
 	    /**
 	     * Sets an attribute of this Element instance.
 	     *
@@ -2070,12 +2070,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {*}      [value] - Value of the attribute. If unspecified, the
 	     *                           attribute will still be present but have no value.
 	     */
-
+	
 	  }, {
 	    key: 'setAttribute',
 	    value: function setAttribute(key, value) {
 	      if (!(0, _assert2.default)((0, _validateAttribute2.default)(key), 'Attribute \'' + key + '\' is reserved')) return;
-
+	
 	      if (value === undefined || value === null || value === false) {
 	        this.element.removeAttribute(key);
 	      } else if (value === true) {
@@ -2083,24 +2083,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else {
 	        this.element.setAttribute(key, value);
 	      }
-
+	
 	      if (key === 'disabled') {
 	        this.setDirty(_DirtyType2.default.STATE);
 	      }
 	    }
-
+	
 	    /**
 	     * Removes an attribute from this Element instance.
 	     *
 	     * @param {string} key - Name of the attribute.
 	     */
-
+	
 	  }, {
 	    key: 'removeAttribute',
 	    value: function removeAttribute(key) {
 	      this.element.removeAttribute(key);
 	    }
-
+	
 	    /**
 	     * Checks to see if this Element instance has the attribute of the specified
 	     * name.
@@ -2109,16 +2109,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {boolean} True if attribute with said name exists, false otherwise.
 	     */
-
+	
 	  }, {
 	    key: 'hasAttribute',
 	    value: function hasAttribute(key) {
 	      var value = this.element.getAttribute(key);
-
+	
 	      if (value === '') return true;
 	      return !(0, _noval2.default)(value);
 	    }
-
+	
 	    /**
 	     * Gets the value of an inline CSS rule of this Element instance by its name.
 	     *
@@ -2126,19 +2126,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {string} Value of the style.
 	     */
-
+	
 	  }, {
 	    key: 'getStyle',
 	    value: function getStyle(key) {
 	      var value = this.element.style[key];
-
+	
 	      if (value === '') {
 	        return null;
 	      } else {
 	        return value;
 	      }
 	    }
-
+	
 	    /**
 	     * Sets an inline CSS rule of this Element instance.
 	     *
@@ -2148,17 +2148,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
 	     */
-
+	
 	  }, {
 	    key: 'setStyle',
 	    value: function setStyle(key, value) {
 	      if (typeof value === 'number') {
 	        value = value + 'px';
 	      }
-
+	
 	      this.element.style[key] = value;
 	    }
-
+	
 	    /**
 	     * Removes an inline CSS rule from this Element instance by its rule name in
 	     * camelCase.
@@ -2167,81 +2167,81 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
 	     */
-
+	
 	  }, {
 	    key: 'removeStyle',
 	    value: function removeStyle(key) {
 	      this.element.style[key] = '';
 	    }
-
+	
 	    /**
 	     * Checks to see if this Element instance has the specified inline CSS rule.
 	     * @param {string} key - Name of the style.
 	     *
 	     * @return {boolean}
 	     */
-
+	
 	  }, {
 	    key: 'hasStyle',
 	    value: function hasStyle(key) {
 	      return this.element.style[key] !== '';
 	    }
-
+	
 	    /**
 	     * Creates the associated DOM element from scratch.
 	     *
 	     * @return {Element}
 	     */
-
+	
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return document.createElement('div');
 	    }
-
+	
 	    /**
 	     * @see ElementUpdateDelegate#isDirty
 	     */
-
+	
 	  }, {
 	    key: 'isDirty',
 	    value: function isDirty() {
 	      return this.updateDelegate.isDirty.apply(this.updateDelegate, arguments);
 	    }
-
+	
 	    /**
 	     * @see ElementUpdateDelegate#setDirty
 	     */
-
+	
 	  }, {
 	    key: 'setDirty',
 	    value: function setDirty() {
 	      return this.updateDelegate.setDirty.apply(this.updateDelegate, arguments);
 	    }
-
+	
 	    /**
 	     * Gets the string representation of this Element instance.
 	     *
 	     * @return {string}
 	     */
-
+	
 	  }, {
 	    key: 'toString',
 	    value: function toString() {
 	      return '[' + (0, _getFunctionName2.default)(this.constructor) + '{' + this.name + '}]';
 	    }
-
+	
 	    /**
 	     * Defines all properties.
 	     *
 	     * @protected
 	     */
-
+	
 	  }, {
 	    key: '__define_properties',
 	    value: function __define_properties() {
 	      var _this2 = this;
-
+	
 	      /**
 	       * Internal DOM element.
 	       *
@@ -2251,11 +2251,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get(value) {
 	          if (!_this2.__private__.element) {
 	            var e = _this2.render();
-
+	
 	            if (_this2.__validate_element(e)) _this2.__private__.element = e;
-
+	
 	            var children = (0, _sightread2.default)(e, true);
-
+	
 	            for (var childName in children) {
 	              _this2.addChild(children[childName], childName);
 	            }
@@ -2268,7 +2268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return null;
 	        }
 	      });
-
+	
 	      /**
 	       * ID of this Element instance.
 	       *
@@ -2282,7 +2282,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return _this2.element.setAttribute('id', value);
 	        }
 	      });
-
+	
 	      /**
 	       * Instance name of this Element instance. Once set, it cannot be changed.
 	       *
@@ -2299,7 +2299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (!_this2.name) _this2.element.setAttribute(_Directive2.default.INSTANCE, value);
 	        }
 	      });
-
+	
 	      /**
 	       * Class list of this Element instance.
 	       *
@@ -2313,7 +2313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return _this2.element.className = value.join(' ');
 	        }
 	      });
-
+	
 	      /**
 	       * Gets the attributes of this Element instance.
 	       *
@@ -2322,7 +2322,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      Object.defineProperty(this, 'attributes', { get: function get() {
 	          return _this2.element.attributes;
 	        } });
-
+	
 	      /**
 	       * Gets the CSS styles of this Element instance.
 	       *
@@ -2331,14 +2331,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      Object.defineProperty(this, 'styles', { get: function get() {
 	          return _this2.element.style;
 	        } });
-
+	
 	      /**
 	       * Current node state of this Element instance.
 	       *
 	       * @property {NodeState}
 	       */
 	      Element.defineProperty(this, 'nodeState', { defaultValue: _NodeState2.default.IDLE, get: true });
-
+	
 	      /**
 	       * State of this Element instance (depicted by Directive.State).
 	       *
@@ -2352,24 +2352,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	        set: function set(value) {
 	          if (_this2.state === value) return;
-
+	
 	          if (value === null || value === undefined) {
 	            _this2.element.removeAttribute(_Directive2.default.STATE);
 	          } else {
 	            _this2.element.setAttribute(_Directive2.default.STATE, value);
 	          }
-
+	
 	          _this2.updateDelegate.setDirty(_DirtyType2.default.STATE);
 	        }
 	      });
-
+	
 	      /**
 	       * Child elements.
 	       *
 	       * @property {Object}
 	       */
 	      Element.defineProperty(this, 'children', { defaultValue: {}, get: true });
-
+	
 	      /**
 	       * Data attributes.
 	       *
@@ -2382,7 +2382,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        dirtyType: _DirtyType2.default.DATA,
 	        eventType: _EventType2.default.DATA.DATA_CHANGE
 	      });
-
+	
 	      /**
 	       * Property attributes.
 	       *
@@ -2390,14 +2390,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @see module:requiem~types.Directive.PROPERTY
 	       */
 	      Element.defineProperty(this, 'properties', { defaultValue: {}, get: true });
-
+	
 	      /**
 	       * ElementUpdateDelegate instance.
 	       *
 	       * @property {ElementUpdateDelegate}
 	       */
 	      Element.defineProperty(this, 'updateDelegate', { defaultValue: new _ElementUpdateDelegate2.default(this), get: true });
-
+	
 	      /**
 	       * Specifies whether this Element instance remembers caches every listener
 	       * that is added to it (via the addEventListener/removeEventListener
@@ -2406,7 +2406,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @property {boolean}
 	       */
 	      Element.defineProperty(this, 'cachesListeners', { defaultValue: true, get: true, set: true });
-
+	
 	      /**
 	       * Wrapper for the 'innerHTML' property of the internal element.
 	       *
@@ -2420,7 +2420,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return _this2.element.innerHTML = value;
 	        }
 	      });
-
+	
 	      /**
 	       * Specifies whether this Element instance is hidden. This property follows
 	       * the rules of the CSS rule 'display: none'.
@@ -2431,7 +2431,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: true,
 	        set: function set(value) {
 	          (0, _assertType2.default)(value, 'boolean', true);
-
+	
 	          if (value) {
 	            _this2.setStyle('display', 'none');
 	          } else {
@@ -2439,11 +2439,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	              _this2.removeStyle('display');
 	            }
 	          }
-
+	
 	          return value;
 	        }
 	      });
-
+	
 	      /**
 	       * Specifies whether this Element instance is invisible. This property follows
 	       * the rules of the CSS rule 'visibility: hidden'.
@@ -2454,7 +2454,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: true,
 	        set: function set(value) {
 	          (0, _assertType2.default)(value, 'boolean', false);
-
+	
 	          if (value) {
 	            _this2.setStyle('visibility', 'hidden');
 	          } else {
@@ -2462,11 +2462,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	              _this2.removeStyle('visibility');
 	            }
 	          }
-
+	
 	          return value;
 	        }
 	      });
-
+	
 	      /**
 	       * Specifies whether this Element instance is disabled.
 	       *
@@ -2481,7 +2481,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      });
 	    }
-
+	
 	    /**
 	     * Validates the inner DOM element.
 	     *
@@ -2491,13 +2491,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @private
 	     */
-
+	
 	  }, {
 	    key: '__validate_element',
 	    value: function __validate_element(element) {
-	      return (0, _assert2.default)(_instanceof(element, Node), 'Element validation failed');
+	      return true;
+	      // return assert(element instanceof Node, 'Element validation failed');
 	    }
-
+	
 	    /**
 	     * Sets the Element's node state.
 	     *
@@ -2505,7 +2506,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @private
 	     */
-
+	
 	  }, {
 	    key: '__set_node_state',
 	    value: function __set_node_state(nodeState) {
@@ -2526,7 +2527,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      (0, _assertType2.default)(descriptor.onChange, 'function', true, 'Optional change handler must be a function');
 	      (0, _assertType2.default)(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
 	      (0, _assert2.default)((0, _validateAttribute2.default)(descriptor.attribute), 'Attribute \'' + descriptor.attribute + '\' is reserved');
-
+	
 	      var dirtyType = descriptor.dirtyType;
 	      var defaultValue = descriptor.defaultValue;
 	      var attribute = descriptor.attribute;
@@ -2535,53 +2536,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	      var eventType = descriptor.eventType;
 	      var unique = descriptor.unique;
-
+	
 	      if (unique === undefined) unique = true;
-
+	
 	      if (scope === undefined) {
 	        scope = element;
 	      } else {
 	        (0, _assert2.default)(element.hasOwnProperty(scope), 'The specified Element instance does not have a property called \'' + scope + '\'');
 	        scope = element[scope];
 	      }
-
+	
 	      if (defaultValue !== undefined) {
 	        scope.__private__ = scope.__private__ || {};
 	        Object.defineProperty(scope.__private__, propertyName, { value: defaultValue, writable: true });
 	      }
-
+	
 	      var newDescriptor = {};
-
+	
 	      if (descriptor.configurable !== undefined) newDescriptor.configurable = descriptor.configurable;
 	      if (descriptor.enumerable !== undefined) newDescriptor.enumerable = descriptor.enumerable;
 	      if (descriptor.value !== undefined) newDescriptor.value = descriptor.value;
 	      if (descriptor.writable !== undefined) newDescriptor.writable = descriptor.writable;
-
+	
 	      if (descriptor.get) {
 	        newDescriptor.get = function () {
 	          return typeof descriptor.get === 'function' ? descriptor.get(scope.__private__[propertyName]) : scope.__private__[propertyName];
 	        };
 	      }
-
+	
 	      if (descriptor.set) {
 	        newDescriptor.set = function (val) {
 	          var oldVal = scope.__private__[propertyName];
-
+	
 	          if (typeof descriptor.set === 'function') val = descriptor.set(val);
-
+	
 	          if (unique && oldVal === val) return;
-
+	
 	          if (oldVal === undefined) {
 	            scope.__private__ = scope.__private__ || {};
 	            Object.defineProperty(scope.__private__, propertyName, { value: val, writable: true });
 	          } else {
 	            scope.__private__[propertyName] = val;
 	          }
-
+	
 	          if (descriptor.onChange !== undefined) descriptor.onChange(oldVal, val);
 	          if (attribute === true) element.setAttribute(attributeName, val);
 	          if (dirtyType !== undefined) element.setDirty(dirtyType);
-
+	
 	          if (eventType !== undefined) {
 	            var event = new CustomEvent(eventType, {
 	              detail: {
@@ -2590,29 +2591,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	                newValue: val
 	              }
 	            });
-
+	
 	            element.dispatchEvent(event);
 	          }
 	        };
 	      }
-
+	
 	      Object.defineProperty(scope, propertyName, newDescriptor);
-
+	
 	      if (defaultValue !== undefined && attribute === true) {
 	        element.setAttribute(attributeName, defaultValue);
 	      }
-
+	
 	      if (defaultValue !== undefined && dirtyType !== undefined && element.nodeState >= _NodeState2.default.UPDATED) {
 	        element.setDirty(dirtyType);
 	      }
 	    }
-
+	
 	    /**
 	     * Adds an event listener to an Element instance.
 	     *
 	     * @see module:requiem~ui.Element#addEventListener
 	     */
-
+	
 	  }, {
 	    key: 'addEventListener',
 	    value: function addEventListener() {
@@ -2620,20 +2621,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var event = arguments[1];
 	      var listener = arguments[2];
 	      var useCapture = arguments[3] || false;
-
+	
 	      (0, _assert2.default)(!element || _instanceof(element, Element));
-
+	
 	      if ((0, _noval2.default)(element)) return;
-
+	
 	      element.addEventListener(event, listener, useCapture);
 	    }
-
+	
 	    /**
 	     * Removes an event listener from an Element instance.
 	     *
 	     * @see module:requiem~ui.Element#removeEventListener
 	     */
-
+	
 	  }, {
 	    key: 'removeEventListener',
 	    value: function removeEventListener() {
@@ -2641,18 +2642,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var event = arguments[1];
 	      var listener = arguments[2];
 	      var useCapture = arguments[3] || false;
-
+	
 	      (0, _assert2.default)(!element || _instanceof(element, Element));
-
+	
 	      if ((0, _noval2.default)(element)) return;
-
+	
 	      element.removeEventListener(event, listener, useCapture);
 	    }
 	  }]);
-
+	
 	  return Element;
 	})();
-
+	
 	module.exports = Element;
 
 /***/ },
@@ -2666,15 +2667,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	var assertType = __webpack_require__(5);
-
+	
 	/**
 	 * Checks if a given value is equal to null. Option to specify recursion, which
 	 * would further evaluate inner elements, such as when an Array or Object is
@@ -2691,9 +2692,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function noval(value, recursive) {
 	  assertType(recursive, 'boolean', true, 'Invalid parameter: recursive');
-
+	
 	  if (recursive === undefined) recursive = false;
-
+	
 	  if (value === undefined || value === null) {
 	    return true;
 	  } else if (typeof value === 'string') {
@@ -2704,23 +2705,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  } else if (recursive && _instanceof(value, Array)) {
 	    var n = value.length;
-
+	
 	    for (var i = 0; i < n; i++) {
 	      if (!noval(value[i], true)) return false;
 	    }
-
+	
 	    return true;
 	  } else if (recursive && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object) {
 	    for (var p in value) {
 	      if (!noval(value[p], true)) return false;
 	    }
-
+	
 	    return true;
 	  } else {
 	    return false;
 	  }
 	}
-
+	
 	module.exports = noval;
 
 /***/ },
@@ -2734,9 +2735,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Internal console logger that activates only when VARS_DEBUG flag is present
 	 * in the window.
@@ -2751,7 +2752,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Function.apply.call(console.log, console, arguments);
 	  }
 	}
-
+	
 	module.exports = log;
 
 /***/ },
@@ -2765,11 +2766,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var Directive = __webpack_require__(16);
-
+	
 	/**
 	 * Validates whether an attribute can be used (could be reserved by Requiem).
 	 *
@@ -2783,10 +2784,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  for (var d in Directive) {
 	    if (attribute === Directive[d]) return false;
 	  }
-
+	
 	  return true;
 	}
-
+	
 	module.exports = validateAttribute;
 
 /***/ },
@@ -2800,9 +2801,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Enum for custom UI dirty types. Dirty types help identify what needs to be
 	 * redrawn/updated in the UI.
@@ -2817,12 +2818,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Indicates that nothing in the UI has changed.
 	   */
 	  NONE: 0x00000000,
-
+	
 	  /**
 	   * Indicates that UI element positions have changed.
 	   */
 	  POSITION: 1 << 0,
-
+	
 	  /**
 	   * Indicates that UI element sizes have changed.
 	   */
@@ -2831,57 +2832,57 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Indicates that UI element layouts have changed.
 	   */
 	  LAYOUT: 1 << 2,
-
+	
 	  /**
 	   * Indicates that UI element states have changed.
 	   */
 	  STATE: 1 << 3,
-
+	
 	  /**
 	   * Indicates that UI element data has changed.
 	   */
 	  DATA: 1 << 4,
-
+	
 	  /**
 	   * Indicates that UI element locale has changed.
 	   */
 	  LOCALE: 1 << 5,
-
+	
 	  /**
 	   * Indicates that UI element depths have changed.
 	   */
 	  DEPTH: 1 << 6,
-
+	
 	  /**
 	   * Indicates that UI element configurations have changed.
 	   */
 	  CONFIG: 1 << 7,
-
+	
 	  /**
 	   * Indicates that UI element styles have changed.
 	   */
 	  STYLE: 1 << 8,
-
+	
 	  /**
 	   * Indicates that UI input elements have changed.
 	   */
 	  INPUT: 1 << 9,
-
+	
 	  /**
 	   * Indicates that UI element orientations have changed.
 	   */
 	  ORIENTATION: 1 << 10,
-
+	
 	  /**
 	   * Custom type used as a base for creating new types.
 	   */
 	  CUSTOM: 1 << 11,
-
+	
 	  /**
 	   * Indicates that everything has changed in the UI.
 	   */
 	  ALL: 0xFFFFFFFF,
-
+	
 	  /**
 	   * Gets the name of the dirty type.
 	   *
@@ -2892,15 +2893,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  toString: function toString(dirtyType) {
 	    if (dirtyType === DirtyType.NONE) return 'NONE';
 	    if (dirtyType >= DirtyType.ALL) return 'ALL';
-
+	
 	    var o = '';
 	    var n = 8 * 4;
-
+	
 	    for (var i = 0; i < n; i++) {
 	      var bit = dirtyType >> i & 1;
-
+	
 	      if (bit === 0) continue;
-
+	
 	      switch (1 << i) {
 	        case DirtyType.POSITION:
 	          o += 'POSITION';break;
@@ -2928,11 +2929,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	          o += String(1 << i);
 	      }
 	    }
-
+	
 	    return o;
 	  }
 	};
-
+	
 	module.exports = DirtyType;
 
 /***/ },
@@ -2950,9 +2951,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @type {Object}
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Enum for all node states.
 	 *
@@ -2967,22 +2968,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * persists.
 	   */
 	  IDLE: 0,
-
+	
 	  /**
 	   * Element is initialized, but not updated yet.
 	   */
 	  INITIALIZED: 1,
-
+	
 	  /**
 	   * Element is updated at least once.
 	   */
 	  UPDATED: 2,
-
+	
 	  /**
 	   * Element is destroyed.
 	   */
 	  DESTROYED: 3,
-
+	
 	  /**
 	   * Gets the name of a node state.
 	   *
@@ -3005,7 +3006,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 	};
-
+	
 	module.exports = NodeState;
 
 /***/ },
@@ -3019,9 +3020,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Enum for all supported event types.
 	 *
@@ -3157,7 +3158,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TOUCH_START: 'touchstart'
 	  }
 	};
-
+	
 	module.exports = EventType;
 
 /***/ },
@@ -3171,33 +3172,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
+	
 	var _debounce = __webpack_require__(27);
-
+	
 	var _debounce2 = _interopRequireDefault(_debounce);
-
+	
 	var _log = __webpack_require__(21);
-
+	
 	var _log2 = _interopRequireDefault(_log);
-
+	
 	var _DirtyType = __webpack_require__(23);
-
+	
 	var _DirtyType2 = _interopRequireDefault(_DirtyType);
-
+	
 	var _EventType = __webpack_require__(25);
-
+	
 	var _EventType2 = _interopRequireDefault(_EventType);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	/**
 	 * Default refresh (debounce) rate in milliseconds.
 	 *
@@ -3207,7 +3208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @default
 	 */
 	var DEFAULT_REFRESH_RATE = 0.0;
-
+	
 	/**
 	 * @class
 	 *
@@ -3215,7 +3216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @alias module:requiem~ui.ElementUpdateDelegate
 	 */
-
+	
 	var ElementUpdateDelegate = (function () {
 	  /**
 	   * @class
@@ -3227,12 +3228,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   *
 	   * @alias module:requiem~ui.ElementUpdateDelegate
 	   */
-
+	
 	  function ElementUpdateDelegate(delegate) {
 	    _classCallCheck(this, ElementUpdateDelegate);
-
+	
 	    this.__define_properties();
-
+	
 	    var mDirtyTable = 0;
 	    var mResizeHandler = null;
 	    var mScrollHandler = null;
@@ -3242,9 +3243,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var mKeyUpHandler = null;
 	    var mKeyPressHandler = null;
 	    var mKeyDownHandler = null;
-
+	
 	    this.delegate = delegate;
-
+	
 	    /**
 	     * Custom requestAnimationFrame implementation.
 	     *
@@ -3254,7 +3255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    var _requestAnimationFrame = function _requestAnimationFrame(callback) {
 	      var raf = window && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame) || null;
-
+	
 	      if (!raf) {
 	        raf = function (callback) {
 	          if (window) {
@@ -3264,10 +3265,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        };
 	      }
-
+	
 	      return raf(callback);
 	    };
-
+	
 	    /**
 	     * Custom cancelAnimationFrame implementation.
 	     *
@@ -3277,7 +3278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    var _cancelAnimationFrame = function _cancelAnimationFrame(callback) {
 	      var caf = window && (window.requestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
-
+	
 	      if (!caf) {
 	        caf = function (callback) {
 	          if (window) {
@@ -3287,10 +3288,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        };
 	      }
-
+	
 	      return caf;
 	    };
-
+	
 	    /**
 	     * Handler invoked when the window resizes.
 	     *
@@ -3301,7 +3302,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _onWindowResize = function _onWindowResize(event) {
 	      this.setDirty(_DirtyType2.default.SIZE);
 	    };
-
+	
 	    /**
 	     * Handler invoked when the window scrolls.
 	     *
@@ -3312,7 +3313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _onWindowScroll = function _onWindowScroll(event) {
 	      this.setDirty(_DirtyType2.default.POSITION);
 	    };
-
+	
 	    /**
 	     * Handler invoked when mouse moves in the window.
 	     *
@@ -3323,10 +3324,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _onWindowMouseMove = function _onWindowMouseMove(event) {
 	      this.mouse.pointerX = event.clientX;
 	      this.mouse.pointerY = event.clientY;
-
+	
 	      this.setDirty(_DirtyType2.default.INPUT);
 	    };
-
+	
 	    /**
 	     * Handler invoked when mouse wheel moves in the window.
 	     *
@@ -3337,10 +3338,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _onWindowMouseWheel = function _onWindowMouseWheel(event) {
 	      this.mouse.wheelX = event.deltaX;
 	      this.mouse.wheelY = event.deltaY;
-
+	
 	      this.setDirty(_DirtyType2.default.INPUT);
 	    };
-
+	
 	    /**
 	     * Handler invoked when device orientation changes.
 	     *
@@ -3350,11 +3351,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    var _onWindowOrientationChange = function _onWindowOrientationChange(event) {
 	      if (!window) return;
-
+	
 	      var x = undefined,
 	          y = undefined,
 	          z = undefined;
-
+	
 	      if (_instanceof(event, window.DeviceOrientationEvent)) {
 	        x = event.beta;
 	        y = event.gamma;
@@ -3368,14 +3369,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        y = event.orientation.y * 50;
 	        z = event.orientation.z * 50;
 	      }
-
+	
 	      this.orientation.x = x;
 	      this.orientation.y = y;
 	      this.orientation.z = z;
-
+	
 	      this.setDirty(_DirtyType2.default.ORIENTATION);
 	    };
-
+	
 	    /**
 	     * Handler invoked when a key is pressed down.
 	     *
@@ -3385,16 +3386,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    var _onWindowKeyDown = function _onWindowKeyDown(event) {
 	      if (!window) return;
-
+	
 	      if (this.keyCode.down === undefined) {
 	        this.keyCode.down = [];
 	      }
-
+	
 	      this.keyCode.down.push(event.keyCode);
-
+	
 	      this.setDirty(_DirtyType2.default.INPUT);
 	    };
-
+	
 	    /**
 	     * Handler invoked when a key is pressed.
 	     *
@@ -3404,16 +3405,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    var _onWindowKeyPress = function _onWindowKeyPress(event) {
 	      if (!window) return;
-
+	
 	      if (this.keyCode.press === undefined) {
 	        this.keyCode.press = [];
 	      }
-
+	
 	      this.keyCode.press.push(event.keyCode);
-
+	
 	      this.setDirty(_DirtyType2.default.INPUT);
 	    };
-
+	
 	    /**
 	     * Handler invoked when a key is pressed up.
 	     *
@@ -3423,16 +3424,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    var _onWindowKeyUp = function _onWindowKeyUp(event) {
 	      if (!window) return;
-
+	
 	      if (this.keyCode.up === undefined) {
 	        this.keyCode.up = [];
 	      }
-
+	
 	      this.keyCode.up.push(event.keyCode);
-
+	
 	      this.setDirty(_DirtyType2.default.INPUT);
 	    };
-
+	
 	    /**
 	     * Sets a dirty type as dirty.
 	     *
@@ -3443,21 +3444,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (this.delegate.children) {
 	          for (var name in this.delegate.children) {
 	            var children = undefined;
-
+	
 	            if (_instanceof(this.delegate.children[name], Array)) {
 	              children = this.delegate.children[name];
 	            } else {
 	              children = [this.delegate.children[name]];
 	            }
-
+	
 	            var n = children.length;
-
+	
 	            for (var i = 0; i < n; i++) {
 	              var child = children[i];
-
+	
 	              if (child.updateDelegate && child.updateDelegate.setDirty) {
 	                var transmitted = dirtyType & child.updateDelegate.receptive;
-
+	
 	                if (transmitted !== _DirtyType2.default.NONE) {
 	                  child.updateDelegate.setDirty(transmitted, validateNow);
 	                }
@@ -3466,26 +3467,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        }
 	      }
-
+	
 	      if (this.isDirty(dirtyType) && !validateNow) return;
-
+	
 	      switch (dirtyType) {
 	        case _DirtyType2.default.NONE:
 	        case _DirtyType2.default.ALL:
 	          mDirtyTable = dirtyType;
 	          break;
-
+	
 	        default:
 	          mDirtyTable |= dirtyType;
 	      }
-
+	
 	      if (validateNow) {
 	        this.update();
 	      } else if (!this._pendingAnimationFrame) {
 	        this._pendingAnimationFrame = _requestAnimationFrame(this.update.bind(this));
 	      }
 	    };
-
+	
 	    /**
 	     * Checks dirty status of a given dirty type.
 	     *
@@ -3498,68 +3499,68 @@ return /******/ (function(modules) { // webpackBootstrap
 	        case _DirtyType2.default.NONE:
 	        case _DirtyType2.default.ALL:
 	          return mDirtyTable === dirtyType;
-
+	
 	        default:
 	          return (dirtyType & mDirtyTable) !== 0;
 	      }
 	    };
-
+	
 	    /**
 	     * Initializes this ElementUpdateDelegate instance. Must manually invoke.
 	     */
 	    this.init = function () {
 	      var conductor = this.conductor || window;
-
+	
 	      if (window && conductor && conductor.addEventListener && (this.responsive === true || _instanceof(this.responsive, Array))) {
 	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.OBJECT.RESIZE) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.ORIENTATION_CHANGE) > -1) {
 	          mResizeHandler = this.refreshRate === 0.0 ? _onWindowResize.bind(this) : (0, _debounce2.default)(_onWindowResize.bind(this), this.refreshRate);
 	        }
-
+	
 	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.OBJECT.SCROLL) > -1) {
 	          mScrollHandler = this.refreshRate === 0.0 ? _onWindowScroll.bind(this) : (0, _debounce2.default)(_onWindowScroll.bind(this), this.refreshRate);
 	        }
-
+	
 	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.MISC.WHEEL) > -1) {
 	          mMouseWheelHandler = this.refreshRate === 0.0 ? _onWindowMouseWheel.bind(this) : (0, _debounce2.default)(_onWindowMouseWheel.bind(this), this.refreshRate);
 	        }
-
+	
 	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.MOUSE.MOUSE_MOVE) > -1) {
 	          mMouseMoveHandler = this.refreshRate === 0.0 ? _onWindowMouseMove.bind(this) : (0, _debounce2.default)(_onWindowMouseMove.bind(this), this.refreshRate);
 	        }
-
+	
 	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.DEVICE.DEVICE_ORIENTATION) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.DEVICE_MOTION) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.ORIENTATION) > -1) {
 	          mOrientationChangeHandler = this.refreshRate === 0.0 ? _onWindowOrientationChange.bind(this) : (0, _debounce2.default)(_onWindowOrientationChange.bind(this), this.refreshRate);
 	        }
-
+	
 	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_DOWN) > -1) {
 	          mKeyDownHandler = _onWindowKeyDown.bind(this);
 	        }
-
+	
 	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_PRESS) > -1) {
 	          mKeyPressHandler = _onWindowKeyPress.bind(this);
 	        }
-
+	
 	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_UP) > -1) {
 	          mKeyUpHandler = _onWindowKeyUp.bind(this);
 	        }
-
+	
 	        if (mResizeHandler) {
 	          window.addEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
 	          window.addEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
 	        }
-
+	
 	        if (mScrollHandler) {
 	          conductor.addEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
 	        }
-
+	
 	        if (mMouseWheelHandler) {
 	          conductor.addEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
 	        }
-
+	
 	        if (mMouseMoveHandler) {
 	          conductor.addEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
 	        }
-
+	
 	        if (mOrientationChangeHandler) {
 	          if (window.DeviceOrientationEvent) {
 	            window.addEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
@@ -3567,49 +3568,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	            window.addEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
 	          }
 	        }
-
+	
 	        if (mKeyDownHandler) {
 	          window.addEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
 	        }
-
+	
 	        if (mKeyPressHandler) {
 	          window.addEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
 	        }
-
+	
 	        if (mKeyUpHandler) {
 	          window.addEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
 	        }
 	      }
-
+	
 	      this.setDirty(_DirtyType2.default.ALL);
 	    };
-
+	
 	    /**
 	     * Destroys this ElementUpdateDelegate instance.
 	     */
 	    this.destroy = function () {
 	      _cancelAnimationFrame();
-
+	
 	      var conductor = this.conductor || window;
-
+	
 	      if (window && conductor && conductor.removeEventListener) {
 	        if (mResizeHandler) {
 	          window.removeEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
 	          window.removeEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
 	        }
-
+	
 	        if (mScrollHandler) {
 	          conductor.removeEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
 	        }
-
+	
 	        if (mMouseWheelHandler) {
 	          conductor.removeEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
 	        }
-
+	
 	        if (mMouseMoveHandler) {
 	          conductor.removeEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
 	        }
-
+	
 	        if (mOrientationChangeHandler) {
 	          if (window.DeviceOrientationEvent) {
 	            window.removeEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
@@ -3617,20 +3618,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            window.removeEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
 	          }
 	        }
-
+	
 	        if (mKeyDownHandler) {
 	          window.removeEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
 	        }
-
+	
 	        if (mKeyPressHandler) {
 	          window.removeEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
 	        }
-
+	
 	        if (mKeyUpHandler) {
 	          window.removeEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
 	        }
 	      }
-
+	
 	      mResizeHandler = null;
 	      mScrollHandler = null;
 	      mMouseWheelHandler = null;
@@ -3640,21 +3641,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      mKeyPressHandler = null;
 	      mKeyUpHandler = null;
 	    };
-
+	
 	    /**
 	     * Handler invoked whenever a visual update is required.
 	     */
 	    this.update = function () {
 	      _cancelAnimationFrame(this._pendingAnimationFrame);
-
+	
 	      if (this.delegate && this.delegate.update) {
 	        (0, _log2.default)(this.toString() + '::update(', _DirtyType2.default.toString(mDirtyTable), ')');
 	        this.delegate.update.call(this.delegate);
 	      }
-
+	
 	      // Reset the dirty status of all types.
 	      this.setDirty(_DirtyType2.default.NONE);
-
+	
 	      delete this.mouse.pointerX;
 	      delete this.mouse.pointerY;
 	      delete this.mouse.wheelX;
@@ -3665,29 +3666,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	      delete this.keyCode.up;
 	      delete this.keyCode.press;
 	      delete this.keyCode.down;
-
+	
 	      this._pendingAnimationFrame = null;
 	    };
 	  }
-
+	
 	  /**
 	   * Gets the string representation of this ElementUpdateDelegate instance.
 	   *
 	   * @return {string}
 	   */
-
+	
 	  _createClass(ElementUpdateDelegate, [{
 	    key: 'toString',
 	    value: function toString() {
 	      return '[ElementUpdateDelegate{' + (this.delegate && this.delegate.name || 'undefined') + '}]';
 	    }
-
+	
 	    /**
 	     * Defines all properties.
 	     *
 	     * @private
 	     */
-
+	
 	  }, {
 	    key: '__define_properties',
 	    value: function __define_properties() {
@@ -3697,7 +3698,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @property {Element}
 	       */
 	      Object.defineProperty(this, 'delegate', { value: null, writable: true });
-
+	
 	      /**
 	       * Indicates whether this ElementUpdateDelegate auto responds to window
 	       * behaviors (i.e. resizing, scrolling).
@@ -3705,14 +3706,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @property {boolean}
 	       */
 	      Object.defineProperty(this, 'responsive', { value: false, writable: true });
-
+	
 	      /**
 	       * Indicates the debounce rate of this ElementUpdateDelegate instance.
 	       *
 	       * @property {number}
 	       */
 	      Object.defineProperty(this, 'refreshRate', { value: DEFAULT_REFRESH_RATE, writable: true });
-
+	
 	      /**
 	       * Indicates the dirty flags in which ElementUpdateDelgate instance will
 	       * transmit to its child Elements.
@@ -3720,7 +3721,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @property {number}
 	       */
 	      Object.defineProperty(this, 'transmissive', { value: _DirtyType2.default.NONE, writable: true });
-
+	
 	      /**
 	       * Indicates the dirty flags in which this ElementUpdateDelegate is capable
 	       * of receiving from parent Elements.
@@ -3728,7 +3729,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @property {number}
 	       */
 	      Object.defineProperty(this, 'receptive', { value: _DirtyType2.default.NONE, writable: true });
-
+	
 	      /**
 	       * Indicates the conductor in which this ElementUpdateDelegate responds to
 	       * (defaults to window).
@@ -3736,7 +3737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @property {Node|window}
 	       */
 	      Object.defineProperty(this, 'conductor', { value: window, writable: true });
-
+	
 	      /**
 	       * Stores mouse properties if this ElementUpdateDelegate responds to mouse
 	       * events.
@@ -3744,7 +3745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @property {Object}
 	       */
 	      Object.defineProperty(this, 'mouse', { value: {}, writable: false });
-
+	
 	      /**
 	       * Stores orientation properties if this ElementUpdateDelgate responds to
 	       * device orientations (i.e. device accelerometer).
@@ -3752,7 +3753,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @property {Object}
 	       */
 	      Object.defineProperty(this, 'orientation', { value: {}, writable: false });
-
+	
 	      /**
 	       * Stores pressed keycodes if this ElementUpdateDelegate responds to
 	       * keyboard events.
@@ -3762,10 +3763,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      Object.defineProperty(this, 'keyCode', { value: {}, writable: false });
 	    }
 	  }]);
-
+	
 	  return ElementUpdateDelegate;
 	})();
-
+	
 	module.exports = ElementUpdateDelegate;
 
 /***/ },
@@ -3779,11 +3780,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var assertType = __webpack_require__(5);
-
+	
 	/**
 	 * Returns a function that, as long as it continues to be invoked, will not
 	 * be triggered. The function will be called after it stops being called for
@@ -3804,34 +3805,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	  assertType(method, 'function', false, 'Invalid parameter: method');
 	  assertType(delay, 'number', true, 'Invalid optional parameter: delay');
 	  assertType(leading, 'boolean', true, 'Invalid optional parameter: leading');
-
+	
 	  if (delay === undefined) delay = 0;
 	  if (leading === undefined) leading = false;
-
+	
 	  var timeout = undefined;
-
+	
 	  return function () {
 	    var context = this;
 	    var args = arguments;
-
+	
 	    var later = function later() {
 	      timeout = null;
-
+	
 	      if (!leading) {
 	        method.apply(context, args);
 	      }
 	    };
-
+	
 	    var callNow = leading && !timeout;
 	    clearTimeout(timeout);
 	    timeout = setTimeout(later, delay);
-
+	
 	    if (callNow) {
 	      method.apply(context, args);
 	    }
 	  };
 	}
-
+	
 	module.exports = debounce;
 
 /***/ },
@@ -3845,35 +3846,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
+	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _DirtyType = __webpack_require__(23);
-
+	
 	var _DirtyType2 = _interopRequireDefault(_DirtyType);
-
+	
 	var _Element2 = __webpack_require__(19);
-
+	
 	var _Element3 = _interopRequireDefault(_Element2);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
+	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
+	
 	/**
 	 * @class
 	 *
@@ -3882,19 +3881,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @extends module:requiem~ui.Element
 	 * @alias module:requiem~ui.Video
 	 */
-
+	
 	var Video = (function (_Element) {
 	  _inherits(Video, _Element);
-
+	
 	  function Video() {
 	    _classCallCheck(this, Video);
-
+	
 	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Video).apply(this, arguments));
 	  }
-
+	
 	  _createClass(Video, [{
 	    key: 'update',
-
+	
 	    /**
 	     * @inheritdoc
 	     */
@@ -3902,76 +3901,77 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.updateDelegate.isDirty(_DirtyType2.default.DATA)) this.__update_source();
 	      _get(Object.getPrototypeOf(Video.prototype), 'update', this).call(this);
 	    }
-
+	
 	    /**
 	     * @inheritdoc
 	     */
-
+	
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return document.createElement('video');
 	    }
-
+	
 	    /**
 	     * Updates the sources in this Video instance.
 	     *
 	     * @private
 	     */
-
+	
 	  }, {
 	    key: '__update_source',
 	    value: function __update_source() {
 	      var i = undefined;
 	      var arrlen = undefined;
-
+	
 	      // Update source(s).
 	      var oldSources = this.element.getElementsByTagName('source');
-
+	
 	      arrlen = oldSources.length;
-
+	
 	      for (i = 0; i < arrlen; i++) {
 	        var oldSource = oldSources[i];
-
+	
 	        this.element.removeChild(oldSource);
 	      }
-
+	
 	      if (!this.source) return;
-
+	
 	      arrlen = this.source.length;
-
+	
 	      for (i = 0; i < arrlen; i++) {
 	        var newSource = document.createElement('source');
 	        var path = this.source[i].src;
 	        var type = this.source[i].type;
 	        var ext = path.split('.').pop();
-
+	
 	        newSource.setAttribute('src', path);
 	        newSource.setAttribute('type', type || 'video/' + ext);
-
+	
 	        this.element.appendChild(newSource);
 	      }
 	    }
-
+	
 	    /**
 	     * @inheritdoc
 	     */
-
+	
 	  }, {
 	    key: '__validate_element',
 	    value: function __validate_element(element) {
-	      return (0, _assert2.default)(_instanceof(element, HTMLVideoElement), 'Element validation failed');
+	      return true;
+	      // return assert(element instanceof HTMLVideoElement, 'Element validation failed');
 	    }
-
+	
 	    /**
 	     * @inheritdoc
 	     */
-
+	
 	  }, {
 	    key: '__define_properties',
 	    value: function __define_properties() {
 	      var _this2 = this;
-
+	
 	      /**
 	       * Specifies that the video will start playing as soon as it is ready.
 	       *
@@ -3986,7 +3986,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
 	        }
 	      });
-
+	
 	      /**
 	       * Specifies that video controls should be displayed (such as a play/pause
 	       * button etc).
@@ -4002,7 +4002,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
 	        }
 	      });
-
+	
 	      /**
 	       * Specifies that the video will start over again, every time it is
 	       * finished.
@@ -4018,7 +4018,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
 	        }
 	      });
-
+	
 	      /**
 	       * Specifies that the audio output of the video should be muted.
 	       *
@@ -4033,7 +4033,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
 	        }
 	      });
-
+	
 	      /**
 	       * Specifies an image to be shown while the video is downloading, or until
 	       * the user hits the play button.
@@ -4049,7 +4049,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
 	        }
 	      });
-
+	
 	      /**
 	       * Specifies if and how the author thinks the video should be loaded when
 	       * the page loads
@@ -4065,7 +4065,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
 	        }
 	      });
-
+	
 	      /**
 	       * Array of sources containing elements in the form of:
 	       * Object {
@@ -4080,14 +4080,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        set: true,
 	        dirtyType: _DirtyType2.default.DATA
 	      });
-
+	
 	      _get(Object.getPrototypeOf(Video.prototype), '__define_properties', this).call(this);
 	    }
 	  }]);
-
+	
 	  return Video;
 	})(_Element3.default);
-
+	
 	module.exports = Video;
 
 /***/ },
@@ -4101,19 +4101,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _toElementArray = __webpack_require__(30);
-
+	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Checks if specified parent contains specified child.
 	 *
@@ -4129,25 +4129,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	function hasChild(parent, child) {
 	  var ps = (0, _toElementArray2.default)(parent);
 	  var cs = (0, _toElementArray2.default)(child);
-
+	
 	  if (!(0, _assert2.default)(ps.length === 1, 'Invalid parent specified. Parent must be a single Node, Requiem Element, or jQuery object.')) return false;
 	  if (!(0, _assert2.default)(cs.length === 1, 'Invalid child specified. Child must be a single Node, Requiem Element, or jQuery object.')) return false;
 	  if (!(0, _assert2.default)(document, 'Document not found. This method requires document to be valid.')) return false;
-
+	
 	  var p = ps[0];
 	  var c = cs[0];
-
+	
 	  if (!c.parentNode) return false;
-
+	
 	  while (c !== null && c !== undefined && c !== document) {
 	    c = c.parentNode;
-
+	
 	    if (c === p) return true;
 	  }
-
+	
 	  return false;
 	}
-
+	
 	module.exports = hasChild;
 
 /***/ },
@@ -4161,11 +4161,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	// let assert = require('./assert');
-
+	
 	/**
 	 * Transforms given element(s) to an element array.
 	 *
@@ -4175,16 +4175,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~helpers.toElementArray
 	 */
 	;
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	function toElementArray(element, keepElement) {
 	  var Element = __webpack_require__(19);
-
+	
 	  if (!element) return null;
-
+	
 	  var elements = undefined;
-
+	
 	  if (_instanceof(element, Array)) {
 	    elements = element;
 	  } else if (_instanceof(element, NodeList)) {
@@ -4193,29 +4193,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	    elements = element.get();
 	  } else {
 	    // if (!assert((element instanceof Node) || (element instanceof Element), 'Invalid element specified. Element must be an instance of Node or Requiem Element.')) return null;
-
+	
 	    if (_instanceof(element, Element)) {
 	      elements = [element.element];
 	    } else {
 	      elements = [element];
 	    }
 	  }
-
+	
 	  var n = elements.length;
-
+	
 	  for (var i = 0; i < n; i++) {
 	    var e = elements[i];
-
+	
 	    // if (!assert((e instanceof Node) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of Node or Requiem Element.')) return null;
-
+	
 	    if (!keepElement && _instanceof(e, Element)) {
 	      elements[i] = e.element;
 	    }
 	  }
-
+	
 	  return elements;
 	}
-
+	
 	module.exports = toElementArray;
 
 /***/ },
@@ -4229,9 +4229,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Collection of event related classes/methods.
 	 *
@@ -4239,9 +4239,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	;
 	var events = {};
-
+	
 	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(32), writable: false, enumerable: true });
-
+	
 	module.exports = events;
 
 /***/ },
@@ -4255,27 +4255,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _assertType = __webpack_require__(5);
-
+	
 	var _assertType2 = _interopRequireDefault(_assertType);
-
+	
 	var _log = __webpack_require__(21);
-
+	
 	var _log2 = _interopRequireDefault(_log);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	/**
 	 * @class
 	 *
@@ -4283,49 +4283,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @alias module:requiem~events.EventDispatcher
 	 */
-
+	
 	var EventDispatcher = (function () {
 	  /**
 	   * Creates a new EventDispatcher instance.
 	   *
 	   * @return {EventDispatcher} A new EventDispatcher instance.
 	   */
-
+	
 	  function EventDispatcher() {
 	    _classCallCheck(this, EventDispatcher);
-
+	
 	    this.__define_properties();
 	  }
-
+	
 	  /**
 	   * Adds an event listener to this EventDispatcher instance.
 	   *
 	   * @param {string}   type
 	   * @param {Function} listener
 	   */
-
+	
 	  _createClass(EventDispatcher, [{
 	    key: 'addEventListener',
 	    value: function addEventListener(type, listener) {
 	      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
 	      if (!(0, _assertType2.default)(listener, 'function', false, 'Invalid parameter: listener')) return;
-
+	
 	      (0, _log2.default)('[EventDispatcher]::addEventListener(' + type + ')');
-
+	
 	      if (!this._listenerMap) {
 	        Object.defineProperty(this, '_listenerMap', {
 	          value: {},
 	          writable: true
 	        });
 	      }
-
+	
 	      if (!this._listenerMap[type]) {
 	        this._listenerMap[type] = [];
 	      }
-
+	
 	      this._listenerMap[type].push(listener);
 	    }
-
+	
 	    /**
 	     * Removes an event listener from this EventDispatcher instance. If no
 	     * listener method is specified, all the listeners of the specified type
@@ -4334,7 +4334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {string}   type
 	     * @param {Function} listener:undefined
 	     */
-
+	
 	  }, {
 	    key: 'removeEventListener',
 	    value: function removeEventListener(type, listener) {
@@ -4342,12 +4342,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!(0, _assertType2.default)(listener, 'function', true, 'Invalid parameter: listener')) return;
 	      if (!(0, _assert2.default)(this._listenerMap, 'Listener map is null.')) return;
 	      if (!(0, _assert2.default)(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
-
+	
 	      (0, _log2.default)('[EventDispatcher]::removeEventListener(' + type + ')');
-
+	
 	      if (listener) {
 	        var index = this._listenerMap[type].indexOf(listener);
-
+	
 	        if (index > -1) {
 	          this._listenerMap[type].splice(index, 1);
 	        }
@@ -4355,7 +4355,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        delete this._listenerMap[type];
 	      }
 	    }
-
+	
 	    /**
 	     * Determines whether this EventDispatcher instance has a specific event
 	     * listener registered. If no listener is specified, it will check if any
@@ -4366,7 +4366,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {boolean}
 	     */
-
+	
 	  }, {
 	    key: 'hasEventListener',
 	    value: function hasEventListener(type, listener) {
@@ -4374,55 +4374,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!(0, _assertType2.default)(listener, 'function', true, 'Invalid parameter: listener')) return;
 	      if (!(0, _assert2.default)(this._listenerMap, 'Listener map is null.')) return;
 	      if (!(0, _assert2.default)(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
-
+	
 	      if (listener) {
 	        var index = this._listenerMap[type].indexOf(listener);
-
+	
 	        return index > -1;
 	      } else {
 	        return true;
 	      }
 	    }
-
+	
 	    /**
 	     * Dispatches the specified event.
 	     *
 	     * @param {Event} event
 	     */
-
+	
 	  }, {
 	    key: 'dispatchEvent',
 	    value: function dispatchEvent(event) {
 	      if (!(0, _assertType2.default)(event, Event, false, 'Event must be specified.')) return;
 	      if (!(0, _assert2.default)(this._listenerMap, 'Listener map is null.')) return;
-
+	
 	      if (!this._listenerMap[event.type]) return;
-
+	
 	      (0, _log2.default)('[EventDispatcher]::dispatchEvent(' + event.type + ')');
-
+	
 	      var arrlen = this._listenerMap[event.type].length;
-
+	
 	      for (var i = 0; i < arrlen; i++) {
 	        var listener = this._listenerMap[event.type][i];
-
+	
 	        listener.call(this, event);
 	      }
 	    }
-
+	
 	    /**
 	     * Defines all properties.
 	     *
 	     * @private
 	     */
-
+	
 	  }, {
 	    key: '__define_properties',
 	    value: function __define_properties() {}
 	  }]);
-
+	
 	  return EventDispatcher;
 	})();
-
+	
 	module.exports = EventDispatcher;
 
 /***/ },
@@ -4436,9 +4436,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Collection of network related methods/classes.
 	 *
@@ -4446,9 +4446,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	;
 	var net = {};
-
+	
 	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(34), writable: false, enumerable: true });
-
+	
 	module.exports = net;
 
 /***/ },
@@ -4462,43 +4462,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
+	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _inherit = __webpack_require__(35);
-
+	
 	var _inherit2 = _interopRequireDefault(_inherit);
-
+	
 	var _log = __webpack_require__(21);
-
+	
 	var _log2 = _interopRequireDefault(_log);
-
+	
 	var _EventDispatcher2 = __webpack_require__(32);
-
+	
 	var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
-
+	
 	var _EventType = __webpack_require__(25);
-
+	
 	var _EventType2 = _interopRequireDefault(_EventType);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
+	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
+	
 	/**
 	 * Common image file extensions.
 	 *
@@ -4508,7 +4508,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @default
 	 */
 	var IMAGE_EXTENSIONS = ['jpg', 'png', 'svg', 'jpeg', 'gif'];
-
+	
 	/**
 	 * Common video file extensions.
 	 *
@@ -4518,7 +4518,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @default
 	 */
 	var VIDEO_EXTENSIONS = ['mp4', 'mpeg', 'ogg', 'ogv', 'mov', 'avi', 'flv'];
-
+	
 	/**
 	 * Common audio file extensions.
 	 *
@@ -4528,7 +4528,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @default
 	 */
 	var AUDIO_EXTENSIONS = ['mp3', 'mp4', 'mpeg', 'flac', 'wav', 'ogg'];
-
+	
 	/**
 	 * Mime type lookup.
 	 *
@@ -4563,7 +4563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    wav: 'audio/vnd.wave'
 	  }
 	};
-
+	
 	/**
 	 * @class
 	 *
@@ -4571,75 +4571,75 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @extends module:requiem~events.EventDispatcher
 	 */
-
+	
 	var AssetLoader = (function (_EventDispatcher) {
 	  _inherits(AssetLoader, _EventDispatcher);
-
+	
 	  function AssetLoader() {
 	    _classCallCheck(this, AssetLoader);
-
+	
 	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AssetLoader).call(this));
 	  }
-
+	
 	  /**
 	   * Initializes this AssetLoader instance and begins loading assets in the
 	   * queue.
 	   */
-
+	
 	  _createClass(AssetLoader, [{
 	    key: 'init',
 	    value: function init() {
 	      if (this.queue.length < 1) return;
-
+	
 	      (0, _log2.default)('[AssetLoader]::init()');
-
+	
 	      var arrlen = this.queue.length;
-
+	
 	      this._xhrs = [];
 	      this._pending = arrlen;
-
+	
 	      for (var i = 0; i < arrlen; i++) {
 	        var target = this.queue[i];
-
+	
 	        (0, _log2.default)('[AssetLoader]::Started loading: ' + target.path);
-
+	
 	        var xhr = this.getXHR({
 	          id: i,
 	          path: target.path,
 	          type: target.type
 	        });
 	        xhr.send();
-
+	
 	        this._xhrs.push(xhr);
 	      }
 	    }
-
+	
 	    /**
 	     * Destroys this AssetLoader instance and resets its state to idle for
 	     * recyclable use.
 	     */
-
+	
 	  }, {
 	    key: 'destroy',
 	    value: function destroy() {
 	      if (this._xhrs) {
 	        var arrlen = this._xhrs.length;
-
+	
 	        for (var i = 0; i < arrlen; i++) {
 	          var xhr = this._xhrs[i];
 	          xhr.abort();
 	          this._xhrs[i] = null;
 	        }
-
+	
 	        this._queue = null;
 	        this._assets = null;
 	        this._bytesLoaded = null;
 	        this._bytesTotal = null;
 	      }
-
+	
 	      this._state = AssetLoader.STATE.IDLE;
 	    }
-
+	
 	    /**
 	     * Adds target loading assets to the queue. Assumes each parameter is as
 	     * follows:
@@ -4649,33 +4649,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *                 'audio').
 	     * }
 	     */
-
+	
 	  }, {
 	    key: 'enqueue',
 	    value: function enqueue() {
 	      (0, _assert2.default)(arguments && arguments.length > 0, 'There are no arguments specified.');
 	      (0, _assert2.default)(this.state !== AssetLoader.STATE.IN_PROGRESS, 'Enqueueing is prohibited when the state is in progress.');
-
+	
 	      if (!arguments) return;
 	      if (arguments.length <= 0) return;
 	      if (this.state === AssetLoader.STATE.IN_PROGRESS) return;
-
+	
 	      (0, _log2.default)('[AssetLoader]::enqueue(' + arguments + ')');
-
+	
 	      var arrlen = arguments.length;
-
+	
 	      for (var i = 0; i < arrlen; i++) {
 	        var arg = arguments[i];
-
+	
 	        (0, _assert2.default)(typeof arg === 'string' || (typeof arg === 'undefined' ? 'undefined' : _typeof(arg)) === 'object', 'Each item to be enqueued must be a string of the target path or an object containing a "path" key and/or a "type" key');
 	        (0, _assert2.default)(typeof arg === 'string' || typeof arg.path === 'string', 'Invalid path specified: ' + arg.path + '.');
-
+	
 	        var path = typeof arg === 'string' ? arg : arg.path;
 	        var type = arg.type;
-
+	
 	        if (!type) {
 	          var ext = path.split('.').pop().toLowerCase();
-
+	
 	          if (IMAGE_EXTENSIONS.indexOf(ext) > -1) {
 	            type = AssetLoader.TYPE.IMAGE;
 	          } else if (VIDEO_EXTENSIONS.indexOf(ext) > -1) {
@@ -4686,60 +4686,60 @@ return /******/ (function(modules) { // webpackBootstrap
 	            throw '[AssetLoader]::Unsupported asset format: ' + path;
 	          }
 	        }
-
+	
 	        if (type) {
 	          this.queue.push({
 	            path: path,
 	            type: type
 	          });
-
+	
 	          if (!this._bytesLoaded) this._bytesLoaded = [];
 	          if (!this._bytesTotal) this._bytesTotal = [];
-
+	
 	          this._bytesLoaded.push(0.0);
 	          this._bytesTotal.push(0.0);
 	        }
 	      }
 	    }
-
+	
 	    /**
 	     * Removes loading targets from the queue. Each parameter is a path that
 	     * must match one that is already in the queue.
 	     */
-
+	
 	  }, {
 	    key: 'dequeue',
 	    value: function dequeue() {
 	      (0, _assert2.default)(arguments && arguments.length > 0, 'There are no arguments specified.');
 	      (0, _assert2.default)(this.state !== AssetLoader.STATE.IN_PROGRESS, 'Dequeueing is prohibited when the state is in progress.');
-
+	
 	      if (!arguments) return;
 	      if (arguments.length <= 0) return;
 	      if (this.state === AssetLoader.STATE.IN_PROGRESS) return;
-
+	
 	      var arrlen = arguments.length;
-
+	
 	      for (var i = 0; i < arrlen; i++) {
 	        var arg = arguments[i];
-
+	
 	        (0, _assert2.default)(typeof arg === 'string', 'Expecting path to be a string.');
-
+	
 	        var n = this.queue.length;
-
+	
 	        for (var j = 0; j < n; j++) {
 	          var target = this.queue[j];
-
+	
 	          if (target.path === arg) {
 	            this.queue.splice(j, 1);
 	            this.bytesLoaded.splice(j, 1);
 	            this.bytesTotal.splice(j, 1);
-
+	
 	            break;
 	          }
 	        }
 	      }
 	    }
-
+	
 	    /**
 	     * Creates and returns a new XHR instance with prepopulated configurations.
 	     *
@@ -4747,30 +4747,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {Object} XHR instance.
 	     */
-
+	
 	  }, {
 	    key: 'getXHR',
 	    value: function getXHR(data) {
 	      var ext = data.path.split('.').pop().toLowerCase();
 	      var mimeType = MIME_TYPES[data.type.toUpperCase()][ext];
-
+	
 	      if (!mimeType) {
 	        throw '[AssetLoader]:: Unsupported asset format: ' + data.path;
 	      }
-
+	
 	      var xhr = new XMLHttpRequest();
 	      xhr.addEventListener('progress', this._onXHRProgress.bind(this), false);
 	      xhr.addEventListener('load', this._onXHRLoadComplete.bind(this), false);
 	      xhr.addEventListener('error', this._onXHRLoadError.bind(this), false);
 	      xhr.addEventListener('abort', this._onXHRAbort.bind(this), false);
-
+	
 	      xhr.open('GET', data.path, this.async);
 	      if (xhr.overrideMimeType) xhr.overrideMimeType(mimeType);
 	      xhr.data = data;
-
+	
 	      return xhr;
 	    }
-
+	
 	    /**
 	     * Handler invoked when an XHR instance is in progress.
 	     *
@@ -4778,30 +4778,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @private
 	     */
-
+	
 	  }, {
 	    key: '_onXHRProgress',
 	    value: function _onXHRProgress(event) {
 	      if (!event.lengthComputable) return;
-
+	
 	      var xhr = event.currentTarget;
 	      var id = xhr.data.id;
 	      var path = xhr.data.path;
 	      var type = xhr.data.type;
 	      var bytesLoaded = event.loaded;
 	      var bytesTotal = event.total;
-
+	
 	      // Hash progress into XHR data.
 	      xhr.data.bytesLoaded = bytesLoaded;
 	      xhr.data.bytesTotal = bytesTotal;
-
+	
 	      this._bytesLoaded[id] = bytesLoaded;
 	      this._bytesTotal[id] = bytesTotal;
-
+	
 	      if (!this._bytesLoaded) this._bytesLoaded = [];
-
+	
 	      (0, _log2.default)('[AssetLoader]::_onXHRProgress("' + path + '":' + bytesLoaded + '/' + bytesTotal + ')');
-
+	
 	      var progressEvent = new CustomEvent(_EventType2.default.OBJECT.PROGRESS, {
 	        bubbles: true,
 	        cancelable: true,
@@ -4814,10 +4814,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          total: this.bytesTotal
 	        }
 	      });
-
+	
 	      this.dispatchEvent(progressEvent);
 	    }
-
+	
 	    /**
 	     * Handler invoked when an XHR instance completes its operation.
 	     *
@@ -4825,7 +4825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @private
 	     */
-
+	
 	  }, {
 	    key: '_onXHRLoadComplete',
 	    value: function _onXHRLoadComplete(event) {
@@ -4833,11 +4833,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var id = xhr.data.id;
 	      var path = xhr.data.path;
 	      var type = xhr.data.type;
-
+	
 	      (0, _log2.default)('[AssetLoader]::_onXHRLoadComplete("' + path + '"")');
-
+	
 	      this._pending--;
-
+	
 	      var loadEvent = new CustomEvent(_EventType2.default.OBJECT.LOAD, {
 	        bubbles: true,
 	        cancelable: true,
@@ -4850,10 +4850,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          total: this.bytesTotal
 	        }
 	      });
-
+	
 	      this.dispatchEvent(loadEvent);
 	    }
-
+	
 	    /**
 	     * Handler invoked when an XHR instance fails its operation.
 	     *
@@ -4861,7 +4861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @private
 	     */
-
+	
 	  }, {
 	    key: '_onXHRLoadError',
 	    value: function _onXHRLoadError(event) {
@@ -4869,11 +4869,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var id = xhr.data.id;
 	      var path = xhr.data.path;
 	      var type = xhr.data.type;
-
+	
 	      (0, _log2.default)('[AssetLoader]::_onXHRLoadError("' + path + '"")');
-
+	
 	      this._pending--;
-
+	
 	      var errorEvent = new CustomEvent(_EventType2.default.OBJECT.ERROR, {
 	        bubbles: true,
 	        cancelable: true,
@@ -4886,9 +4886,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          total: this.bytesTotal
 	        }
 	      });
-
+	
 	      this.dispatchEvent(errorEvent);
-
+	
 	      if (this._pending === 0) {
 	        var loadEvent = new CustomEvent(_EventType2.default.OBJECT.LOAD, {
 	          bubbles: true,
@@ -4902,11 +4902,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            total: this.bytesTotal
 	          }
 	        });
-
+	
 	        this.dispatchEvent(loadEvent);
 	      }
 	    }
-
+	
 	    /**
 	     * Handler invoked when an XHR aborts its operation.
 	     *
@@ -4914,7 +4914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @private
 	     */
-
+	
 	  }, {
 	    key: '_onXHRAbort',
 	    value: function _onXHRAbort(event) {
@@ -4922,11 +4922,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var id = xhr.data.id;
 	      var path = xhr.data.path;
 	      var type = xhr.data.type;
-
+	
 	      (0, _log2.default)('[AssetLoader]::_onXHRLoadError("' + path + '"")');
-
+	
 	      this._pending--;
-
+	
 	      var abortEvent = new CustomEvent(_EventType2.default.OBJECT.ABORT, {
 	        bubbles: true,
 	        cancelable: true,
@@ -4939,9 +4939,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          total: this.bytesTotal
 	        }
 	      });
-
+	
 	      this.dispatchEvent(abortEvent);
-
+	
 	      if (this._pending === 0) {
 	        var loadEvent = new CustomEvent(_EventType2.default.OBJECT.LOAD, {
 	          bubbles: true,
@@ -4955,15 +4955,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            total: this.bytesTotal
 	          }
 	        });
-
+	
 	        this.dispatchEvent(loadEvent);
 	      }
 	    }
-
+	
 	    /**
 	     * @inheritdoc
 	     */
-
+	
 	  }, {
 	    key: '__define_properties',
 	    value: function __define_properties() {
@@ -4982,11 +4982,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	              writable: true
 	            });
 	          }
-
+	
 	          return this._state;
 	        }
 	      });
-
+	
 	      /**
 	       * @property
 	       *
@@ -5002,11 +5002,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	              writable: true
 	            });
 	          }
-
+	
 	          return this._queue;
 	        }
 	      });
-
+	
 	      /**
 	       * @property
 	       *
@@ -5022,11 +5022,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	              writable: true
 	            });
 	          }
-
+	
 	          return this._assets;
 	        }
 	      });
-
+	
 	      /**
 	       * @property
 	       *
@@ -5044,7 +5044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	        set: function set(value) {
 	          (0, _assert2.default)(this.state !== AssetLoader.STATE.IN_PROGRESS, 'Cannot change the async mode while it is in progress.');
-
+	
 	          if (this.state !== AssetLoader.STATE.IN_PROGRESS) {
 	            Object.defineProperty(this, '_async', {
 	              value: value,
@@ -5053,7 +5053,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	        }
 	      });
-
+	
 	      /**
 	       * @property
 	       *
@@ -5068,16 +5068,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	          } else {
 	            var total = 0;
 	            var arrlen = this._bytesLoaded.length;
-
+	
 	            for (var i = 0; i < arrlen; i++) {
 	              total += this._bytesLoaded[i];
 	            }
-
+	
 	            return total;
 	          }
 	        }
 	      });
-
+	
 	      /**
 	       * @property
 	       *
@@ -5092,16 +5092,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	          } else {
 	            var total = 0;
 	            var arrlen = this._bytesTotal.length;
-
+	
 	            for (var i = 0; i < arrlen; i++) {
 	              total += this._bytesTotal[i];
 	            }
-
+	
 	            return total;
 	          }
 	        }
 	      });
-
+	
 	      /**
 	       * @property
 	       *
@@ -5113,30 +5113,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	        get: function get() {
 	          if (!this._bytesTotal || !this._bytesLoaded) return 0.0;
 	          if (this._bytesTotal.length !== this._bytesLoaded.length) return 0.0;
-
+	
 	          var arrlen = this._bytesTotal.length;
 	          var sum = 0.0;
-
+	
 	          for (var i = 0; i < arrlen; i++) {
 	            var loaded = this._bytesLoaded[i];
 	            var total = this._bytesTotal[i];
-
+	
 	            if (total > 0.0) {
 	              sum += loaded / total;
 	            }
 	          }
-
+	
 	          return sum / arrlen;
 	        }
 	      });
-
+	
 	      _get(Object.getPrototypeOf(AssetLoader.prototype), '__define_properties', this).call(this);
 	    }
 	  }]);
-
+	
 	  return AssetLoader;
 	})(_EventDispatcher3.default);
-
+	
 	/**
 	 * @static
 	 *
@@ -5144,7 +5144,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @enum {number}
 	 */
-
+	
 	AssetLoader.STATE = {
 	  IDLE: 0,
 	  IN_PROGRESS: 1,
@@ -5152,7 +5152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  FAILED: 3,
 	  ABORTED: 4
 	};
-
+	
 	/**
 	 * @static
 	 *
@@ -5165,7 +5165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  VIDEO: 'video',
 	  AUDIO: 'audio'
 	};
-
+	
 	module.exports = AssetLoader;
 
 /***/ },
@@ -5179,11 +5179,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var assertType = __webpack_require__(5);
-
+	
 	/**
 	 * Sets up prototypal inheritance between a child class and a parent class.
 	 *
@@ -5197,23 +5197,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	function inherit(childClass, parentClass) {
 	  assertType(childClass, 'class', false, 'Invalid parameter: childClass');
 	  assertType(parentClass, 'class', false, 'Invalid parameter: parentClass');
-
+	
 	  for (var key in parentClass) {
 	    if (parentClass.hasOwnProperty(key)) {
 	      childClass[key] = parentClass[key];
 	    }
 	  }
-
+	
 	  function C() {
 	    this.constructor = childClass;
 	  }
-
+	
 	  C.prototype = Object.create(parentClass.prototype);
 	  childClass.prototype = new C();
 	  childClass.__super__ = parentClass.prototype;
 	  return childClass;
 	}
-
+	
 	module.exports = inherit;
 
 /***/ },
@@ -5227,9 +5227,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Collection of Requiem data-types and definitions.
 	 *
@@ -5237,13 +5237,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	;
 	var types = {};
-
+	
 	Object.defineProperty(types, 'Directive', { value: __webpack_require__(16), writable: false, enumerable: true });
 	Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(23), writable: false, enumerable: true });
 	Object.defineProperty(types, 'EventType', { value: __webpack_require__(25), writable: false, enumerable: true });
 	Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(37), writable: false, enumerable: true });
 	Object.defineProperty(types, 'NodeState', { value: __webpack_require__(24), writable: false, enumerable: true });
-
+	
 	module.exports = types;
 
 /***/ },
@@ -5259,9 +5259,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @type {Object}
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Enum for universal key codes.
 	 *
@@ -5370,7 +5370,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  CLOSE_BRACKET: 221,
 	  SINGLE_QUOTE: 222
 	};
-
+	
 	module.exports = KeyCode;
 
 /***/ },
@@ -5384,9 +5384,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Collection of UI related methods/classes.
 	 *
@@ -5394,11 +5394,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	;
 	var ui = {};
-
+	
 	Object.defineProperty(ui, 'Element', { value: __webpack_require__(19), writable: false, enumerable: true });
 	Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(26), writable: false, enumerable: true });
 	Object.defineProperty(ui, 'Video', { value: __webpack_require__(28), writable: false, enumerable: true });
-
+	
 	module.exports = ui;
 
 /***/ },
@@ -5412,9 +5412,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict'
-
+	
 	/**
 	 * Utility methods.
 	 *
@@ -5422,7 +5422,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	;
 	var utils = {};
-
+	
 	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(40), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(43), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(41), writable: false, enumerable: true });
@@ -5438,7 +5438,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(utils, 'translate', { value: __webpack_require__(51), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(52), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'transform', { value: __webpack_require__(53), writable: false, enumerable: true });
-
+	
 	module.exports = utils;
 
 /***/ },
@@ -5452,25 +5452,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _toElementArray = __webpack_require__(30);
-
+	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-
+	
 	var _hasClass = __webpack_require__(41);
-
+	
 	var _hasClass2 = _interopRequireDefault(_hasClass);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	/**
 	 * Adds a class(es) to DOM element(s).
 	 *
@@ -5483,31 +5483,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var elements = (0, _toElementArray2.default)(element);
 	  var classes = [];
 	  var n = elements.length;
-
+	
 	  if (!(0, _assert2.default)(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
-
+	
 	  if (typeof className === 'string') {
 	    classes.push(className);
 	  } else {
 	    classes = className;
 	  }
-
+	
 	  var nClasses = classes.length;
-
+	
 	  for (var i = 0; i < n; i++) {
 	    var e = elements[i];
-
+	
 	    for (var j = 0; j < nClasses; j++) {
 	      var c = classes[j];
-
+	
 	      if (!(0, _assert2.default)(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
 	      if ((0, _hasClass2.default)(e, c)) continue;
-
+	
 	      e.className = e.className + (e.className === '' ? '' : ' ') + c;
 	    }
 	  }
 	}
-
+	
 	module.exports = addClass;
 
 /***/ },
@@ -5521,23 +5521,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _toElementArray = __webpack_require__(30);
-
+	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-
+	
 	var _getClassIndex = __webpack_require__(42);
-
+	
 	var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Verifies that the specified element(s) has the specified class.
 	 *
@@ -5550,18 +5550,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function hasClass(element, className) {
 	  if (!(0, _assert2.default)(className && typeof className === 'string', 'Invalid class name: ' + className)) return false;
-
+	
 	  var elements = (0, _toElementArray2.default)(element);
 	  var n = elements.length;
-
+	
 	  for (var i = 0; i < n; i++) {
 	    var e = elements[i];
 	    if ((0, _getClassIndex2.default)(e, className) < 0) return false;
 	  }
-
+	
 	  return true;
 	}
-
+	
 	module.exports = hasClass;
 
 /***/ },
@@ -5575,21 +5575,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _Element = __webpack_require__(19);
-
+	
 	var _Element2 = _interopRequireDefault(_Element);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	/**
 	 * Gets the index of a specified class in a DOM element,
 	 *
@@ -5604,14 +5604,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!(0, _assert2.default)(element && (_instanceof(element, Node) || _instanceof(element, _Element2.default) || element.jquery), 'Invalid element specified. Element must be an instance of Node or Element.')) return null;
 	  if (_instanceof(element, _Element2.default)) element = element.element;
 	  if (element.jquery) element = element.get(0);
-
+	
 	  if (!(0, _assert2.default)(className && typeof className === 'string', 'Invalid class name: ' + className)) return -1;
-
+	
 	  var classList = element.className.split(' ');
-
+	
 	  return classList.indexOf(className);
 	}
-
+	
 	module.exports = getClassIndex;
 
 /***/ },
@@ -5625,29 +5625,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _toElementArray = __webpack_require__(30);
-
+	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-
+	
 	var _getElementState = __webpack_require__(44);
-
+	
 	var _getElementState2 = _interopRequireDefault(_getElementState);
-
+	
 	var _Directive = __webpack_require__(16);
-
+	
 	var _Directive2 = _interopRequireDefault(_Directive);
-
+	
 	var _Element = __webpack_require__(19);
-
+	
 	var _Element2 = _interopRequireDefault(_Element);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	/**
 	 * Changes the state of DOM element(s), assumes that state classes are prefixed
 	 * with 'state-'.
@@ -5659,16 +5659,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function changeElementState(element, state) {
 	  var elements = (0, _toElementArray2.default)(element, true);
-
+	
 	  if (!elements) return;
-
+	
 	  var n = elements.length;
-
+	
 	  for (var i = 0; i < n; i++) {
 	    var e = elements[i];
-
+	
 	    if ((0, _getElementState2.default)(e) === state) continue;
-
+	
 	    if (_instanceof(e, _Element2.default)) {
 	      e.state = state;
 	    } else {
@@ -5676,7 +5676,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 	}
-
+	
 	module.exports = changeElementState;
 
 /***/ },
@@ -5690,25 +5690,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _Directive = __webpack_require__(16);
-
+	
 	var _Directive2 = _interopRequireDefault(_Directive);
-
+	
 	var _Element = __webpack_require__(19);
-
+	
 	var _Element2 = _interopRequireDefault(_Element);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	/**
 	 * Gets the state of a DOM element, assumes that state classes are prefixed with
 	 * 'state-'.
@@ -5721,24 +5721,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function getElementState(element) {
 	  if (!(0, _assert2.default)(element && (_instanceof(element, Node) || _instanceof(element, _Element2.default) || element.jquery), 'Invalid element specified.')) return null;
-
+	
 	  if (element.jquery) element = element.get(0);
-
+	
 	  var s = undefined;
-
+	
 	  if (_instanceof(element, _Element2.default)) {
 	    s = element.state;
 	  } else {
 	    s = element.getAttribute(_Directive2.default.STATE);
 	  }
-
+	
 	  if (!s || s === '') {
 	    return null;
 	  } else {
 	    return s;
 	  }
 	}
-
+	
 	module.exports = getElementState;
 
 /***/ },
@@ -5752,19 +5752,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _getRect = __webpack_require__(46);
-
+	
 	var _getRect2 = _interopRequireDefault(_getRect);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Computes the intersecting rect of 2 given elements. If only 1 element is
 	 * specified, the other element will default to the current viewport.
@@ -5777,20 +5777,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function getIntersectRect(element) {
 	  if (!(0, _assert2.default)(window, 'This method relies on the window object, which is undefined.')) return null;
-
+	
 	  var n = arguments.length;
-
+	
 	  if (!(0, _assert2.default)(n > 0, 'This method requires at least 1 argument specified.')) return null;
-
+	
 	  var rect = {};
 	  var currRect = undefined,
 	      nextRect = undefined;
-
+	
 	  for (var i = 0; i < n; i++) {
 	    if (!currRect) currRect = (0, _getRect2.default)(arguments[i]);
-
+	
 	    if (!(0, _assert2.default)(currRect, 'Invalid computed rect.')) return null;
-
+	
 	    if (i === 0 && i + 1 === n) {
 	      nextRect = (0, _getRect2.default)(window);
 	    } else if (i + 1 < n) {
@@ -5798,16 +5798,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      break;
 	    }
-
+	
 	    if (!(0, _assert2.default)(nextRect, 'Invalid computed rect.')) return null;
-
+	
 	    rect.width = Math.max(0.0, Math.min(currRect.right, nextRect.right) - Math.max(currRect.left, nextRect.left));
 	    rect.height = Math.max(0.0, Math.min(currRect.bottom, nextRect.bottom) - Math.max(currRect.top, nextRect.top));
 	    rect.top = Math.max(currRect.top, nextRect.top);
 	    rect.left = Math.max(currRect.left, nextRect.left);
 	    rect.bottom = rect.top + rect.height;
 	    rect.right = rect.left + rect.width;
-
+	
 	    if (rect.width * rect.height === 0) {
 	      rect.width = 0;
 	      rect.height = 0;
@@ -5816,13 +5816,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      rect.bottom = 0;
 	      rect.right = 0;
 	    }
-
+	
 	    currRect = rect;
 	  }
-
+	
 	  return rect;
 	}
-
+	
 	module.exports = getIntersectRect;
 
 /***/ },
@@ -5836,23 +5836,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _toElementArray = __webpack_require__(30);
-
+	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-
+	
 	var _getViewportRect = __webpack_require__(47);
-
+	
 	var _getViewportRect2 = _interopRequireDefault(_getViewportRect);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Gets the rect of a given element or the overall rect of an array of elements.
 	 *
@@ -5866,25 +5866,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	function getRect(element, reference) {
 	  if (!(0, _assert2.default)(window, 'This method relies on the window object, which is undefined.')) return null;
 	  if (element === window) return (0, _getViewportRect2.default)();
-
+	
 	  if (!reference) reference = window;
-
+	
 	  var elements = (0, _toElementArray2.default)(element);
 	  var n = elements.length;
-
+	
 	  if (n <= 0) return null;
-
+	
 	  var refRect = getRect(reference);
-
+	
 	  if (!(0, _assert2.default)(refRect, 'Cannot determine reference FOV.')) return null;
-
+	
 	  var winRect = getRect(window);
 	  var rect = {};
-
+	
 	  for (var i = 0; i < n; i++) {
 	    var e = elements[i];
 	    var c = e.getBoundingClientRect();
-
+	
 	    var w = c.width;
 	    var h = c.height;
 	    var t = c.top + winRect.top;
@@ -5893,38 +5893,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (reference !== window) l -= refRect.left;
 	    var b = t + h;
 	    var r = l + w;
-
+	
 	    if (rect.left === undefined) {
 	      rect.left = l;
 	    } else {
 	      rect.left = Math.min(rect.left, l);
 	    }
-
+	
 	    if (rect.right === undefined) {
 	      rect.right = r;
 	    } else {
 	      rect.right = Math.max(rect.right, r);
 	    }
-
+	
 	    if (rect.top === undefined) {
 	      rect.top = t;
 	    } else {
 	      rect.top = Math.min(rect.top, t);
 	    }
-
+	
 	    if (rect.bottom === undefined) {
 	      rect.bottom = b;
 	    } else {
 	      rect.bottom = Math.max(rect.bottom, b);
 	    }
 	  }
-
+	
 	  rect.width = rect.right - rect.left;
 	  rect.height = rect.bottom - rect.top;
-
+	
 	  return rect;
 	}
-
+	
 	module.exports = getRect;
 
 /***/ },
@@ -5938,15 +5938,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Gets the rect of the viewport (FOV).
 	 *
@@ -5957,19 +5957,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function getViewportRect() {
 	  if (!(0, _assert2.default)(window && document, 'Window or document undefined.')) return null;
-
+	
 	  var rect = {};
-
+	
 	  rect.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 	  rect.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 	  rect.top = window.pageYOffset !== undefined ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
 	  rect.left = window.pageXOffset !== undefined ? window.pageXOffset : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
 	  rect.bottom = rect.top + rect.height;
 	  rect.right = rect.left + rect.width;
-
+	
 	  return rect;
 	}
-
+	
 	module.exports = getViewportRect;
 
 /***/ },
@@ -5983,25 +5983,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _getIntersectRect = __webpack_require__(45);
-
+	
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
-
+	
 	var _getRect = __webpack_require__(46);
-
+	
 	var _getRect2 = _interopRequireDefault(_getRect);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
+	
 	/**
 	 * Hit tests a vector or element against other elements.
 	 *
@@ -6016,35 +6016,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function hitTestElement(obj, elements) {
 	  if (!(0, _assert2.default)(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
-
+	
 	  var args = Array.prototype.slice.call(arguments);
 	  var isVector = _typeof(args[0]) === 'object' && args[0].hasOwnProperty('x') && args[0].hasOwnProperty('y');
-
+	
 	  if (isVector) {
 	    var vector = args.shift();
 	    var n = args.length;
 	    var pass = false;
-
+	
 	    for (var i = 0; i < n; i++) {
 	      var rect = (0, _getRect2.default)(args[i]);
 	      var clampedX = vector.x >= rect.left && vector.x <= rect.right;
 	      var clampedY = vector.y >= rect.top && vector.x <= rect.bottom;
-
+	
 	      if (clampedX && clampedY) {
 	        pass = true;
 	      }
 	    }
-
+	
 	    return pass;
 	  } else {
 	    var intersectRect = _getIntersectRect2.default.apply(null, arguments);
-
+	
 	    if (!(0, _assert2.default)(intersectRect, 'Invalid elements specified.')) return false;
-
+	
 	    return intersectRect.width * intersectRect.height !== 0;
 	  }
 	}
-
+	
 	module.exports = hitTestElement;
 
 /***/ },
@@ -6058,21 +6058,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _getIntersectRect = __webpack_require__(45);
-
+	
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-
+	
 	/**
 	 * Hit tests a vector or element against other elements.
 	 *
@@ -6091,38 +6091,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function hitTestRect(obj, rects) {
 	  if (!(0, _assert2.default)(arguments.length > 1, 'Insufficient arguments. Expecting at least 2.')) return false;
-
+	
 	  var args = Array.prototype.slice.call(arguments);
 	  var isVector = _typeof(args[0]) === 'object' && args[0].hasOwnProperty('x') && args[0].hasOwnProperty('y');
-
+	
 	  if (isVector) {
 	    var vector = args.shift();
 	    var n = args.length;
 	    var pass = false;
-
+	
 	    for (var i = 0; i < n; i++) {
 	      var rect = args[i];
-
+	
 	      if (!(0, _assert2.default)(rect.top !== undefined && !isNaN(rect.top) && rect.right !== undefined && !isNaN(rect.right) && rect.bottom !== undefined && !isNaN(rect.bottom) && rect.left !== undefined && !isNaN(rect.left), 'Invalid rect supplied. Rect must be an object containing "top", "right", "bottom", and "left" key values.')) return false;
-
+	
 	      var clampedX = vector.x >= rect.left && vector.x <= rect.right;
 	      var clampedY = vector.y >= rect.top && vector.x <= rect.bottom;
-
+	
 	      if (clampedX && clampedY) {
 	        pass = true;
 	      }
 	    }
-
+	
 	    return pass;
 	  } else {
 	    var intersectRect = _getIntersectRect2.default.apply(null, arguments);
-
+	
 	    if (!(0, _assert2.default)(intersectRect, 'Invalid elements specified.')) return false;
-
+	
 	    return intersectRect.width * intersectRect.height !== 0;
 	  }
 	}
-
+	
 	module.exports = hitTestRect;
 
 /***/ },
@@ -6136,21 +6136,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _toElementArray = __webpack_require__(30);
-
+	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
+	
 	/**
 	 * Removes a class(es) from DOM element(s).
 	 *
@@ -6163,31 +6163,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var elements = (0, _toElementArray2.default)(element);
 	  var classes = [];
 	  var n = elements.length;
-
+	
 	  if (!(0, _assert2.default)(typeof className === 'string' || _instanceof(className, Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
-
+	
 	  if (typeof className === 'string') {
 	    classes.push(className);
 	  } else {
 	    classes = className;
 	  }
-
+	
 	  var nClasses = classes.length;
-
+	
 	  for (var i = 0; i < n; i++) {
 	    var e = elements[i];
-
+	
 	    for (var j = 0; j < nClasses; j++) {
 	      var c = classes[j];
-
+	
 	      if (!(0, _assert2.default)(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
-
+	
 	      var regex = new RegExp('^' + c + '\\s+|\\s+' + c, 'g');
 	      e.className = e.className.replace(regex, '');
 	    }
 	  }
 	}
-
+	
 	module.exports = removeClass;
 
 /***/ },
@@ -6201,19 +6201,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _toElementArray = __webpack_require__(30);
-
+	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Translates a DOM element.
 	 *
@@ -6240,41 +6240,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	function translate(element, properties, constraints) {
 	  var elements = (0, _toElementArray2.default)(element);
 	  var n = elements.length;
-
+	
 	  if (properties) {
 	    if (!(0, _assert2.default)(properties.top === undefined || !isNaN(properties.top), 'Top property must be a number.')) return null;
 	    if (!(0, _assert2.default)(properties.right === undefined || !isNaN(properties.right), 'Right property must be a number.')) return null;
 	    if (!(0, _assert2.default)(properties.bottom === undefined || !isNaN(properties.bottom), 'Bottom property must be a number.')) return null;
 	    if (!(0, _assert2.default)(properties.left === undefined || !isNaN(properties.left), 'Left property must be a number.')) return null;
-
+	
 	    var units = properties.units || 'px';
-
+	
 	    if (constraints) {
 	      if (!(0, _assert2.default)(constraints.top === undefined || !isNaN(constraints.top), 'Top constraint must be a number.')) return null;
 	      if (!(0, _assert2.default)(constraints.right === undefined || !isNaN(constraints.right), 'Right constraint must be a number.')) return null;
 	      if (!(0, _assert2.default)(constraints.bottom === undefined || !isNaN(constraints.bottom), 'Bottom constraint must be a number.')) return null;
 	      if (!(0, _assert2.default)(constraints.left === undefined || !isNaN(constraints.left), 'Left constraint must be a number.')) return null;
 	    }
-
+	
 	    var top = constraints && constraints.top !== undefined ? Math.min(properties.top, constraints.top) : properties.top;
 	    var right = constraints && constraints.right !== undefined ? Math.min(properties.right, constraints.right) : properties.right;
 	    var bottom = constraints && constraints.bottom !== undefined ? Math.min(properties.bottom, constraints.bottom) : properties.bottom;
 	    var left = constraints && constraints.left !== undefined ? Math.min(properties.left, constraints.left) : properties.left;
-
+	
 	    for (var i = 0; i < n; i++) {
 	      if (properties.top !== undefined) elements[i].style.top = String(top) + units;
 	      if (properties.right !== undefined) elements[i].style.right = String(right) + units;
 	      if (properties.bottom !== undefined) elements[i].style.bottom = String(bottom) + units;
 	      if (properties.left !== undefined) elements[i].style.left = String(left) + units;
 	    }
-
+	
 	    var t = {};
-
+	
 	    if (properties.top !== undefined) t.top = top;
 	    if (properties.right !== undefined) t.right = right;
 	    if (properties.bottom !== undefined) t.bottom = bottom;
 	    if (properties.left !== undefined) t.left = left;
-
+	
 	    return t;
 	  } else {
 	    for (var j = 0; j < n; j++) {
@@ -6283,7 +6283,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      elements[j].style.bottom = 'initial';
 	      elements[j].style.left = 'initial';
 	    }
-
+	
 	    return {
 	      top: 'initial',
 	      right: 'initial',
@@ -6292,7 +6292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	  }
 	}
-
+	
 	module.exports = translate;
 
 /***/ },
@@ -6306,19 +6306,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _toElementArray = __webpack_require__(30);
-
+	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Translates a DOM element.
 	 *
@@ -6343,49 +6343,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	function translate3d(element, properties, constraints) {
 	  var elements = (0, _toElementArray2.default)(element);
 	  var n = elements.length;
-
+	
 	  if (properties) {
 	    if (!(0, _assert2.default)(properties.x === undefined || !isNaN(properties.x), 'X property must be a number.')) return null;
 	    if (!(0, _assert2.default)(properties.y === undefined || !isNaN(properties.y), 'Y property must be a number.')) return null;
 	    if (!(0, _assert2.default)(properties.z === undefined || !isNaN(properties.z), 'Z property must be a number.')) return null;
-
+	
 	    var units = properties.units || 'px';
-
+	
 	    if (constraints) {
 	      if (!(0, _assert2.default)(constraints.x === undefined || !isNaN(constraints.x), 'X constraint must be a number.')) return null;
 	      if (!(0, _assert2.default)(constraints.y === undefined || !isNaN(constraints.y), 'Y constraint must be a number.')) return null;
 	      if (!(0, _assert2.default)(constraints.z === undefined || !isNaN(constraints.z), 'Z constraint must be a number.')) return null;
 	    }
-
+	
 	    var x = constraints && constraints.x !== undefined ? Math.min(properties.x, constraints.x) : properties.x;
 	    var y = constraints && constraints.y !== undefined ? Math.min(properties.y, constraints.y) : properties.y;
 	    var z = constraints && constraints.z !== undefined ? Math.min(properties.z, constraints.z) : properties.z;
-
+	
 	    var translateX = properties.x !== undefined ? 'translateX(' + x + units + ')' : null;
 	    var translateY = properties.y !== undefined ? 'translateY(' + y + units + ')' : null;
 	    var translateZ = properties.z !== undefined ? 'translateZ(' + z + units + ')' : null;
 	    var transforms = '';
-
+	
 	    if (translateX) transforms += transforms === '' ? translateX : ' ' + translateX;
 	    if (translateY) transforms += transforms === '' ? translateY : ' ' + translateY;
 	    if (translateZ) transforms += transforms === '' ? translateZ : ' ' + translateZ;
-
+	
 	    for (var i = 0; i < n; i++) {
 	      elements[i].style.transform = transforms;
 	    }
-
+	
 	    var t = {};
-
+	
 	    if (translateX) t.x = x;
 	    if (translateY) t.y = y;
 	    if (translateZ) t.z = z;
-
+	
 	    return t;
 	  } else {
 	    for (var j = 0; j < n; j++) {
 	      elements[j].style.transform = 'translateX(0) translateY(0) translateZ(0)';
 	    }
-
+	
 	    return {
 	      x: 0,
 	      y: 0,
@@ -6393,7 +6393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	  }
 	}
-
+	
 	module.exports = translate3d;
 
 /***/ },
@@ -6407,23 +6407,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 */
-
+	
 	'use strict';
-
+	
 	var _assert = __webpack_require__(6);
-
+	
 	var _assert2 = _interopRequireDefault(_assert);
-
+	
 	var _toElementArray = __webpack_require__(30);
-
+	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-
+	
 	var _getRect = __webpack_require__(46);
-
+	
 	var _getRect2 = _interopRequireDefault(_getRect);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	/**
 	 * Transforms a DOM element.
 	 *
@@ -6452,12 +6452,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	function transform(element, properties, constraints) {
 	  var elements = (0, _toElementArray2.default)(element);
 	  var n = elements.length;
-
+	
 	  if (properties) {
 	    if (!(0, _assert2.default)(properties.width === undefined || !isNaN(properties.width), 'Width property must be a number.')) return null;
 	    if (!(0, _assert2.default)(properties.height === undefined || !isNaN(properties.height), 'Height property must be a number.')) return null;
 	    if (!(0, _assert2.default)(properties.aspectRatio === undefined || !isNaN(properties.aspectRatio), 'Aspect ratio property must be a number.')) return null;
-
+	
 	    var rect = (0, _getRect2.default)(element);
 	    var units = properties.units || 'px';
 	    var aspectRatio = properties.aspectRatio !== undefined ? Number(properties.aspectRatio) : rect.width / rect.height;
@@ -6466,11 +6466,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var minW = properties.width;
 	    var minH = properties.height;
 	    var type = properties.type || 'default';
-
+	
 	    if (constraints && type !== 'default') {
 	      (0, _assert2.default)(constraints.width === undefined || !isNaN(constraints.width), 'Width constraint must be a number.');
 	      (0, _assert2.default)(constraints.height === undefined || !isNaN(constraints.height), 'Height constraint must be a number.');
-
+	
 	      if (type && type === 'cover') {
 	        if (constraints.width !== undefined) minW = Math.min(constraints.width, minW);
 	        if (constraints.width !== undefined) minH = Math.min(constraints.height, minH);
@@ -6479,14 +6479,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (constraints.height !== undefined) maxH = Math.min(constraints.height, maxH);
 	      }
 	    }
-
+	
 	    var w = undefined,
 	        h = undefined;
-
+	
 	    if (type === 'contain') {
 	      w = maxW > maxH ? maxH * aspectRatio : maxW;
 	      h = maxW > maxH ? maxH : maxW / aspectRatio;
-
+	
 	      if (w > maxW) {
 	        w = maxW;
 	        h = w / aspectRatio;
@@ -6497,7 +6497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else if (type === 'cover') {
 	      w = minW > minH ? minH * aspectRatio : minW;
 	      h = minW > minH ? minH : minW / aspectRatio;
-
+	
 	      if (w < minW) {
 	        w = minW;
 	        h = w / aspectRatio;
@@ -6509,36 +6509,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	      w = maxW;
 	      h = maxH;
 	    }
-
+	
 	    for (var i = 0; i < n; i++) {
 	      var e = elements[i];
-
+	
 	      if (properties.width !== undefined) e.style.width = String(w) + units;
 	      if (properties.height !== undefined) e.style.height = String(h) + units;
 	    }
-
+	
 	    var t = {};
-
+	
 	    if (properties.width !== undefined) t.width = w;
 	    if (properties.height !== undefined) t.height = h;
-
+	
 	    return t;
 	  } else {
 	    for (var j = 0; j < n; j++) {
 	      elements[j].style.width = 'initial';
 	      elements[j].style.height = 'initial';
 	    }
-
+	
 	    return {
 	      width: 'initial',
 	      height: 'initial'
 	    };
 	  }
 	}
-
+	
 	module.exports = transform;
 
 /***/ }
 /******/ ])
 });
 ;
+//# sourceMappingURL=requiem.js.map

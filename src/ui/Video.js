@@ -77,7 +77,8 @@ class Video extends Element {
    * @inheritdoc
    */
   __validate_element(element) {
-    return assert(element instanceof HTMLVideoElement, 'Element validation failed');
+    return true;
+    // return assert(element instanceof HTMLVideoElement, 'Element validation failed');
   }
 
   /**
