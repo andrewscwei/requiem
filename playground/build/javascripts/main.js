@@ -58,7 +58,7 @@
 	
 	var _Foo2 = _interopRequireDefault(_Foo);
 	
-	var _Bar = __webpack_require__(5);
+	var _Bar = __webpack_require__(4);
 	
 	var _Bar2 = _interopRequireDefault(_Bar);
 	
@@ -168,7 +168,7 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.21.6', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.21.7', writable: false });
 		
 		(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 		(0, _injectModule2.default)(requiem, 'events', __webpack_require__(31));
@@ -732,8 +732,13 @@
 		
 		  var className = (0, _getFunctionName2.default)(c);
 		
-		  if (!(0, _assert2.default)((0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
+		  if (typeof n === 'string') {
+		    var groups = n.split('.');
+		    className = groups.pop();
+		    n = groups.join('.');
+		  }
 		
+		  if (!(0, _assert2.default)((0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
 		  (0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] = c;
 		
 		  return c;
@@ -6670,9 +6675,6 @@
 	    key: 'init',
 	    value: function init() {
 	      this.addChild(new _Foo2.default('foo'));
-	
-	      console.log(this.getStyle('margin-right', true));
-	
 	      _get(Object.getPrototypeOf(Playground.prototype), 'init', this).call(this);
 	    }
 	  }, {
@@ -6751,8 +6753,7 @@
 	exports.default = Foo;
 
 /***/ },
-/* 4 */,
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

@@ -31,8 +31,13 @@ function register(c, n) {
 
   let className = getFunctionName(c);
 
-  if (!assert(namespace(n, getClassRegistry())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
+  if (typeof n === 'string') {
+    let groups = n.split('.');
+    className = groups.pop();
+    n = groups.join('.');
+  }
 
+  if (!assert(namespace(n, getClassRegistry())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
   namespace(n, getClassRegistry())[className] = c;
 
   return c;

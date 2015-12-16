@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.21.6', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.21.7', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(31));
@@ -651,8 +651,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  var className = (0, _getFunctionName2.default)(c);
 	
-	  if (!(0, _assert2.default)((0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
+	  if (typeof n === 'string') {
+	    var groups = n.split('.');
+	    className = groups.pop();
+	    n = groups.join('.');
+	  }
 	
+	  if (!(0, _assert2.default)((0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
 	  (0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] = c;
 	
 	  return c;
