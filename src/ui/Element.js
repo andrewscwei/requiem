@@ -1076,12 +1076,16 @@ class Element {
   /**
    * Gets the value of an inline CSS rule of this Element instance by its name.
    *
-   * @param {string} key - Name of the CSS rule in camelCase.
+   * @param {string}  key                - Name of the CSS rule in camelCase.
+   * @param {boolean} [isComputed=false] - Specifies whether the styles are
+   *                                       computed.
    *
    * @return {string} Value of the style.
    */
-  getStyle(key) {
-    let value = this.element.style[key];
+  getStyle(key, isComputed) {
+    if (typeof isComputed !== 'boolean') isComputed = false;
+
+    let value = (isComputed) ? window.getComputedStyle(this.element, null).getPropertyValue(key) : this.element.style[key];
 
     if (value === '') {
       return null;

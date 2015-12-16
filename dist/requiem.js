@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.21.5', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.21.6', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(31));
@@ -2122,15 +2122,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Gets the value of an inline CSS rule of this Element instance by its name.
 	     *
-	     * @param {string} key - Name of the CSS rule in camelCase.
+	     * @param {string}  key                - Name of the CSS rule in camelCase.
+	     * @param {boolean} [isComputed=false] - Specifies whether the styles are
+	     *                                       computed.
 	     *
 	     * @return {string} Value of the style.
 	     */
 	
 	  }, {
 	    key: 'getStyle',
-	    value: function getStyle(key) {
-	      var value = this.element.style[key];
+	    value: function getStyle(key, isComputed) {
+	      if (typeof isComputed !== 'boolean') isComputed = false;
+	
+	      var value = isComputed ? window.getComputedStyle(this.element, null).getPropertyValue(key) : this.element.style[key];
 	
 	      if (value === '') {
 	        return null;
