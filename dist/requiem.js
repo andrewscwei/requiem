@@ -87,14 +87,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.21.7', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.22.0', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
-	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(31));
-	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(33));
-	(0, _injectModule2.default)(requiem, 'types', __webpack_require__(36));
-	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(38));
-	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(39));
+	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(33));
+	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(35));
+	(0, _injectModule2.default)(requiem, 'types', __webpack_require__(38));
+	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(40));
+	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(41));
 	
 	(0, _polyfill2.default)();
 	
@@ -741,7 +741,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Directive2 = _interopRequireDefault(_Directive);
 	
-	var _hasChild = __webpack_require__(29);
+	var _hasChild = __webpack_require__(32);
 	
 	var _hasChild2 = _interopRequireDefault(_hasChild);
 	
@@ -1021,7 +1021,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    switch (controllerClassName) {
 	      case 'Video':
 	        {
-	          controllerClass = __webpack_require__(28);
+	          controllerClass = __webpack_require__(31);
 	          break;
 	        }
 	      case 'Element':
@@ -1140,6 +1140,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _ElementUpdateDelegate = __webpack_require__(26);
 	
 	var _ElementUpdateDelegate2 = _interopRequireDefault(_ElementUpdateDelegate);
+	
+	var _getRect = __webpack_require__(28);
+	
+	var _getRect2 = _interopRequireDefault(_getRect);
 	
 	var _sightread = __webpack_require__(14);
 	
@@ -2162,7 +2166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'setStyle',
 	    value: function setStyle(key, value) {
 	      if (typeof value === 'number') {
-	        value = value + 'px';
+	        value = String(value);
 	      }
 	
 	      this.element.style[key] = value;
@@ -2427,6 +2431,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 	        set: function set(value) {
 	          return _this2.element.innerHTML = value;
+	        }
+	      });
+	
+	      /**
+	       * Gets the rect of this Element instance.
+	       *
+	       * @property {Object}
+	       */
+	      Object.defineProperty(this, 'rect', {
+	        get: function get() {
+	          return (0, _getRect2.default)(_this2);
+	        }
+	      });
+	
+	      /**
+	       * Gets/sets the opacity of this Element instance.
+	       */
+	      Object.defineProperty(this, 'opacity', {
+	        get: function get() {
+	          return _this2.getStyle('opacity', true);
+	        },
+	        set: function set(value) {
+	          return _this2.setStyle('opacity', value);
 	        }
 	      });
 	
@@ -3858,6 +3885,221 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
+	var _assert = __webpack_require__(6);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	var _toElementArray = __webpack_require__(29);
+	
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+	
+	var _getViewportRect = __webpack_require__(30);
+	
+	var _getViewportRect2 = _interopRequireDefault(_getViewportRect);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Gets the rect of a given element or the overall rect of an array of elements.
+	 *
+	 * @param {Node|Node[]|Element|Element[]} element
+	 * @param {Object}                                      [reference=window]
+	 *
+	 * @return {Object} Object containing top, left, bottom, right, width, height.
+	 *
+	 * @alias module:requiem~utils.getRect
+	 */
+	function getRect(element, reference) {
+	  if (!(0, _assert2.default)(window, 'This method relies on the window object, which is undefined.')) return null;
+	  if (element === window) return (0, _getViewportRect2.default)();
+	
+	  if (!reference) reference = window;
+	
+	  var elements = (0, _toElementArray2.default)(element);
+	  var n = elements.length;
+	
+	  if (n <= 0) return null;
+	
+	  var refRect = getRect(reference);
+	
+	  if (!(0, _assert2.default)(refRect, 'Cannot determine reference FOV.')) return null;
+	
+	  var winRect = getRect(window);
+	  var rect = {};
+	
+	  for (var i = 0; i < n; i++) {
+	    var e = elements[i];
+	    var c = e.getBoundingClientRect();
+	
+	    var w = c.width;
+	    var h = c.height;
+	    var t = c.top + winRect.top;
+	    if (reference !== window) t -= refRect.top;
+	    var l = c.left + winRect.left;
+	    if (reference !== window) l -= refRect.left;
+	    var b = t + h;
+	    var r = l + w;
+	
+	    if (rect.left === undefined) {
+	      rect.left = l;
+	    } else {
+	      rect.left = Math.min(rect.left, l);
+	    }
+	
+	    if (rect.right === undefined) {
+	      rect.right = r;
+	    } else {
+	      rect.right = Math.max(rect.right, r);
+	    }
+	
+	    if (rect.top === undefined) {
+	      rect.top = t;
+	    } else {
+	      rect.top = Math.min(rect.top, t);
+	    }
+	
+	    if (rect.bottom === undefined) {
+	      rect.bottom = b;
+	    } else {
+	      rect.bottom = Math.max(rect.bottom, b);
+	    }
+	  }
+	
+	  rect.width = rect.right - rect.left;
+	  rect.height = rect.bottom - rect.top;
+	
+	  return rect;
+	}
+	
+	module.exports = getRect;
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict'
+	
+	// let assert = require('./assert');
+	
+	/**
+	 * Transforms given element(s) to an element array.
+	 *
+	 * @param {*}       element
+	 * @param {boolean} [keepElement=false]
+	 *
+	 * @alias module:requiem~helpers.toElementArray
+	 */
+	;
+	
+	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+	
+	function toElementArray(element, keepElement) {
+	  var Element = __webpack_require__(19);
+	
+	  if (!element) return null;
+	
+	  var elements = undefined;
+	
+	  if (_instanceof(element, Array)) {
+	    elements = element;
+	  } else if (_instanceof(element, NodeList)) {
+	    elements = Array.prototype.slice.call(element);
+	  } else if (element.jquery) {
+	    elements = element.get();
+	  } else {
+	    // if (!assert((element instanceof Node) || (element instanceof Element), 'Invalid element specified. Element must be an instance of Node or Requiem Element.')) return null;
+	
+	    if (_instanceof(element, Element)) {
+	      elements = [element.element];
+	    } else {
+	      elements = [element];
+	    }
+	  }
+	
+	  var n = elements.length;
+	
+	  for (var i = 0; i < n; i++) {
+	    var e = elements[i];
+	
+	    // if (!assert((e instanceof Node) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of Node or Requiem Element.')) return null;
+	
+	    if (!keepElement && _instanceof(e, Element)) {
+	      elements[i] = e.element;
+	    }
+	  }
+	
+	  return elements;
+	}
+	
+	module.exports = toElementArray;
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _assert = __webpack_require__(6);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Gets the rect of the viewport (FOV).
+	 *
+	 * @return {Object} Object containing top, left, bottom, right, width,
+	 *                  height.
+	 *
+	 * @alias module:requiem~utils.getViewportRect
+	 */
+	function getViewportRect() {
+	  if (!(0, _assert2.default)(window && document, 'Window or document undefined.')) return null;
+	
+	  var rect = {};
+	
+	  rect.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+	  rect.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+	  rect.top = window.pageYOffset !== undefined ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+	  rect.left = window.pageXOffset !== undefined ? window.pageXOffset : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
+	  rect.bottom = rect.top + rect.height;
+	  rect.right = rect.left + rect.width;
+	
+	  return rect;
+	}
+	
+	module.exports = getViewportRect;
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
@@ -4100,7 +4342,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Video;
 
 /***/ },
-/* 29 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4117,7 +4359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(30);
+	var _toElementArray = __webpack_require__(29);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -4160,75 +4402,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hasChild;
 
 /***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict'
-	
-	// let assert = require('./assert');
-	
-	/**
-	 * Transforms given element(s) to an element array.
-	 *
-	 * @param {*}       element
-	 * @param {boolean} [keepElement=false]
-	 *
-	 * @alias module:requiem~helpers.toElementArray
-	 */
-	;
-	
-	function _instanceof(left, right) { if (right != null && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-	
-	function toElementArray(element, keepElement) {
-	  var Element = __webpack_require__(19);
-	
-	  if (!element) return null;
-	
-	  var elements = undefined;
-	
-	  if (_instanceof(element, Array)) {
-	    elements = element;
-	  } else if (_instanceof(element, NodeList)) {
-	    elements = Array.prototype.slice.call(element);
-	  } else if (element.jquery) {
-	    elements = element.get();
-	  } else {
-	    // if (!assert((element instanceof Node) || (element instanceof Element), 'Invalid element specified. Element must be an instance of Node or Requiem Element.')) return null;
-	
-	    if (_instanceof(element, Element)) {
-	      elements = [element.element];
-	    } else {
-	      elements = [element];
-	    }
-	  }
-	
-	  var n = elements.length;
-	
-	  for (var i = 0; i < n; i++) {
-	    var e = elements[i];
-	
-	    // if (!assert((e instanceof Node) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of Node or Requiem Element.')) return null;
-	
-	    if (!keepElement && _instanceof(e, Element)) {
-	      elements[i] = e.element;
-	    }
-	  }
-	
-	  return elements;
-	}
-	
-	module.exports = toElementArray;
-
-/***/ },
-/* 31 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4249,12 +4423,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var events = {};
 	
-	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(32), writable: false, enumerable: true });
+	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(34), writable: false, enumerable: true });
 	
 	module.exports = events;
 
 /***/ },
-/* 32 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4435,7 +4609,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventDispatcher;
 
 /***/ },
-/* 33 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4456,12 +4630,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var net = {};
 	
-	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(34), writable: false, enumerable: true });
+	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(36), writable: false, enumerable: true });
 	
 	module.exports = net;
 
 /***/ },
-/* 34 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4482,7 +4656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _inherit = __webpack_require__(35);
+	var _inherit = __webpack_require__(37);
 	
 	var _inherit2 = _interopRequireDefault(_inherit);
 	
@@ -4490,7 +4664,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _log2 = _interopRequireDefault(_log);
 	
-	var _EventDispatcher2 = __webpack_require__(32);
+	var _EventDispatcher2 = __webpack_require__(34);
 	
 	var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
 	
@@ -5178,7 +5352,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = AssetLoader;
 
 /***/ },
-/* 35 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5226,7 +5400,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = inherit;
 
 /***/ },
-/* 36 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5250,13 +5424,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(types, 'Directive', { value: __webpack_require__(16), writable: false, enumerable: true });
 	Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(23), writable: false, enumerable: true });
 	Object.defineProperty(types, 'EventType', { value: __webpack_require__(25), writable: false, enumerable: true });
-	Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(37), writable: false, enumerable: true });
+	Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(39), writable: false, enumerable: true });
 	Object.defineProperty(types, 'NodeState', { value: __webpack_require__(24), writable: false, enumerable: true });
 	
 	module.exports = types;
 
 /***/ },
-/* 37 */
+/* 39 */
 /***/ function(module, exports) {
 
 	/**
@@ -5383,7 +5557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 38 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5406,12 +5580,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	Object.defineProperty(ui, 'Element', { value: __webpack_require__(19), writable: false, enumerable: true });
 	Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(26), writable: false, enumerable: true });
-	Object.defineProperty(ui, 'Video', { value: __webpack_require__(28), writable: false, enumerable: true });
+	Object.defineProperty(ui, 'Video', { value: __webpack_require__(31), writable: false, enumerable: true });
 	
 	module.exports = ui;
 
 /***/ },
-/* 39 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5432,15 +5606,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	var utils = {};
 	
-	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(40), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(43), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(41), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(29), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(42), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(44), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(45), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(46), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(47), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(42), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(45), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(43), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(32), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(44), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(46), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(47), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(28), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(30), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(48), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(49), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(50), writable: false, enumerable: true });
@@ -5451,7 +5625,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = utils;
 
 /***/ },
-/* 40 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5468,11 +5642,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(30);
+	var _toElementArray = __webpack_require__(29);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _hasClass = __webpack_require__(41);
+	var _hasClass = __webpack_require__(43);
 	
 	var _hasClass2 = _interopRequireDefault(_hasClass);
 	
@@ -5520,7 +5694,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = addClass;
 
 /***/ },
-/* 41 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5537,11 +5711,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(30);
+	var _toElementArray = __webpack_require__(29);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _getClassIndex = __webpack_require__(42);
+	var _getClassIndex = __webpack_require__(44);
 	
 	var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
 	
@@ -5574,7 +5748,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hasClass;
 
 /***/ },
-/* 42 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5624,7 +5798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getClassIndex;
 
 /***/ },
-/* 43 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5637,11 +5811,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _toElementArray = __webpack_require__(30);
+	var _toElementArray = __webpack_require__(29);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _getElementState = __webpack_require__(44);
+	var _getElementState = __webpack_require__(46);
 	
 	var _getElementState2 = _interopRequireDefault(_getElementState);
 	
@@ -5689,7 +5863,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = changeElementState;
 
 /***/ },
-/* 44 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5751,7 +5925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getElementState;
 
 /***/ },
-/* 45 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5768,7 +5942,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _getRect = __webpack_require__(46);
+	var _getRect = __webpack_require__(28);
 	
 	var _getRect2 = _interopRequireDefault(_getRect);
 	
@@ -5835,153 +6009,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getIntersectRect;
 
 /***/ },
-/* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _toElementArray = __webpack_require__(30);
-	
-	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-	
-	var _getViewportRect = __webpack_require__(47);
-	
-	var _getViewportRect2 = _interopRequireDefault(_getViewportRect);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Gets the rect of a given element or the overall rect of an array of elements.
-	 *
-	 * @param {Node|Node[]|Element|Element[]} element
-	 * @param {Object}                                      [reference=window]
-	 *
-	 * @return {Object} Object containing top, left, bottom, right, width, height.
-	 *
-	 * @alias module:requiem~utils.getRect
-	 */
-	function getRect(element, reference) {
-	  if (!(0, _assert2.default)(window, 'This method relies on the window object, which is undefined.')) return null;
-	  if (element === window) return (0, _getViewportRect2.default)();
-	
-	  if (!reference) reference = window;
-	
-	  var elements = (0, _toElementArray2.default)(element);
-	  var n = elements.length;
-	
-	  if (n <= 0) return null;
-	
-	  var refRect = getRect(reference);
-	
-	  if (!(0, _assert2.default)(refRect, 'Cannot determine reference FOV.')) return null;
-	
-	  var winRect = getRect(window);
-	  var rect = {};
-	
-	  for (var i = 0; i < n; i++) {
-	    var e = elements[i];
-	    var c = e.getBoundingClientRect();
-	
-	    var w = c.width;
-	    var h = c.height;
-	    var t = c.top + winRect.top;
-	    if (reference !== window) t -= refRect.top;
-	    var l = c.left + winRect.left;
-	    if (reference !== window) l -= refRect.left;
-	    var b = t + h;
-	    var r = l + w;
-	
-	    if (rect.left === undefined) {
-	      rect.left = l;
-	    } else {
-	      rect.left = Math.min(rect.left, l);
-	    }
-	
-	    if (rect.right === undefined) {
-	      rect.right = r;
-	    } else {
-	      rect.right = Math.max(rect.right, r);
-	    }
-	
-	    if (rect.top === undefined) {
-	      rect.top = t;
-	    } else {
-	      rect.top = Math.min(rect.top, t);
-	    }
-	
-	    if (rect.bottom === undefined) {
-	      rect.bottom = b;
-	    } else {
-	      rect.bottom = Math.max(rect.bottom, b);
-	    }
-	  }
-	
-	  rect.width = rect.right - rect.left;
-	  rect.height = rect.bottom - rect.top;
-	
-	  return rect;
-	}
-	
-	module.exports = getRect;
-
-/***/ },
-/* 47 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Gets the rect of the viewport (FOV).
-	 *
-	 * @return {Object} Object containing top, left, bottom, right, width,
-	 *                  height.
-	 *
-	 * @alias module:requiem~utils.getViewportRect
-	 */
-	function getViewportRect() {
-	  if (!(0, _assert2.default)(window && document, 'Window or document undefined.')) return null;
-	
-	  var rect = {};
-	
-	  rect.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-	  rect.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-	  rect.top = window.pageYOffset !== undefined ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-	  rect.left = window.pageXOffset !== undefined ? window.pageXOffset : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
-	  rect.bottom = rect.top + rect.height;
-	  rect.right = rect.left + rect.width;
-	
-	  return rect;
-	}
-	
-	module.exports = getViewportRect;
-
-/***/ },
 /* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -5999,11 +6026,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _getIntersectRect = __webpack_require__(45);
+	var _getIntersectRect = __webpack_require__(47);
 	
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
-	var _getRect = __webpack_require__(46);
+	var _getRect = __webpack_require__(28);
 	
 	var _getRect2 = _interopRequireDefault(_getRect);
 	
@@ -6074,7 +6101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _getIntersectRect = __webpack_require__(45);
+	var _getIntersectRect = __webpack_require__(47);
 	
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
@@ -6152,7 +6179,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(30);
+	var _toElementArray = __webpack_require__(29);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -6217,7 +6244,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(30);
+	var _toElementArray = __webpack_require__(29);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -6322,7 +6349,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(30);
+	var _toElementArray = __webpack_require__(29);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -6423,11 +6450,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(30);
+	var _toElementArray = __webpack_require__(29);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _getRect = __webpack_require__(46);
+	var _getRect = __webpack_require__(28);
 	
 	var _getRect2 = _interopRequireDefault(_getRect);
 	

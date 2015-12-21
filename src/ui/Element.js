@@ -21,6 +21,7 @@ import NodeState from '../types/NodeState';
 import EventType from '../types/EventType';
 import Directive from '../types/Directive';
 import ElementUpdateDelegate from '../ui/ElementUpdateDelegate';
+import getRect from '../utils/getRect';
 import sightread from '../dom/sightread';
 
 /**
@@ -1106,7 +1107,7 @@ class Element {
    */
   setStyle(key, value) {
     if (typeof value === 'number') {
-      value = value + 'px';
+      value = String(value);
     }
 
     this.element.style[key] = value;
@@ -1334,6 +1335,23 @@ class Element {
     Object.defineProperty(this, 'content', {
       get: () => (this.element.innerHTML),
       set: (value) => this.element.innerHTML = value
+    });
+
+    /**
+     * Gets the rect of this Element instance.
+     *
+     * @property {Object}
+     */
+    Object.defineProperty(this, 'rect', {
+      get: () => (getRect(this))
+    });
+
+    /**
+     * Gets/sets the opacity of this Element instance.
+     */
+    Object.defineProperty(this, 'opacity', {
+      get: () => (this.getStyle('opacity', true)),
+      set: (value) => this.setStyle('opacity', value)
     });
 
     /**
