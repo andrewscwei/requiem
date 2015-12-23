@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.22.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.22.1', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(33));
@@ -1955,6 +1955,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!(0, _assert2.default)(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
 	        var regex = new RegExp('^' + c + '\\s+|\\s+' + c + '|^' + c + '$', 'g');
 	        this.element.className = this.element.className.replace(regex, '');
+	      }
+	
+	      if (this.element.className === '') {
+	        this.element.removeAttribute('class');
 	      }
 	    }
 	
@@ -6218,8 +6222,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      if (!(0, _assert2.default)(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
 	
-	      var regex = new RegExp('^' + c + '\\s+|\\s+' + c, 'g');
+	      var regex = new RegExp('^' + c + '\\s+|\\s+' + c + '|^' + c + '$', 'g');
 	      e.className = e.className.replace(regex, '');
+	    }
+	
+	    if (e.className === '') {
+	      e.removeAttribute('class');
 	    }
 	  }
 	}

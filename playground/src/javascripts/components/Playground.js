@@ -1,7 +1,7 @@
 
 'use strict';
 
-import { Element, Video, EventType, DirtyType } from 'requiem';
+import { Element, Video, EventType, DirtyType, utils } from 'requiem';
 
 import Foo from './Foo';
 

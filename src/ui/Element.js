@@ -926,6 +926,10 @@ class Element {
       let regex = new RegExp('^' + c + '\\s+|\\s+' + c + '|^' + c + '$', 'g');
       this.element.className = this.element.className.replace(regex, '');
     }
+
+    if (this.element.className === '') {
+      this.element.removeAttribute('class');
+    }
   }
 
   /**

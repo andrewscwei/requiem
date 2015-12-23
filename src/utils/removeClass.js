@@ -43,8 +43,12 @@ function removeClass(element, className) {
 
       if (!assert(typeof c === 'string', 'Invalid class detected: ' + c)) continue;
 
-      let regex = new RegExp('^' + c + '\\s+|\\s+' + c, 'g');
+      let regex = new RegExp('^' + c + '\\s+|\\s+' + c + '|^' + c + '$', 'g');
       e.className = e.className.replace(regex, '');
+    }
+
+    if (e.className === '') {
+      e.removeAttribute('class');
     }
   }
 }
