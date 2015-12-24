@@ -54,7 +54,8 @@ let EventType = {
     RESIZE: 'resize',
     SCROLL: 'scroll',
     UNLOAD: 'unload',
-    PROGRESS: 'progress' // Custom
+    PROGRESS: 'progress', // Custom
+    STATE: 'state' // Custom
   },
   FORM: {
     BLUR: 'blur',

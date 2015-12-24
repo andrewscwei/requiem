@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.22.1', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.23.0', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(33));
@@ -2370,6 +2370,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        set: function set(value) {
 	          if (_this2.state === value) return;
 	
+	          var oldValue = _this2.state;
+	
 	          if (value === null || value === undefined) {
 	            _this2.element.removeAttribute(_Directive2.default.STATE);
 	          } else {
@@ -2377,6 +2379,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	          }
 	
 	          _this2.updateDelegate.setDirty(_DirtyType2.default.STATE);
+	
+	          var event = new CustomEvent(_EventType2.default.OBJECT.STATE, {
+	            detail: {
+	              property: 'state',
+	              oldValue: oldValue,
+	              newValue: value
+	            }
+	          });
+	
+	          _this2.dispatchEvent(event);
 	        }
 	      });
 	
@@ -3110,7 +3122,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    RESIZE: 'resize',
 	    SCROLL: 'scroll',
 	    UNLOAD: 'unload',
-	    PROGRESS: 'progress' // Custom
+	    PROGRESS: 'progress', // Custom
+	    STATE: 'state' // Custom
 	  },
 	  FORM: {
 	    BLUR: 'blur',

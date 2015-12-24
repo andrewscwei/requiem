@@ -1276,6 +1276,8 @@ class Element {
       set: (value) => {
         if (this.state === value) return;
 
+        let oldValue = this.state;
+
         if (value === null || value === undefined) {
           this.element.removeAttribute(Directive.STATE);
         }
@@ -1284,6 +1286,16 @@ class Element {
         }
 
         this.updateDelegate.setDirty(DirtyType.STATE);
+
+        let event = new CustomEvent(EventType.OBJECT.STATE, {
+          detail: {
+            property: 'state',
+            oldValue: oldValue,
+            newValue: value
+          }
+        });
+
+        this.dispatchEvent(event);
       }
     });
 
