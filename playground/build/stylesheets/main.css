@@ -294,8 +294,7 @@ button {
 
 input[type='text'] {
   resize: none; }
-  input[type='text']:focus,
-  input[type='text']:invalid {
+  input[type='text']:focus, input[type='text']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='text']:-webkit-autofill {
@@ -303,8 +302,7 @@ input[type='text'] {
 
 input[type='password'] {
   resize: none; }
-  input[type='password']:focus,
-  input[type='password']:invalid {
+  input[type='password']:focus, input[type='password']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='password']:-webkit-autofill {
@@ -312,8 +310,7 @@ input[type='password'] {
 
 input[type='number'] {
   resize: none; }
-  input[type='number']:focus,
-  input[type='number']:invalid {
+  input[type='number']:focus, input[type='number']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='number']:-webkit-autofill {
@@ -321,8 +318,7 @@ input[type='number'] {
 
 input[type='date'] {
   resize: none; }
-  input[type='date']:focus,
-  input[type='date']:invalid {
+  input[type='date']:focus, input[type='date']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='date']:-webkit-autofill {
@@ -330,8 +326,7 @@ input[type='date'] {
 
 input[type='month'] {
   resize: none; }
-  input[type='month']:focus,
-  input[type='month']:invalid {
+  input[type='month']:focus, input[type='month']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='month']:-webkit-autofill {
@@ -339,8 +334,7 @@ input[type='month'] {
 
 input[type='week'] {
   resize: none; }
-  input[type='week']:focus,
-  input[type='week']:invalid {
+  input[type='week']:focus, input[type='week']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='week']:-webkit-autofill {
@@ -348,8 +342,7 @@ input[type='week'] {
 
 input[type='time'] {
   resize: none; }
-  input[type='time']:focus,
-  input[type='time']:invalid {
+  input[type='time']:focus, input[type='time']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='time']:-webkit-autofill {
@@ -357,8 +350,7 @@ input[type='time'] {
 
 input[type='datetime'] {
   resize: none; }
-  input[type='datetime']:focus,
-  input[type='datetime']:invalid {
+  input[type='datetime']:focus, input[type='datetime']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='datetime']:-webkit-autofill {
@@ -366,8 +358,7 @@ input[type='datetime'] {
 
 input[type='datetime-local'] {
   resize: none; }
-  input[type='datetime-local']:focus,
-  input[type='datetime-local']:invalid {
+  input[type='datetime-local']:focus, input[type='datetime-local']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='datetime-local']:-webkit-autofill {
@@ -375,8 +366,7 @@ input[type='datetime-local'] {
 
 input[type='email'] {
   resize: none; }
-  input[type='email']:focus,
-  input[type='email']:invalid {
+  input[type='email']:focus, input[type='email']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='email']:-webkit-autofill {
@@ -384,8 +374,7 @@ input[type='email'] {
 
 input[type='search'] {
   resize: none; }
-  input[type='search']:focus,
-  input[type='search']:invalid {
+  input[type='search']:focus, input[type='search']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='search']:-webkit-autofill {
@@ -393,8 +382,7 @@ input[type='search'] {
 
 input[type='tel'] {
   resize: none; }
-  input[type='tel']:focus,
-  input[type='tel']:invalid {
+  input[type='tel']:focus, input[type='tel']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='tel']:-webkit-autofill {
@@ -402,8 +390,7 @@ input[type='tel'] {
 
 input[type='url'] {
   resize: none; }
-  input[type='url']:focus,
-  input[type='url']:invalid {
+  input[type='url']:focus, input[type='url']:invalid {
     box-shadow: none;
     outline-width: 0; }
   input[type='url']:-webkit-autofill {
@@ -411,8 +398,7 @@ input[type='url'] {
 
 textarea {
   resize: none; }
-  textarea:focus,
-  textarea:invalid {
+  textarea:focus, textarea:invalid {
     box-shadow: none;
     outline-width: 0; }
   textarea:-webkit-autofill {
@@ -438,8 +424,7 @@ template {
 
 a {
   background-color: transparent; }
-  a:active,
-  a:hover {
+  a:active, a:hover {
     outline: 0; }
 
 abbr[title] {

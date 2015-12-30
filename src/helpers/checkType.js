@@ -32,7 +32,7 @@ function checkType(value, type) {
         return typeof value === 'function';
 
       case 'array':
-        return value instanceof Array;
+        return value.constructor === Array;
 
       default:
         return false;

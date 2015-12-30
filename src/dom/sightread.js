@@ -43,7 +43,6 @@ function sightread() {
 
   if (arguments.length === 1) {
     let arg = arguments[0];
-
     assertType(arg, [Node, 'boolean'], true);
 
     if (arg instanceof Node) {
