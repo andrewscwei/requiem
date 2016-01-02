@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.25.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.25.1', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(37));
@@ -680,6 +680,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {Function} f - The function/class.
 	 *
 	 * @return {string} Name of the function/class.
+	 *
+	 * @alias module:requiem~helpers.getFunctionName
 	 */
 	
 	function getFunctionName(f) {

@@ -14,6 +14,8 @@
  * @param  {Function} f - The function/class.
  *
  * @return {string} Name of the function/class.
+ *
+ * @alias module:requiem~helpers.getFunctionName
  */
 function getFunctionName(f) {
   if (!f) return;
