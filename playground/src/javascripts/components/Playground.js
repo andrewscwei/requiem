@@ -7,7 +7,11 @@ import Foo from './Foo';
 
 class Playground extends Element {
   init() {
-    this.addChild(new Foo('foo'));
+    let grid = this.getChild('grid');
+    grid.padding = 10;
+    grid.itemWidth = 100;
+    grid.itemHeight = 50;
+
     super.init();
   }
 

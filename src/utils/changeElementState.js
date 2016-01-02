@@ -10,7 +10,7 @@
 
 import toElementArray from '../helpers/toElementArray';
 import getElementState from './getElementState';
-import Directive from '../types/Directive';
+import Directive from '../enums/Directive';
 import Element from '../ui/Element';
 
 /**

@@ -17,7 +17,7 @@
  *
  * @readonly
  * @enum {number}
- * @alias module:requiem~types.NodeState
+ * @alias module:requiem~enums.NodeState
  */
 let NodeState = {
   /**

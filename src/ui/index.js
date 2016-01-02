@@ -18,5 +18,6 @@ let ui = {};
 Object.defineProperty(ui, 'Element',               { value: require('./Element'),               writable: false, enumerable: true });
 Object.defineProperty(ui, 'ElementUpdateDelegate', { value: require('./ElementUpdateDelegate'), writable: false, enumerable: true });
 Object.defineProperty(ui, 'Video',                 { value: require('./Video'),                 writable: false, enumerable: true });
+Object.defineProperty(ui, 'Grid',                  { value: require('./Grid'),                  writable: false, enumerable: true });
 
 module.exports = ui;

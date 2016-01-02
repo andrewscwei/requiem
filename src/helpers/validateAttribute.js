@@ -8,7 +8,7 @@
 
 'use strict';
 
-let Directive = require('../types/Directive');
+let Directive = require('../enums/Directive');
 
 /**
  * Validates whether an attribute can be used (could be reserved by Requiem).

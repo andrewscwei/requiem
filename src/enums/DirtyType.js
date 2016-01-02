@@ -14,7 +14,7 @@
  *
  * @readonly
  * @enum {number}
- * @alias module:requiem~types.DirtyType
+ * @alias module:requiem~enums.DirtyType
  */
 let DirtyType = {
   /**

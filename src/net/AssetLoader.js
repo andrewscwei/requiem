@@ -12,7 +12,7 @@ import assert from '../helpers/assert';
 import inherit from '../helpers/inherit';
 import log from '../helpers/log';
 import EventDispatcher from '../events/EventDispatcher';
-import EventType from '../types/EventType';
+import EventType from '../enums/EventType';
 
 /**
  * Common image file extensions.

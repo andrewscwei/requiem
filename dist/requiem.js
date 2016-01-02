@@ -87,14 +87,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.24.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.25.0', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
-	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(33));
-	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(35));
-	(0, _injectModule2.default)(requiem, 'types', __webpack_require__(38));
-	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(40));
-	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(41));
+	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(37));
+	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(39));
+	(0, _injectModule2.default)(requiem, 'enums', __webpack_require__(42));
+	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(44));
+	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(45));
 	
 	(0, _polyfill2.default)();
 	
@@ -736,7 +736,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Directive2 = _interopRequireDefault(_Directive);
 	
-	var _hasChild = __webpack_require__(32);
+	var _hasChild = __webpack_require__(36);
 	
 	var _hasChild2 = _interopRequireDefault(_hasChild);
 	
@@ -935,7 +935,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @readonly
 	 * @enum {string}
-	 * @alias module:requiem~types.Directive
+	 * @alias module:requiem~enums.Directive
 	 * @see {@link module:requiem~dom.sightread}
 	 */
 	
@@ -1012,20 +1012,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else if (typeof controllerClass !== 'function') {
 	    switch (controllerClassName) {
 	      case 'Video':
-	        {
-	          controllerClass = __webpack_require__(31);
-	          break;
-	        }
+	        controllerClass = __webpack_require__(31);
+	        break;
+	
 	      case 'Element':
-	        {
-	          controllerClass = __webpack_require__(19);
-	          break;
-	        }
+	        controllerClass = __webpack_require__(19);
+	        break;
+	
+	      case 'Grid':
+	        controllerClass = __webpack_require__(32);
+	        break;
+	
 	      default:
-	        {
-	          controllerClass = null;
-	          break;
-	        }
+	        controllerClass = null;
 	    }
 	  }
 	
@@ -2125,25 +2124,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Gets the value of an inline CSS rule of this Element instance by its name.
 	     *
-	     * @param {string}  key                - Name of the CSS rule in camelCase.
-	     * @param {boolean} [isComputed=false] - Specifies whether the styles are
-	     *                                       computed.
+	     * @param {string}  key                  - Name of the CSS rule in camelCase.
+	     * @param {boolean} [isComputed=false]   - Specifies whether the styles are
+	     *                                         computed.
+	     * @param {boolean} [isolateUnits=false] - Specifies whether value and units
+	     *                                         are separated. This affects the
+	     *                                         return value type.
 	     *
-	     * @return {string} Value of the style.
+	     * @return {*} Value of the style. If isolateUnits is set to true, this will
+	     *             return an object containing both 'value' and 'unit' keys.
 	     */
 	
 	  }, {
 	    key: 'getStyle',
-	    value: function getStyle(key, isComputed) {
-	      if (typeof isComputed !== 'boolean') isComputed = false;
-	
-	      var value = isComputed ? window.getComputedStyle(this.element, null).getPropertyValue(key) : this.element.style[key];
-	
-	      if (value === '') {
-	        return null;
-	      } else {
-	        return value;
-	      }
+	    value: function getStyle(key, isComputed, isolateUnits) {
+	      return Element.getStyle(this, key, isComputed, isolateUnits);
 	    }
 	
 	    /**
@@ -2159,11 +2154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setStyle',
 	    value: function setStyle(key, value) {
-	      if (typeof value === 'number') {
-	        value = String(value);
-	      }
-	
-	      this.element.style[key] = value;
+	      Element.setStyle(this, key, value);
 	    }
 	
 	    /**
@@ -2178,11 +2169,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'removeStyle',
 	    value: function removeStyle(key) {
-	      this.element.style[key] = '';
+	      return Element.removeStyle(this, key);
 	    }
 	
 	    /**
 	     * Checks to see if this Element instance has the specified inline CSS rule.
+	     *
 	     * @param {string} key - Name of the style.
 	     *
 	     * @return {boolean}
@@ -2191,7 +2183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'hasStyle',
 	    value: function hasStyle(key) {
-	      return this.element.style[key] !== '';
+	      return Element.hasStyle(this, key);
 	    }
 	
 	    /**
@@ -2406,7 +2398,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * Property attributes.
 	       *
 	       * @property {Object}
-	       * @see module:requiem~types.Directive.PROPERTY
+	       * @see module:requiem~enums.Directive.PROPERTY
 	       */
 	      Element.defineProperty(this, 'properties', { defaultValue: {}, get: true });
 	
@@ -2691,6 +2683,107 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      element.removeEventListener(event, listener, useCapture);
 	    }
+	
+	    /**
+	     * Gets the value of an inline CSS rule of an Element/Node instance by its
+	     * name.
+	     *
+	     * @param {Node|Element} element              - Target element.
+	     * @param {string}       key                  - Name of the CSS rule in
+	     *                                              camelCase.
+	     * @param {boolean}      [isComputed=false]   - Specifies whether the styles
+	     *                                              are computed.
+	     * @param {boolean}      [isolateUnits=false] - Specifies whether value and
+	     *                                              units are separated. This
+	     *                                              affects the return value type.
+	     *
+	     * @return {*} Value of the style. If isolateUnits is set to true, this will
+	     *             return an object containing both 'value' and 'unit' keys.
+	     */
+	
+	  }, {
+	    key: 'getStyle',
+	    value: function getStyle(element, key, isComputed, isolateUnits) {
+	      (0, _assertType2.default)(element, [Node, Element], false, 'Invalid element specified');
+	      if (element instanceof Element) element = element.element;
+	      if (typeof isComputed !== 'boolean') isComputed = false;
+	      if (typeof isolateUnits !== 'boolean') isolateUnits = false;
+	
+	      var value = isComputed ? window.getComputedStyle(element, null).getPropertyValue(key) : element.style[key];
+	      var regex = new RegExp('^[+-]?[0-9]+.?([0-9]+)?(px|em|ex|%|in|cm|mm|pt|pc)$', 'i');
+	
+	      if (value === '') return isolateUnits ? { value: null, unit: null } : null;
+	      if (!isNaN(Number(value))) return isolateUnits ? { value: Number(value), unit: null } : Number(value);
+	
+	      if (regex.test(value)) {
+	        if (isolateUnits) {
+	          if (value.charAt(value.length - 1) === '%') return { value: Number(value.substr(0, value.length - 1)), unit: value.slice(-1) };
+	          return { value: Number(value.substr(0, value.length - 2)), unit: value.slice(-2) };
+	        } else {
+	          return value;
+	        }
+	      }
+	
+	      return isolateUnits ? { value: value, units: null } : value;
+	    }
+	
+	    /**
+	     * Sets an inline CSS rule of an Element/Node instance.
+	     *
+	     * @param {Node|Element} element - Target element.
+	     * @param {string}       key     - Name of the CSS rule in camelCase.
+	     * @param {*}            value   - Value of the style. If a number is
+	     *                                 provided, it will be automatically suffixed
+	     *                                 with 'px'.
+	     *
+	     * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
+	     */
+	
+	  }, {
+	    key: 'setStyle',
+	    value: function setStyle(element, key, value) {
+	      (0, _assertType2.default)(element, [Node, Element], false, 'Invalid element specified');
+	      if (element instanceof Element) element = element.element;
+	      if (typeof value === 'number') value = String(value);
+	      if (value === null || value === undefined) value = '';
+	
+	      element.style[key] = value;
+	    }
+	
+	    /**
+	     * Removes an inline CSS rule from an Element/Node instance by its rule name
+	     * in camelCase.
+	     *
+	     * @param {Node|Element} element - Target element.
+	     * @param {string}       key     - Name of the CSS rule.
+	     *
+	     * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
+	     */
+	
+	  }, {
+	    key: 'removeStyle',
+	    value: function removeStyle(element, key) {
+	      (0, _assertType2.default)(element, [Node, Element], false, 'Invalid element specified');
+	      if (element instanceof Element) element = element.element;
+	      element.style[key] = '';
+	    }
+	
+	    /**
+	     * Checks to see if an Element/Node instance has the specified inline CSS rule.
+	     *
+	     * @param {Node|Element} element - Target element.
+	     * @param {string}       key     - Name of the style.
+	     *
+	     * @return {boolean}
+	     */
+	
+	  }, {
+	    key: 'hasStyle',
+	    value: function hasStyle(element, key) {
+	      (0, _assertType2.default)(element, [Node, Element], false, 'Invalid element specified');
+	      if (element instanceof Element) element = element.element;
+	      return element.style[key] !== '';
+	    }
 	  }]);
 	
 	  return Element;
@@ -2850,7 +2943,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @readonly
 	 * @enum {number}
-	 * @alias module:requiem~types.DirtyType
+	 * @alias module:requiem~enums.DirtyType
 	 */
 	
 	var DirtyType = {
@@ -2999,7 +3092,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @readonly
 	 * @enum {number}
-	 * @alias module:requiem~types.NodeState
+	 * @alias module:requiem~enums.NodeState
 	 */
 	
 	var NodeState = {
@@ -3068,7 +3161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @readonly
 	 * @enum {string}
-	 * @alias module:requiem~types.EventType
+	 * @alias module:requiem~enums.EventType
 	 */
 	
 	var EventType = {
@@ -4345,6 +4438,770 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _getRect = __webpack_require__(28);
+	
+	var _getRect2 = _interopRequireDefault(_getRect);
+	
+	var _translate3d = __webpack_require__(33);
+	
+	var _translate3d2 = _interopRequireDefault(_translate3d);
+	
+	var _transform = __webpack_require__(34);
+	
+	var _transform2 = _interopRequireDefault(_transform);
+	
+	var _Element2 = __webpack_require__(19);
+	
+	var _Element3 = _interopRequireDefault(_Element2);
+	
+	var _DirtyType = __webpack_require__(23);
+	
+	var _DirtyType2 = _interopRequireDefault(_DirtyType);
+	
+	var _EventType = __webpack_require__(25);
+	
+	var _EventType2 = _interopRequireDefault(_EventType);
+	
+	var _Orientation = __webpack_require__(35);
+	
+	var _Orientation2 = _interopRequireDefault(_Orientation);
+	
+	var _assertType = __webpack_require__(5);
+	
+	var _assertType2 = _interopRequireDefault(_assertType);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // © Grubbb
+	
+	/**
+	 * @class
+	 *
+	 * Masonry grid element.
+	 *
+	 * @alias module:requiem~ui.Grid
+	 */
+	
+	var Grid = (function (_Element) {
+	  _inherits(Grid, _Element);
+	
+	  function Grid() {
+	    _classCallCheck(this, Grid);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Grid).apply(this, arguments));
+	  }
+	
+	  _createClass(Grid, [{
+	    key: 'init',
+	
+	    /** @inheritdoc */
+	    value: function init() {
+	      this.respondsTo(10.0, _EventType2.default.OBJECT.RESIZE);
+	
+	      _get(Object.getPrototypeOf(Grid.prototype), 'init', this).call(this);
+	    }
+	
+	    /** @inheritdoc */
+	
+	  }, {
+	    key: 'update',
+	    value: function update() {
+	      if (this.isDirty(_DirtyType2.default.SIZE | _DirtyType2.default.LAYOUT)) {
+	        this.reposition();
+	      }
+	
+	      _get(Object.getPrototypeOf(Grid.prototype), 'update', this).call(this);
+	    }
+	
+	    /**
+	     * Repositions invidual child item.
+	     */
+	
+	  }, {
+	    key: 'reposition',
+	    value: function reposition() {
+	      var l = this.length;
+	      if (this.length < 2) return;
+	
+	      var map = [{ x: 0, y: 0, width: this.maxWidth, height: this.maxHeight }];
+	      var w = 0;
+	      var h = 0;
+	      var mw = NaN;
+	      var mh = NaN;
+	
+	      for (var i = 0; i < l; i++) {
+	        var item = this.getChild('item')[i];
+	
+	        if (!isNaN(this.itemWidth)) (0, _transform2.default)(item, { width: this.itemWidth });
+	        if (!isNaN(this.itemHeight)) (0, _transform2.default)(item, { height: this.itemHeight });
+	
+	        var slot = this.__computeItemPosition(item, map);
+	
+	        if (!slot) continue;
+	
+	        item.setStyle('position', 'absolute');
+	        (0, _translate3d2.default)(item, { x: slot.x, y: slot.y });
+	
+	        var rect = (0, _getRect2.default)(item);
+	
+	        if (slot.x + rect.width > w) w = slot.x + rect.width;
+	        if (slot.y + rect.height > h) h = slot.y + rect.height;
+	
+	        if (isNaN(mw) || rect.width < mw) mw = rect.width;
+	        if (isNaN(mh) || rect.height < mh) mh = rect.height;
+	      }
+	
+	      if (!this.autoResize) {
+	        if (!isNaN(mw) && this.orientation === _Orientation2.default.PORTRAIT) {
+	          w = this.maxWidth - (this.maxWidth - w) % (mw + this.padding);
+	        } else if (!isNaN(mh)) {
+	          h = this.maxHeight - (this.maxHeight - h) % (mh + this.padding);
+	        }
+	      }
+	
+	      (0, _transform2.default)(this, { width: w, height: h });
+	    }
+	
+	    /**
+	     * Computes the position of the specified children according to a vacancy
+	     * map.
+	     * @param  {Element} item      - Target item.
+	     * @param  {Array}   vacancies - Array of open slots.
+	     *
+	     * @return {Object} Hash describing the computed position of the target item.
+	     *
+	     * @private
+	     */
+	
+	  }, {
+	    key: '__computeItemPosition',
+	    value: function __computeItemPosition(item, vacancies) {
+	      var rect = item.rect;
+	      var slot = null;
+	      var index = -1;
+	      var n = vacancies.length;
+	
+	      for (var i = 0; i < n; i++) {
+	        var vacancy = vacancies[i];
+	
+	        if (this.orientation === _Orientation2.default.PORTRAIT) {
+	          if (vacancy.width >= rect.width) {
+	            if (!slot || vacancy.y < slot.y || vacancy.y === slot.y && vacancy.x < slot.x) {
+	              slot = vacancy;
+	              index = i;
+	            }
+	          }
+	        } else {
+	          if (vacancy.height >= rect.height) {
+	            if (!slot || vacancy.x < slot.x || vacancy.x === slot.x && vacancy.y < slot.y) {
+	              slot = vacancy;
+	              index = i;
+	            }
+	          }
+	        }
+	      }
+	
+	      if (slot && index > -1) {
+	        if (this.orientation === _Orientation2.default.PORTRAIT) {
+	          if (slot.width - rect.width - this.padding > 0) {
+	            vacancies[index] = {
+	              x: slot.x + rect.width + this.padding,
+	              y: slot.y,
+	              width: slot.width - rect.width - this.padding
+	            };
+	          } else {
+	            vacancies.splice(index, 1);
+	          }
+	
+	          vacancies.push({
+	            x: slot.x,
+	            y: slot.y + rect.height + this.padding,
+	            width: rect.width
+	          });
+	        } else {
+	          if (slot.height - rect.height - this.padding > 0) {
+	            vacancies[index] = {
+	              x: slot.x,
+	              y: slot.y + rect.height + this.padding,
+	              height: slot.height - rect.height - this.padding
+	            };
+	          } else {
+	            vacancies.splice(index, 1);
+	          }
+	
+	          vacancies.push({
+	            x: slot.x + rect.width + this.padding,
+	            y: slot.y,
+	            height: rect.height
+	          });
+	        }
+	      }
+	
+	      return slot;
+	    }
+	  }, {
+	    key: 'padding',
+	
+	    /**
+	     * Uniform padding between each grid item. This padding can be defined as
+	     * a member or a DOM attribute, prioritized respectively.
+	     *
+	     * @type {number}
+	     */
+	    get: function get() {
+	      var v1 = this.__private__.padding;
+	      var v2 = this.getProperty('padding');
+	      if (!isNaN(v1)) return v1;
+	      if (!isNaN(v2)) return v2;
+	      return 0;
+	    },
+	    set: function set(value) {
+	      (0, _assertType2.default)(value, 'number', false, 'Padding must be a number in pixels');
+	      if (value === this.padding) return;
+	      this.__private__.padding = value;
+	      this.setDirty(_DirtyType2.default.LAYOUT);
+	    }
+	
+	    /**
+	     * Max width of this grid. Max width can be defined as a member, a CSS style
+	     * rule, or a DOM attribute, prioritized respectively.
+	     *
+	     * @type {number}
+	     */
+	
+	  }, {
+	    key: 'maxWidth',
+	    get: function get() {
+	      var refPadding = _Element3.default.getStyle(this.element.parentNode, 'padding-left', true, true).value + _Element3.default.getStyle(this.element.parentNode, 'padding-right', true, true).value;
+	      var ref = (0, _getRect2.default)(this.element.parentNode).width - refPadding;
+	      var v1 = this.__private__.maxWidth;
+	      var v2 = this.getStyle('max-width', true);
+	      var v3 = this.getProperty('maxWidth');
+	      var v = undefined;
+	
+	      if (v3 !== null && v3 !== undefined) v = v3;
+	      if (v2 !== null && v2 !== undefined) v = v2;
+	      if (v1 !== null && v1 !== undefined) v = v1;
+	      if (v === null || v === undefined) v = ref;
+	
+	      (0, _assertType2.default)(v, ['number', 'string'], false, 'Invalid max width provided');
+	
+	      if (typeof v === 'number') return v;
+	      if (v.indexOf('px') > -1) return Number(v.substring(0, v.length - 2));
+	      if (v.indexOf('%') > -1) return Number(v.substring(0, v.length - 1)) / 100 * ref;
+	      return ref;
+	    },
+	    set: function set(value) {
+	      (0, _assertType2.default)(value, 'number', false, 'Max width must be a number in pixels');
+	      if (value === this.maxWidth) return;
+	      this.__private__.maxWidth = value;
+	      this.setDirty(_DirtyType2.default.SIZE);
+	    }
+	
+	    /**
+	     * Max height of this grid. Max height can be defined as a member, a CSS style
+	     * rule, or a DOM attribute, prioritized respectively.
+	     *
+	     * @type {number}
+	     */
+	
+	  }, {
+	    key: 'maxHeight',
+	    get: function get() {
+	      var ref = (0, _getRect2.default)(this.element.parentNode).height;
+	      var v1 = this.__private__.maxHeight;
+	      var v2 = this.getStyle('max-height', true);
+	      var v3 = this.getProperty('maxHeight');
+	      var v = undefined;
+	
+	      if (v3 !== null && v3 !== undefined) v = v3;
+	      if (v2 !== null && v2 !== undefined) v = v2;
+	      if (v1 !== null && v1 !== undefined) v = v1;
+	      if (v === null || v === undefined) v = ref;
+	
+	      (0, _assertType2.default)(v, ['number', 'string'], false, 'Invalid max height provided');
+	
+	      if (typeof v === 'number') return v;
+	      if (v.indexOf('px') > -1) return Number(v.substring(0, v.length - 2));
+	      if (v.indexOf('%') > -1) return Number(v.substring(0, v.length - 1)) / 100 * ref;
+	      return ref;
+	    },
+	    set: function set(value) {
+	      (0, _assertType2.default)(value, 'number', false, 'Max height must be a number in pixels');
+	      if (value === this.maxHeight) return;
+	      this.__private__.maxHeight = value;
+	      this.setDirty(_DirtyType2.default.SIZE);
+	    }
+	
+	    /**
+	     * Orientation of the grid, either portrait or landscape.
+	     *
+	     * @type {Orientation}
+	     * @see module:requiem~enums.Orientation
+	     */
+	
+	  }, {
+	    key: 'orientation',
+	    get: function get() {
+	      var v1 = this.__private__.orientation;
+	      var v2 = this.getProperty('orientation');
+	
+	      if (!isNaN(v1)) return v1;
+	      if (!isNaN(v2)) return v2;
+	      return _Orientation2.default.PORTRAIT;
+	    },
+	    set: function set(value) {
+	      (0, _assertType2.default)(value, 'number', false, 'Invalid orientation provided');
+	      if (value === this.orientation) return;
+	      this.__private__.orientation = value;
+	      this.setDirty(_DirtyType2.default.LAYOUT);
+	    }
+	
+	    /**
+	     * Number of items in this grid.
+	     *
+	     * @type {number}
+	     * @readonly
+	     */
+	
+	  }, {
+	    key: 'length',
+	    get: function get() {
+	      var items = this.items;
+	      if (items) return items.length;
+	      return 0;
+	    }
+	
+	    /**
+	     * Array of items in this grid.
+	     *
+	     * @type {Array}
+	     * @readonly
+	     */
+	
+	  }, {
+	    key: 'items',
+	    get: function get() {
+	      var children = this.getChild('item');
+	      if (children instanceof Array) return children;
+	      if (children instanceof _Element3.default) return [children];
+	      return null;
+	    }
+	
+	    /**
+	     * Individual item width. This can either be specified as a member or as a
+	     * DOM attribute, prioritized respectively. If unspecified or set as NaN, the
+	     * width will be derived naturally from individual child item.
+	     *
+	     * @type {number}
+	     */
+	
+	  }, {
+	    key: 'itemWidth',
+	    get: function get() {
+	      var v1 = this.__private__.itemWidth;
+	      var v2 = this.getProperty('itemWidth');
+	
+	      if (!isNaN(v1)) return v1;
+	      if (!isNaN(v2)) return v2;
+	      return NaN;
+	    },
+	    set: function set(value) {
+	      if (value === this.itemWidth) return;
+	
+	      if (value === null) {
+	        this.__private__.itemWidth = NaN;
+	      } else {
+	        (0, _assertType2.default)(value, 'number', false);
+	        this.__private__.itemWidth = value;
+	      }
+	
+	      this.setDirty(_DirtyType2.default.SIZE);
+	    }
+	
+	    /**
+	     * Individual item height. This can either be specified as a member or as a
+	     * DOM attribute, prioritized respectively. If unspecified or set as NaN, the
+	     * height will be derived naturally from individual child item.
+	     *
+	     * @type {number}
+	     */
+	
+	  }, {
+	    key: 'itemHeight',
+	    get: function get() {
+	      var v1 = this.__private__.itemHeight;
+	      var v2 = this.getProperty('itemHeight');
+	
+	      if (!isNaN(v1)) return v1;
+	      if (!isNaN(v2)) return v2;
+	      return NaN;
+	    },
+	    set: function set(value) {
+	      if (value === this.itemHeight) return;
+	
+	      if (value === null) {
+	        this.__private__.itemHeight = NaN;
+	      } else {
+	        (0, _assertType2.default)(value, 'number', false);
+	        this.__private__.itemHeight = value;
+	      }
+	
+	      this.setDirty(_DirtyType2.default.SIZE);
+	    }
+	
+	    /**
+	     * Specifies whether this grid will auto resize itself to fit child items.
+	     *
+	     * @type {boolean}
+	     */
+	
+	  }, {
+	    key: 'autoResize',
+	    get: function get() {
+	      var v1 = this.__private__.autoResize;
+	      var v2 = this.getProperty('autoResize');
+	      var v = undefined;
+	
+	      if (v1 !== null && v1 !== undefined) {
+	        v = v1;
+	      } else if (v2 !== null && v2 !== undefined) {
+	        v = v2;
+	      } else {
+	        v = false;
+	      }
+	
+	      (0, _assertType2.default)(v, 'boolean', false);
+	
+	      return v;
+	    },
+	    set: function set(value) {
+	      if (value === this.autoResize) return;
+	      this.__private__.autoResize = value;
+	      this.setDirty(_DirtyType2.default.SIZE);
+	    }
+	  }]);
+	
+	  return Grid;
+	})(_Element3.default);
+	
+	module.exports = Grid;
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _assert = __webpack_require__(6);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	var _toElementArray = __webpack_require__(29);
+	
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Translates a DOM element.
+	 *
+	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to
+	 *                                                                perform the
+	 *                                                                3D translation.
+	 * @param {Object} [properties] - Translation properties (if unspecified, all
+	 *                                translation coordinates will be reset to 0).
+	 * @param {number} [properties.x] - X-coordinate.
+	 * @param {number} [properties.y] - Y-coordinate.
+	 * @param {number} [properties.z] - Z-coordinate.
+	 * @param {string} [properties.units='px'] - Unit of translations.
+	 * @param {Object} [constraints] - Translation constraints.
+	 * @param {number} [constraints.x] - Bounded x-coordinate.
+	 * @param {number} [constraints.y] - Bounded y-coordinate.
+	 * @param {number} [constraints.z] - Bounded z-coordinate.
+	 *
+	 * @return {Object} Translated properties.
+	 *
+	 * @alias module:requiem~utils.translate3d
+	 */
+	function translate3d(element, properties, constraints) {
+	  var elements = (0, _toElementArray2.default)(element);
+	  var n = elements.length;
+	
+	  if (properties) {
+	    if (!(0, _assert2.default)(properties.x === undefined || !isNaN(properties.x), 'X property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.y === undefined || !isNaN(properties.y), 'Y property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.z === undefined || !isNaN(properties.z), 'Z property must be a number.')) return null;
+	
+	    var units = properties.units || 'px';
+	
+	    if (constraints) {
+	      if (!(0, _assert2.default)(constraints.x === undefined || !isNaN(constraints.x), 'X constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.y === undefined || !isNaN(constraints.y), 'Y constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.z === undefined || !isNaN(constraints.z), 'Z constraint must be a number.')) return null;
+	    }
+	
+	    var x = constraints && constraints.x !== undefined ? Math.min(properties.x, constraints.x) : properties.x;
+	    var y = constraints && constraints.y !== undefined ? Math.min(properties.y, constraints.y) : properties.y;
+	    var z = constraints && constraints.z !== undefined ? Math.min(properties.z, constraints.z) : properties.z;
+	
+	    var translateX = properties.x !== undefined ? 'translateX(' + x + units + ')' : null;
+	    var translateY = properties.y !== undefined ? 'translateY(' + y + units + ')' : null;
+	    var translateZ = properties.z !== undefined ? 'translateZ(' + z + units + ')' : null;
+	    var transforms = '';
+	
+	    if (translateX) transforms += transforms === '' ? translateX : ' ' + translateX;
+	    if (translateY) transforms += transforms === '' ? translateY : ' ' + translateY;
+	    if (translateZ) transforms += transforms === '' ? translateZ : ' ' + translateZ;
+	
+	    for (var i = 0; i < n; i++) {
+	      elements[i].style.transform = transforms;
+	    }
+	
+	    var t = {};
+	
+	    if (translateX) t.x = x;
+	    if (translateY) t.y = y;
+	    if (translateZ) t.z = z;
+	
+	    return t;
+	  } else {
+	    for (var j = 0; j < n; j++) {
+	      elements[j].style.transform = 'translateX(0) translateY(0) translateZ(0)';
+	    }
+	
+	    return {
+	      x: 0,
+	      y: 0,
+	      z: 0
+	    };
+	  }
+	}
+	
+	module.exports = translate3d;
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _assert = __webpack_require__(6);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	var _toElementArray = __webpack_require__(29);
+	
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+	
+	var _getRect = __webpack_require__(28);
+	
+	var _getRect2 = _interopRequireDefault(_getRect);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Transforms a DOM element.
+	 *
+	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to
+	 *                                                                perform the
+	 *                                                                transform on.
+	 * @param {Object} [properties] - Transformation properties. (If unspecified,
+	 *                                all transformation styles will be reset to
+	 *                                'initial').
+	 * @param {number} properties.width - Target width of the element.
+	 * @param {number} properties.height - Target height of the element.
+	 * @param {number} properties.aspectRatio - Target aspect ratio of the element.
+	 *                                          If unspecified, it will be inferred
+	 *                                          from the original element.
+	 * @param {string} [properties.unit='px'] - Unit of width/height values.
+	 * @param {string} [properties.type='default'] - Resizing constraint: 'default',
+	 *                                               'contain', 'cover'.
+	 * @param {Object} [constraints] - Transformation constraints.
+	 * @param {number} [contraints.width] - Bounded width of the element.
+	 * @param {number} [contraints.height] - Bounded height of the element.
+	 *
+	 * @return {Object} Transformed properties.
+	 *
+	 * @alias module:requiem~utils.transform
+	 */
+	function transform(element, properties, constraints) {
+	  var elements = (0, _toElementArray2.default)(element);
+	  var n = elements.length;
+	
+	  if (properties) {
+	    if (!(0, _assert2.default)(properties.width === undefined || !isNaN(properties.width), 'Width property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.height === undefined || !isNaN(properties.height), 'Height property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.aspectRatio === undefined || !isNaN(properties.aspectRatio), 'Aspect ratio property must be a number.')) return null;
+	
+	    var rect = (0, _getRect2.default)(element);
+	    var units = properties.units || 'px';
+	    var aspectRatio = properties.aspectRatio !== undefined ? Number(properties.aspectRatio) : rect.width / rect.height;
+	    var maxW = properties.width;
+	    var maxH = properties.height;
+	    var minW = properties.width;
+	    var minH = properties.height;
+	    var type = properties.type || 'default';
+	
+	    if (constraints && type !== 'default') {
+	      (0, _assert2.default)(constraints.width === undefined || !isNaN(constraints.width), 'Width constraint must be a number.');
+	      (0, _assert2.default)(constraints.height === undefined || !isNaN(constraints.height), 'Height constraint must be a number.');
+	
+	      if (type && type === 'cover') {
+	        if (constraints.width !== undefined) minW = Math.min(constraints.width, minW);
+	        if (constraints.width !== undefined) minH = Math.min(constraints.height, minH);
+	      } else {
+	        if (constraints.width !== undefined) maxW = Math.min(constraints.width, maxW);
+	        if (constraints.height !== undefined) maxH = Math.min(constraints.height, maxH);
+	      }
+	    }
+	
+	    var w = undefined,
+	        h = undefined;
+	
+	    if (type === 'contain') {
+	      w = maxW > maxH ? maxH * aspectRatio : maxW;
+	      h = maxW > maxH ? maxH : maxW / aspectRatio;
+	
+	      if (w > maxW) {
+	        w = maxW;
+	        h = w / aspectRatio;
+	      } else if (h > maxH) {
+	        h = maxH;
+	        w = h * aspectRatio;
+	      }
+	    } else if (type === 'cover') {
+	      w = minW > minH ? minH * aspectRatio : minW;
+	      h = minW > minH ? minH : minW / aspectRatio;
+	
+	      if (w < minW) {
+	        w = minW;
+	        h = w / aspectRatio;
+	      } else if (h < minH) {
+	        h = minH;
+	        w = h * aspectRatio;
+	      }
+	    } else {
+	      w = maxW;
+	      h = maxH;
+	    }
+	
+	    for (var i = 0; i < n; i++) {
+	      var e = elements[i];
+	
+	      if (properties.width !== undefined) e.style.width = String(w) + units;
+	      if (properties.height !== undefined) e.style.height = String(h) + units;
+	    }
+	
+	    var t = {};
+	
+	    if (properties.width !== undefined) t.width = w;
+	    if (properties.height !== undefined) t.height = h;
+	
+	    return t;
+	  } else {
+	    for (var j = 0; j < n; j++) {
+	      elements[j].style.width = 'initial';
+	      elements[j].style.height = 'initial';
+	    }
+	
+	    return {
+	      width: 'initial',
+	      height: 'initial'
+	    };
+	  }
+	}
+	
+	module.exports = transform;
+
+/***/ },
+/* 35 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 *
+	 * Orientation types.
+	 *
+	 * @type {Object}
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Enum for all orientation types.
+	 *
+	 * @readonly
+	 * @enum {number}
+	 * @alias module:requiem~enums.Orientation
+	 */
+	
+	var Orientation = {
+	  /**
+	   * Portrait orientation, where height > width.
+	   */
+	  PORTRAIT: 0,
+	
+	  /**
+	   * Landscape orientation, where width > height.
+	   */
+	  LANDSCAPE: 1,
+	
+	  /**
+	   * Gets the name of an orientation enum.
+	   *
+	   * @param  {Orientation} orientation - Orientation.
+	   *
+	   * @return {string} Name of the orientation.
+	   */
+	  toString: function toString(orientation) {
+	    switch (orientation) {
+	      case Orientation.PORTRAIT:
+	        return 'PORTRAIT';
+	      case Orientation.LANDSCAPE:
+	        return 'LANDSCAPE';
+	      default:
+	        return 'UNKNOWN';
+	    }
+	  }
+	};
+	
+	module.exports = Orientation;
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/**
 	 * Requiem
 	 * (c) VARIANTE (http://variante.io)
@@ -4402,7 +5259,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hasChild;
 
 /***/ },
-/* 33 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4423,12 +5280,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var events = {};
 	
-	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(34), writable: false, enumerable: true });
+	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(38), writable: false, enumerable: true });
 	
 	module.exports = events;
 
 /***/ },
-/* 34 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4609,7 +5466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventDispatcher;
 
 /***/ },
-/* 35 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4630,12 +5487,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var net = {};
 	
-	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(36), writable: false, enumerable: true });
+	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(40), writable: false, enumerable: true });
 	
 	module.exports = net;
 
 /***/ },
-/* 36 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4656,7 +5513,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _inherit = __webpack_require__(37);
+	var _inherit = __webpack_require__(41);
 	
 	var _inherit2 = _interopRequireDefault(_inherit);
 	
@@ -4664,7 +5521,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _log2 = _interopRequireDefault(_log);
 	
-	var _EventDispatcher2 = __webpack_require__(34);
+	var _EventDispatcher2 = __webpack_require__(38);
 	
 	var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
 	
@@ -5352,7 +6209,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = AssetLoader;
 
 /***/ },
-/* 37 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5400,7 +6257,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = inherit;
 
 /***/ },
-/* 38 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5414,23 +6271,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	/**
-	 * Collection of Requiem data-types and definitions.
+	 * Collection of Requiem enums and types.
 	 *
-	 * @namespace module:requiem~types
+	 * @namespace module:requiem~enums
 	 */
 	
-	var types = {};
+	var enums = {};
 	
-	Object.defineProperty(types, 'Directive', { value: __webpack_require__(16), writable: false, enumerable: true });
-	Object.defineProperty(types, 'DirtyType', { value: __webpack_require__(23), writable: false, enumerable: true });
-	Object.defineProperty(types, 'EventType', { value: __webpack_require__(25), writable: false, enumerable: true });
-	Object.defineProperty(types, 'KeyCode', { value: __webpack_require__(39), writable: false, enumerable: true });
-	Object.defineProperty(types, 'NodeState', { value: __webpack_require__(24), writable: false, enumerable: true });
+	Object.defineProperty(enums, 'Directive', { value: __webpack_require__(16), writable: false, enumerable: true });
+	Object.defineProperty(enums, 'DirtyType', { value: __webpack_require__(23), writable: false, enumerable: true });
+	Object.defineProperty(enums, 'EventType', { value: __webpack_require__(25), writable: false, enumerable: true });
+	Object.defineProperty(enums, 'KeyCode', { value: __webpack_require__(43), writable: false, enumerable: true });
+	Object.defineProperty(enums, 'NodeState', { value: __webpack_require__(24), writable: false, enumerable: true });
+	Object.defineProperty(enums, 'Orientation', { value: __webpack_require__(35), writable: false, enumerable: true });
 	
-	module.exports = types;
+	module.exports = enums;
 
 /***/ },
-/* 39 */
+/* 43 */
 /***/ function(module, exports) {
 
 	/**
@@ -5450,7 +6308,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @readonly
 	 * @enum {number}
-	 * @alias module:requiem~types.KeyCode
+	 * @alias module:requiem~enums.KeyCode
 	 */
 	
 	var KeyCode = {
@@ -5557,7 +6415,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = KeyCode;
 
 /***/ },
-/* 40 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5581,11 +6439,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(ui, 'Element', { value: __webpack_require__(19), writable: false, enumerable: true });
 	Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(26), writable: false, enumerable: true });
 	Object.defineProperty(ui, 'Video', { value: __webpack_require__(31), writable: false, enumerable: true });
+	Object.defineProperty(ui, 'Grid', { value: __webpack_require__(32), writable: false, enumerable: true });
 	
 	module.exports = ui;
 
 /***/ },
-/* 41 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5606,26 +6465,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var utils = {};
 	
-	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(42), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(45), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(43), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(32), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(44), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(46), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(47), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(46), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(49), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(47), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(36), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(48), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(50), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(51), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(28), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(30), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(48), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(49), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(50), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate', { value: __webpack_require__(51), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(52), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'transform', { value: __webpack_require__(53), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(52), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(53), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(54), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate', { value: __webpack_require__(55), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(33), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'transform', { value: __webpack_require__(34), writable: false, enumerable: true });
 	
 	module.exports = utils;
 
 /***/ },
-/* 42 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5646,7 +6505,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _hasClass = __webpack_require__(43);
+	var _hasClass = __webpack_require__(47);
 	
 	var _hasClass2 = _interopRequireDefault(_hasClass);
 	
@@ -5692,7 +6551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = addClass;
 
 /***/ },
-/* 43 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5713,7 +6572,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _getClassIndex = __webpack_require__(44);
+	var _getClassIndex = __webpack_require__(48);
 	
 	var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
 	
@@ -5746,7 +6605,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hasClass;
 
 /***/ },
-/* 44 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5794,7 +6653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getClassIndex;
 
 /***/ },
-/* 45 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5811,7 +6670,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _getElementState = __webpack_require__(46);
+	var _getElementState = __webpack_require__(50);
 	
 	var _getElementState2 = _interopRequireDefault(_getElementState);
 	
@@ -5857,7 +6716,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = changeElementState;
 
 /***/ },
-/* 46 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5917,7 +6776,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getElementState;
 
 /***/ },
-/* 47 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6001,7 +6860,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getIntersectRect;
 
 /***/ },
-/* 48 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6018,7 +6877,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _getIntersectRect = __webpack_require__(47);
+	var _getIntersectRect = __webpack_require__(51);
 	
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
@@ -6076,7 +6935,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hitTestElement;
 
 /***/ },
-/* 49 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6093,7 +6952,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _getIntersectRect = __webpack_require__(47);
+	var _getIntersectRect = __webpack_require__(51);
 	
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
@@ -6154,7 +7013,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hitTestRect;
 
 /***/ },
-/* 50 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6221,7 +7080,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = removeClass;
 
 /***/ },
-/* 51 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6324,249 +7183,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	module.exports = translate;
-
-/***/ },
-/* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _toElementArray = __webpack_require__(29);
-	
-	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Translates a DOM element.
-	 *
-	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to
-	 *                                                                perform the
-	 *                                                                3D translation.
-	 * @param {Object} [properties] - Translation properties (if unspecified, all
-	 *                                translation coordinates will be reset to 0).
-	 * @param {number} [properties.x] - X-coordinate.
-	 * @param {number} [properties.y] - Y-coordinate.
-	 * @param {number} [properties.z] - Z-coordinate.
-	 * @param {string} [properties.units='px'] - Unit of translations.
-	 * @param {Object} [constraints] - Translation constraints.
-	 * @param {number} [constraints.x] - Bounded x-coordinate.
-	 * @param {number} [constraints.y] - Bounded y-coordinate.
-	 * @param {number} [constraints.z] - Bounded z-coordinate.
-	 *
-	 * @return {Object} Translated properties.
-	 *
-	 * @alias module:requiem~utils.translate3d
-	 */
-	function translate3d(element, properties, constraints) {
-	  var elements = (0, _toElementArray2.default)(element);
-	  var n = elements.length;
-	
-	  if (properties) {
-	    if (!(0, _assert2.default)(properties.x === undefined || !isNaN(properties.x), 'X property must be a number.')) return null;
-	    if (!(0, _assert2.default)(properties.y === undefined || !isNaN(properties.y), 'Y property must be a number.')) return null;
-	    if (!(0, _assert2.default)(properties.z === undefined || !isNaN(properties.z), 'Z property must be a number.')) return null;
-	
-	    var units = properties.units || 'px';
-	
-	    if (constraints) {
-	      if (!(0, _assert2.default)(constraints.x === undefined || !isNaN(constraints.x), 'X constraint must be a number.')) return null;
-	      if (!(0, _assert2.default)(constraints.y === undefined || !isNaN(constraints.y), 'Y constraint must be a number.')) return null;
-	      if (!(0, _assert2.default)(constraints.z === undefined || !isNaN(constraints.z), 'Z constraint must be a number.')) return null;
-	    }
-	
-	    var x = constraints && constraints.x !== undefined ? Math.min(properties.x, constraints.x) : properties.x;
-	    var y = constraints && constraints.y !== undefined ? Math.min(properties.y, constraints.y) : properties.y;
-	    var z = constraints && constraints.z !== undefined ? Math.min(properties.z, constraints.z) : properties.z;
-	
-	    var translateX = properties.x !== undefined ? 'translateX(' + x + units + ')' : null;
-	    var translateY = properties.y !== undefined ? 'translateY(' + y + units + ')' : null;
-	    var translateZ = properties.z !== undefined ? 'translateZ(' + z + units + ')' : null;
-	    var transforms = '';
-	
-	    if (translateX) transforms += transforms === '' ? translateX : ' ' + translateX;
-	    if (translateY) transforms += transforms === '' ? translateY : ' ' + translateY;
-	    if (translateZ) transforms += transforms === '' ? translateZ : ' ' + translateZ;
-	
-	    for (var i = 0; i < n; i++) {
-	      elements[i].style.transform = transforms;
-	    }
-	
-	    var t = {};
-	
-	    if (translateX) t.x = x;
-	    if (translateY) t.y = y;
-	    if (translateZ) t.z = z;
-	
-	    return t;
-	  } else {
-	    for (var j = 0; j < n; j++) {
-	      elements[j].style.transform = 'translateX(0) translateY(0) translateZ(0)';
-	    }
-	
-	    return {
-	      x: 0,
-	      y: 0,
-	      z: 0
-	    };
-	  }
-	}
-	
-	module.exports = translate3d;
-
-/***/ },
-/* 53 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _toElementArray = __webpack_require__(29);
-	
-	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-	
-	var _getRect = __webpack_require__(28);
-	
-	var _getRect2 = _interopRequireDefault(_getRect);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Transforms a DOM element.
-	 *
-	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to
-	 *                                                                perform the
-	 *                                                                transform on.
-	 * @param {Object} [properties] - Transformation properties. (If unspecified,
-	 *                                all transformation styles will be reset to
-	 *                                'initial').
-	 * @param {number} properties.width - Target width of the element.
-	 * @param {number} properties.height - Target height of the element.
-	 * @param {number} properties.aspectRatio - Target aspect ratio of the element.
-	 *                                          If unspecified, it will be inferred
-	 *                                          from the original element.
-	 * @param {string} [properties.unit='px'] - Unit of width/height values.
-	 * @param {string} [properties.type='default'] - Resizing constraint: 'default',
-	 *                                               'contain', 'cover'.
-	 * @param {Object} [constraints] - Transformation constraints.
-	 * @param {number} [contraints.width] - Bounded width of the element.
-	 * @param {number} [contraints.height] - Bounded height of the element.
-	 *
-	 * @return {Object} Transformed properties.
-	 *
-	 * @alias module:requiem~utils.transform
-	 */
-	function transform(element, properties, constraints) {
-	  var elements = (0, _toElementArray2.default)(element);
-	  var n = elements.length;
-	
-	  if (properties) {
-	    if (!(0, _assert2.default)(properties.width === undefined || !isNaN(properties.width), 'Width property must be a number.')) return null;
-	    if (!(0, _assert2.default)(properties.height === undefined || !isNaN(properties.height), 'Height property must be a number.')) return null;
-	    if (!(0, _assert2.default)(properties.aspectRatio === undefined || !isNaN(properties.aspectRatio), 'Aspect ratio property must be a number.')) return null;
-	
-	    var rect = (0, _getRect2.default)(element);
-	    var units = properties.units || 'px';
-	    var aspectRatio = properties.aspectRatio !== undefined ? Number(properties.aspectRatio) : rect.width / rect.height;
-	    var maxW = properties.width;
-	    var maxH = properties.height;
-	    var minW = properties.width;
-	    var minH = properties.height;
-	    var type = properties.type || 'default';
-	
-	    if (constraints && type !== 'default') {
-	      (0, _assert2.default)(constraints.width === undefined || !isNaN(constraints.width), 'Width constraint must be a number.');
-	      (0, _assert2.default)(constraints.height === undefined || !isNaN(constraints.height), 'Height constraint must be a number.');
-	
-	      if (type && type === 'cover') {
-	        if (constraints.width !== undefined) minW = Math.min(constraints.width, minW);
-	        if (constraints.width !== undefined) minH = Math.min(constraints.height, minH);
-	      } else {
-	        if (constraints.width !== undefined) maxW = Math.min(constraints.width, maxW);
-	        if (constraints.height !== undefined) maxH = Math.min(constraints.height, maxH);
-	      }
-	    }
-	
-	    var w = undefined,
-	        h = undefined;
-	
-	    if (type === 'contain') {
-	      w = maxW > maxH ? maxH * aspectRatio : maxW;
-	      h = maxW > maxH ? maxH : maxW / aspectRatio;
-	
-	      if (w > maxW) {
-	        w = maxW;
-	        h = w / aspectRatio;
-	      } else if (h > maxH) {
-	        h = maxH;
-	        w = h * aspectRatio;
-	      }
-	    } else if (type === 'cover') {
-	      w = minW > minH ? minH * aspectRatio : minW;
-	      h = minW > minH ? minH : minW / aspectRatio;
-	
-	      if (w < minW) {
-	        w = minW;
-	        h = w / aspectRatio;
-	      } else if (h < minH) {
-	        h = minH;
-	        w = h * aspectRatio;
-	      }
-	    } else {
-	      w = maxW;
-	      h = maxH;
-	    }
-	
-	    for (var i = 0; i < n; i++) {
-	      var e = elements[i];
-	
-	      if (properties.width !== undefined) e.style.width = String(w) + units;
-	      if (properties.height !== undefined) e.style.height = String(h) + units;
-	    }
-	
-	    var t = {};
-	
-	    if (properties.width !== undefined) t.width = w;
-	    if (properties.height !== undefined) t.height = h;
-	
-	    return t;
-	  } else {
-	    for (var j = 0; j < n; j++) {
-	      elements[j].style.width = 'initial';
-	      elements[j].style.height = 'initial';
-	    }
-	
-	    return {
-	      width: 'initial',
-	      height: 'initial'
-	    };
-	  }
-	}
-	
-	module.exports = transform;
 
 /***/ }
 /******/ ])

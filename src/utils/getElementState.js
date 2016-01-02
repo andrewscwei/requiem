@@ -9,7 +9,7 @@
 'use strict';
 
 import assert from '../helpers/assert';
-import Directive from '../types/Directive';
+import Directive from '../enums/Directive';
 import Element from '../ui/Element';
 
 /**

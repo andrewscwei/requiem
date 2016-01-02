@@ -14,7 +14,7 @@ import assertType from '../helpers/assertType';
 import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
 import getControllerClassFromElement from '../helpers/getControllerClassFromElement';
 import getControllerClassNameFromElement from '../helpers/getControllerClassNameFromElement';
-import Directive from '../types/Directive';
+import Directive from '../enums/Directive';
 import hasChild from '../utils/hasChild';
 
 /**

@@ -36,18 +36,20 @@ function getControllerClassFromElement(element) {
   }
   else if (typeof controllerClass !== 'function') {
     switch (controllerClassName) {
-      case 'Video': {
+      case 'Video':
         controllerClass = require('../ui/Video');
         break;
-      }
-      case 'Element': {
+
+      case 'Element':
         controllerClass = require('../ui/Element');
         break;
-      }
-      default: {
-        controllerClass = null;
+
+      case 'Grid':
+        controllerClass = require('../ui/Grid');
         break;
-      }
+
+      default:
+        controllerClass = null;
     }
   }
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: dom/getDataRegistry.js</title>
+    <title>JSDoc: Source: enums/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: dom/getDataRegistry.js</h1>
+    <h1 class="page-title">Source: enums/index.js</h1>
 
     
 
@@ -37,18 +37,20 @@
 'use strict';
 
 /**
- * Gets the data registry.
+ * Collection of Requiem enums and types.
  *
- * @return {Object} The data registry.
- *
- * @alias module:requiem~dom.getDataRegistry
+ * @namespace module:requiem~enums
  */
-function getDataRegistry() {
-  if (window._dataRegistry === undefined) window._dataRegistry = {};
-  return window._dataRegistry;
-}
+let enums = {};
 
-module.exports = getDataRegistry;
+Object.defineProperty(enums, 'Directive', { value: require('./Directive'), writable: false, enumerable: true });
+Object.defineProperty(enums, 'DirtyType', { value: require('./DirtyType'), writable: false, enumerable: true });
+Object.defineProperty(enums, 'EventType', { value: require('./EventType'), writable: false, enumerable: true });
+Object.defineProperty(enums, 'KeyCode',   { value: require('./KeyCode'),   writable: false, enumerable: true });
+Object.defineProperty(enums, 'NodeState', { value: require('./NodeState'), writable: false, enumerable: true });
+Object.defineProperty(enums, 'Orientation', { value: require('./Orientation'), writable: false, enumerable: true });
+
+module.exports = enums;
 </code></pre>
         </article>
     </section>

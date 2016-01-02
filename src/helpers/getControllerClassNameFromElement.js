@@ -8,7 +8,7 @@
 
 'use strict';
 
-let Directive = require('../types/Directive');
+let Directive = require('../enums/Directive');
 
 /**
  * Gets the controller class name from the DOM element.

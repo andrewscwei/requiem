@@ -10,8 +10,8 @@
 
 import debounce from '../helpers/debounce';
 import log from '../helpers/log';
-import DirtyType from '../types/DirtyType';
-import EventType from '../types/EventType';
+import DirtyType from '../enums/DirtyType';
+import EventType from '../enums/EventType';
 
 /**
  * Default refresh (debounce) rate in milliseconds.

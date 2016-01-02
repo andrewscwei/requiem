@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: dom/getDataRegistry.js</title>
+    <title>JSDoc: Source: enums/Orientation.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: dom/getDataRegistry.js</h1>
+    <h1 class="page-title">Source: enums/Orientation.js</h1>
 
     
 
@@ -32,23 +32,49 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
+ *
+ * Orientation types.
+ *
+ * @type {Object}
  */
 
 'use strict';
 
 /**
- * Gets the data registry.
+ * Enum for all orientation types.
  *
- * @return {Object} The data registry.
- *
- * @alias module:requiem~dom.getDataRegistry
+ * @readonly
+ * @enum {number}
+ * @alias module:requiem~enums.Orientation
  */
-function getDataRegistry() {
-  if (window._dataRegistry === undefined) window._dataRegistry = {};
-  return window._dataRegistry;
-}
+let Orientation = {
+  /**
+   * Portrait orientation, where height > width.
+   */
+  PORTRAIT: 0,
 
-module.exports = getDataRegistry;
+  /**
+   * Landscape orientation, where width > height.
+   */
+  LANDSCAPE: 1,
+
+  /**
+   * Gets the name of an orientation enum.
+   *
+   * @param  {Orientation} orientation - Orientation.
+   *
+   * @return {string} Name of the orientation.
+   */
+  toString: (orientation) => {
+    switch (orientation) {
+      case Orientation.PORTRAIT: return 'PORTRAIT';
+      case Orientation.LANDSCAPE: return 'LANDSCAPE';
+      default: return 'UNKNOWN';
+    }
+  }
+};
+
+module.exports = Orientation;
 </code></pre>
         </article>
     </section>

@@ -13,7 +13,7 @@
  *
  * @readonly
  * @enum {string}
- * @alias module:requiem~types.Directive
+ * @alias module:requiem~enums.Directive
  * @see {@link module:requiem~dom.sightread}
  */
 let Directive = {

@@ -16,10 +16,10 @@ import getFunctionName from '../helpers/getFunctionName';
 import log from '../helpers/log';
 import validateAttribute from '../helpers/validateAttribute';
 import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
-import DirtyType from '../types/DirtyType';
-import NodeState from '../types/NodeState';
-import EventType from '../types/EventType';
-import Directive from '../types/Directive';
+import DirtyType from '../enums/DirtyType';
+import NodeState from '../enums/NodeState';
+import EventType from '../enums/EventType';
+import Directive from '../enums/Directive';
 import ElementUpdateDelegate from '../ui/ElementUpdateDelegate';
 import getRect from '../utils/getRect';
 import sightread from '../dom/sightread';
@@ -308,6 +308,96 @@ class Element {
     if (noval(element)) return;
 
     element.removeEventListener(event, listener, useCapture);
+  }
+
+  /**
+   * Gets the value of an inline CSS rule of an Element/Node instance by its
+   * name.
+   *
+   * @param {Node|Element} element              - Target element.
+   * @param {string}       key                  - Name of the CSS rule in
+   *                                              camelCase.
+   * @param {boolean}      [isComputed=false]   - Specifies whether the styles
+   *                                              are computed.
+   * @param {boolean}      [isolateUnits=false] - Specifies whether value and
+   *                                              units are separated. This
+   *                                              affects the return value type.
+   *
+   * @return {*} Value of the style. If isolateUnits is set to true, this will
+   *             return an object containing both 'value' and 'unit' keys.
+   */
+  static getStyle(element, key, isComputed, isolateUnits) {
+    assertType(element, [Node, Element], false, 'Invalid element specified');
+    if (element instanceof Element) element = element.element;
+    if (typeof isComputed !== 'boolean') isComputed = false;
+    if (typeof isolateUnits !== 'boolean') isolateUnits = false;
+
+    let value = (isComputed) ? window.getComputedStyle(element, null).getPropertyValue(key) : element.style[key];
+    let regex = new RegExp('^[+-]?[0-9]+.?([0-9]+)?(px|em|ex|%|in|cm|mm|pt|pc)$', 'i');
+
+    if (value === '') return (isolateUnits ? { value: null, unit: null } : null);
+    if (!isNaN(Number(value))) return (isolateUnits ? { value: Number(value), unit: null } : Number(value));
+
+    if (regex.test(value)) {
+      if (isolateUnits) {
+        if (value.charAt(value.length-1) === '%') return { value: Number(value.substr(0, value.length-1)), unit: value.slice(-1) };
+        return { value: Number(value.substr(0, value.length-2)), unit: value.slice(-2) };
+      }
+      else {
+        return value;
+      }
+    }
+
+    return (isolateUnits ? { value: value, units: null } : value);
+  }
+
+  /**
+   * Sets an inline CSS rule of an Element/Node instance.
+   *
+   * @param {Node|Element} element - Target element.
+   * @param {string}       key     - Name of the CSS rule in camelCase.
+   * @param {*}            value   - Value of the style. If a number is
+   *                                 provided, it will be automatically suffixed
+   *                                 with 'px'.
+   *
+   * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
+   */
+  static setStyle(element, key, value) {
+    assertType(element, [Node, Element], false, 'Invalid element specified');
+    if (element instanceof Element) element = element.element;
+    if (typeof value === 'number') value = String(value);
+    if (value === null || value === undefined) value = '';
+
+    element.style[key] = value;
+  }
+
+  /**
+   * Removes an inline CSS rule from an Element/Node instance by its rule name
+   * in camelCase.
+   *
+   * @param {Node|Element} element - Target element.
+   * @param {string}       key     - Name of the CSS rule.
+   *
+   * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
+   */
+  static removeStyle(element, key) {
+    assertType(element, [Node, Element], false, 'Invalid element specified');
+    if (element instanceof Element) element = element.element;
+    element.style[key] = '';
+  }
+
+  /**
+   * Checks to see if an Element/Node instance has the specified inline CSS rule.
+   *
+   * @param {Node|Element} element - Target element.
+   * @param {string}       key     - Name of the style.
+   *
+   * @return {boolean}
+   */
+  static hasStyle(element, key) {
+    assertType(element, [Node, Element], false, 'Invalid element specified');
+    if (element instanceof Element) element = element.element;
+    return element.style[key] !== '';
   }
 
   /**
@@ -1081,23 +1171,18 @@ class Element {
   /**
    * Gets the value of an inline CSS rule of this Element instance by its name.
    *
-   * @param {string}  key                - Name of the CSS rule in camelCase.
-   * @param {boolean} [isComputed=false] - Specifies whether the styles are
-   *                                       computed.
+   * @param {string}  key                  - Name of the CSS rule in camelCase.
+   * @param {boolean} [isComputed=false]   - Specifies whether the styles are
+   *                                         computed.
+   * @param {boolean} [isolateUnits=false] - Specifies whether value and units
+   *                                         are separated. This affects the
+   *                                         return value type.
    *
-   * @return {string} Value of the style.
+   * @return {*} Value of the style. If isolateUnits is set to true, this will
+   *             return an object containing both 'value' and 'unit' keys.
    */
-  getStyle(key, isComputed) {
-    if (typeof isComputed !== 'boolean') isComputed = false;
-
-    let value = (isComputed) ? window.getComputedStyle(this.element, null).getPropertyValue(key) : this.element.style[key];
-
-    if (value === '') {
-      return null;
-    }
-    else {
-      return value;
-    }
+  getStyle(key, isComputed, isolateUnits) {
+    return Element.getStyle(this, key, isComputed, isolateUnits);
   }
 
   /**
@@ -1110,11 +1195,7 @@ class Element {
    * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
    */
   setStyle(key, value) {
-    if (typeof value === 'number') {
-      value = String(value);
-    }
-
-    this.element.style[key] = value;
+    Element.setStyle(this, key, value);
   }
 
   /**
@@ -1126,17 +1207,18 @@ class Element {
    * @see {@link http://www.w3schools.com/jsref/dom_obj_style.asp}
    */
   removeStyle(key) {
-    this.element.style[key] = '';
+    return Element.removeStyle(this, key);
   }
 
   /**
    * Checks to see if this Element instance has the specified inline CSS rule.
+   *
    * @param {string} key - Name of the style.
    *
    * @return {boolean}
    */
   hasStyle(key) {
-    return this.element.style[key] !== '';
+    return Element.hasStyle(this, key);
   }
 
   /**
@@ -1323,7 +1405,7 @@ class Element {
      * Property attributes.
      *
      * @property {Object}
-     * @see module:requiem~types.Directive.PROPERTY
+     * @see module:requiem~enums.Directive.PROPERTY
      */
     Element.defineProperty(this, 'properties', { defaultValue: {}, get: true });
 

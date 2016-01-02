@@ -15,7 +15,7 @@
  *
  * @readonly
  * @enum {number}
- * @alias module:requiem~types.KeyCode
+ * @alias module:requiem~enums.KeyCode
  */
 let KeyCode = {
   BACKSPACE:     8,

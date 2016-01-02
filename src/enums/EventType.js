@@ -13,7 +13,7 @@
  *
  * @readonly
  * @enum {string}
- * @alias module:requiem~types.EventType
+ * @alias module:requiem~enums.EventType
  */
 let EventType = {
   DATA: {

@@ -9,7 +9,7 @@
 'use strict';
 
 import assert from '../helpers/assert';
-import DirtyType from '../types/DirtyType';
+import DirtyType from '../enums/DirtyType';
 import Element from './Element';
 
 /**

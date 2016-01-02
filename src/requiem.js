@@ -24,12 +24,12 @@ Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
 /**
  * @property {string} version - Version number.
  */
-Object.defineProperty(requiem, 'version', { value: '0.24.0', writable: false });
+Object.defineProperty(requiem, 'version', { value: '0.25.0', writable: false });
 
 injectModule(requiem, 'dom',    require('./dom'));
 injectModule(requiem, 'events', require('./events'));
 injectModule(requiem, 'net',    require('./net'));
-injectModule(requiem, 'types',  require('./types'));
+injectModule(requiem, 'enums',  require('./enums'));
 injectModule(requiem, 'ui',     require('./ui'));
 injectModule(requiem, 'utils',  require('./utils'));
 
