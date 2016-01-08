@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.25.1', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.26.0', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(37));
@@ -805,7 +805,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var Element = __webpack_require__(19);
 	    var children = null;
 	
-	    if (element.jquery) element = element.get(0);
 	    if (!(0, _assert2.default)(element instanceof Node || element instanceof Element || document && element === document, 'Element must be an instance of an Node or the DOM itself.')) return null;
 	    if (element instanceof Element) element = element.element;
 	
@@ -1434,8 +1433,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {Element|Element[]|Node|Node[]} child  - Single child or an array of
 	     *                                                 children. Child elements
 	     *                                                 can be instance(s) of
-	     *                                                 Requiem Elements, jQuery
-	     *                                                 Elements or HTMLElements.
+	     *                                                 Requiem Elements or Nodes.
 	     * @param {string} [name] - The name of the child/children to be added.
 	     *                          Typically a name is required. If it is not
 	     *                          specified, this method will attempt to deduct the
@@ -1444,25 +1442,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *                          exists another child with the same name, the added
 	     *                          child will be grouped together with the existing
 	     *                          child.
+	     * @param {boolean} [prepend=false] - Specifies whether the child is prepended
+	     *                                    to this element instead of appended.
 	     *
 	     * @return {Element|Element[]} The added element(s).
 	     */
 	
 	  }, {
 	    key: 'addChild',
-	    value: function addChild(child, name) {
+	    value: function addChild(child, name, prepend) {
 	      if (!(0, _assert2.default)(child !== undefined, 'Parameter \'child\' must be specified')) return null;
+	      if (typeof prepend !== 'boolean') prepend = false;
 	
-	      if (child.jquery) {
-	        return this.addChild(child.get(), name);
-	      } else if (child instanceof Array) {
+	      if (child instanceof Array) {
 	        var n = child.length;
 	        var children = [];
 	
-	        for (var i = 0; i < n; i++) {
-	          var c = child[i];
-	
-	          children.push(this.addChild(c, name));
+	        if (prepend) {
+	          for (var i = n - 1; i >= 0; i--) {
+	            var c = child[i];
+	            children.push(this.addChild(c, name, true));
+	          }
+	        } else {
+	          for (var i = 0; i < n; i++) {
+	            var c = child[i];
+	            children.push(this.addChild(c, name));
+	          }
 	        }
 	
 	        return children;
@@ -1515,7 +1520,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        if (shouldAddChild) {
-	          this.element.appendChild(child.element);
+	          if (prepend) {
+	            this.element.insertBefore(child.element, this.element.firstChild);
+	          } else {
+	            this.element.appendChild(child.element);
+	          }
 	        }
 	
 	        return child;
@@ -1525,10 +1534,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Determines if this Element instance contains the specified child.
 	     *
-	     * @param {Element|Node|string} child - A child is a Requiem Element,
-	     *                                             jQuery element or Node. It
-	     *                                             can also be a string of child
-	     *                                             name(s) separated by '.'.
+	     * @param {Element|Node|string} child - A child is a Requiem Element, or Node.
+	     *                                      It can also be a string of child
+	     *                                      name(s) separated by '.'.
 	     *
 	     * @return {boolean} True if this Element instance has the specified child,
 	     *                   false otherwise.
@@ -1542,22 +1550,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (typeof child === 'string') {
 	        return !(0, _noval2.default)(this.getChild(child));
 	      } else {
-	        var e = undefined;
+	        var node = child instanceof Element ? child.element : child;
 	
-	        if (child.jquery && child.length === 1) {
-	          e = child.get(0);
-	        } else if (child instanceof Element) {
-	          e = child.element;
-	        } else {
-	          e = child;
-	        }
-	
-	        while (!(0, _noval2.default)(e) && e !== document) {
-	          e = e.parentNode;
-	
-	          if (e === this.element) {
-	            return true;
-	          }
+	        while (!(0, _noval2.default)(node) && node !== document) {
+	          node = node.parentNode;
+	          if (node === this.element) return true;
 	        }
 	
 	        return false;
@@ -1567,11 +1564,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Removes a child or multiple children from this Element instance.
 	     *
-	     * @param {Node|Element|Array|string} child - A single child is a Requiem
-	     *                                            Element, jQuery element or Node.
-	     *                                            It can also be a string of child
-	     *                                            name(s) separated by '.', or an
-	     *                                            array of child elements.
+	     * @param {Node|Element|Array|string} child - Child/children to be removed.
+	     *                                            This can either be an Element or
+	     *                                            Node instance or array. It can
+	     *                                            also be a string namespace of
+	     *                                            the target child/children.
 	     *
 	     * @return {Element|Element[]} The removed element(s).
 	     */
@@ -1586,7 +1583,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.removeChild(this.getChild(child));
 	      }
 	      // If child is an array, remove each element inside recursively.
-	      else if (child instanceof Array || child.jquery && child.length > 1) {
+	      else if (child instanceof Array) {
 	          while (child.length > 0) {
 	            this.removeChild(child[0]);
 	          }
@@ -1599,9 +1596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var e = undefined;
 	            var a = [];
 	
-	            if (child.jquery && child.length === 1) {
-	              e = child.get(0);
-	            } else if (child instanceof Element) {
+	            if (child instanceof Element) {
 	              e = child.element;
 	            } else if (child instanceof Node) {
 	              e = child;
@@ -2419,6 +2414,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @property {boolean}
 	       */
 	      Element.defineProperty(this, 'cachesListeners', { defaultValue: true, get: true, set: true });
+	
+	      /**
+	       * Gets the total number of immediate children in this Element instance.
+	       *
+	       * @property {number}
+	       */
+	      Object.defineProperty(this, 'childCount', {
+	        get: function get() {
+	          var count = 0;
+	
+	          for (var k in _this2.children) {
+	            var child = _this2.children[k];
+	
+	            if (child instanceof Element) {
+	              count += 1;
+	            } else if (child instanceof Array) {
+	              count += child.length;
+	            }
+	          }
+	
+	          return count;
+	        }
+	      });
 	
 	      /**
 	       * Wrapper for the 'innerHTML' property of the internal element.
@@ -4107,8 +4125,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    elements = element;
 	  } else if (element instanceof NodeList) {
 	    elements = Array.prototype.slice.call(element);
-	  } else if (element.jquery) {
-	    elements = element.get();
 	  } else {
 	    // if (!assert((element instanceof Node) || (element instanceof Element), 'Invalid element specified. Element must be an instance of Node or Requiem Element.')) return null;
 	
@@ -5227,10 +5243,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Checks if specified parent contains specified child.
 	 *
-	 * @param {Node|Element} parent - Node, Requiem Element, or jQuery
-	 *                                       object.
-	 * @param {Node|Element} child  - Node, Requiem Element, or jQuery
-	 *                                       object.
+	 * @param {Node|Element} parent - Node or Element instance.
+	 * @param {Node|Element} child  - Node or Element instance.
 	 *
 	 * @return {boolean} True if parent has given child, false otherwise.
 	 *
@@ -5240,8 +5254,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var ps = (0, _toElementArray2.default)(parent);
 	  var cs = (0, _toElementArray2.default)(child);
 	
-	  if (!(0, _assert2.default)(ps.length === 1, 'Invalid parent specified. Parent must be a single Node, Requiem Element, or jQuery object.')) return false;
-	  if (!(0, _assert2.default)(cs.length === 1, 'Invalid child specified. Child must be a single Node, Requiem Element, or jQuery object.')) return false;
+	  if (!(0, _assert2.default)(ps.length === 1, 'Invalid parent specified. Parent must be a single Node or Element instance.')) return false;
+	  if (!(0, _assert2.default)(cs.length === 1, 'Invalid child specified. Child must be a single Node or Element instance.')) return false;
 	  if (!(0, _assert2.default)(document, 'Document not found. This method requires document to be valid.')) return false;
 	
 	  var p = ps[0];
@@ -6411,7 +6425,217 @@ return /******/ (function(modules) { // webpackBootstrap
 	  OPEN_BRACKET: 219,
 	  BACK_SLASH: 220,
 	  CLOSE_BRACKET: 221,
-	  SINGLE_QUOTE: 222
+	  SINGLE_QUOTE: 222,
+	
+	  /**
+	   * Gets the name of a key code.
+	   *
+	   * @param  {KeyCode} keyCode - Key code.
+	   *
+	   * @return {string} Name of the key code.
+	   */
+	  toString: function toString(keyCode) {
+	    switch (keyCode) {
+	      case KeyCode.BACKSPACE:
+	        return 'BACKSPACE';
+	      case KeyCode.TAB:
+	        return 'TAB';
+	      case KeyCode.ENTER:
+	        return 'ENTER';
+	      case KeyCode.SHIFT:
+	        return 'SHIFT';
+	      case KeyCode.CTRL:
+	        return 'CTRL';
+	      case KeyCode.ALT:
+	        return 'ALT';
+	      case KeyCode.PAUSE_BREAK:
+	        return 'PAUSE_BREAK';
+	      case KeyCode.CAPS_LOCK:
+	        return 'CAPS_LOCK';
+	      case KeyCode.ESCAPE:
+	        return 'ESCAPE';
+	      case KeyCode.PAGE_UP:
+	        return 'PAGE_UP';
+	      case KeyCode.PAGE_DOWN:
+	        return 'PAGE_DOWN';
+	      case KeyCode.END:
+	        return 'END';
+	      case KeyCode.HOME:
+	        return 'HOME';
+	      case KeyCode.LEFT_ARROW:
+	        return 'LEFT_ARROW';
+	      case KeyCode.UP_ARROW:
+	        return 'UP_ARROW';
+	      case KeyCode.RIGHT_ARROW:
+	        return 'RIGHT_ARROW';
+	      case KeyCode.DOWN_ARROW:
+	        return 'DOWN_ARROW';
+	      case KeyCode.INSERT:
+	        return 'INSERT';
+	      case KeyCode.DELETE:
+	        return 'DELETE';
+	      case KeyCode.ZERO:
+	        return 'ZERO';
+	      case KeyCode.ONE:
+	        return 'ONE';
+	      case KeyCode.TWO:
+	        return 'TWO';
+	      case KeyCode.THREE:
+	        return 'THREE';
+	      case KeyCode.FOUR:
+	        return 'FOUR';
+	      case KeyCode.FIVE:
+	        return 'FIVE';
+	      case KeyCode.SIX:
+	        return 'SIX';
+	      case KeyCode.SEVEN:
+	        return 'SEVEN';
+	      case KeyCode.EIGHT:
+	        return 'EIGHT';
+	      case KeyCode.NINE:
+	        return 'NINE';
+	      case KeyCode.A:
+	        return 'A';
+	      case KeyCode.B:
+	        return 'B';
+	      case KeyCode.C:
+	        return 'C';
+	      case KeyCode.D:
+	        return 'D';
+	      case KeyCode.E:
+	        return 'E';
+	      case KeyCode.F:
+	        return 'F';
+	      case KeyCode.G:
+	        return 'G';
+	      case KeyCode.H:
+	        return 'H';
+	      case KeyCode.I:
+	        return 'I';
+	      case KeyCode.J:
+	        return 'J';
+	      case KeyCode.K:
+	        return 'K';
+	      case KeyCode.L:
+	        return 'L';
+	      case KeyCode.M:
+	        return 'M';
+	      case KeyCode.N:
+	        return 'N';
+	      case KeyCode.O:
+	        return 'O';
+	      case KeyCode.P:
+	        return 'P';
+	      case KeyCode.Q:
+	        return 'Q';
+	      case KeyCode.R:
+	        return 'R';
+	      case KeyCode.S:
+	        return 'S';
+	      case KeyCode.T:
+	        return 'T';
+	      case KeyCode.U:
+	        return 'U';
+	      case KeyCode.V:
+	        return 'V';
+	      case KeyCode.W:
+	        return 'W';
+	      case KeyCode.X:
+	        return 'X';
+	      case KeyCode.Y:
+	        return 'Y';
+	      case KeyCode.Z:
+	        return 'Z';
+	      case KeyCode.LEFT_CMD:
+	        return 'LEFT_CMD';
+	      case KeyCode.RIGHT_CMD:
+	        return 'RIGHT_CMD';
+	      case KeyCode.SELECT:
+	        return 'SELECT';
+	      case KeyCode.NUMPAD_ZERO:
+	        return 'NUMPAD_ZERO';
+	      case KeyCode.NUMPAD_ONE:
+	        return 'NUMPAD_ONE';
+	      case KeyCode.NUMPAD_TWO:
+	        return 'NUMPAD_TWO';
+	      case KeyCode.NUMPAD_THREE:
+	        return 'NUMPAD_THREE';
+	      case KeyCode.NUMPAD_FOUR:
+	        return 'NUMPAD_FOUR';
+	      case KeyCode.NUMPAD_FIVE:
+	        return 'NUMPAD_FIVE';
+	      case KeyCode.NUMPAD_SIX:
+	        return 'NUMPAD_SIX';
+	      case KeyCode.NUMPAD_SEVEN:
+	        return 'NUMPAD_SEVEN';
+	      case KeyCode.NUMPAD_EIGHT:
+	        return 'NUMPAD_EIGHT';
+	      case KeyCode.NUMPAD_NINE:
+	        return 'NUMPAD_NINE';
+	      case KeyCode.MULTIPLY:
+	        return 'MULTIPLY';
+	      case KeyCode.ADD:
+	        return 'ADD';
+	      case KeyCode.SUBTRACT:
+	        return 'SUBTRACT';
+	      case KeyCode.DECIMAL:
+	        return 'DECIMAL';
+	      case KeyCode.DIVIDE:
+	        return 'DIVIDE';
+	      case KeyCode.F1:
+	        return 'F1';
+	      case KeyCode.F2:
+	        return 'F2';
+	      case KeyCode.F3:
+	        return 'F3';
+	      case KeyCode.F4:
+	        return 'F4';
+	      case KeyCode.F5:
+	        return 'F5';
+	      case KeyCode.F6:
+	        return 'F6';
+	      case KeyCode.F7:
+	        return 'F7';
+	      case KeyCode.F8:
+	        return 'F8';
+	      case KeyCode.F9:
+	        return 'F9';
+	      case KeyCode.F10:
+	        return 'F10';
+	      case KeyCode.F11:
+	        return 'F11';
+	      case KeyCode.F12:
+	        return 'F12';
+	      case KeyCode.NUM_LOCK:
+	        return 'NUM_LOCK';
+	      case KeyCode.SCROLL_LOCK:
+	        return 'SCROLL_LOCK';
+	      case KeyCode.SEMI_COLON:
+	        return 'SEMI_COLON';
+	      case KeyCode.EQUAL:
+	        return 'EQUAL';
+	      case KeyCode.COMMA:
+	        return 'COMMA';
+	      case KeyCode.DASH:
+	        return 'DASH';
+	      case KeyCode.PERIOD:
+	        return 'PERIOD';
+	      case KeyCode.FORWARD_SLASH:
+	        return 'FORWARD_SLASH';
+	      case KeyCode.GRAVE_ACCENT:
+	        return 'GRAVE_ACCENT';
+	      case KeyCode.OPEN_BRACKET:
+	        return 'OPEN_BRACKET';
+	      case KeyCode.BACK_SLASH:
+	        return 'BACK_SLASH';
+	      case KeyCode.CLOSE_BRACKET:
+	        return 'CLOSE_BRACKET';
+	      case KeyCode.SINGLE_QUOTE:
+	        return 'SINGLE_QUOTE';
+	      default:
+	        return 'UNKNOWN';
+	    }
+	  }
 	};
 	
 	module.exports = KeyCode;
@@ -6634,16 +6858,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Gets the index of a specified class in a DOM element,
 	 *
 	 * @param {Node|Element} element
-	 * @param {string}              className
+	 * @param {string}       className
 	 *
 	 * @return {number} Index of given class name. -1 if not found.
 	 *
 	 * @alias module:requiem~utils.getClassIndex
 	 */
 	function getClassIndex(element, className) {
-	  if (!(0, _assert2.default)(element && (element instanceof Node || element instanceof _Element2.default || element.jquery), 'Invalid element specified. Element must be an instance of Node or Element.')) return null;
+	  if (!(0, _assert2.default)(element && (element instanceof Node || element instanceof _Element2.default), 'Invalid element specified. Element must be an instance of Node or Element.')) return null;
 	  if (element instanceof _Element2.default) element = element.element;
-	  if (element.jquery) element = element.get(0);
 	
 	  if (!(0, _assert2.default)(className && typeof className === 'string', 'Invalid class name: ' + className)) return -1;
 	
@@ -6756,9 +6979,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~utils.getElementState
 	 */
 	function getElementState(element) {
-	  if (!(0, _assert2.default)(element && (element instanceof Node || element instanceof _Element2.default || element.jquery), 'Invalid element specified.')) return null;
-	
-	  if (element.jquery) element = element.get(0);
+	  if (!(0, _assert2.default)(element && (element instanceof Node || element instanceof _Element2.default), 'Invalid element specified.')) return null;
 	
 	  var s = undefined;
 	

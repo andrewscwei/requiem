@@ -23,9 +23,7 @@ import Element from '../ui/Element';
  * @alias module:requiem~utils.getElementState
  */
 function getElementState(element) {
-  if (!assert((element) && ((element instanceof Node) || (element instanceof Element) || (element.jquery)), 'Invalid element specified.')) return null;
-
-  if (element.jquery) element = element.get(0);
+  if (!assert((element) && ((element instanceof Node) || (element instanceof Element)), 'Invalid element specified.')) return null;
 
   let s;
 

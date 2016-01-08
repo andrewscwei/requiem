@@ -81,7 +81,6 @@ function sightread() {
     let Element = require('../ui/Element');
     let children = null;
 
-    if (element.jquery) element = element.get(0);
     if (!assert((element instanceof Node) || (element instanceof Element) || (document && element === document), 'Element must be an instance of an Node or the DOM itself.')) return null;
     if (element instanceof Element) element = element.element;
 

@@ -513,8 +513,7 @@ class Element {
    * @param {Element|Element[]|Node|Node[]} child  - Single child or an array of
    *                                                 children. Child elements
    *                                                 can be instance(s) of
-   *                                                 Requiem Elements, jQuery
-   *                                                 Elements or HTMLElements.
+   *                                                 Requiem Elements or Nodes.
    * @param {string} [name] - The name of the child/children to be added.
    *                          Typically a name is required. If it is not
    *                          specified, this method will attempt to deduct the
@@ -523,23 +522,30 @@ class Element {
    *                          exists another child with the same name, the added
    *                          child will be grouped together with the existing
    *                          child.
+   * @param {boolean} [prepend=false] - Specifies whether the child is prepended
+   *                                    to this element instead of appended.
    *
    * @return {Element|Element[]} The added element(s).
    */
-  addChild(child, name) {
+  addChild(child, name, prepend) {
     if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
+    if (typeof prepend !== 'boolean') prepend = false;
 
-    if (child.jquery) {
-      return this.addChild(child.get(), name);
-    }
-    else if (child instanceof Array) {
+    if (child instanceof Array) {
       let n = child.length;
       let children = [];
 
-      for (let i = 0; i < n; i++) {
-        let c = child[i];
-
-        children.push(this.addChild(c, name));
+      if (prepend) {
+        for (let i = n-1; i >= 0; i--) {
+          let c = child[i];
+          children.push(this.addChild(c, name, true));
+        }
+      }
+      else {
+        for (let i = 0; i < n; i++) {
+          let c = child[i];
+          children.push(this.addChild(c, name));
+        }
       }
 
       return children;
@@ -596,7 +602,12 @@ class Element {
       }
 
       if (shouldAddChild) {
-        this.element.appendChild(child.element);
+        if (prepend) {
+          this.element.insertBefore(child.element, this.element.firstChild);
+        }
+        else {
+          this.element.appendChild(child.element);
+        }
       }
 
       return child;
@@ -606,10 +617,9 @@ class Element {
   /**
    * Determines if this Element instance contains the specified child.
    *
-   * @param {Element|Node|string} child - A child is a Requiem Element,
-   *                                             jQuery element or Node. It
-   *                                             can also be a string of child
-   *                                             name(s) separated by '.'.
+   * @param {Element|Node|string} child - A child is a Requiem Element, or Node.
+   *                                      It can also be a string of child
+   *                                      name(s) separated by '.'.
    *
    * @return {boolean} True if this Element instance has the specified child,
    *                   false otherwise.
@@ -621,24 +631,11 @@ class Element {
       return !noval(this.getChild(child));
     }
     else {
-      let e;
+      let node = (child instanceof Element) ? child.element : child;
 
-      if (child.jquery && child.length === 1) {
-        e = child.get(0);
-      }
-      else if (child instanceof Element) {
-        e = child.element;
-      }
-      else {
-        e = child;
-      }
-
-      while (!noval(e) && e !== document) {
-        e = e.parentNode;
-
-        if (e === this.element) {
-          return true;
-        }
+      while (!noval(node) && node !== document) {
+        node = node.parentNode;
+        if (node === this.element) return true;
       }
 
       return false;
@@ -648,11 +645,11 @@ class Element {
   /**
    * Removes a child or multiple children from this Element instance.
    *
-   * @param {Node|Element|Array|string} child - A single child is a Requiem
-   *                                            Element, jQuery element or Node.
-   *                                            It can also be a string of child
-   *                                            name(s) separated by '.', or an
-   *                                            array of child elements.
+   * @param {Node|Element|Array|string} child - Child/children to be removed.
+   *                                            This can either be an Element or
+   *                                            Node instance or array. It can
+   *                                            also be a string namespace of
+   *                                            the target child/children.
    *
    * @return {Element|Element[]} The removed element(s).
    */
@@ -664,7 +661,7 @@ class Element {
       this.removeChild(this.getChild(child));
     }
     // If child is an array, remove each element inside recursively.
-    else if ((child instanceof Array) || (child.jquery && child.length > 1)) {
+    else if ((child instanceof Array)) {
       while (child.length > 0) {
         this.removeChild(child[0]);
       }
@@ -677,10 +674,7 @@ class Element {
       let e;
       let a = [];
 
-      if (child.jquery && child.length === 1) {
-        e = child.get(0);
-      }
-      else if (child instanceof Element) {
+      if (child instanceof Element) {
         e = child.element;
       }
       else if (child instanceof Node) {
@@ -1424,6 +1418,30 @@ class Element {
      * @property {boolean}
      */
     Element.defineProperty(this, 'cachesListeners', { defaultValue: true, get: true, set: true });
+
+    /**
+     * Gets the total number of immediate children in this Element instance.
+     *
+     * @property {number}
+     */
+    Object.defineProperty(this, 'childCount', {
+      get: () => {
+        let count = 0;
+
+        for (let k in this.children) {
+          let child = this.children[k];
+
+          if (child instanceof Element) {
+            count += 1;
+          }
+          else if (child instanceof Array) {
+            count += child.length;
+          }
+        }
+
+        return count;
+      }
+    });
 
     /**
      * Wrapper for the 'innerHTML' property of the internal element.

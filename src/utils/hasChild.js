@@ -14,10 +14,8 @@ import toElementArray from '../helpers/toElementArray';
 /**
  * Checks if specified parent contains specified child.
  *
- * @param {Node|Element} parent - Node, Requiem Element, or jQuery
- *                                       object.
- * @param {Node|Element} child  - Node, Requiem Element, or jQuery
- *                                       object.
+ * @param {Node|Element} parent - Node or Element instance.
+ * @param {Node|Element} child  - Node or Element instance.
  *
  * @return {boolean} True if parent has given child, false otherwise.
  *
@@ -27,8 +25,8 @@ function hasChild(parent, child) {
   let ps = toElementArray(parent);
   let cs = toElementArray(child);
 
-  if (!assert(ps.length === 1, 'Invalid parent specified. Parent must be a single Node, Requiem Element, or jQuery object.')) return false;
-  if (!assert(cs.length === 1, 'Invalid child specified. Child must be a single Node, Requiem Element, or jQuery object.')) return false;
+  if (!assert(ps.length === 1, 'Invalid parent specified. Parent must be a single Node or Element instance.')) return false;
+  if (!assert(cs.length === 1, 'Invalid child specified. Child must be a single Node or Element instance.')) return false;
   if (!assert(document, 'Document not found. This method requires document to be valid.')) return false;
 
   let p = ps[0];

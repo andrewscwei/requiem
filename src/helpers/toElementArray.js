@@ -31,9 +31,6 @@ function toElementArray(element, keepElement) {
   else if (element instanceof NodeList) {
     elements = Array.prototype.slice.call(element);
   }
-  else if (element.jquery) {
-    elements = element.get();
-  }
   else {
     // if (!assert((element instanceof Node) || (element instanceof Element), 'Invalid element specified. Element must be an instance of Node or Requiem Element.')) return null;
 

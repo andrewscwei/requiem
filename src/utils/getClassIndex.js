@@ -15,16 +15,15 @@ import Element from '../ui/Element';
  * Gets the index of a specified class in a DOM element,
  *
  * @param {Node|Element} element
- * @param {string}              className
+ * @param {string}       className
  *
  * @return {number} Index of given class name. -1 if not found.
  *
  * @alias module:requiem~utils.getClassIndex
  */
 function getClassIndex(element, className) {
-  if (!assert((element) && ((element instanceof Node) || (element instanceof Element) || (element.jquery)), 'Invalid element specified. Element must be an instance of Node or Element.')) return null;
+  if (!assert((element) && ((element instanceof Node) || (element instanceof Element)), 'Invalid element specified. Element must be an instance of Node or Element.')) return null;
   if (element instanceof Element) element = element.element;
-  if (element.jquery) element = element.get(0);
 
   if (!assert(className && (typeof className === 'string'), 'Invalid class name: ' + className)) return -1;
 
