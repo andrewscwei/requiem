@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: enums/Orientation.js</title>
+    <title>JSDoc: Source: enums/ViewportSizeClass.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: enums/Orientation.js</h1>
+    <h1 class="page-title">Source: enums/ViewportSizeClass.js</h1>
 
     
 
@@ -33,7 +33,7 @@
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Orientation types.
+ * Viewport types.
  *
  * @type {Object}
  */
@@ -41,40 +41,73 @@
 'use strict';
 
 /**
- * Enum for all orientation types.
+ * Enum for all viewport size classes (defaults to portrait).
  *
  * @readonly
  * @enum {number}
- * @alias module:requiem~enums.Orientation
+ * @alias module:requiem~enums.NodeState
  */
-let Orientation = {
+let ViewportSizeClass = {
   /**
-   * Portrait orientation, where height > width.
+   * Mobile devices.
    */
-  PORTRAIT: 0,
+  MOBILE: {
+    id: 0,
+    min: 0,
+    max: 599
+  },
 
   /**
-   * Landscape orientation, where width > height.
+   * Phablet devices
    */
-  LANDSCAPE: 1,
+  PHABLET: {
+    id: 1,
+    min: 600,
+    max: 767
+  },
 
   /**
-   * Gets the name of an orientation enum.
-   *
-   * @param  {Orientation} orientation - Orientation.
-   *
-   * @return {string} Name of the orientation.
+   * Tablet devices.
    */
-  toString: (orientation) => {
-    switch (orientation) {
-      case Orientation.PORTRAIT: return 'PORTRAIT';
-      case Orientation.LANDSCAPE: return 'LANDSCAPE';
-      default: return 'UNKNOWN';
-    }
+  TABLET: {
+    id: 2,
+    min: 768,
+    max: 1024
+  },
+
+  /**
+   * Desktop devices.
+   */
+  DESKTOP: {
+    id: 3,
+    min: 1025,
+    max: 100000
+  },
+
+  /**
+   * Gets the viewport size class.
+   *
+   * @param {boolean} [isLandscape=false] - Specifies whether to verify viewport
+   *                                       size class in landscape orientation
+   *                                       (defaults to portrait).
+   *
+   * @return {ViewportSizeClass} The viewport size class enum.
+   */
+  get: (isLandscape) => {
+    if (typeof isLandscape !== 'boolean') isLandscape = false;
+
+    let rect = require('../utils/getViewportRect')();
+    let t = isLandscape ? Math.min(rect.width, rect.height) : Math.max(rect.width, rect.height);
+
+    if (t >= ViewportSizeClass.MOBILE.min &amp;&amp; t &lt;= ViewportSizeClass.MOBILE.max) return ViewportSizeClass.MOBILE;
+    if (t >= ViewportSizeClass.PHABLET.min &amp;&amp; t &lt;= ViewportSizeClass.PHABLET.max) return ViewportSizeClass.PHABLET;
+    if (t >= ViewportSizeClass.TABLET.min &amp;&amp; t &lt;= ViewportSizeClass.TABLET.max) return ViewportSizeClass.TABLET;
+    if (t >= ViewportSizeClass.DESKTOP.min &amp;&amp; t &lt;= ViewportSizeClass.DESKTOP.max) return ViewportSizeClass.DESKTOP;
+    return null;
   }
 };
 
-module.exports = Orientation;
+module.exports = ViewportSizeClass;
 </code></pre>
         </article>
     </section>

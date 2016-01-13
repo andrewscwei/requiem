@@ -87,14 +87,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.26.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.27.0', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(37));
 	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(39));
 	(0, _injectModule2.default)(requiem, 'enums', __webpack_require__(42));
-	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(44));
-	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(45));
+	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(45));
+	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(46));
 	
 	(0, _polyfill2.default)();
 	
@@ -6300,6 +6300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(enums, 'KeyCode', { value: __webpack_require__(43), writable: false, enumerable: true });
 	Object.defineProperty(enums, 'NodeState', { value: __webpack_require__(24), writable: false, enumerable: true });
 	Object.defineProperty(enums, 'Orientation', { value: __webpack_require__(35), writable: false, enumerable: true });
+	Object.defineProperty(enums, 'ViewportSizeClass', { value: __webpack_require__(44), writable: false, enumerable: true });
 	
 	module.exports = enums;
 
@@ -6650,6 +6651,94 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
+	 *
+	 * Viewport types.
+	 *
+	 * @type {Object}
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Enum for all viewport size classes (defaults to portrait).
+	 *
+	 * @readonly
+	 * @enum {number}
+	 * @alias module:requiem~enums.NodeState
+	 */
+	
+	var ViewportSizeClass = {
+	  /**
+	   * Mobile devices.
+	   */
+	  MOBILE: {
+	    id: 0,
+	    min: 0,
+	    max: 599
+	  },
+	
+	  /**
+	   * Phablet devices
+	   */
+	  PHABLET: {
+	    id: 1,
+	    min: 600,
+	    max: 767
+	  },
+	
+	  /**
+	   * Tablet devices.
+	   */
+	  TABLET: {
+	    id: 2,
+	    min: 768,
+	    max: 1024
+	  },
+	
+	  /**
+	   * Desktop devices.
+	   */
+	  DESKTOP: {
+	    id: 3,
+	    min: 1025,
+	    max: 100000
+	  },
+	
+	  /**
+	   * Gets the viewport size class.
+	   *
+	   * @param {boolean} [isLandscape=false] - Specifies whether to verify viewport
+	   *                                       size class in landscape orientation
+	   *                                       (defaults to portrait).
+	   *
+	   * @return {ViewportSizeClass} The viewport size class enum.
+	   */
+	  get: function get(isLandscape) {
+	    if (typeof isLandscape !== 'boolean') isLandscape = false;
+	
+	    var rect = __webpack_require__(30)();
+	    var t = isLandscape ? Math.min(rect.width, rect.height) : Math.max(rect.width, rect.height);
+	
+	    if (t >= ViewportSizeClass.MOBILE.min && t <= ViewportSizeClass.MOBILE.max) return ViewportSizeClass.MOBILE;
+	    if (t >= ViewportSizeClass.PHABLET.min && t <= ViewportSizeClass.PHABLET.max) return ViewportSizeClass.PHABLET;
+	    if (t >= ViewportSizeClass.TABLET.min && t <= ViewportSizeClass.TABLET.max) return ViewportSizeClass.TABLET;
+	    if (t >= ViewportSizeClass.DESKTOP.min && t <= ViewportSizeClass.DESKTOP.max) return ViewportSizeClass.DESKTOP;
+	    return null;
+	  }
+	};
+	
+	module.exports = ViewportSizeClass;
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
 	 */
 	
 	'use strict';
@@ -6670,7 +6759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = ui;
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6691,26 +6780,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var utils = {};
 	
-	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(46), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(49), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(47), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(47), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(50), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(48), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(36), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(48), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(50), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(51), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(49), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(51), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(52), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(28), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(30), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(52), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(53), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(54), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate', { value: __webpack_require__(55), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(53), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(54), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(55), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate', { value: __webpack_require__(56), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(33), writable: false, enumerable: true });
 	Object.defineProperty(utils, 'transform', { value: __webpack_require__(34), writable: false, enumerable: true });
 	
 	module.exports = utils;
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6731,7 +6820,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _hasClass = __webpack_require__(47);
+	var _hasClass = __webpack_require__(48);
 	
 	var _hasClass2 = _interopRequireDefault(_hasClass);
 	
@@ -6777,7 +6866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = addClass;
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6798,7 +6887,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _getClassIndex = __webpack_require__(48);
+	var _getClassIndex = __webpack_require__(49);
 	
 	var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
 	
@@ -6831,7 +6920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hasClass;
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6878,7 +6967,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getClassIndex;
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6895,7 +6984,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _getElementState = __webpack_require__(50);
+	var _getElementState = __webpack_require__(51);
 	
 	var _getElementState2 = _interopRequireDefault(_getElementState);
 	
@@ -6941,7 +7030,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = changeElementState;
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6999,7 +7088,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getElementState;
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7083,7 +7172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getIntersectRect;
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7100,7 +7189,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _getIntersectRect = __webpack_require__(51);
+	var _getIntersectRect = __webpack_require__(52);
 	
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
@@ -7158,7 +7247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hitTestElement;
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7175,7 +7264,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _getIntersectRect = __webpack_require__(51);
+	var _getIntersectRect = __webpack_require__(52);
 	
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
@@ -7236,7 +7325,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hitTestRect;
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7303,7 +7392,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = removeClass;
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
