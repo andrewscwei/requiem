@@ -59,17 +59,31 @@ let ViewportSizeClass = {
   /**
    * Gets the viewport size class.
    *
-   * @param {boolean} [isLandscape=false] - Specifies whether to verify viewport
-   *                                       size class in landscape orientation
-   *                                       (defaults to portrait).
+   * @param {string} [measurement='width'] - Specifies whether to use a specific
+   *                                         measurement to determine the size
+   *                                         class ('width', 'height', 'min' or
+   *                                         'max').
    *
    * @return {ViewportSizeClass} The viewport size class enum.
    */
-  get: (isLandscape) => {
-    if (typeof isLandscape !== 'boolean') isLandscape = false;
+  get: (measurement) => {
+    if (typeof measurement !== 'string') measurement = 'width';
 
     let rect = require('../utils/getViewportRect')();
-    let t = isLandscape ? Math.max(rect.width, rect.height) : Math.min(rect.width, rect.height);
+    let t;
+
+    if (measurement === 'height') {
+      t = rect.height;
+    }
+    else if (measurement === 'max') {
+      t = Math.max(rect.width, rect.height);
+    }
+    else if (measurement === 'min') {
+      t = Math.min(rect.width, rect.height);
+    }
+    else {
+      t = rect.width;
+    }
 
     if (t >= ViewportSizeClass.MOBILE.min && t <= ViewportSizeClass.MOBILE.max) return ViewportSizeClass.MOBILE;
     if (t >= ViewportSizeClass.PHABLET.min && t <= ViewportSizeClass.PHABLET.max) return ViewportSizeClass.PHABLET;

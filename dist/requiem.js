@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.27.1', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.27.2', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(37));
@@ -6707,17 +6707,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Gets the viewport size class.
 	   *
-	   * @param {boolean} [isLandscape=false] - Specifies whether to verify viewport
-	   *                                       size class in landscape orientation
-	   *                                       (defaults to portrait).
+	   * @param {string} [measurement='width'] - Specifies whether to use a specific
+	   *                                         measurement to determine the size
+	   *                                         class ('width', 'height', 'min' or
+	   *                                         'max').
 	   *
 	   * @return {ViewportSizeClass} The viewport size class enum.
 	   */
-	  get: function get(isLandscape) {
-	    if (typeof isLandscape !== 'boolean') isLandscape = false;
+	  get: function get(measurement) {
+	    if (typeof measurement !== 'string') measurement = 'width';
 	
 	    var rect = __webpack_require__(30)();
-	    var t = isLandscape ? Math.max(rect.width, rect.height) : Math.min(rect.width, rect.height);
+	    var t = undefined;
+	
+	    if (measurement === 'height') {
+	      t = rect.height;
+	    } else if (measurement === 'max') {
+	      t = Math.max(rect.width, rect.height);
+	    } else if (measurement === 'min') {
+	      t = Math.min(rect.width, rect.height);
+	    } else {
+	      t = rect.width;
+	    }
 	
 	    if (t >= ViewportSizeClass.MOBILE.min && t <= ViewportSizeClass.MOBILE.max) return ViewportSizeClass.MOBILE;
 	    if (t >= ViewportSizeClass.PHABLET.min && t <= ViewportSizeClass.PHABLET.max) return ViewportSizeClass.PHABLET;
