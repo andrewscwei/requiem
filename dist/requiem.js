@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.27.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.27.1', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(37));
@@ -6717,7 +6717,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (typeof isLandscape !== 'boolean') isLandscape = false;
 	
 	    var rect = __webpack_require__(30)();
-	    var t = isLandscape ? Math.min(rect.width, rect.height) : Math.max(rect.width, rect.height);
+	    var t = isLandscape ? Math.max(rect.width, rect.height) : Math.min(rect.width, rect.height);
 	
 	    if (t >= ViewportSizeClass.MOBILE.min && t <= ViewportSizeClass.MOBILE.max) return ViewportSizeClass.MOBILE;
 	    if (t >= ViewportSizeClass.PHABLET.min && t <= ViewportSizeClass.PHABLET.max) return ViewportSizeClass.PHABLET;

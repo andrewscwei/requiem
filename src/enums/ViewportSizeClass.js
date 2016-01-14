@@ -69,7 +69,7 @@ let ViewportSizeClass = {
     if (typeof isLandscape !== 'boolean') isLandscape = false;
 
     let rect = require('../utils/getViewportRect')();
-    let t = isLandscape ? Math.min(rect.width, rect.height) : Math.max(rect.width, rect.height);
+    let t = isLandscape ? Math.max(rect.width, rect.height) : Math.min(rect.width, rect.height);
 
     if (t >= ViewportSizeClass.MOBILE.min && t <= ViewportSizeClass.MOBILE.max) return ViewportSizeClass.MOBILE;
     if (t >= ViewportSizeClass.PHABLET.min && t <= ViewportSizeClass.PHABLET.max) return ViewportSizeClass.PHABLET;
