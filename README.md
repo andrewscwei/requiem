@@ -2,7 +2,7 @@
 
 Requiem is VARIANTE's on-going project for experimenting with web UI building techniques. It is a stand-alone front-end framework that, at its current state, is not production ready, has an ever-changing API, and lacks proper documentation. Its features are driven by internal requirements and is meant for internal use only.
 
-Requiem is packaged with UI utilities and base wrapper classes for common DOM elements. It is a stand-alone, hence has no external dependencies, around `17kb` gzipped.
+Requiem is packaged with UI utilities and base wrapper classes for common DOM elements. It is a stand-alone framework, hence has no external dependencies (i.e. no jQuery required), and around `17kb` gzipped.
 
 Requiem is best paired with its sister stylesheet library [requiem-styles](https://github.com/VARIANTE/requiem-styles).
 
