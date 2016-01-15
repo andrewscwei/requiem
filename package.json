@@ -1,10 +1,9 @@
 {
-  "name": "requiemjs",
-  "version": "0.27.3",
+  "name": "requiem",
+  "version": "0.28.0",
   "description": "An experimental front-end JS framework.",
   "homepage": "http://variante.io",
   "license": "MIT",
-  "private": true,
   "main": "dist/requiem.js",
   "authors": [
     "Andrew Wei <andrew@variante.io>"

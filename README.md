@@ -27,6 +27,12 @@ With Requiem you can easily assign view controllers (JS classes) to DOM elements
   Requiem.sightread();
   ```
 
+# Usage
+
+```
+$ npm install requiem
+```
+
 # API
 
 Raw documentation is generated using JSDoc avaiable in the `docs` directory.
