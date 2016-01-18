@@ -41,18 +41,11 @@ class EventDispatcher {
 
     log('[EventDispatcher]::addEventListener(' + type + ')');
 
-    if (!this._listenerMap) {
-      Object.defineProperty(this, '_listenerMap', {
-        value: {},
-        writable: true
-      });
+    if (!this.__private__.listenerMap[type]) {
+      this.__private__.listenerMap[type] = [];
     }
 
-    if (!this._listenerMap[type]) {
-      this._listenerMap[type] = [];
-    }
-
-    this._listenerMap[type].push(listener);
+    this.__private__.listenerMap[type].push(listener);
   }
 
   /**
@@ -66,19 +59,19 @@ class EventDispatcher {
   removeEventListener(type, listener) {
     if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
     if (!assertType(listener, 'function', true, 'Invalid parameter: listener')) return;
-    if (!assert(this._listenerMap, 'Listener map is null.')) return;
-    if (!assert(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+    if (!assert(this.__private__.listenerMap, 'Listener map is null.')) return;
+    if (!assert(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
 
     log('[EventDispatcher]::removeEventListener(' + type + ')');
 
     if (listener) {
-      let index = this._listenerMap[type].indexOf(listener);
+      let index = this.__private__.listenerMap[type].indexOf(listener);
 
       if (index > -1) {
-        this._listenerMap[type].splice(index, 1);
+        this.__private__.listenerMap[type].splice(index, 1);
       }
     } else {
-      delete this._listenerMap[type];
+      delete this.__private__.listenerMap[type];
     }
   }
 
@@ -95,11 +88,11 @@ class EventDispatcher {
   hasEventListener(type, listener) {
     if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
     if (!assertType(listener, 'function', true, 'Invalid parameter: listener')) return;
-    if (!assert(this._listenerMap, 'Listener map is null.')) return;
-    if (!assert(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+    if (!assert(this.__private__.listenerMap, 'Listener map is null.')) return;
+    if (!assert(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
 
     if (listener) {
-      let index = this._listenerMap[type].indexOf(listener);
+      let index = this.__private__.listenerMap[type].indexOf(listener);
 
       return (index > -1);
     } else {
@@ -114,17 +107,16 @@ class EventDispatcher {
    */
   dispatchEvent(event) {
     if (!assertType(event, Event, false, 'Event must be specified.')) return;
-    if (!assert(this._listenerMap, 'Listener map is null.')) return;
+    if (!assert(this.__private__.listenerMap, 'Listener map is null.')) return;
 
-    if (!this._listenerMap[event.type]) return;
+    if (!this.__private__.listenerMap[event.type]) return;
 
     log('[EventDispatcher]::dispatchEvent(' + event.type + ')');
 
-    let arrlen = this._listenerMap[event.type].length;
+    let arrlen = this.__private__.listenerMap[event.type].length;
 
     for (let i = 0; i < arrlen; i++) {
-      let listener = this._listenerMap[event.type][i];
-
+      let listener = this.__private__.listenerMap[event.type][i];
       listener.call(this, event);
     }
   }
@@ -135,9 +127,13 @@ class EventDispatcher {
    * @private
    */
   __define_properties() {
+    if (!this.__private__) this.__private__ = {};
 
+    Object.defineProperty(this.__private__, 'listenerMap', {
+      value: {},
+      writable: true
+    });
   }
 }
-
 
 module.exports = EventDispatcher;

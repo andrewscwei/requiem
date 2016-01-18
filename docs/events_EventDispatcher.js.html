@@ -69,18 +69,11 @@ class EventDispatcher {
 
     log('[EventDispatcher]::addEventListener(' + type + ')');
 
-    if (!this._listenerMap) {
-      Object.defineProperty(this, '_listenerMap', {
-        value: {},
-        writable: true
-      });
+    if (!this.__private__.listenerMap[type]) {
+      this.__private__.listenerMap[type] = [];
     }
 
-    if (!this._listenerMap[type]) {
-      this._listenerMap[type] = [];
-    }
-
-    this._listenerMap[type].push(listener);
+    this.__private__.listenerMap[type].push(listener);
   }
 
   /**
@@ -94,19 +87,19 @@ class EventDispatcher {
   removeEventListener(type, listener) {
     if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
     if (!assertType(listener, 'function', true, 'Invalid parameter: listener')) return;
-    if (!assert(this._listenerMap, 'Listener map is null.')) return;
-    if (!assert(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+    if (!assert(this.__private__.listenerMap, 'Listener map is null.')) return;
+    if (!assert(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
 
     log('[EventDispatcher]::removeEventListener(' + type + ')');
 
     if (listener) {
-      let index = this._listenerMap[type].indexOf(listener);
+      let index = this.__private__.listenerMap[type].indexOf(listener);
 
       if (index > -1) {
-        this._listenerMap[type].splice(index, 1);
+        this.__private__.listenerMap[type].splice(index, 1);
       }
     } else {
-      delete this._listenerMap[type];
+      delete this.__private__.listenerMap[type];
     }
   }
 
@@ -123,11 +116,11 @@ class EventDispatcher {
   hasEventListener(type, listener) {
     if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
     if (!assertType(listener, 'function', true, 'Invalid parameter: listener')) return;
-    if (!assert(this._listenerMap, 'Listener map is null.')) return;
-    if (!assert(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+    if (!assert(this.__private__.listenerMap, 'Listener map is null.')) return;
+    if (!assert(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
 
     if (listener) {
-      let index = this._listenerMap[type].indexOf(listener);
+      let index = this.__private__.listenerMap[type].indexOf(listener);
 
       return (index > -1);
     } else {
@@ -142,17 +135,16 @@ class EventDispatcher {
    */
   dispatchEvent(event) {
     if (!assertType(event, Event, false, 'Event must be specified.')) return;
-    if (!assert(this._listenerMap, 'Listener map is null.')) return;
+    if (!assert(this.__private__.listenerMap, 'Listener map is null.')) return;
 
-    if (!this._listenerMap[event.type]) return;
+    if (!this.__private__.listenerMap[event.type]) return;
 
     log('[EventDispatcher]::dispatchEvent(' + event.type + ')');
 
-    let arrlen = this._listenerMap[event.type].length;
+    let arrlen = this.__private__.listenerMap[event.type].length;
 
     for (let i = 0; i &lt; arrlen; i++) {
-      let listener = this._listenerMap[event.type][i];
-
+      let listener = this.__private__.listenerMap[event.type][i];
       listener.call(this, event);
     }
   }
@@ -163,10 +155,14 @@ class EventDispatcher {
    * @private
    */
   __define_properties() {
+    if (!this.__private__) this.__private__ = {};
 
+    Object.defineProperty(this.__private__, 'listenerMap', {
+      value: {},
+      writable: true
+    });
   }
 }
-
 
 module.exports = EventDispatcher;
 </code></pre>
@@ -179,13 +175,13 @@ module.exports = EventDispatcher;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="AssetLoader.html">AssetLoader</a></li><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li><li><a href="module-requiem-ui.Grid.html">Grid</a></li><li><a href="module-requiem-ui.Video.html">Video</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-enums.html">enums</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-net.html">net</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="AssetLoader.html">AssetLoader</a></li><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-events.EventTimer.html">EventTimer</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li><li><a href="module-requiem-ui.Grid.html">Grid</a></li><li><a href="module-requiem-ui.Video.html">Video</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-enums.html">enums</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-net.html">net</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Jan 15 2016 02:59:37 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jan 17 2016 16:46:55 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

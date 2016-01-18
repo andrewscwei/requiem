@@ -69,6 +69,14 @@
 	_requiem2.default.register(_Foo2.default);
 	_requiem2.default.register(_Bar2.default);
 	_requiem2.default.sightread();
+	
+	_requiem.EventTimer.addEvent('foo', function () {
+	  console.log('foo');
+	}, 1000, 2, true, 'foo');
+	
+	_requiem.EventTimer.addEventListener('foo', function (event) {
+	  console.log(event.detail);
+	});
 
 /***/ },
 /* 1 */
@@ -163,14 +171,14 @@
 		/**
 		 * @property {string} version - Version number.
 		 */
-		Object.defineProperty(requiem, 'version', { value: '0.27.3', writable: false });
+		Object.defineProperty(requiem, 'version', { value: '0.29.0', writable: false });
 		
 		(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 		(0, _injectModule2.default)(requiem, 'events', __webpack_require__(37));
-		(0, _injectModule2.default)(requiem, 'net', __webpack_require__(39));
-		(0, _injectModule2.default)(requiem, 'enums', __webpack_require__(42));
-		(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(45));
-		(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(46));
+		(0, _injectModule2.default)(requiem, 'net', __webpack_require__(40));
+		(0, _injectModule2.default)(requiem, 'enums', __webpack_require__(43));
+		(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(46));
+		(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(47));
 		
 		(0, _polyfill2.default)();
 		
@@ -254,6 +262,32 @@
 		  CustomEvent.prototype = window.Event.prototype;
 		
 		  window.CustomEvent = CustomEvent;
+		
+		  // Polyfill to support passing of arguments to the callback function of either
+		  // setTimeout() or setInterval() in IE9 and below.
+		  //
+		  // @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval}
+		  if (document.all && !window.setTimeout.isPolyfill) {
+		    var __nativeST__ = window.setTimeout;
+		    window.setTimeout = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
+		      var aArgs = Array.prototype.slice.call(arguments, 2);
+		      return __nativeST__(vCallback instanceof Function ? function () {
+		        vCallback.apply(null, aArgs);
+		      } : vCallback, nDelay);
+		    };
+		    window.setTimeout.isPolyfill = true;
+		  }
+		
+		  if (document.all && !window.setInterval.isPolyfill) {
+		    var __nativeSI__ = window.setInterval;
+		    window.setInterval = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
+		      var aArgs = Array.prototype.slice.call(arguments, 2);
+		      return __nativeSI__(vCallback instanceof Function ? function () {
+		        vCallback.apply(null, aArgs);
+		      } : vCallback, nDelay);
+		    };
+		    window.setInterval.isPolyfill = true;
+		  }
 		}
 		
 		module.exports = polyfill;
@@ -5373,6 +5407,7 @@
 		var events = {};
 		
 		Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(38), writable: false, enumerable: true });
+		Object.defineProperty(events, 'EventTimer', { value: __webpack_require__(39), writable: false, enumerable: true });
 		
 		module.exports = events;
 	
@@ -5444,18 +5479,11 @@
 		
 		      (0, _log2.default)('[EventDispatcher]::addEventListener(' + type + ')');
 		
-		      if (!this._listenerMap) {
-		        Object.defineProperty(this, '_listenerMap', {
-		          value: {},
-		          writable: true
-		        });
+		      if (!this.__private__.listenerMap[type]) {
+		        this.__private__.listenerMap[type] = [];
 		      }
 		
-		      if (!this._listenerMap[type]) {
-		        this._listenerMap[type] = [];
-		      }
-		
-		      this._listenerMap[type].push(listener);
+		      this.__private__.listenerMap[type].push(listener);
 		    }
 		
 		    /**
@@ -5472,19 +5500,19 @@
 		    value: function removeEventListener(type, listener) {
 		      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
 		      if (!(0, _assertType2.default)(listener, 'function', true, 'Invalid parameter: listener')) return;
-		      if (!(0, _assert2.default)(this._listenerMap, 'Listener map is null.')) return;
-		      if (!(0, _assert2.default)(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+		      if (!(0, _assert2.default)(this.__private__.listenerMap, 'Listener map is null.')) return;
+		      if (!(0, _assert2.default)(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
 		
 		      (0, _log2.default)('[EventDispatcher]::removeEventListener(' + type + ')');
 		
 		      if (listener) {
-		        var index = this._listenerMap[type].indexOf(listener);
+		        var index = this.__private__.listenerMap[type].indexOf(listener);
 		
 		        if (index > -1) {
-		          this._listenerMap[type].splice(index, 1);
+		          this.__private__.listenerMap[type].splice(index, 1);
 		        }
 		      } else {
-		        delete this._listenerMap[type];
+		        delete this.__private__.listenerMap[type];
 		      }
 		    }
 		
@@ -5504,11 +5532,11 @@
 		    value: function hasEventListener(type, listener) {
 		      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
 		      if (!(0, _assertType2.default)(listener, 'function', true, 'Invalid parameter: listener')) return;
-		      if (!(0, _assert2.default)(this._listenerMap, 'Listener map is null.')) return;
-		      if (!(0, _assert2.default)(this._listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+		      if (!(0, _assert2.default)(this.__private__.listenerMap, 'Listener map is null.')) return;
+		      if (!(0, _assert2.default)(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
 		
 		      if (listener) {
-		        var index = this._listenerMap[type].indexOf(listener);
+		        var index = this.__private__.listenerMap[type].indexOf(listener);
 		
 		        return index > -1;
 		      } else {
@@ -5526,17 +5554,16 @@
 		    key: 'dispatchEvent',
 		    value: function dispatchEvent(event) {
 		      if (!(0, _assertType2.default)(event, Event, false, 'Event must be specified.')) return;
-		      if (!(0, _assert2.default)(this._listenerMap, 'Listener map is null.')) return;
+		      if (!(0, _assert2.default)(this.__private__.listenerMap, 'Listener map is null.')) return;
 		
-		      if (!this._listenerMap[event.type]) return;
+		      if (!this.__private__.listenerMap[event.type]) return;
 		
 		      (0, _log2.default)('[EventDispatcher]::dispatchEvent(' + event.type + ')');
 		
-		      var arrlen = this._listenerMap[event.type].length;
+		      var arrlen = this.__private__.listenerMap[event.type].length;
 		
 		      for (var i = 0; i < arrlen; i++) {
-		        var listener = this._listenerMap[event.type][i];
-		
+		        var listener = this.__private__.listenerMap[event.type][i];
 		        listener.call(this, event);
 		      }
 		    }
@@ -5549,7 +5576,14 @@
 		
 		  }, {
 		    key: '__define_properties',
-		    value: function __define_properties() {}
+		    value: function __define_properties() {
+		      if (!this.__private__) this.__private__ = {};
+		
+		      Object.defineProperty(this.__private__, 'listenerMap', {
+		        value: {},
+		        writable: true
+		      });
+		    }
 		  }]);
 		
 		  return EventDispatcher;
@@ -5571,6 +5605,267 @@
 		
 		'use strict';
 		
+		var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+		
+		var _assert = __webpack_require__(6);
+		
+		var _assert2 = _interopRequireDefault(_assert);
+		
+		var _assertType = __webpack_require__(5);
+		
+		var _assertType2 = _interopRequireDefault(_assertType);
+		
+		var _log = __webpack_require__(21);
+		
+		var _log2 = _interopRequireDefault(_log);
+		
+		var _EventDispatcher2 = __webpack_require__(38);
+		
+		var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
+		
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+		
+		function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+		
+		function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+		
+		function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+		
+		/**
+		 * @class
+		 *
+		 * Class for handling timed events.
+		 *
+		 * @alias module:requiem~events.EventTimer
+		 */
+		
+		var EventTimer = (function (_EventDispatcher) {
+		  _inherits(EventTimer, _EventDispatcher);
+		
+		  function EventTimer() {
+		    _classCallCheck(this, EventTimer);
+		
+		    return _possibleConstructorReturn(this, Object.getPrototypeOf(EventTimer).apply(this, arguments));
+		  }
+		
+		  _createClass(EventTimer, [{
+		    key: 'addEvent',
+		
+		    /**
+		     * Adds an event to the EventTimer.
+		     * @param {string}   id               - Unique ID of the timed event.
+		     * @param {Function} func             - Callback to be invoked when event
+		     *                                      triggers.
+		     * @param {number}   [delay=0]        - Delay (interval) of event (in ms).
+		     * @param {number}   [count=1]        - Number of times the event should
+		     *                                      invoke. If set to 0, it will be
+		     *                                      infinite.
+		     * @param {boolean}  [overwrite=true] - Specifies whether this timed event
+		     *                                      should overwrite an existing one
+		     *                                      with the same name.
+		     * @param {string}   [eventName]      - The event name of the custom event
+		     *                                      to be dispatched.
+		     * @param {*}        [...params]      - Additional parameters that are passed
+		     *                                      through to the function specified by
+		     *                                      'func'.
+		     */
+		    value: function addEvent() {
+		      var _this2 = this;
+		
+		      var id = arguments[0];
+		      var func = arguments[1];
+		      var delay = arguments[2] === undefined ? 0 : arguments[2];
+		      var count = arguments[3] === undefined ? 1 : arguments[3];
+		      var overwrite = arguments[4] === undefined ? true : arguments[4];
+		      var eventName = arguments[5];
+		      var params = arguments[6];
+		
+		      (0, _assert2.default)(!this.eventPool.hasOwnProperty(id) || overwrite, 'Duplicate timed event with id ' + id);
+		      (0, _assertType2.default)(func, 'function', false, 'Invalid function provided');
+		      (0, _assertType2.default)(delay, 'number', false, 'Invalid delay specified: ' + delay);
+		      (0, _assertType2.default)(count, 'number', false, 'Invalid count specified: ' + count);
+		      (0, _assertType2.default)(overwrite, 'boolean', false, 'Invalid overwrite flag specified: ' + overwrite);
+		      (0, _assertType2.default)(eventName, 'string', true, 'Invalid event name specified: ' + eventName);
+		
+		      if (overwrite) this.removeEvent(id);
+		
+		      // Process params for func.
+		      if (params !== undefined) {
+		        params = [];
+		        for (var i = 6; i < arguments.length; i++) {
+		          params.push(arguments[i]);
+		        }
+		      }
+		
+		      this.eventPool[id] = {
+		        event: setInterval(function () {
+		          _this2.eventPool[id].iteration++;
+		          func.apply(_this2.params);
+		
+		          if (eventName !== undefined) {
+		            var e = new CustomEvent(eventName, {
+		              detail: {
+		                id: id,
+		                iteration: _this2.eventPool[id].iteration,
+		                count: _this2.eventPool[id].count
+		              }
+		            });
+		
+		            _this2.dispatchEvent(e);
+		          }
+		
+		          if (_this2.eventPool[id].iteration >= _this2.eventPool[id].count) {
+		            _this2.removeEvent(id);
+		          }
+		        }, delay),
+		        iteration: 0,
+		        count: count
+		      };
+		    }
+		
+		    /**
+		     * Removes a timed event by its ID.
+		     *
+		     * @param  {string} id - ID of the timed event.
+		     */
+		
+		  }, {
+		    key: 'removeEvent',
+		    value: function removeEvent(id) {
+		      if (this.eventPool.hasOwnProperty(id)) {
+		        clearInterval(this.eventPool[id].event);
+		        delete this.eventPool[id];
+		      }
+		    }
+		
+		    /**
+		     * Removes all timed events from the EventTimer.
+		     */
+		
+		  }, {
+		    key: 'removeAllEvents',
+		    value: function removeAllEvents() {
+		      for (var k in this.eventPool) {
+		        var v = this.eventPool[k];
+		        clearInterval(v.event);
+		        delete this.eventPool[k];
+		      }
+		    }
+		  }, {
+		    key: 'eventPool',
+		
+		    /**
+		     * The current event pool.
+		     *
+		     * @return {Object} The current event pool.
+		     */
+		    get: function get() {
+		      if (!this.__private__.eventPool) this.__private__.eventPool = {};
+		      return this.__private__.eventPool;
+		    }
+		  }], [{
+		    key: 'addEvent',
+		
+		    /**
+		     * @see module:requiem~events.EventTimer.addEvent
+		     */
+		    value: function addEvent() {
+		      EventTimer.sharedInstance.addEvent.apply(EventTimer.sharedInstance, arguments);
+		    }
+		
+		    /**
+		     * @see module:requiem~events.EventTimer.removeEvent
+		     */
+		
+		  }, {
+		    key: 'removeEvent',
+		    value: function removeEvent() {
+		      EventTimer.sharedInstance.removeEvent.apply(EventTimer.sharedInstance, arguments);
+		    }
+		
+		    /**
+		     * @see module:requiem~events.EventTimer.removeAllEvents
+		     */
+		
+		  }, {
+		    key: 'removeAllEvents',
+		    value: function removeAllEvents() {
+		      EventTimer.sharedInstance.removeAllEvents.apply(EventTimer.sharedInstance, arguments);
+		    }
+		
+		    /**
+		     * @see module:requiem~events.EventTimer.addEventListener
+		     */
+		
+		  }, {
+		    key: 'addEventListener',
+		    value: function addEventListener() {
+		      EventTimer.sharedInstance.addEventListener.apply(EventTimer.sharedInstance, arguments);
+		    }
+		
+		    /**
+		     * @see module:requiem~events.EventTimer.removeEventListener
+		     */
+		
+		  }, {
+		    key: 'removeEventListener',
+		    value: function removeEventListener() {
+		      EventTimer.sharedInstance.removeEventListener.apply(EventTimer.sharedInstance, arguments);
+		    }
+		
+		    /**
+		     * @see module:requiem~events.EventTimer.hasEventLisetener
+		     */
+		
+		  }, {
+		    key: 'hasEventLisetener',
+		    value: function hasEventLisetener() {
+		      EventTimer.sharedInstance.hasEventLisetener.apply(EventTimer.sharedInstance, arguments);
+		    }
+		  }, {
+		    key: 'sharedInstance',
+		
+		    /**
+		     * Gets the singleton instance of EventTimer.
+		     *
+		     * @return {EventTimer} The singleton EventTimer instance.
+		     */
+		    get: function get() {
+		      if (!EventTimer.__private__) EventTimer.__private__ = {};
+		      if (!EventTimer.__private__.sharedInstance) EventTimer.__private__.sharedInstance = new EventTimer();
+		      return EventTimer.__private__.sharedInstance;
+		    }
+		
+		    /**
+		     * @see module:requiem~events.EventTimer.eventPool
+		     */
+		
+		  }, {
+		    key: 'eventPool',
+		    get: function get() {
+		      return EventTimer.sharedInstance.eventPool;
+		    }
+		  }]);
+		
+		  return EventTimer;
+		})(_EventDispatcher3.default);
+		
+		module.exports = EventTimer;
+	
+	/***/ },
+	/* 40 */
+	/***/ function(module, exports, __webpack_require__) {
+	
+		/**
+		 * Requiem
+		 * (c) VARIANTE (http://variante.io)
+		 *
+		 * This software is released under the MIT License:
+		 * http://www.opensource.org/licenses/mit-license.php
+		 */
+		
+		'use strict';
+		
 		/**
 		 * Collection of network related methods/classes.
 		 *
@@ -5579,12 +5874,12 @@
 		
 		var net = {};
 		
-		Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(40), writable: false, enumerable: true });
+		Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(41), writable: false, enumerable: true });
 		
 		module.exports = net;
 	
 	/***/ },
-	/* 40 */
+	/* 41 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -5605,7 +5900,7 @@
 		
 		var _assert2 = _interopRequireDefault(_assert);
 		
-		var _inherit = __webpack_require__(41);
+		var _inherit = __webpack_require__(42);
 		
 		var _inherit2 = _interopRequireDefault(_inherit);
 		
@@ -6301,7 +6596,7 @@
 		module.exports = AssetLoader;
 	
 	/***/ },
-	/* 41 */
+	/* 42 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6349,7 +6644,7 @@
 		module.exports = inherit;
 	
 	/***/ },
-	/* 42 */
+	/* 43 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6373,15 +6668,15 @@
 		Object.defineProperty(enums, 'Directive', { value: __webpack_require__(16), writable: false, enumerable: true });
 		Object.defineProperty(enums, 'DirtyType', { value: __webpack_require__(23), writable: false, enumerable: true });
 		Object.defineProperty(enums, 'EventType', { value: __webpack_require__(25), writable: false, enumerable: true });
-		Object.defineProperty(enums, 'KeyCode', { value: __webpack_require__(43), writable: false, enumerable: true });
+		Object.defineProperty(enums, 'KeyCode', { value: __webpack_require__(44), writable: false, enumerable: true });
 		Object.defineProperty(enums, 'NodeState', { value: __webpack_require__(24), writable: false, enumerable: true });
 		Object.defineProperty(enums, 'Orientation', { value: __webpack_require__(35), writable: false, enumerable: true });
-		Object.defineProperty(enums, 'ViewportSizeClass', { value: __webpack_require__(44), writable: false, enumerable: true });
+		Object.defineProperty(enums, 'ViewportSizeClass', { value: __webpack_require__(45), writable: false, enumerable: true });
 		
 		module.exports = enums;
 	
 	/***/ },
-	/* 43 */
+	/* 44 */
 	/***/ function(module, exports) {
 	
 		/**
@@ -6718,7 +7013,7 @@
 		module.exports = KeyCode;
 	
 	/***/ },
-	/* 44 */
+	/* 45 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6817,7 +7112,7 @@
 		module.exports = ViewportSizeClass;
 	
 	/***/ },
-	/* 45 */
+	/* 46 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6846,7 +7141,7 @@
 		module.exports = ui;
 	
 	/***/ },
-	/* 46 */
+	/* 47 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6867,26 +7162,26 @@
 		
 		var utils = {};
 		
-		Object.defineProperty(utils, 'addClass', { value: __webpack_require__(47), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(50), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(48), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'addClass', { value: __webpack_require__(48), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(51), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(49), writable: false, enumerable: true });
 		Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(36), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(49), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(51), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(52), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(50), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(52), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(53), writable: false, enumerable: true });
 		Object.defineProperty(utils, 'getRect', { value: __webpack_require__(28), writable: false, enumerable: true });
 		Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(30), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(53), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(54), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(55), writable: false, enumerable: true });
-		Object.defineProperty(utils, 'translate', { value: __webpack_require__(56), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(54), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(55), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(56), writable: false, enumerable: true });
+		Object.defineProperty(utils, 'translate', { value: __webpack_require__(57), writable: false, enumerable: true });
 		Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(33), writable: false, enumerable: true });
 		Object.defineProperty(utils, 'transform', { value: __webpack_require__(34), writable: false, enumerable: true });
 		
 		module.exports = utils;
 	
 	/***/ },
-	/* 47 */
+	/* 48 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6907,7 +7202,7 @@
 		
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 		
-		var _hasClass = __webpack_require__(48);
+		var _hasClass = __webpack_require__(49);
 		
 		var _hasClass2 = _interopRequireDefault(_hasClass);
 		
@@ -6953,7 +7248,7 @@
 		module.exports = addClass;
 	
 	/***/ },
-	/* 48 */
+	/* 49 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -6974,7 +7269,7 @@
 		
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 		
-		var _getClassIndex = __webpack_require__(49);
+		var _getClassIndex = __webpack_require__(50);
 		
 		var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
 		
@@ -7007,7 +7302,7 @@
 		module.exports = hasClass;
 	
 	/***/ },
-	/* 49 */
+	/* 50 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -7054,7 +7349,7 @@
 		module.exports = getClassIndex;
 	
 	/***/ },
-	/* 50 */
+	/* 51 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -7071,7 +7366,7 @@
 		
 		var _toElementArray2 = _interopRequireDefault(_toElementArray);
 		
-		var _getElementState = __webpack_require__(51);
+		var _getElementState = __webpack_require__(52);
 		
 		var _getElementState2 = _interopRequireDefault(_getElementState);
 		
@@ -7117,7 +7412,7 @@
 		module.exports = changeElementState;
 	
 	/***/ },
-	/* 51 */
+	/* 52 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -7175,7 +7470,7 @@
 		module.exports = getElementState;
 	
 	/***/ },
-	/* 52 */
+	/* 53 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -7259,7 +7554,7 @@
 		module.exports = getIntersectRect;
 	
 	/***/ },
-	/* 53 */
+	/* 54 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -7276,7 +7571,7 @@
 		
 		var _assert2 = _interopRequireDefault(_assert);
 		
-		var _getIntersectRect = __webpack_require__(52);
+		var _getIntersectRect = __webpack_require__(53);
 		
 		var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 		
@@ -7334,7 +7629,7 @@
 		module.exports = hitTestElement;
 	
 	/***/ },
-	/* 54 */
+	/* 55 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -7351,7 +7646,7 @@
 		
 		var _assert2 = _interopRequireDefault(_assert);
 		
-		var _getIntersectRect = __webpack_require__(52);
+		var _getIntersectRect = __webpack_require__(53);
 		
 		var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 		
@@ -7412,7 +7707,7 @@
 		module.exports = hitTestRect;
 	
 	/***/ },
-	/* 55 */
+	/* 56 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
@@ -7479,7 +7774,7 @@
 		module.exports = removeClass;
 	
 	/***/ },
-	/* 56 */
+	/* 57 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/**
