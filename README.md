@@ -37,7 +37,7 @@ $ npm install requiem
 
 # API
 
-Raw documentation is generated using JSDoc avaiable in the `docs` directory.
+Raw documentation is available [here](http://VARIANTE.github.io/requiem).
 
 ## License
 
