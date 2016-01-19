@@ -6,38 +6,36 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-var config = require('./.taskconfig');
-var del = require('del');
-var gulp = require('gulp');
-var $util = require('gulp-util');
-var webpack = require('webpack');
+import config from './.taskconfig';
+import del from 'del';
+import gulp from 'gulp';
+import $util from 'gulp-util';
+import webpack from 'webpack';
 
 /**
  * Cleans the built files.
  */
-gulp.task('clean', function(done) {
-  del(config.tasks.build.clean.input).then(function(paths) {
-    done();
-  });
+gulp.task('clean', (done) => {
+  del(config.tasks.build.clean.input).then((paths) => done());
 });
 
 /**
  * Builds the JavaScript library.
  */
-gulp.task('build', function(done) {
-  var guard = false;
+gulp.task('build', (done) => {
+  let guard = false;
 
   if (config.env.watch) {
     webpack(config.tasks.build.webpack.pretty).watch(100, build(done));
   }
   else {
-    webpack(config.tasks.build.webpack.pretty).run(build(function() {
+    webpack(config.tasks.build.webpack.pretty).run(build(() => {
       webpack(config.tasks.build.webpack.ugly).run(build(done));
     }));
   }
 
   function build(cb) {
-    return function(err, stats) {
+    return (err, stats) => {
       if (err) throw new $util.PluginError('webpack', err);
       $util.log($util.colors.green('[webpack]'), stats.toString());
 

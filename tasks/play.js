@@ -8,32 +8,30 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-var autoprefixer = require('autoprefixer');
-var browserSync = require('browser-sync');
-var config = require('./.taskconfig');
-var del = require('del');
-var gulp = require('gulp');
-var path = require('path');
-var sequence = require('run-sequence');
-var webpack = require('webpack');
-var $jade = require('gulp-jade');
-var $postcss = require('gulp-postcss');
-var $sass = require('gulp-sass');
-var $util = require('gulp-util');
+import autoprefixer from 'autoprefixer';
+import browserSync from 'browser-sync';
+import config from './.taskconfig';
+import del from 'del';
+import gulp from 'gulp';
+import path from 'path';
+import sequence from 'run-sequence';
+import webpack from 'webpack';
+import $jade from 'gulp-jade';
+import $postcss from 'gulp-postcss';
+import $sass from 'gulp-sass';
+import $util from 'gulp-util';
 
 /**
  * Cleans built files in the playground.
  */
-gulp.task('clean:play', function(done) {
-  del(config.tasks.play.clean.input).then(function(paths) {
-    done();
-  });
+gulp.task('clean:play', (done) => {
+  del(config.tasks.play.clean.input).then((paths) => done());
 });
 
 /**
  * Compiles stylesheets for the playground.
  */
-gulp.task('styles:play', function() {
+gulp.task('styles:play', () => {
   return gulp.src(config.tasks.play.styles.input)
     .pipe($sass(config.tasks.play.styles.sass).on('error', $sass.logError))
     .pipe($postcss([autoprefixer()]))
@@ -46,8 +44,8 @@ gulp.task('styles:play', function() {
  *
  * @param {boolean} --watch
  */
-gulp.task('scripts:play', function(done) {
-  var watchGuard = false;
+gulp.task('scripts:play', (done) => {
+  let watchGuard = false;
 
   if (config.env.watch) {
     webpack(config.tasks.play.scripts.webpack).watch(100, build(done));
@@ -57,7 +55,7 @@ gulp.task('scripts:play', function(done) {
   }
 
   function build(cb) {
-    return function(err, stats) {
+    return (err, stats) => {
       if (err) {
         throw new $util.PluginError('webpack', err);
       }
@@ -88,15 +86,15 @@ gulp.task('templates:play', function() {
  * @param {number}  --port
  * @param {boolean} --watch
  */
-gulp.task('serve:play', function() {
+gulp.task('serve:play', () => {
   browserSync(config.tasks.play.serve.browserSync);
 
   // Watch for changes.
   if (config.env.watch) {
-    var entries = config.tasks.watch.play;
+    let entries = config.tasks.watch.play;
 
-    for (var i = 0; i < entries.length; i++) {
-      var entry = entries[i];
+    for (let i = 0; i < entries.length; i++) {
+      let entry = entries[i];
       gulp.watch(entry.files, entry.tasks);
     }
   }
@@ -110,8 +108,8 @@ gulp.task('serve:play', function() {
  * @param {boolean} --watch
  * @param {boolean} --serve
  */
-gulp.task('play', function(done) {
-  var seq = ['clean', 'build', 'clean:play', ['styles:play', 'scripts:play', 'templates:play']];
+gulp.task('play', (done) => {
+  let seq = ['clean', 'build', 'clean:play', ['styles:play', 'scripts:play', 'templates:play']];
   if (config.env.serve) seq.push('serve:play');
   seq.push(done);
 

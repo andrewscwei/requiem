@@ -8,17 +8,17 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-var path = require('path');
-var webpack = require('webpack');
-var $util = require('gulp-util');
+import path from 'path';
+import webpack from 'webpack';
+import $util from 'gulp-util';
 
-var env = {
+let env = {
   port: $util.env['port'] || $util.env['p'],
   serve: $util.env['serve'] || $util.env['s'],
   watch: $util.env['watch'] || $util.env['w']
 };
 
-var paths = {
+let paths = {
   base: path.join(__dirname, '../'),
   src: path.join(__dirname, '../', 'src'),
   dist: path.join(__dirname, '../', 'dist'),
@@ -27,7 +27,7 @@ var paths = {
   modules: path.join(__dirname, '../', 'node_modules')
 };
 
-var tasks = {
+let tasks = {
   build: {
     clean: {
       input: paths.dist
@@ -170,7 +170,7 @@ var tasks = {
   }
 };
 
-module.exports = {
+export default {
   env: env,
   paths: paths,
   tasks: tasks
