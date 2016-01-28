@@ -500,7 +500,12 @@ class Element {
       this.updateDelegate.responsive = true;
     }
     else {
-      this.updateDelegate.responsive = args;
+      if (this.updateDelegate.responsive instanceof Array) {
+        this.updateDelegate.responsive = this.updateDelegate.responsive.concat(args);
+      }
+      else {
+        this.updateDelegate.responsive = args;
+      }
     }
   }
 

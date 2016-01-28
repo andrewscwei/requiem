@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.29.0', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.30.1', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(37));
@@ -1446,7 +1446,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (args.length === 0) {
 	        this.updateDelegate.responsive = true;
 	      } else {
-	        this.updateDelegate.responsive = args;
+	        if (this.updateDelegate.responsive instanceof Array) {
+	          this.updateDelegate.responsive = this.updateDelegate.responsive.concat(args);
+	        } else {
+	          this.updateDelegate.responsive = args;
+	        }
 	      }
 	    }
 	
