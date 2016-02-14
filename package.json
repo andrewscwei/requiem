@@ -13,24 +13,24 @@
     "url": "https://github.com/VARIANTE/requiem.git"
   },
   "devDependencies": {
-    "autoprefixer": "^6.2.3",
-    "babel-core": "^6.3.26",
-    "babel-loader": "^6.2.0",
-    "babel-preset-es2015": "^6.3.13",
-    "browser-sync": "^2.10.1",
+    "autoprefixer": "^6.3.3",
+    "babel-core": "^6.5.2",
+    "babel-loader": "^6.2.2",
+    "babel-preset-es2015": "^6.5.0",
+    "browser-sync": "^2.11.1",
     "del": "^2.2.0",
-    "gulp": "^3.8.11",
+    "gulp": "^3.9.1",
     "gulp-gh-pages": "^0.5.4",
     "gulp-jade": "^1.1.0",
-    "gulp-postcss": "^6.0.1",
-    "gulp-sass": "^2.1.1",
+    "gulp-postcss": "^6.1.0",
+    "gulp-sass": "^2.2.0",
     "gulp-util": "^3.0.7",
     "html-loader": "^0.4.0",
     "jade": "^1.11.0",
     "jsdoc": "^3.4.0",
-    "requiem-styles": "^0.12.0",
+    "requiem-styles": "^0.18.8",
     "run-sequence": "^1.1.5",
     "template-html-loader": "0.0.3",
-    "webpack": "^1.12.9"
+    "webpack": "^1.12.13"
   }
 }
