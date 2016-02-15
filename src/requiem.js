@@ -8,6 +8,7 @@
 
 'use strict';
 
+import assert from './helpers/assert';
 import injectModule from './helpers/injectModule';
 import polyfill from './helpers/polyfill';
 
@@ -24,7 +25,7 @@ Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
 /**
  * @property {string} version - Version number.
  */
-Object.defineProperty(requiem, 'version', { value: '0.30.1', writable: false });
+Object.defineProperty(requiem, 'version', { value: '0.30.3', writable: false });
 
 injectModule(requiem, 'dom',    require('./dom'));
 injectModule(requiem, 'events', require('./events'));
@@ -34,5 +35,7 @@ injectModule(requiem, 'ui',     require('./ui'));
 injectModule(requiem, 'utils',  require('./utils'));
 
 polyfill();
+
+assert(window && document, 'Requiem is a front-end web framework where \'window\' and \'document\' must be defined');
 
 module.exports = requiem;

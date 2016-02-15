@@ -14,13 +14,12 @@
  * @namespace module:requiem~enums
  */
 let enums = {};
-
-Object.defineProperty(enums, 'Directive', { value: require('./Directive'), writable: false, enumerable: true });
-Object.defineProperty(enums, 'DirtyType', { value: require('./DirtyType'), writable: false, enumerable: true });
-Object.defineProperty(enums, 'EventType', { value: require('./EventType'), writable: false, enumerable: true });
-Object.defineProperty(enums, 'KeyCode',   { value: require('./KeyCode'),   writable: false, enumerable: true });
-Object.defineProperty(enums, 'NodeState', { value: require('./NodeState'), writable: false, enumerable: true });
-Object.defineProperty(enums, 'Orientation', { value: require('./Orientation'), writable: false, enumerable: true });
-Object.defineProperty(enums, 'ViewportSizeClass', { value: require('./ViewportSizeClass'), writable: false, enumerable: true });
+enums['Directive']         = require('./Directive');
+enums['DirtyType']         = require('./DirtyType');
+enums['EventType']         = require('./EventType');
+enums['KeyCode']           = require('./KeyCode');
+enums['NodeState']         = require('./NodeState');
+enums['Orientation']       = require('./Orientation');
+enums['ViewportSizeClass'] = require('./ViewportSizeClass');
 
 module.exports = enums;

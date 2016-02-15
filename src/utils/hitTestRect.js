@@ -15,13 +15,13 @@ import getIntersectRect from './getIntersectRect';
  * Hit tests a vector or element against other elements.
  *
  * @param {Object|Node|Element} obj
- * @param {number}                     obj.x
- * @param {number}                     obj.y
- * @param {...Object}                  rects
- * @param {number}                     rects.top
- * @param {number}                     rects.right
- * @param {number}                     rects.bottom
- * @param {number}                     rects.left
+ * @param {number}              obj.x
+ * @param {number}              obj.y
+ * @param {...Object}           rects
+ * @param {number}              rects.top
+ * @param {number}              rects.right
+ * @param {number}              rects.bottom
+ * @param {number}              rects.left
  *
  * @return {boolean} True if test passes, false otherwise.
  *

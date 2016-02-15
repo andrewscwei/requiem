@@ -13,7 +13,6 @@ import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
 import noval from '../helpers/noval';
 import getFunctionName from '../helpers/getFunctionName';
-import log from '../helpers/log';
 import validateAttribute from '../helpers/validateAttribute';
 import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
 import DirtyType from '../enums/DirtyType';
@@ -35,15 +34,15 @@ class Element {
   /**
    * Creates a new Element instance with optional initial properties.
    *
-   * @param  {string|Node|Object} [init] - Initial properties. If this is a
-   *                                       string, it will be used as this
-   *                                       Element's instance name. If this is
-   *                                       a Node, it would be used as the
-   *                                       internal DOM element. If this is a
-   *                                       hash, each key/value pair will be
-   *                                       mapped to an instance property (only
-   *                                       existing instance properties will be
-   *                                       mapped).
+   * @param {string|Node|Object} [init] - Initial properties. If this is a
+   *                                      string, it will be used as this
+   *                                      Element's instance name. If this is
+   *                                      a Node, it would be used as the
+   *                                      internal DOM element. If this is a
+   *                                      hash, each key/value pair will be
+   *                                      mapped to an instance property (only
+   *                                      existing instance properties will be
+   *                                      mapped).
    *
    * @return {Element} A new Element instance.
    */
@@ -116,8 +115,6 @@ class Element {
         set: true
       }, 'properties');
     }
-
-    log(this.toString() + ':new(', init, ')');
 
     this.init();
   }
@@ -404,8 +401,6 @@ class Element {
    * Initializes this Element instance. Must manually invoke.
    */
   init() {
-    log(this.toString() + '::init()');
-
     this.__set_node_state(NodeState.INITIALIZED);
     this.updateDelegate.init();
 
@@ -435,8 +430,6 @@ class Element {
    * Destroys this Element instance.
    */
   destroy() {
-    log(this.toString() + '::destroy()');
-
     // Destroy all children first.
     for (let key in this.children) {
       let child = this.children[key];
@@ -1101,7 +1094,7 @@ class Element {
   /**
    * Gets the value of the attribute with the specified name.
    *
-   * @param  {string} key - Name of the attribute.
+   * @param {string} key - Name of the attribute.
    *
    * @return {*} Value of the attribute.
    */
@@ -1156,7 +1149,7 @@ class Element {
    * Checks to see if this Element instance has the attribute of the specified
    * name.
    *
-   * @param  {string}  key - Name of the attribute.
+   * @param {string}  key - Name of the attribute.
    *
    * @return {boolean} True if attribute with said name exists, false otherwise.
    */
@@ -1537,7 +1530,7 @@ class Element {
   /**
    * Validates the inner DOM element.
    *
-   * @param  {Node} element - DOM element.
+   * @param {Node} element - DOM element.
    *
    * @return {boolean} True if validation passes, false otherwise.
    *
@@ -1551,7 +1544,7 @@ class Element {
   /**
    * Sets the Element's node state.
    *
-   * @param  {NodeState} nodeState - Node state.
+   * @param {NodeState} nodeState - Node state.
    *
    * @private
    */

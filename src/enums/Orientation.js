@@ -33,7 +33,7 @@ let Orientation = {
   /**
    * Gets the name of an orientation enum.
    *
-   * @param  {Orientation} orientation - Orientation.
+   * @param {Orientation} orientation - Orientation.
    *
    * @return {string} Name of the orientation.
    */

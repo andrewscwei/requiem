@@ -8,8 +8,6 @@
 
 'use strict';
 
-// let assert = require('./assert');
-
 /**
  * Transforms given element(s) to an element array.
  *
@@ -25,29 +23,17 @@ function toElementArray(element, keepElement) {
 
   let elements;
 
-  if (element instanceof Array) {
+  if (element instanceof Array)
     elements = element;
-  }
-  else if (element instanceof NodeList) {
+  else if (element instanceof NodeList)
     elements = Array.prototype.slice.call(element);
-  }
-  else {
-    // if (!assert((element instanceof Node) || (element instanceof Element), 'Invalid element specified. Element must be an instance of Node or Requiem Element.')) return null;
-
-    if (element instanceof Element) {
-      elements = [element.element];
-    }
-    else {
-      elements = [element];
-    }
-  }
+  else
+    elements = [element];
 
   let n = elements.length;
 
   for (let i = 0; i < n; i++) {
     let e = elements[i];
-
-    // if (!assert((e instanceof Node) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of Node or Requiem Element.')) return null;
 
     if (!keepElement && (e instanceof Element)) {
       elements[i] = e.element;

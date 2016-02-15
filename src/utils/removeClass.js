@@ -15,7 +15,7 @@ import toElementArray from '../helpers/toElementArray';
  * Removes a class(es) from DOM element(s).
  *
  * @param {Node|Node[]|Element|Element[]} element
- * @param {string|string[]}                             className
+ * @param {string|string[]}               className
  *
  * @alias module:requiem~utils.removeClass
  */

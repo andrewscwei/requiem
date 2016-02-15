@@ -15,13 +15,13 @@ import getRect from './getRect';
  * Computes the intersecting rect of 2 given elements. If only 1 element is
  * specified, the other element will default to the current viewport.
  *
- * @param {...Node|...Element} element
+ * @param {...Node|...Element}
  *
  * @return {Object} Object containing width, height.
  *
  * @alias module:requiem~utils.getIntersectRect
  */
-function getIntersectRect(element) {
+function getIntersectRect() {
   if (!assert(window, 'This method relies on the window object, which is undefined.')) return null;
 
   let n = arguments.length;

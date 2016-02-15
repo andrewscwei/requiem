@@ -11,7 +11,7 @@
 /**
  * Gets the name of a function/class.
  *
- * @param  {Function} f - The function/class.
+ * @param {Function} f - The function/class.
  *
  * @return {string} Name of the function/class.
  *

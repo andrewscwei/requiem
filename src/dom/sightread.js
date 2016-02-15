@@ -128,7 +128,7 @@ function sightread() {
  * Scans the provided node list and returns a new node list with only parent
  * nodes.
  *
- * @param  {NodeList} nodeList - The node list.
+ * @param {NodeList} nodeList - The node list.
  *
  * @return {NodeList} The filtered node list containing only parent nodes.
  *

@@ -44,30 +44,21 @@ function assertType(value, type, allowUndefined, message) {
 
   allowUndefined = (allowUndefined === undefined) ? false : allowUndefined;
 
-  let ok = false;
+  if (allowUndefined && (value === undefined)) return true;
 
-  if (allowUndefined && (value === undefined)) {
-    ok = true;
-  }
-  else if (type instanceof Array) {
+  if (type instanceof Array) {
     let n = type.length;
 
     for (let i = 0; i < n; i++) {
-      if (checkType(value, type[i])) {
-        ok = true;
-        break;
-      }
+      if (checkType(value, type[i])) return true;
     }
-  }
-  else {
-    ok = checkType(value, type);
-  }
 
-  if (!ok) {
     throw new Error(message || 'AssertType failed');
   }
 
-  return ok;
+  if (checkType(value, type)) return true;
+
+  throw new Error(message || 'AssertType failed');
 }
 
 module.exports = assertType;

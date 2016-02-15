@@ -44,7 +44,7 @@ let NodeState = {
   /**
    * Gets the name of a node state.
    *
-   * @param  {NodeState} nodeState - Node state.
+   * @param {NodeState} nodeState - Node state.
    *
    * @return {string} Name of the node state.
    */

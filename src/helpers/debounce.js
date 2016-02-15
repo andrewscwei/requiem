@@ -42,19 +42,14 @@ function debounce(method, delay, leading) {
 
     let later = function() {
       timeout = null;
-
-      if (!leading) {
-        method.apply(context, args);
-      }
+      if (!leading) method.apply(context, args);
     };
 
     let callNow = leading && !timeout;
     clearTimeout(timeout);
     timeout = setTimeout(later, delay);
 
-    if (callNow) {
-      method.apply(context, args);
-    }
+    if (callNow) method.apply(context, args);
   };
 }
 

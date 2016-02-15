@@ -9,8 +9,6 @@
 'use strict';
 
 import assert from '../helpers/assert';
-import inherit from '../helpers/inherit';
-import log from '../helpers/log';
 import EventDispatcher from '../events/EventDispatcher';
 import EventType from '../enums/EventType';
 
@@ -87,18 +85,12 @@ const MIME_TYPES = {
  * @extends module:requiem~events.EventDispatcher
  */
 class AssetLoader extends EventDispatcher {
-  constructor() {
-    super();
-  }
-
   /**
    * Initializes this AssetLoader instance and begins loading assets in the
    * queue.
    */
   init() {
     if (this.queue.length < 1) return;
-
-    log('[AssetLoader]::init()');
 
     let arrlen = this.queue.length;
 
@@ -107,8 +99,6 @@ class AssetLoader extends EventDispatcher {
 
     for (let i = 0; i < arrlen; i++) {
       let target = this.queue[i];
-
-      log('[AssetLoader]::Started loading: ' + target.path);
 
       let xhr = this.getXHR({
         id: i,
@@ -160,8 +150,6 @@ class AssetLoader extends EventDispatcher {
     if (!arguments) return;
     if (arguments.length <= 0) return;
     if (this.state === AssetLoader.STATE.IN_PROGRESS) return;
-
-    log('[AssetLoader]::enqueue(' + arguments + ')');
 
     let arrlen = arguments.length;
 
@@ -292,8 +280,6 @@ class AssetLoader extends EventDispatcher {
 
     if (!this._bytesLoaded) this._bytesLoaded = [];
 
-    log('[AssetLoader]::_onXHRProgress("' + path + '":' + bytesLoaded + '/' + bytesTotal + ')');
-
     let progressEvent = new CustomEvent(EventType.OBJECT.PROGRESS, {
       bubbles: true,
       cancelable: true,
@@ -322,8 +308,6 @@ class AssetLoader extends EventDispatcher {
     let id = xhr.data.id;
     let path = xhr.data.path;
     let type = xhr.data.type;
-
-    log('[AssetLoader]::_onXHRLoadComplete("' + path + '"")');
 
     this._pending--;
 
@@ -355,8 +339,6 @@ class AssetLoader extends EventDispatcher {
     let id = xhr.data.id;
     let path = xhr.data.path;
     let type = xhr.data.type;
-
-    log('[AssetLoader]::_onXHRLoadError("' + path + '"")');
 
     this._pending--;
 
@@ -405,8 +387,6 @@ class AssetLoader extends EventDispatcher {
     let id = xhr.data.id;
     let path = xhr.data.path;
     let type = xhr.data.type;
-
-    log('[AssetLoader]::_onXHRLoadError("' + path + '"")');
 
     this._pending--;
 

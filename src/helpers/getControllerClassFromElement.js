@@ -16,7 +16,7 @@ let namespace = require('../dom/namespace');
 /**
  * Gets the controller class from the DOM element.
  *
- * @param  {Node}   element
+ * @param {Node} element
  *
  * @return {Class} The controller class.
  *
@@ -24,7 +24,6 @@ let namespace = require('../dom/namespace');
  */
 function getControllerClassFromElement(element) {
   let classRegistry = getClassRegistry();
-
   let controllerClassName = getControllerClassNameFromElement(element);
   let instanceName = getInstanceNameFromElement(element);
   let controllerClass = (controllerClassName) ? namespace(controllerClassName, classRegistry) : undefined;

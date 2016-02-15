@@ -53,7 +53,11 @@ let tasks = {
               presets: ['es2015']
             }
           }]
-        }
+        },
+        plugins: [
+          new webpack.optimize.OccurenceOrderPlugin(),
+          new webpack.optimize.DedupePlugin()
+        ]
       },
       ugly: {
         context: paths.src,
@@ -76,7 +80,9 @@ let tasks = {
           }]
         },
         plugins: [
-          new webpack.optimize.UglifyJsPlugin()
+          new webpack.optimize.UglifyJsPlugin(),
+          new webpack.optimize.OccurenceOrderPlugin(),
+          new webpack.optimize.DedupePlugin()
         ]
       }
     }

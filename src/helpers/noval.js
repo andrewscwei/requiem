@@ -33,12 +33,7 @@ function noval(value, recursive) {
     return true;
   }
   else if (typeof value === 'string') {
-    if (value === '') {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return (value === '');
   }
   else if (recursive && (value instanceof Array)) {
     let n = value.length;

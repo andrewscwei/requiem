@@ -309,8 +309,8 @@ class Grid extends Element {
   /**
    * Computes the position of the specified children according to a vacancy
    * map.
-   * @param  {Element} item      - Target item.
-   * @param  {Array}   vacancies - Array of open slots.
+   * @param {Element} item      - Target item.
+   * @param {Array}   vacancies - Array of open slots.
    *
    * @return {Object} Hash describing the computed position of the target item.
    *

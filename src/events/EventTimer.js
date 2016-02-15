@@ -10,7 +10,6 @@
 
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
-import log from '../helpers/log';
 import EventDispatcher from './EventDispatcher';
 
 /**
@@ -164,7 +163,7 @@ class EventTimer extends EventDispatcher {
   /**
    * Removes a timed event by its ID.
    *
-   * @param  {string} id - ID of the timed event.
+   * @param {string} id - ID of the timed event.
    */
   removeEvent(id) {
     if (this.eventPool.hasOwnProperty(id)) {

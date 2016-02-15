@@ -8,19 +8,14 @@
 
 'use strict';
 
-import assert from '../helpers/assert';
-
 /**
  * Gets the rect of the viewport (FOV).
  *
- * @return {Object} Object containing top, left, bottom, right, width,
- *                  height.
+ * @return {Object} Object containing top, left, bottom, right, width, height.
  *
  * @alias module:requiem~utils.getViewportRect
  */
 function getViewportRect() {
-  if (!assert(window && document, 'Window or document undefined.')) return null;
-
   let rect = {};
 
   rect.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);

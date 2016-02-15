@@ -120,7 +120,7 @@ let KeyCode = {
   /**
    * Gets the name of a key code.
    *
-   * @param  {KeyCode} keyCode - Key code.
+   * @param {KeyCode} keyCode - Key code.
    *
    * @return {string} Name of the key code.
    */

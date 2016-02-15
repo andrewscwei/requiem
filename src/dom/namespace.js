@@ -34,10 +34,10 @@ function namespace(path, scope) {
   if (!scope) scope = (window) ? window : {};
   if (path === undefined || path === '') return scope;
 
-  var groups = path.split('.');
-  var currentScope = scope;
+  let groups = path.split('.');
+  let currentScope = scope;
 
-  for (var i = 0; i < groups.length; i++) {
+  for (let i = 0; i < groups.length; i++) {
     currentScope = currentScope[groups[i]] || (currentScope[groups[i]] = {});
   }
 

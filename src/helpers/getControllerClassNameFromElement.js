@@ -13,7 +13,7 @@ let Directive = require('../enums/Directive');
 /**
  * Gets the controller class name from the DOM element.
  *
- * @param  {Node} element - The DOM element.
+ * @param {Node} element - The DOM element.
  *
  * @return {string} The controller class name.
  *

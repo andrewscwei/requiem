@@ -27,7 +27,6 @@ function hasChild(parent, child) {
 
   if (!assert(ps.length === 1, 'Invalid parent specified. Parent must be a single Node or Element instance.')) return false;
   if (!assert(cs.length === 1, 'Invalid child specified. Child must be a single Node or Element instance.')) return false;
-  if (!assert(document, 'Document not found. This method requires document to be valid.')) return false;
 
   let p = ps[0];
   let c = cs[0];
@@ -36,7 +35,6 @@ function hasChild(parent, child) {
 
   while (c !== null && c !== undefined && c !== document) {
     c = c.parentNode;
-
     if (c === p) return true;
   }
 

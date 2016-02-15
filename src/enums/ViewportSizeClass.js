@@ -72,18 +72,14 @@ let ViewportSizeClass = {
     let rect = require('../utils/getViewportRect')();
     let t;
 
-    if (measurement === 'height') {
+    if (measurement === 'height')
       t = rect.height;
-    }
-    else if (measurement === 'max') {
+    else if (measurement === 'max')
       t = Math.max(rect.width, rect.height);
-    }
-    else if (measurement === 'min') {
+    else if (measurement === 'min')
       t = Math.min(rect.width, rect.height);
-    }
-    else {
+    else
       t = rect.width;
-    }
 
     if (t >= ViewportSizeClass.MOBILE.min && t <= ViewportSizeClass.MOBILE.max) return ViewportSizeClass.MOBILE;
     if (t >= ViewportSizeClass.PHABLET.min && t <= ViewportSizeClass.PHABLET.max) return ViewportSizeClass.PHABLET;

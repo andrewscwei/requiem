@@ -13,10 +13,10 @@ import toElementArray from '../helpers/toElementArray';
 import hasClass from './hasClass';
 
 /**
- * Adds a class(es) to DOM element(s).
+ * Adds class(es) to DOM element(s).
  *
  * @param {Node|Node[]|Element|Element[]} element
- * @param {string|string[]}                             className
+ * @param {string|string[]}               className
  *
  * @alias module:requiem~utils.addClass
  */
@@ -27,12 +27,10 @@ function addClass(element, className) {
 
   if (!assert((typeof className === 'string') || (className instanceof Array), 'Invalid class name specified. Must be either a string or an array of strings.')) return;
 
-  if (typeof className === 'string') {
+  if (typeof className === 'string')
     classes.push(className);
-  }
-  else {
+  else
     classes = className;
-  }
 
   let nClasses = classes.length;
 

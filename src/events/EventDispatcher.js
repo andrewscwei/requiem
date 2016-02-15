@@ -10,7 +10,6 @@
 
 import assert from'../helpers/assert';
 import assertType from'../helpers/assertType';
-import log from'../helpers/log';
 
 /**
  * @class
@@ -39,8 +38,6 @@ class EventDispatcher {
     if (!assertType(type, 'string', false, 'Invalid parameter: type')) return;
     if (!assertType(listener, 'function', false, 'Invalid parameter: listener')) return;
 
-    log('[EventDispatcher]::addEventListener(' + type + ')');
-
     if (!this.__private__.listenerMap[type]) {
       this.__private__.listenerMap[type] = [];
     }
@@ -61,8 +58,6 @@ class EventDispatcher {
     if (!assertType(listener, 'function', true, 'Invalid parameter: listener')) return;
     if (!assert(this.__private__.listenerMap, 'Listener map is null.')) return;
     if (!assert(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
-
-    log('[EventDispatcher]::removeEventListener(' + type + ')');
 
     if (listener) {
       let index = this.__private__.listenerMap[type].indexOf(listener);
@@ -110,8 +105,6 @@ class EventDispatcher {
     if (!assert(this.__private__.listenerMap, 'Listener map is null.')) return;
 
     if (!this.__private__.listenerMap[event.type]) return;
-
-    log('[EventDispatcher]::dispatchEvent(' + event.type + ')');
 
     let arrlen = this.__private__.listenerMap[event.type].length;
 

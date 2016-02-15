@@ -64,11 +64,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _injectModule = __webpack_require__(1);
+	var _assert = __webpack_require__(1);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	var _injectModule = __webpack_require__(40);
 	
 	var _injectModule2 = _interopRequireDefault(_injectModule);
 	
-	var _polyfill = __webpack_require__(2);
+	var _polyfill = __webpack_require__(42);
 	
 	var _polyfill2 = _interopRequireDefault(_polyfill);
 	
@@ -87,16 +91,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.30.1', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.30.3', writable: false });
 	
-	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(3));
-	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(37));
-	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(40));
-	(0, _injectModule2.default)(requiem, 'enums', __webpack_require__(43));
-	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(46));
-	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(47));
+	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(29));
+	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(36));
+	(0, _injectModule2.default)(requiem, 'net', __webpack_require__(45));
+	(0, _injectModule2.default)(requiem, 'enums', __webpack_require__(34));
+	(0, _injectModule2.default)(requiem, 'ui', __webpack_require__(47));
+	(0, _injectModule2.default)(requiem, 'utils', __webpack_require__(51));
 	
 	(0, _polyfill2.default)();
+	
+	(0, _assert2.default)(window && document, 'Requiem is a front-end web framework where \'window\' and \'document\' must be defined');
 	
 	module.exports = requiem;
 
@@ -115,101 +121,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	/**
-	 * Injects a module and all of its sub-modules into a target module.
+	 * Asserts the specified condition and throws a warning if assertion fails.
 	 *
-	 * @param {Object} target     - Target module for injecting a module into.
-	 * @param {string} moduleName - Name of the module to be injected (used as the
-	 *                              key for the key-value pair in target module).
-	 * @param {Object} module     - Module object (used as value for the key-value
-	 *                              pair in target module).
+	 * @param {boolean} condition - Condition to validate against.
+	 * @param {string}  [message] - Message to be displayed when assertion fails.
 	 *
-	 * @alias module:requiem~helpers.injectModule
+	 * @return {boolean} True if assert passed, false otherwise.
+	 *
+	 * @throws Error is assert fails.
+	 *
+	 * @alias module:requiem~helpers.assert
 	 */
 	
-	function injectModule(target, moduleName, module) {
-	  Object.defineProperty(target, moduleName, {
-	    value: module,
-	    writable: false
-	  });
-	
-	  for (var key in module) {
-	    if (module.hasOwnProperty(key)) {
-	      Object.defineProperty(target, key, {
-	        value: module[key],
-	        writable: false
-	      });
-	    }
-	  }
+	function assert(condition, message) {
+	  if (!condition) throw new Error(message || 'Assert failed');
+	  return condition;
 	}
 	
-	module.exports = injectModule;
+	module.exports = assert;
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Applies special polyfills to the browser window (i.e. IE happiness).
-	 *
-	 * @alias module:requiem~helpers.polyfill
-	 */
-	
-	function polyfill() {
-	  if (!window) return;
-	
-	  // Create CustomEvent class.
-	  function CustomEvent(event, params) {
-	    params = params || { bubbles: false, cancelable: false, detail: undefined };
-	    var evt = document.createEvent('CustomEvent');
-	    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-	    return evt;
-	  }
-	
-	  CustomEvent.prototype = window.Event.prototype;
-	
-	  window.CustomEvent = CustomEvent;
-	
-	  // Polyfill to support passing of arguments to the callback function of either
-	  // setTimeout() or setInterval() in IE9 and below.
-	  //
-	  // @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval}
-	  if (document.all && !window.setTimeout.isPolyfill) {
-	    var __nativeST__ = window.setTimeout;
-	    window.setTimeout = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
-	      var aArgs = Array.prototype.slice.call(arguments, 2);
-	      return __nativeST__(vCallback instanceof Function ? function () {
-	        vCallback.apply(null, aArgs);
-	      } : vCallback, nDelay);
-	    };
-	    window.setTimeout.isPolyfill = true;
-	  }
-	
-	  if (document.all && !window.setInterval.isPolyfill) {
-	    var __nativeSI__ = window.setInterval;
-	    window.setInterval = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
-	      var aArgs = Array.prototype.slice.call(arguments, 2);
-	      return __nativeSI__(vCallback instanceof Function ? function () {
-	        vCallback.apply(null, aArgs);
-	      } : vCallback, nDelay);
-	    };
-	    window.setInterval.isPolyfill = true;
-	  }
-	}
-	
-	module.exports = polyfill;
-
-/***/ },
-/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -222,81 +154,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	/**
-	 * Collection of DOM manipulation methods.
-	 *
-	 * @namespace module:requiem~dom
-	 */
-	
-	var dom = {};
-	
-	Object.defineProperty(dom, 'createElement', { value: __webpack_require__(4), writable: false, enumerable: true });
-	Object.defineProperty(dom, 'getClassRegistry', { value: __webpack_require__(8), writable: false, enumerable: true });
-	Object.defineProperty(dom, 'getDataRegistry', { value: __webpack_require__(9), writable: false, enumerable: true });
-	Object.defineProperty(dom, 'namespace', { value: __webpack_require__(10), writable: false, enumerable: true });
-	Object.defineProperty(dom, 'ready', { value: __webpack_require__(11), writable: false, enumerable: true });
-	Object.defineProperty(dom, 'register', { value: __webpack_require__(12), writable: false, enumerable: true });
-	Object.defineProperty(dom, 'sightread', { value: __webpack_require__(14), writable: false, enumerable: true });
-	
-	module.exports = dom;
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _assertType = __webpack_require__(5);
-	
-	var _assertType2 = _interopRequireDefault(_assertType);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Creates a DOM element from the provided string.
-	 *
-	 * @param {string} value - String describing the DOM element.
-	 *
-	 * @return {Node} DOM element.
-	 *
-	 * @alias module:requiem~dom.createElement
-	 */
-	function createElement(value) {
-	  if (!document) return null;
-	
-	  (0, _assertType2.default)(value, 'string', true, 'Value must be a string');
-	
-	  var div = document.createElement('div');
-	  div.innerHTML = value;
-	  return div.firstChild;
-	}
-	
-	module.exports = createElement;
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var assert = __webpack_require__(6);
-	var checkType = __webpack_require__(7);
+	var assert = __webpack_require__(1);
+	var checkType = __webpack_require__(37);
 	
 	/**
 	 * Asserts the specified condition and throws a warning if assertion fails.
@@ -331,179 +190,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  allowUndefined = allowUndefined === undefined ? false : allowUndefined;
 	
-	  var ok = false;
+	  if (allowUndefined && value === undefined) return true;
 	
-	  if (allowUndefined && value === undefined) {
-	    ok = true;
-	  } else if (type instanceof Array) {
+	  if (type instanceof Array) {
 	    var n = type.length;
 	
 	    for (var i = 0; i < n; i++) {
-	      if (checkType(value, type[i])) {
-	        ok = true;
-	        break;
-	      }
+	      if (checkType(value, type[i])) return true;
 	    }
-	  } else {
-	    ok = checkType(value, type);
-	  }
 	
-	  if (!ok) {
 	    throw new Error(message || 'AssertType failed');
 	  }
 	
-	  return ok;
+	  if (checkType(value, type)) return true;
+	
+	  throw new Error(message || 'AssertType failed');
 	}
 	
 	module.exports = assertType;
 
 /***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Asserts the specified condition and throws a warning if assertion fails.
-	 *
-	 * @param {boolean} condition - Condition to validate against.
-	 * @param {string}  [message] - Message to be displayed when assertion fails.
-	 *
-	 * @return {boolean} True if assert passed, false otherwise.
-	 *
-	 * @throws Error is assert fails.
-	 *
-	 * @alias module:requiem~helpers.assert
-	 */
-	
-	function assert(condition, message) {
-	  if (!condition) throw new Error(message || 'Assert failed');
-	  return condition;
-	}
-	
-	module.exports = assert;
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Verifies that a given is of the given type.
-	 *
-	 * @param {*} value - Any value.
-	 * @param {*} type  - Any class or string that describes a type.
-	 *
-	 * @return {boolean} True if validation passes, false otherwise.
-	 *
-	 * @alias module:requiem~helpers.checkType
-	 */
-	
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-	
-	function checkType(value, type) {
-	  if (typeof type === 'string') {
-	    switch (type) {
-	      case 'string':
-	      case 'object':
-	      case 'number':
-	      case 'boolean':
-	      case 'function':
-	        return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === type;
-	
-	      case 'class':
-	        return typeof value === 'function';
-	
-	      case 'array':
-	        return value.constructor === Array;
-	
-	      default:
-	        return false;
-	    }
-	  } else {
-	    return value instanceof type;
-	  }
-	}
-	
-	module.exports = checkType;
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Gets the class registry.
-	 *
-	 * @return {Object} The class registry.
-	 *
-	 * @alias module:requiem~dom.getClassRegistry
-	 */
-	
-	function getClassRegistry() {
-	  if (window._classRegistry === undefined) window._classRegistry = {};
-	  return window._classRegistry;
-	}
-	
-	module.exports = getClassRegistry;
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Gets the data registry.
-	 *
-	 * @return {Object} The data registry.
-	 *
-	 * @alias module:requiem~dom.getDataRegistry
-	 */
-	
-	function getDataRegistry() {
-	  if (window._dataRegistry === undefined) window._dataRegistry = {};
-	  return window._dataRegistry;
-	}
-	
-	module.exports = getDataRegistry;
-
-/***/ },
-/* 10 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -516,404 +223,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _assertType = __webpack_require__(5);
-	
-	var _assertType2 = _interopRequireDefault(_assertType);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
 	/**
-	 * Generates a nested namespace in the specified scope, as described by the dot-
-	 * notated namespace path.
+	 * Transforms given element(s) to an element array.
 	 *
-	 * @param {string}        [path]            - Namespace path with keywords
-	 *                                            separated by dots.
-	 * @param {Object|window} [scope=window|{}] - Scope/object to create the nested
-	 *                                            namespace in. If browser
-	 *                                            environment is detected, this
-	 *                                            param will default to window.
-	 *                                            Otherwise it will be an empty
-	 *                                            object literal.
+	 * @param {*}       element
+	 * @param {boolean} [keepElement=false]
 	 *
-	 * @return {Object} The generated namespace.
-	 *
-	 * @alias module:requiem~dom.namespace
-	 */
-	function namespace(path, scope) {
-	  (0, _assertType2.default)(path, 'string', true, 'Invalid parameter: path');
-	  (0, _assertType2.default)(scope, 'object', true, 'Invalid optional parameter: scope');
-	
-	  if (!scope) scope = window ? window : {};
-	  if (path === undefined || path === '') return scope;
-	
-	  var groups = path.split('.');
-	  var currentScope = scope;
-	
-	  for (var i = 0; i < groups.length; i++) {
-	    currentScope = currentScope[groups[i]] || (currentScope[groups[i]] = {});
-	  }
-	
-	  return currentScope;
-	}
-	
-	module.exports = namespace;
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
+	 * @alias module:requiem~helpers.toElementArray
 	 */
 	
-	'use strict';
+	function toElementArray(element, keepElement) {
+	  var Element = __webpack_require__(4);
 	
-	var _assertType = __webpack_require__(5);
+	  if (!element) return null;
 	
-	var _assertType2 = _interopRequireDefault(_assertType);
+	  var elements = undefined;
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	  if (element instanceof Array) elements = element;else if (element instanceof NodeList) elements = Array.prototype.slice.call(element);else elements = [element];
 	
-	/**
-	 * Invokes a callback when the DOM is ready.
-	 *
-	 * @param {Function} callback - Function invoked when the DOM is ready.
-	 *
-	 * @alias module:requiem~dom.ready
-	 */
-	function ready(callback) {
-	  (0, _assertType2.default)(callback, 'function', false, 'Invalid parameter: callback');
-	
-	  if (!document) return null;
-	
-	  var onLoaded = function onLoaded(event) {
-	    if (document.addEventListener) {
-	      document.removeEventListener('DOMContentLoaded', onLoaded, false);
-	      window.removeEventListener('load', onLoaded, false);
-	    } else if (document.attachEvent) {
-	      document.detachEvent('onreadystatechange', onLoaded);
-	      window.detachEvent('onload', onLoaded);
-	    }
-	
-	    setTimeout(callback, 1);
-	  };
-	
-	  if (document.readyState === 'complete') {
-	    return setTimeout(callback, 1);
-	  }
-	
-	  if (document.addEventListener) {
-	    document.addEventListener('DOMContentLoaded', onLoaded, false);
-	    window.addEventListener('load', onLoaded, false);
-	  } else if (document.attachEvent) {
-	    document.attachEvent('onreadystatechange', onLoaded);
-	    window.attachEvent('onload', onLoaded);
-	  }
-	
-	  return null;
-	}
-	
-	module.exports = ready;
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _getClassRegistry = __webpack_require__(8);
-	
-	var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
-	
-	var _namespace = __webpack_require__(10);
-	
-	var _namespace2 = _interopRequireDefault(_namespace);
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _assertType = __webpack_require__(5);
-	
-	var _assertType2 = _interopRequireDefault(_assertType);
-	
-	var _getFunctionName = __webpack_require__(13);
-	
-	var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Registers a controller class with Requiem to be used for instantiating
-	 * custom elements during the sighreading process.
-	 *
-	 * @param {Class}  c   - Class to be registered.
-	 * @param {string} [n] - Namespace of class.
-	 *
-	 * @return {Class} The registered class.
-	 *
-	 * @alias module:requiem~dom.register
-	 */
-	function register(c, n) {
-	  (0, _assertType2.default)(c, 'function', false, 'Invalid class provided');
-	  (0, _assertType2.default)(n, 'string', true, 'Invalid optional parameter: namespace');
-	
-	  var className = (0, _getFunctionName2.default)(c);
-	
-	  if (typeof n === 'string') {
-	    var groups = n.split('.');
-	    className = groups.pop();
-	    n = groups.join('.');
-	  }
-	
-	  if (!(0, _assert2.default)((0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
-	  (0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] = c;
-	
-	  return c;
-	}
-	
-	module.exports = register;
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Gets the name of a function/class.
-	 *
-	 * @param  {Function} f - The function/class.
-	 *
-	 * @return {string} Name of the function/class.
-	 *
-	 * @alias module:requiem~helpers.getFunctionName
-	 */
-	
-	function getFunctionName(f) {
-	  if (!f) return;
-	  if (f.name) return f.name;
-	
-	  var regex = /function\s([^(]{1,})\(/;
-	  var name = regex.exec(f.toString());
-	
-	  return name && name.length > 1 ? name[1].trim() : '';
-	}
-	
-	module.exports = getFunctionName;
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _getClassRegistry = __webpack_require__(8);
-	
-	var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _assertType = __webpack_require__(5);
-	
-	var _assertType2 = _interopRequireDefault(_assertType);
-	
-	var _getInstanceNameFromElement = __webpack_require__(15);
-	
-	var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
-	
-	var _getControllerClassFromElement = __webpack_require__(17);
-	
-	var _getControllerClassFromElement2 = _interopRequireDefault(_getControllerClassFromElement);
-	
-	var _getControllerClassNameFromElement = __webpack_require__(18);
-	
-	var _getControllerClassNameFromElement2 = _interopRequireDefault(_getControllerClassNameFromElement);
-	
-	var _Directive = __webpack_require__(16);
-	
-	var _Directive2 = _interopRequireDefault(_Directive);
-	
-	var _hasChild = __webpack_require__(36);
-	
-	var _hasChild2 = _interopRequireDefault(_hasChild);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Crawls a DOM node and performs transformations on child nodes marked with
-	 * Requiem attributes, such as instantiating controller classes and assigning
-	 * instance names. Transformations are also applied to the specified DOM node,
-	 * not just its children.
-	 *
-	 * @param {Node}   [element=document] - Target element for sightreading. By
-	 *                                      default this will be the document.
-	 * @param {Object} [exclusive=false]  - Specifies whether the root node should
-	 *                                      be excluded from the sightread.
-	 *
-	 * @return {Object|Element} Either a dictionary (object literal) containing
-	 *                          all instantiated Requiem Element instances (if the
-	 *                          target element was the entire document) or a
-	 *                          single Requiem Element instance representing to
-	 *                          the single target element.
-	 *
-	 * @alias module:requiem~dom.sightread
-	 */
-	function sightread() {
-	  var element = document;
-	  var classRegistry = (0, _getClassRegistry2.default)();
-	  var exclusive = false;
-	
-	  if (arguments.length === 1) {
-	    var arg = arguments[0];
-	    (0, _assertType2.default)(arg, [Node, 'boolean'], true);
-	
-	    if (arg instanceof Node) {
-	      element = arg;
-	    } else if (typeof obj === 'boolean') {
-	      exclusive = arg;
-	    }
-	  } else if (arguments.length === 2) {
-	    var arg1 = arguments[0];
-	    var arg2 = arguments[1];
-	
-	    (0, _assertType2.default)(arg1, Node, true);
-	    (0, _assertType2.default)(arg2, 'boolean', true);
-	
-	    if (arg1 !== undefined) element = arg1;
-	    if (arg2 !== undefined) exclusive = arg2;
-	  }
-	
-	  if (element === document) exclusive = true;
-	
-	  if (!exclusive) {
-	    var instanceName = (0, _getInstanceNameFromElement2.default)(element);
-	    var ControllerClass = (0, _getControllerClassFromElement2.default)(element);
-	
-	    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(element) + '\' is not found in specified controller scope: ' + classRegistry);
-	
-	    return new ControllerClass({
-	      element: element,
-	      name: instanceName,
-	      children: sightread(element, true)
-	    });
-	  } else {
-	    var Element = __webpack_require__(19);
-	    var children = null;
-	
-	    if (!(0, _assert2.default)(element instanceof Node || element instanceof Element || document && element === document, 'Element must be an instance of an Node or the DOM itself.')) return null;
-	    if (element instanceof Element) element = element.element;
-	
-	    var nodeList = element.querySelectorAll('[' + _Directive2.default.CLASS + '], [' + _Directive2.default.INSTANCE + ']');
-	    var qualifiedChildren = _filterParentElements(nodeList);
-	    var n = qualifiedChildren.length;
-	
-	    for (var i = 0; i < n; i++) {
-	      var child = qualifiedChildren[i];
-	      var instanceName = (0, _getInstanceNameFromElement2.default)(child);
-	      var ControllerClass = (0, _getControllerClassFromElement2.default)(child, classRegistry);
-	
-	      (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(child) + '\' is not found in specified controller scope: ' + classRegistry);
-	
-	      var m = new ControllerClass({
-	        element: child,
-	        name: instanceName,
-	        children: sightread(child, true)
-	      });
-	
-	      if (instanceName && instanceName.length > 0) {
-	        if (!children) children = {};
-	
-	        if (!children[instanceName]) {
-	          children[instanceName] = m;
-	        } else {
-	          if (children[instanceName] instanceof Array) {
-	            children[instanceName].push(m);
-	          } else {
-	            var a = [children[instanceName]];
-	            a.push(m);
-	            children[instanceName] = a;
-	          }
-	        }
-	      }
-	    }
-	
-	    return children;
-	  }
-	}
-	
-	/**
-	 * Scans the provided node list and returns a new node list with only parent
-	 * nodes.
-	 *
-	 * @param  {NodeList} nodeList - The node list.
-	 *
-	 * @return {NodeList} The filtered node list containing only parent nodes.
-	 *
-	 * @private
-	 * @alias module:requiem~dom._filterParentElements
-	 */
-	function _filterParentElements(nodeList) {
-	  var n = nodeList.length;
-	  var o = [];
+	  var n = elements.length;
 	
 	  for (var i = 0; i < n; i++) {
-	    var isParent = true;
-	    var child = nodeList[i];
+	    var e = elements[i];
 	
-	    for (var j = 0; j < n; j++) {
-	      if (i === j) continue;
-	
-	      var parent = nodeList[j];
-	
-	      if ((0, _hasChild2.default)(parent, child)) {
-	        isParent = false;
-	        break;
-	      }
-	    }
-	
-	    if (isParent) {
-	      o.push(child);
+	    if (!keepElement && e instanceof Element) {
+	      elements[i] = e.element;
 	    }
 	  }
 	
-	  return o;
+	  return elements;
 	}
 	
-	module.exports = sightread;
+	module.exports = toElementArray;
 
 /***/ },
-/* 15 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -926,250 +270,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var Directive = __webpack_require__(16);
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 	
-	/**
-	 * Gets the instance name from a DOM element.
-	 *
-	 * @param  {Node} element - The DOM element.
-	 *
-	 * @return {string} The instance name.
-	 *
-	 * @alias module:requiem~helpers.getInstanceNameFromElement
-	 */
-	function getInstanceNameFromElement(element) {
-	  return element.getAttribute(Directive.INSTANCE);
-	}
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	module.exports = getInstanceNameFromElement;
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Enum for custom DOM directives/attributes.
-	 *
-	 * @readonly
-	 * @enum {string}
-	 * @alias module:requiem~enums.Directive
-	 * @see {@link module:requiem~dom.sightread}
-	 */
-	
-	var Directive = {
-	  /**
-	   * Use this directive for attaching a controller class to a DOM element.
-	   * Controller classes are automatically instantiated during the sightreading
-	   * process.
-	   */
-	  CLASS: 'data-class',
-	
-	  /**
-	   * Use this directive for assigning an instance name to a DOM element.
-	   */
-	  INSTANCE: 'data-instance',
-	
-	  /**
-	   * Use this directive for managing DOM element states.
-	   */
-	  STATE: 'data-state',
-	
-	  /**
-	   * Use this directive for referencing global shared data.
-	   */
-	  REF: 'data-ref',
-	
-	  /**
-	   * Use this directive to map any property from the DOM to the controller.
-	   */
-	  PROPERTY: 'data-'
-	};
-	
-	module.exports = Directive;
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var getControllerClassNameFromElement = __webpack_require__(18);
-	var getInstanceNameFromElement = __webpack_require__(15);
-	var getClassRegistry = __webpack_require__(8);
-	var namespace = __webpack_require__(10);
-	
-	/**
-	 * Gets the controller class from the DOM element.
-	 *
-	 * @param  {Node}   element
-	 *
-	 * @return {Class} The controller class.
-	 *
-	 * @alias module:requiem~helpers.getControllerClassFromElement
-	 */
-	function getControllerClassFromElement(element) {
-	  var classRegistry = getClassRegistry();
-	
-	  var controllerClassName = getControllerClassNameFromElement(element);
-	  var instanceName = getInstanceNameFromElement(element);
-	  var controllerClass = controllerClassName ? namespace(controllerClassName, classRegistry) : undefined;
-	
-	  // If no controller class is specified but element is marked as an instance,
-	  // default the controller class to Element.
-	  if (!controllerClass && instanceName && instanceName.length > 0) {
-	    controllerClass = __webpack_require__(19);
-	  } else if (typeof controllerClass !== 'function') {
-	    switch (controllerClassName) {
-	      case 'Video':
-	        controllerClass = __webpack_require__(31);
-	        break;
-	
-	      case 'Element':
-	        controllerClass = __webpack_require__(19);
-	        break;
-	
-	      case 'Grid':
-	        controllerClass = __webpack_require__(32);
-	        break;
-	
-	      default:
-	        controllerClass = null;
-	    }
-	  }
-	
-	  return controllerClass;
-	}
-	
-	module.exports = getControllerClassFromElement;
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var Directive = __webpack_require__(16);
-	
-	/**
-	 * Gets the controller class name from the DOM element.
-	 *
-	 * @param  {Node} element - The DOM element.
-	 *
-	 * @return {string} The controller class name.
-	 *
-	 * @alias module:requiem~helpers.getControllerClassNameFromElement
-	 */
-	function getControllerClassNameFromElement(element) {
-	  return element.getAttribute(Directive.CLASS);
-	}
-	
-	module.exports = getControllerClassNameFromElement;
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _getDataRegistry = __webpack_require__(9);
+	var _getDataRegistry = __webpack_require__(15);
 	
 	var _getDataRegistry2 = _interopRequireDefault(_getDataRegistry);
 	
-	var _assert = __webpack_require__(6);
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _assertType = __webpack_require__(5);
+	var _assertType = __webpack_require__(2);
 	
 	var _assertType2 = _interopRequireDefault(_assertType);
 	
-	var _noval = __webpack_require__(20);
+	var _noval = __webpack_require__(41);
 	
 	var _noval2 = _interopRequireDefault(_noval);
 	
-	var _getFunctionName = __webpack_require__(13);
+	var _getFunctionName = __webpack_require__(20);
 	
 	var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
 	
-	var _log = __webpack_require__(21);
-	
-	var _log2 = _interopRequireDefault(_log);
-	
-	var _validateAttribute = __webpack_require__(22);
+	var _validateAttribute = __webpack_require__(43);
 	
 	var _validateAttribute2 = _interopRequireDefault(_validateAttribute);
 	
-	var _getInstanceNameFromElement = __webpack_require__(15);
+	var _getInstanceNameFromElement = __webpack_require__(12);
 	
 	var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
 	
-	var _DirtyType = __webpack_require__(23);
+	var _DirtyType = __webpack_require__(7);
 	
 	var _DirtyType2 = _interopRequireDefault(_DirtyType);
 	
-	var _NodeState = __webpack_require__(24);
+	var _NodeState = __webpack_require__(17);
 	
 	var _NodeState2 = _interopRequireDefault(_NodeState);
 	
-	var _EventType = __webpack_require__(25);
+	var _EventType = __webpack_require__(8);
 	
 	var _EventType2 = _interopRequireDefault(_EventType);
 	
-	var _Directive = __webpack_require__(16);
+	var _Directive = __webpack_require__(5);
 	
 	var _Directive2 = _interopRequireDefault(_Directive);
 	
-	var _ElementUpdateDelegate = __webpack_require__(26);
+	var _ElementUpdateDelegate = __webpack_require__(46);
 	
 	var _ElementUpdateDelegate2 = _interopRequireDefault(_ElementUpdateDelegate);
 	
-	var _getRect = __webpack_require__(28);
+	var _getRect = __webpack_require__(6);
 	
 	var _getRect2 = _interopRequireDefault(_getRect);
 	
-	var _sightread = __webpack_require__(14);
+	var _sightread = __webpack_require__(16);
 	
 	var _sightread2 = _interopRequireDefault(_sightread);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -1181,19 +342,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~ui.Element
 	 */
 	
-	var Element = (function () {
+	var Element = function () {
 	  /**
 	   * Creates a new Element instance with optional initial properties.
 	   *
-	   * @param  {string|Node|Object} [init] - Initial properties. If this is a
-	   *                                       string, it will be used as this
-	   *                                       Element's instance name. If this is
-	   *                                       a Node, it would be used as the
-	   *                                       internal DOM element. If this is a
-	   *                                       hash, each key/value pair will be
-	   *                                       mapped to an instance property (only
-	   *                                       existing instance properties will be
-	   *                                       mapped).
+	   * @param {string|Node|Object} [init] - Initial properties. If this is a
+	   *                                      string, it will be used as this
+	   *                                      Element's instance name. If this is
+	   *                                      a Node, it would be used as the
+	   *                                      internal DOM element. If this is a
+	   *                                      hash, each key/value pair will be
+	   *                                      mapped to an instance property (only
+	   *                                      existing instance properties will be
+	   *                                      mapped).
 	   *
 	   * @return {Element} A new Element instance.
 	   */
@@ -1272,8 +433,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }, 'properties');
 	    }
 	
-	    (0, _log2.default)(this.toString() + ':new(', init, ')');
-	
 	    this.init();
 	  }
 	
@@ -1338,15 +497,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	   *                                                      enumerable.
 	   */
 	
+	
 	  _createClass(Element, [{
 	    key: 'init',
+	
 	
 	    /**
 	     * Initializes this Element instance. Must manually invoke.
 	     */
 	    value: function init() {
-	      (0, _log2.default)(this.toString() + '::init()');
-	
 	      this.__set_node_state(_NodeState2.default.INITIALIZED);
 	      this.updateDelegate.init();
 	
@@ -1378,8 +537,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'destroy',
 	    value: function destroy() {
-	      (0, _log2.default)(this.toString() + '::destroy()');
-	
 	      // Destroy all children first.
 	      for (var key in this.children) {
 	        var child = this.children[key];
@@ -1771,11 +928,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (event === _EventType2.default.MOUSE.CLICK_OUTSIDE) {
 	          (function () {
 	            var _listener = listener;
-	            listener = (function (event) {
+	            listener = function (event) {
 	              if (event.target !== this.element && !this.hasChild(event.target)) {
 	                _listener(event);
 	              }
-	            }).bind(_this);
+	            }.bind(_this);
 	          })();
 	        }
 	
@@ -2072,7 +1229,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Gets the value of the attribute with the specified name.
 	     *
-	     * @param  {string} key - Name of the attribute.
+	     * @param {string} key - Name of the attribute.
 	     *
 	     * @return {*} Value of the attribute.
 	     */
@@ -2134,7 +1291,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Checks to see if this Element instance has the attribute of the specified
 	     * name.
 	     *
-	     * @param  {string}  key - Name of the attribute.
+	     * @param {string}  key - Name of the attribute.
 	     *
 	     * @return {boolean} True if attribute with said name exists, false otherwise.
 	     */
@@ -2569,7 +1726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Validates the inner DOM element.
 	     *
-	     * @param  {Node} element - DOM element.
+	     * @param {Node} element - DOM element.
 	     *
 	     * @return {boolean} True if validation passes, false otherwise.
 	     *
@@ -2586,7 +1743,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Sets the Element's node state.
 	     *
-	     * @param  {NodeState} nodeState - Node state.
+	     * @param {NodeState} nodeState - Node state.
 	     *
 	     * @private
 	     */
@@ -2837,78 +1994,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 	
 	  return Element;
-	})();
+	}();
 	
 	module.exports = Element;
 
 /***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-	
-	var assertType = __webpack_require__(5);
-	
-	/**
-	 * Checks if a given value is equal to null. Option to specify recursion, which
-	 * would further evaluate inner elements, such as when an Array or Object is
-	 * specified.
-	 *
-	 * @param {*}       value              - Value to evaluate.
-	 * @param {boolean} [recursive=false]  - Specifies whether to recursively
-	 *                                       evaluate the supplied value's inner
-	 *                                       values (i.e. an Array or Object).
-	 *
-	 * @return {boolean} True if null, false otherwise.
-	 *
-	 * @alias module:requiem~helpers.noval
-	 */
-	function noval(value, recursive) {
-	  assertType(recursive, 'boolean', true, 'Invalid parameter: recursive');
-	
-	  if (recursive === undefined) recursive = false;
-	
-	  if (value === undefined || value === null) {
-	    return true;
-	  } else if (typeof value === 'string') {
-	    if (value === '') {
-	      return true;
-	    } else {
-	      return false;
-	    }
-	  } else if (recursive && value instanceof Array) {
-	    var n = value.length;
-	
-	    for (var i = 0; i < n; i++) {
-	      if (!noval(value[i], true)) return false;
-	    }
-	
-	    return true;
-	  } else if (recursive && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object) {
-	    for (var p in value) {
-	      if (!noval(value[p], true)) return false;
-	    }
-	
-	    return true;
-	  } else {
-	    return false;
-	  }
-	}
-	
-	module.exports = noval;
-
-/***/ },
-/* 21 */
+/* 5 */
 /***/ function(module, exports) {
 
 	/**
@@ -2922,24 +2013,47 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	/**
-	 * Internal console logger that activates only when VARS_DEBUG flag is present
-	 * in the window.
+	 * Enum for custom DOM directives/attributes.
 	 *
-	 * @param {...String} message - Message to log.
-	 *
-	 * @alias module:requiem~helpers.log
+	 * @readonly
+	 * @enum {string}
+	 * @alias module:requiem~enums.Directive
+	 * @see {@link module:requiem~dom.sightread}
 	 */
 	
-	function log(message) {
-	  if (window && window.REQUIEM_DEBUG && window.console && console.log) {
-	    Function.apply.call(console.log, console, arguments);
-	  }
-	}
+	var Directive = {
+	  /**
+	   * Use this directive for attaching a controller class to a DOM element.
+	   * Controller classes are automatically instantiated during the sightreading
+	   * process.
+	   */
+	  CLASS: 'data-class',
 	
-	module.exports = log;
+	  /**
+	   * Use this directive for assigning an instance name to a DOM element.
+	   */
+	  INSTANCE: 'data-instance',
+	
+	  /**
+	   * Use this directive for managing DOM element states.
+	   */
+	  STATE: 'data-state',
+	
+	  /**
+	   * Use this directive for referencing global shared data.
+	   */
+	  REF: 'data-ref',
+	
+	  /**
+	   * Use this directive to map any property from the DOM to the controller.
+	   */
+	  PROPERTY: 'data-'
+	};
+	
+	module.exports = Directive;
 
 /***/ },
-/* 22 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2952,29 +2066,76 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var Directive = __webpack_require__(16);
+	var _assert = __webpack_require__(1);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	var _toElementArray = __webpack_require__(3);
+	
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+	
+	var _getViewportRect = __webpack_require__(14);
+	
+	var _getViewportRect2 = _interopRequireDefault(_getViewportRect);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/**
-	 * Validates whether an attribute can be used (could be reserved by Requiem).
+	 * Gets the rect of a given element or the overall rect of an array of elements.
 	 *
-	 * @param {string} attribute - Name of the attribute.
+	 * @param {Node|Node[]|Element|Element[]} element
+	 * @param {Object}                        [reference=window]
 	 *
-	 * @return {boolean} True if attribute is OK to be used, false otherwise.
+	 * @return {Object} Object containing top, left, bottom, right, width, height.
 	 *
-	 * @alias module:requiem~helpers.validateAttribute
+	 * @alias module:requiem~utils.getRect
 	 */
-	function validateAttribute(attribute) {
-	  for (var d in Directive) {
-	    if (attribute === Directive[d]) return false;
+	function getRect(element, reference) {
+	  if (element === window) return (0, _getViewportRect2.default)();
+	
+	  if (!reference) reference = window;
+	
+	  var elements = (0, _toElementArray2.default)(element);
+	  var n = elements.length;
+	
+	  if (n <= 0) return null;
+	
+	  var refRect = getRect(reference);
+	
+	  if (!(0, _assert2.default)(refRect, 'Cannot determine reference FOV.')) return null;
+	
+	  var winRect = getRect(window);
+	  var rect = {};
+	
+	  for (var i = 0; i < n; i++) {
+	    var e = elements[i];
+	    var c = e.getBoundingClientRect();
+	
+	    var w = c.width;
+	    var h = c.height;
+	    var t = c.top + winRect.top;
+	    if (reference !== window) t -= refRect.top;
+	    var l = c.left + winRect.left;
+	    if (reference !== window) l -= refRect.left;
+	    var b = t + h;
+	    var r = l + w;
+	
+	    rect.left = rect.left === undefined ? l : rect.left = Math.min(rect.left, l);
+	    rect.right = rect.right === undefined ? r : rect.right = Math.max(rect.right, r);
+	    rect.top = rect.top === undefined ? t : rect.top = Math.min(rect.top, t);
+	    rect.bottom = rect.bottom === undefined ? b : rect.bottom = Math.max(rect.bottom, b);
 	  }
 	
-	  return true;
+	  rect.width = rect.right - rect.left;
+	  rect.height = rect.bottom - rect.top;
+	
+	  return rect;
 	}
 	
-	module.exports = validateAttribute;
+	module.exports = getRect;
 
 /***/ },
-/* 23 */
+/* 7 */
 /***/ function(module, exports) {
 
 	/**
@@ -3069,7 +2230,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Gets the name of the dirty type.
 	   *
-	   * @param  {DirtyType} dirtyType - Dirty type.
+	   * @param {DirtyType} dirtyType - Dirty type.
 	   *
 	   * @return {string} - Name of the dirty type.
 	   */
@@ -3082,9 +2243,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    for (var i = 0; i < n; i++) {
 	      var bit = dirtyType >> i & 1;
-	
 	      if (bit === 0) continue;
-	
 	      switch (1 << i) {
 	        case DirtyType.POSITION:
 	          o += 'POSITION';break;
@@ -3120,80 +2279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = DirtyType;
 
 /***/ },
-/* 24 */
-/***/ function(module, exports) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 *
-	 * Element node states.
-	 *
-	 * @type {Object}
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Enum for all node states.
-	 *
-	 * @readonly
-	 * @enum {number}
-	 * @alias module:requiem~enums.NodeState
-	 */
-	
-	var NodeState = {
-	  /**
-	   * Element is instantiated but not initialized yet. This state almost never
-	   * persists.
-	   */
-	  IDLE: 0,
-	
-	  /**
-	   * Element is initialized, but not updated yet.
-	   */
-	  INITIALIZED: 1,
-	
-	  /**
-	   * Element is updated at least once.
-	   */
-	  UPDATED: 2,
-	
-	  /**
-	   * Element is destroyed.
-	   */
-	  DESTROYED: 3,
-	
-	  /**
-	   * Gets the name of a node state.
-	   *
-	   * @param  {NodeState} nodeState - Node state.
-	   *
-	   * @return {string} Name of the node state.
-	   */
-	  toString: function toString(nodeState) {
-	    switch (nodeState) {
-	      case NodeState.IDLE:
-	        return 'IDLE';
-	      case NodeState.INITIALIZED:
-	        return 'INITIALIZED';
-	      case NodeState.UPDATED:
-	        return 'UPDATED';
-	      case NodeState.DESTROYED:
-	        return 'DESTROYED';
-	      default:
-	        return 'UNKNOWN';
-	    }
-	  }
-	};
-	
-	module.exports = NodeState;
-
-/***/ },
-/* 25 */
+/* 8 */
 /***/ function(module, exports) {
 
 	/**
@@ -3346,7 +2432,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = EventType;
 
 /***/ },
-/* 26 */
+/* 9 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Gets the class registry.
+	 *
+	 * @return {Object} The class registry.
+	 *
+	 * @alias module:requiem~dom.getClassRegistry
+	 */
+	
+	function getClassRegistry() {
+	  if (window._classRegistry === undefined) window._classRegistry = {};
+	  return window._classRegistry;
+	}
+	
+	module.exports = getClassRegistry;
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3359,510 +2474,194 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _assertType = __webpack_require__(2);
 	
-	var _debounce = __webpack_require__(27);
+	var _assertType2 = _interopRequireDefault(_assertType);
 	
-	var _debounce2 = _interopRequireDefault(_debounce);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var _log = __webpack_require__(21);
+	/**
+	 * Generates a nested namespace in the specified scope, as described by the dot-
+	 * notated namespace path.
+	 *
+	 * @param {string}        [path]            - Namespace path with keywords
+	 *                                            separated by dots.
+	 * @param {Object|window} [scope=window|{}] - Scope/object to create the nested
+	 *                                            namespace in. If browser
+	 *                                            environment is detected, this
+	 *                                            param will default to window.
+	 *                                            Otherwise it will be an empty
+	 *                                            object literal.
+	 *
+	 * @return {Object} The generated namespace.
+	 *
+	 * @alias module:requiem~dom.namespace
+	 */
+	function namespace(path, scope) {
+	  (0, _assertType2.default)(path, 'string', true, 'Invalid parameter: path');
+	  (0, _assertType2.default)(scope, 'object', true, 'Invalid optional parameter: scope');
 	
-	var _log2 = _interopRequireDefault(_log);
+	  if (!scope) scope = window ? window : {};
+	  if (path === undefined || path === '') return scope;
 	
-	var _DirtyType = __webpack_require__(23);
+	  var groups = path.split('.');
+	  var currentScope = scope;
 	
-	var _DirtyType2 = _interopRequireDefault(_DirtyType);
+	  for (var i = 0; i < groups.length; i++) {
+	    currentScope = currentScope[groups[i]] || (currentScope[groups[i]] = {});
+	  }
 	
-	var _EventType = __webpack_require__(25);
+	  return currentScope;
+	}
 	
-	var _EventType2 = _interopRequireDefault(_EventType);
+	module.exports = namespace;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _assert = __webpack_require__(1);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	var _assertType = __webpack_require__(2);
+	
+	var _assertType2 = _interopRequireDefault(_assertType);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	/**
-	 * Default refresh (debounce) rate in milliseconds.
-	 *
-	 * @const
-	 * @memberof module:requiem~ui.ElementUpdateDelegate
-	 * @type {number}
-	 * @default
-	 */
-	var DEFAULT_REFRESH_RATE = 0.0;
-	
-	/**
 	 * @class
 	 *
-	 * Delegate for managing update calls of a Requiem Element.
+	 * Custom event dispatcher object.
 	 *
-	 * @alias module:requiem~ui.ElementUpdateDelegate
+	 * @alias module:requiem~events.EventDispatcher
 	 */
 	
-	var ElementUpdateDelegate = (function () {
+	var EventDispatcher = function () {
 	  /**
-	   * @class
+	   * Creates a new EventDispatcher instance.
 	   *
-	   * Creates a new ElementUpdateDelegate instance.
-	   *
-	   * @param {Element} delegate - The Requiem Element instance of which this
-	   *                             ElementUpdateDelgate instance manages.
-	   *
-	   * @alias module:requiem~ui.ElementUpdateDelegate
+	   * @return {EventDispatcher} A new EventDispatcher instance.
 	   */
 	
-	  function ElementUpdateDelegate(delegate) {
-	    _classCallCheck(this, ElementUpdateDelegate);
+	  function EventDispatcher() {
+	    _classCallCheck(this, EventDispatcher);
 	
 	    this.__define_properties();
-	
-	    var mDirtyTable = 0;
-	    var mResizeHandler = null;
-	    var mScrollHandler = null;
-	    var mMouseMoveHandler = null;
-	    var mOrientationChangeHandler = null;
-	    var mMouseWheelHandler = null;
-	    var mKeyUpHandler = null;
-	    var mKeyPressHandler = null;
-	    var mKeyDownHandler = null;
-	
-	    this.delegate = delegate;
-	
-	    /**
-	     * Custom requestAnimationFrame implementation.
-	     *
-	     * @param {Function} callback
-	     *
-	     * @private
-	     */
-	    var _requestAnimationFrame = function _requestAnimationFrame(callback) {
-	      var raf = window && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame) || null;
-	
-	      if (!raf) {
-	        raf = function (callback) {
-	          if (window) {
-	            return window.setTimeout(callback, 10.0);
-	          } else {
-	            return null;
-	          }
-	        };
-	      }
-	
-	      return raf(callback);
-	    };
-	
-	    /**
-	     * Custom cancelAnimationFrame implementation.
-	     *
-	     * @return {Function} callback
-	     *
-	     * @private
-	     */
-	    var _cancelAnimationFrame = function _cancelAnimationFrame(callback) {
-	      var caf = window && (window.requestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
-	
-	      if (!caf) {
-	        caf = function (callback) {
-	          if (window) {
-	            return window.clearTimeout(callback);
-	          } else {
-	            return null;
-	          }
-	        };
-	      }
-	
-	      return caf;
-	    };
-	
-	    /**
-	     * Handler invoked when the window resizes.
-	     *
-	     * @param {Event} event
-	     *
-	     * @private
-	     */
-	    var _onWindowResize = function _onWindowResize(event) {
-	      this.setDirty(_DirtyType2.default.SIZE);
-	    };
-	
-	    /**
-	     * Handler invoked when the window scrolls.
-	     *
-	     * @param {Event} event
-	     *
-	     * @private
-	     */
-	    var _onWindowScroll = function _onWindowScroll(event) {
-	      this.setDirty(_DirtyType2.default.POSITION);
-	    };
-	
-	    /**
-	     * Handler invoked when mouse moves in the window.
-	     *
-	     * @param {Event} event
-	     *
-	     * @private
-	     */
-	    var _onWindowMouseMove = function _onWindowMouseMove(event) {
-	      this.mouse.pointerX = event.clientX;
-	      this.mouse.pointerY = event.clientY;
-	
-	      this.setDirty(_DirtyType2.default.INPUT);
-	    };
-	
-	    /**
-	     * Handler invoked when mouse wheel moves in the window.
-	     *
-	     * @param {Event} event
-	     *
-	     * @private
-	     */
-	    var _onWindowMouseWheel = function _onWindowMouseWheel(event) {
-	      this.mouse.wheelX = event.deltaX;
-	      this.mouse.wheelY = event.deltaY;
-	
-	      this.setDirty(_DirtyType2.default.INPUT);
-	    };
-	
-	    /**
-	     * Handler invoked when device orientation changes.
-	     *
-	     * @param {Event} event
-	     *
-	     * @private
-	     */
-	    var _onWindowOrientationChange = function _onWindowOrientationChange(event) {
-	      if (!window) return;
-	
-	      var x = undefined,
-	          y = undefined,
-	          z = undefined;
-	
-	      if (event instanceof window.DeviceOrientationEvent) {
-	        x = event.beta;
-	        y = event.gamma;
-	        z = event.alpha;
-	      } else if (event instanceof window.DeviceMotionEvent) {
-	        x = event.acceleration.x * 2;
-	        y = event.acceleration.y * 2;
-	        z = event.acceleration.z * 2;
-	      } else {
-	        x = event.orientation.x * 50;
-	        y = event.orientation.y * 50;
-	        z = event.orientation.z * 50;
-	      }
-	
-	      this.orientation.x = x;
-	      this.orientation.y = y;
-	      this.orientation.z = z;
-	
-	      this.setDirty(_DirtyType2.default.ORIENTATION);
-	    };
-	
-	    /**
-	     * Handler invoked when a key is pressed down.
-	     *
-	     * @param {Event} event
-	     *
-	     * @private
-	     */
-	    var _onWindowKeyDown = function _onWindowKeyDown(event) {
-	      if (!window) return;
-	
-	      if (this.keyCode.down === undefined) {
-	        this.keyCode.down = [];
-	      }
-	
-	      this.keyCode.down.push(event.keyCode);
-	
-	      this.setDirty(_DirtyType2.default.INPUT);
-	    };
-	
-	    /**
-	     * Handler invoked when a key is pressed.
-	     *
-	     * @param {Event} event
-	     *
-	     * @private
-	     */
-	    var _onWindowKeyPress = function _onWindowKeyPress(event) {
-	      if (!window) return;
-	
-	      if (this.keyCode.press === undefined) {
-	        this.keyCode.press = [];
-	      }
-	
-	      this.keyCode.press.push(event.keyCode);
-	
-	      this.setDirty(_DirtyType2.default.INPUT);
-	    };
-	
-	    /**
-	     * Handler invoked when a key is pressed up.
-	     *
-	     * @param {Event} event
-	     *
-	     * @private
-	     */
-	    var _onWindowKeyUp = function _onWindowKeyUp(event) {
-	      if (!window) return;
-	
-	      if (this.keyCode.up === undefined) {
-	        this.keyCode.up = [];
-	      }
-	
-	      this.keyCode.up.push(event.keyCode);
-	
-	      this.setDirty(_DirtyType2.default.INPUT);
-	    };
-	
-	    /**
-	     * Sets a dirty type as dirty.
-	     *
-	     * @param {number} dirtyType
-	     */
-	    this.setDirty = function (dirtyType, validateNow) {
-	      if (this.transmissive !== _DirtyType2.default.NONE) {
-	        if (this.delegate.children) {
-	          for (var name in this.delegate.children) {
-	            var children = undefined;
-	
-	            if (this.delegate.children[name] instanceof Array) {
-	              children = this.delegate.children[name];
-	            } else {
-	              children = [this.delegate.children[name]];
-	            }
-	
-	            var n = children.length;
-	
-	            for (var i = 0; i < n; i++) {
-	              var child = children[i];
-	
-	              if (child.updateDelegate && child.updateDelegate.setDirty) {
-	                var transmitted = dirtyType & child.updateDelegate.receptive;
-	
-	                if (transmitted !== _DirtyType2.default.NONE) {
-	                  child.updateDelegate.setDirty(transmitted, validateNow);
-	                }
-	              }
-	            }
-	          }
-	        }
-	      }
-	
-	      if (this.isDirty(dirtyType) && !validateNow) return;
-	
-	      switch (dirtyType) {
-	        case _DirtyType2.default.NONE:
-	        case _DirtyType2.default.ALL:
-	          mDirtyTable = dirtyType;
-	          break;
-	
-	        default:
-	          mDirtyTable |= dirtyType;
-	      }
-	
-	      if (validateNow) {
-	        this.update();
-	      } else if (!this._pendingAnimationFrame) {
-	        this._pendingAnimationFrame = _requestAnimationFrame(this.update.bind(this));
-	      }
-	    };
-	
-	    /**
-	     * Checks dirty status of a given dirty type.
-	     *
-	     * @param {number} dirtyType [description]
-	     *
-	     * @return {boolean}
-	     */
-	    this.isDirty = function (dirtyType) {
-	      switch (dirtyType) {
-	        case _DirtyType2.default.NONE:
-	        case _DirtyType2.default.ALL:
-	          return mDirtyTable === dirtyType;
-	
-	        default:
-	          return (dirtyType & mDirtyTable) !== 0;
-	      }
-	    };
-	
-	    /**
-	     * Initializes this ElementUpdateDelegate instance. Must manually invoke.
-	     */
-	    this.init = function () {
-	      var conductor = this.conductor || window;
-	
-	      if (window && conductor && conductor.addEventListener && (this.responsive === true || this.responsive instanceof Array)) {
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.OBJECT.RESIZE) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.ORIENTATION_CHANGE) > -1) {
-	          mResizeHandler = this.refreshRate === 0.0 ? _onWindowResize.bind(this) : (0, _debounce2.default)(_onWindowResize.bind(this), this.refreshRate);
-	        }
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.OBJECT.SCROLL) > -1) {
-	          mScrollHandler = this.refreshRate === 0.0 ? _onWindowScroll.bind(this) : (0, _debounce2.default)(_onWindowScroll.bind(this), this.refreshRate);
-	        }
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.MISC.WHEEL) > -1) {
-	          mMouseWheelHandler = this.refreshRate === 0.0 ? _onWindowMouseWheel.bind(this) : (0, _debounce2.default)(_onWindowMouseWheel.bind(this), this.refreshRate);
-	        }
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.MOUSE.MOUSE_MOVE) > -1) {
-	          mMouseMoveHandler = this.refreshRate === 0.0 ? _onWindowMouseMove.bind(this) : (0, _debounce2.default)(_onWindowMouseMove.bind(this), this.refreshRate);
-	        }
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.DEVICE.DEVICE_ORIENTATION) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.DEVICE_MOTION) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.ORIENTATION) > -1) {
-	          mOrientationChangeHandler = this.refreshRate === 0.0 ? _onWindowOrientationChange.bind(this) : (0, _debounce2.default)(_onWindowOrientationChange.bind(this), this.refreshRate);
-	        }
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_DOWN) > -1) {
-	          mKeyDownHandler = _onWindowKeyDown.bind(this);
-	        }
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_PRESS) > -1) {
-	          mKeyPressHandler = _onWindowKeyPress.bind(this);
-	        }
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_UP) > -1) {
-	          mKeyUpHandler = _onWindowKeyUp.bind(this);
-	        }
-	
-	        if (mResizeHandler) {
-	          window.addEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
-	          window.addEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
-	        }
-	
-	        if (mScrollHandler) {
-	          conductor.addEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
-	        }
-	
-	        if (mMouseWheelHandler) {
-	          conductor.addEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
-	        }
-	
-	        if (mMouseMoveHandler) {
-	          conductor.addEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
-	        }
-	
-	        if (mOrientationChangeHandler) {
-	          if (window.DeviceOrientationEvent) {
-	            window.addEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
-	          } else if (window.DeviceMotionEvent) {
-	            window.addEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
-	          }
-	        }
-	
-	        if (mKeyDownHandler) {
-	          window.addEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
-	        }
-	
-	        if (mKeyPressHandler) {
-	          window.addEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
-	        }
-	
-	        if (mKeyUpHandler) {
-	          window.addEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
-	        }
-	      }
-	
-	      this.setDirty(_DirtyType2.default.ALL);
-	    };
-	
-	    /**
-	     * Destroys this ElementUpdateDelegate instance.
-	     */
-	    this.destroy = function () {
-	      _cancelAnimationFrame();
-	
-	      var conductor = this.conductor || window;
-	
-	      if (window && conductor && conductor.removeEventListener) {
-	        if (mResizeHandler) {
-	          window.removeEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
-	          window.removeEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
-	        }
-	
-	        if (mScrollHandler) {
-	          conductor.removeEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
-	        }
-	
-	        if (mMouseWheelHandler) {
-	          conductor.removeEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
-	        }
-	
-	        if (mMouseMoveHandler) {
-	          conductor.removeEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
-	        }
-	
-	        if (mOrientationChangeHandler) {
-	          if (window.DeviceOrientationEvent) {
-	            window.removeEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
-	          } else if (window.DeviceMotionEvent) {
-	            window.removeEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
-	          }
-	        }
-	
-	        if (mKeyDownHandler) {
-	          window.removeEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
-	        }
-	
-	        if (mKeyPressHandler) {
-	          window.removeEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
-	        }
-	
-	        if (mKeyUpHandler) {
-	          window.removeEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
-	        }
-	      }
-	
-	      mResizeHandler = null;
-	      mScrollHandler = null;
-	      mMouseWheelHandler = null;
-	      mMouseMoveHandler = null;
-	      mOrientationChangeHandler = null;
-	      mKeyDownHandler = null;
-	      mKeyPressHandler = null;
-	      mKeyUpHandler = null;
-	    };
-	
-	    /**
-	     * Handler invoked whenever a visual update is required.
-	     */
-	    this.update = function () {
-	      _cancelAnimationFrame(this._pendingAnimationFrame);
-	
-	      if (this.delegate && this.delegate.update) {
-	        (0, _log2.default)(this.toString() + '::update(', _DirtyType2.default.toString(mDirtyTable), ')');
-	        this.delegate.update.call(this.delegate);
-	      }
-	
-	      // Reset the dirty status of all types.
-	      this.setDirty(_DirtyType2.default.NONE);
-	
-	      delete this.mouse.pointerX;
-	      delete this.mouse.pointerY;
-	      delete this.mouse.wheelX;
-	      delete this.mouse.wheelY;
-	      delete this.orientation.x;
-	      delete this.orientation.y;
-	      delete this.orientation.z;
-	      delete this.keyCode.up;
-	      delete this.keyCode.press;
-	      delete this.keyCode.down;
-	
-	      this._pendingAnimationFrame = null;
-	    };
 	  }
 	
 	  /**
-	   * Gets the string representation of this ElementUpdateDelegate instance.
+	   * Adds an event listener to this EventDispatcher instance.
 	   *
-	   * @return {string}
+	   * @param {string}   type
+	   * @param {Function} listener
 	   */
 	
-	  _createClass(ElementUpdateDelegate, [{
-	    key: 'toString',
-	    value: function toString() {
-	      return '[ElementUpdateDelegate{' + (this.delegate && this.delegate.name || 'undefined') + '}]';
+	
+	  _createClass(EventDispatcher, [{
+	    key: 'addEventListener',
+	    value: function addEventListener(type, listener) {
+	      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
+	      if (!(0, _assertType2.default)(listener, 'function', false, 'Invalid parameter: listener')) return;
+	
+	      if (!this.__private__.listenerMap[type]) {
+	        this.__private__.listenerMap[type] = [];
+	      }
+	
+	      this.__private__.listenerMap[type].push(listener);
+	    }
+	
+	    /**
+	     * Removes an event listener from this EventDispatcher instance. If no
+	     * listener method is specified, all the listeners of the specified type
+	     * will be removed.
+	     *
+	     * @param {string}   type
+	     * @param {Function} listener:undefined
+	     */
+	
+	  }, {
+	    key: 'removeEventListener',
+	    value: function removeEventListener(type, listener) {
+	      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
+	      if (!(0, _assertType2.default)(listener, 'function', true, 'Invalid parameter: listener')) return;
+	      if (!(0, _assert2.default)(this.__private__.listenerMap, 'Listener map is null.')) return;
+	      if (!(0, _assert2.default)(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+	
+	      if (listener) {
+	        var index = this.__private__.listenerMap[type].indexOf(listener);
+	
+	        if (index > -1) {
+	          this.__private__.listenerMap[type].splice(index, 1);
+	        }
+	      } else {
+	        delete this.__private__.listenerMap[type];
+	      }
+	    }
+	
+	    /**
+	     * Determines whether this EventDispatcher instance has a specific event
+	     * listener registered. If no listener is specified, it will check if any
+	     * listener of the specified event type is registered.
+	     *
+	     * @param {string}   type
+	     * @param {Function} [listener]
+	     *
+	     * @return {boolean}
+	     */
+	
+	  }, {
+	    key: 'hasEventListener',
+	    value: function hasEventListener(type, listener) {
+	      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
+	      if (!(0, _assertType2.default)(listener, 'function', true, 'Invalid parameter: listener')) return;
+	      if (!(0, _assert2.default)(this.__private__.listenerMap, 'Listener map is null.')) return;
+	      if (!(0, _assert2.default)(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
+	
+	      if (listener) {
+	        var index = this.__private__.listenerMap[type].indexOf(listener);
+	
+	        return index > -1;
+	      } else {
+	        return true;
+	      }
+	    }
+	
+	    /**
+	     * Dispatches the specified event.
+	     *
+	     * @param {Event} event
+	     */
+	
+	  }, {
+	    key: 'dispatchEvent',
+	    value: function dispatchEvent(event) {
+	      if (!(0, _assertType2.default)(event, Event, false, 'Event must be specified.')) return;
+	      if (!(0, _assert2.default)(this.__private__.listenerMap, 'Listener map is null.')) return;
+	
+	      if (!this.__private__.listenerMap[event.type]) return;
+	
+	      var arrlen = this.__private__.listenerMap[event.type].length;
+	
+	      for (var i = 0; i < arrlen; i++) {
+	        var listener = this.__private__.listenerMap[event.type][i];
+	        listener.call(this, event);
+	      }
 	    }
 	
 	    /**
@@ -3874,85 +2673,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '__define_properties',
 	    value: function __define_properties() {
-	      /**
-	       * Delegate of this ElementUpdateDelegate instance.
-	       *
-	       * @property {Element}
-	       */
-	      Object.defineProperty(this, 'delegate', { value: null, writable: true });
+	      if (!this.__private__) this.__private__ = {};
 	
-	      /**
-	       * Indicates whether this ElementUpdateDelegate auto responds to window
-	       * behaviors (i.e. resizing, scrolling).
-	       *
-	       * @property {boolean}
-	       */
-	      Object.defineProperty(this, 'responsive', { value: false, writable: true });
-	
-	      /**
-	       * Indicates the debounce rate of this ElementUpdateDelegate instance.
-	       *
-	       * @property {number}
-	       */
-	      Object.defineProperty(this, 'refreshRate', { value: DEFAULT_REFRESH_RATE, writable: true });
-	
-	      /**
-	       * Indicates the dirty flags in which ElementUpdateDelgate instance will
-	       * transmit to its child Elements.
-	       *
-	       * @property {number}
-	       */
-	      Object.defineProperty(this, 'transmissive', { value: _DirtyType2.default.NONE, writable: true });
-	
-	      /**
-	       * Indicates the dirty flags in which this ElementUpdateDelegate is capable
-	       * of receiving from parent Elements.
-	       *
-	       * @property {number}
-	       */
-	      Object.defineProperty(this, 'receptive', { value: _DirtyType2.default.NONE, writable: true });
-	
-	      /**
-	       * Indicates the conductor in which this ElementUpdateDelegate responds to
-	       * (defaults to window).
-	       *
-	       * @property {Node|window}
-	       */
-	      Object.defineProperty(this, 'conductor', { value: window, writable: true });
-	
-	      /**
-	       * Stores mouse properties if this ElementUpdateDelegate responds to mouse
-	       * events.
-	       *
-	       * @property {Object}
-	       */
-	      Object.defineProperty(this, 'mouse', { value: {}, writable: false });
-	
-	      /**
-	       * Stores orientation properties if this ElementUpdateDelgate responds to
-	       * device orientations (i.e. device accelerometer).
-	       *
-	       * @property {Object}
-	       */
-	      Object.defineProperty(this, 'orientation', { value: {}, writable: false });
-	
-	      /**
-	       * Stores pressed keycodes if this ElementUpdateDelegate responds to
-	       * keyboard events.
-	       *
-	       * @property {Object}
-	       */
-	      Object.defineProperty(this, 'keyCode', { value: {}, writable: false });
+	      Object.defineProperty(this.__private__, 'listenerMap', {
+	        value: {},
+	        writable: true
+	      });
 	    }
 	  }]);
 	
-	  return ElementUpdateDelegate;
-	})();
+	  return EventDispatcher;
+	}();
 	
-	module.exports = ElementUpdateDelegate;
+	module.exports = EventDispatcher;
 
 /***/ },
-/* 27 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3965,60 +2701,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var assertType = __webpack_require__(5);
+	var Directive = __webpack_require__(5);
 	
 	/**
-	 * Returns a function that, as long as it continues to be invoked, will not
-	 * be triggered. The function will be called after it stops being called for
-	 * N milliseconds. If 'leading' is passed, the function will be triggered on
-	 * the leading edge instead of the trailing.
+	 * Gets the instance name from a DOM element.
 	 *
-	 * @param {Function} method          - Method to be debounced.
-	 * @param {number}   [delay=0]       - Debounce rate in milliseconds.
-	 * @param {boolean}  [leading=false] - Indicates whether the method is triggered
-	 *                                     on the leading edge instead of the
-	 *                                     trailing.
+	 * @param {Node} element - The DOM element.
 	 *
-	 * @return {Function} The debounced method.
+	 * @return {string} The instance name.
 	 *
-	 * @alias module:requiem~helpers.debounce
+	 * @alias module:requiem~helpers.getInstanceNameFromElement
 	 */
-	function debounce(method, delay, leading) {
-	  assertType(method, 'function', false, 'Invalid parameter: method');
-	  assertType(delay, 'number', true, 'Invalid optional parameter: delay');
-	  assertType(leading, 'boolean', true, 'Invalid optional parameter: leading');
-	
-	  if (delay === undefined) delay = 0;
-	  if (leading === undefined) leading = false;
-	
-	  var timeout = undefined;
-	
-	  return function () {
-	    var context = this;
-	    var args = arguments;
-	
-	    var later = function later() {
-	      timeout = null;
-	
-	      if (!leading) {
-	        method.apply(context, args);
-	      }
-	    };
-	
-	    var callNow = leading && !timeout;
-	    clearTimeout(timeout);
-	    timeout = setTimeout(later, delay);
-	
-	    if (callNow) {
-	      method.apply(context, args);
-	    }
-	  };
+	function getInstanceNameFromElement(element) {
+	  return element.getAttribute(Directive.INSTANCE);
 	}
 	
-	module.exports = debounce;
+	module.exports = getInstanceNameFromElement;
 
 /***/ },
-/* 28 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4031,97 +2732,79 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _assert = __webpack_require__(6);
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(29);
+	var _getRect = __webpack_require__(6);
 	
-	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-	
-	var _getViewportRect = __webpack_require__(30);
-	
-	var _getViewportRect2 = _interopRequireDefault(_getViewportRect);
+	var _getRect2 = _interopRequireDefault(_getRect);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/**
-	 * Gets the rect of a given element or the overall rect of an array of elements.
+	 * Computes the intersecting rect of 2 given elements. If only 1 element is
+	 * specified, the other element will default to the current viewport.
 	 *
-	 * @param {Node|Node[]|Element|Element[]} element
-	 * @param {Object}                                      [reference=window]
+	 * @param {...Node|...Element}
 	 *
-	 * @return {Object} Object containing top, left, bottom, right, width, height.
+	 * @return {Object} Object containing width, height.
 	 *
-	 * @alias module:requiem~utils.getRect
+	 * @alias module:requiem~utils.getIntersectRect
 	 */
-	function getRect(element, reference) {
+	function getIntersectRect() {
 	  if (!(0, _assert2.default)(window, 'This method relies on the window object, which is undefined.')) return null;
-	  if (element === window) return (0, _getViewportRect2.default)();
 	
-	  if (!reference) reference = window;
+	  var n = arguments.length;
 	
-	  var elements = (0, _toElementArray2.default)(element);
-	  var n = elements.length;
+	  if (!(0, _assert2.default)(n > 0, 'This method requires at least 1 argument specified.')) return null;
 	
-	  if (n <= 0) return null;
-	
-	  var refRect = getRect(reference);
-	
-	  if (!(0, _assert2.default)(refRect, 'Cannot determine reference FOV.')) return null;
-	
-	  var winRect = getRect(window);
 	  var rect = {};
+	  var currRect = undefined,
+	      nextRect = undefined;
 	
 	  for (var i = 0; i < n; i++) {
-	    var e = elements[i];
-	    var c = e.getBoundingClientRect();
+	    if (!currRect) currRect = (0, _getRect2.default)(arguments[i]);
 	
-	    var w = c.width;
-	    var h = c.height;
-	    var t = c.top + winRect.top;
-	    if (reference !== window) t -= refRect.top;
-	    var l = c.left + winRect.left;
-	    if (reference !== window) l -= refRect.left;
-	    var b = t + h;
-	    var r = l + w;
+	    if (!(0, _assert2.default)(currRect, 'Invalid computed rect.')) return null;
 	
-	    if (rect.left === undefined) {
-	      rect.left = l;
+	    if (i === 0 && i + 1 === n) {
+	      nextRect = (0, _getRect2.default)(window);
+	    } else if (i + 1 < n) {
+	      nextRect = (0, _getRect2.default)(arguments[i + 1]);
 	    } else {
-	      rect.left = Math.min(rect.left, l);
+	      break;
 	    }
 	
-	    if (rect.right === undefined) {
-	      rect.right = r;
-	    } else {
-	      rect.right = Math.max(rect.right, r);
+	    if (!(0, _assert2.default)(nextRect, 'Invalid computed rect.')) return null;
+	
+	    rect.width = Math.max(0.0, Math.min(currRect.right, nextRect.right) - Math.max(currRect.left, nextRect.left));
+	    rect.height = Math.max(0.0, Math.min(currRect.bottom, nextRect.bottom) - Math.max(currRect.top, nextRect.top));
+	    rect.top = Math.max(currRect.top, nextRect.top);
+	    rect.left = Math.max(currRect.left, nextRect.left);
+	    rect.bottom = rect.top + rect.height;
+	    rect.right = rect.left + rect.width;
+	
+	    if (rect.width * rect.height === 0) {
+	      rect.width = 0;
+	      rect.height = 0;
+	      rect.top = 0;
+	      rect.left = 0;
+	      rect.bottom = 0;
+	      rect.right = 0;
 	    }
 	
-	    if (rect.top === undefined) {
-	      rect.top = t;
-	    } else {
-	      rect.top = Math.min(rect.top, t);
-	    }
-	
-	    if (rect.bottom === undefined) {
-	      rect.bottom = b;
-	    } else {
-	      rect.bottom = Math.max(rect.bottom, b);
-	    }
+	    currRect = rect;
 	  }
-	
-	  rect.width = rect.right - rect.left;
-	  rect.height = rect.bottom - rect.top;
 	
 	  return rect;
 	}
 	
-	module.exports = getRect;
+	module.exports = getIntersectRect;
 
 /***/ },
-/* 29 */
-/***/ function(module, exports, __webpack_require__) {
+/* 14 */
+/***/ function(module, exports) {
 
 	/**
 	 * Requiem
@@ -4132,87 +2815,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	'use strict';
-	
-	// let assert = require('./assert');
-	
-	/**
-	 * Transforms given element(s) to an element array.
-	 *
-	 * @param {*}       element
-	 * @param {boolean} [keepElement=false]
-	 *
-	 * @alias module:requiem~helpers.toElementArray
-	 */
-	
-	function toElementArray(element, keepElement) {
-	  var Element = __webpack_require__(19);
-	
-	  if (!element) return null;
-	
-	  var elements = undefined;
-	
-	  if (element instanceof Array) {
-	    elements = element;
-	  } else if (element instanceof NodeList) {
-	    elements = Array.prototype.slice.call(element);
-	  } else {
-	    // if (!assert((element instanceof Node) || (element instanceof Element), 'Invalid element specified. Element must be an instance of Node or Requiem Element.')) return null;
-	
-	    if (element instanceof Element) {
-	      elements = [element.element];
-	    } else {
-	      elements = [element];
-	    }
-	  }
-	
-	  var n = elements.length;
-	
-	  for (var i = 0; i < n; i++) {
-	    var e = elements[i];
-	
-	    // if (!assert((e instanceof Node) || (e instanceof Element), 'Element array contains invalid element(s). Each element must be an instance of Node or Requiem Element.')) return null;
-	
-	    if (!keepElement && e instanceof Element) {
-	      elements[i] = e.element;
-	    }
-	  }
-	
-	  return elements;
-	}
-	
-	module.exports = toElementArray;
-
-/***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/**
 	 * Gets the rect of the viewport (FOV).
 	 *
-	 * @return {Object} Object containing top, left, bottom, right, width,
-	 *                  height.
+	 * @return {Object} Object containing top, left, bottom, right, width, height.
 	 *
 	 * @alias module:requiem~utils.getViewportRect
 	 */
-	function getViewportRect() {
-	  if (!(0, _assert2.default)(window && document, 'Window or document undefined.')) return null;
 	
+	function getViewportRect() {
 	  var rect = {};
 	
 	  rect.width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -4228,7 +2840,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = getViewportRect;
 
 /***/ },
-/* 31 */
+/* 15 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Gets the data registry.
+	 *
+	 * @return {Object} The data registry.
+	 *
+	 * @alias module:requiem~dom.getDataRegistry
+	 */
+	
+	function getDataRegistry() {
+	  if (window._dataRegistry === undefined) window._dataRegistry = {};
+	  return window._dataRegistry;
+	}
+	
+	module.exports = getDataRegistry;
+
+/***/ },
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4241,286 +2882,419 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _getClassRegistry = __webpack_require__(9);
 	
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
 	
-	var _assert = __webpack_require__(6);
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _DirtyType = __webpack_require__(23);
+	var _assertType = __webpack_require__(2);
 	
-	var _DirtyType2 = _interopRequireDefault(_DirtyType);
+	var _assertType2 = _interopRequireDefault(_assertType);
 	
-	var _Element2 = __webpack_require__(19);
+	var _getInstanceNameFromElement = __webpack_require__(12);
 	
-	var _Element3 = _interopRequireDefault(_Element2);
+	var _getInstanceNameFromElement2 = _interopRequireDefault(_getInstanceNameFromElement);
+	
+	var _getControllerClassFromElement = __webpack_require__(39);
+	
+	var _getControllerClassFromElement2 = _interopRequireDefault(_getControllerClassFromElement);
+	
+	var _getControllerClassNameFromElement = __webpack_require__(19);
+	
+	var _getControllerClassNameFromElement2 = _interopRequireDefault(_getControllerClassNameFromElement);
+	
+	var _Directive = __webpack_require__(5);
+	
+	var _Directive2 = _interopRequireDefault(_Directive);
+	
+	var _hasChild = __webpack_require__(24);
+	
+	var _hasChild2 = _interopRequireDefault(_hasChild);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
 	/**
-	 * @class
+	 * Crawls a DOM node and performs transformations on child nodes marked with
+	 * Requiem attributes, such as instantiating controller classes and assigning
+	 * instance names. Transformations are also applied to the specified DOM node,
+	 * not just its children.
 	 *
-	 * Controller of a DOM 'video' element.
+	 * @param {Node}   [element=document] - Target element for sightreading. By
+	 *                                      default this will be the document.
+	 * @param {Object} [exclusive=false]  - Specifies whether the root node should
+	 *                                      be excluded from the sightread.
 	 *
-	 * @extends module:requiem~ui.Element
-	 * @alias module:requiem~ui.Video
+	 * @return {Object|Element} Either a dictionary (object literal) containing
+	 *                          all instantiated Requiem Element instances (if the
+	 *                          target element was the entire document) or a
+	 *                          single Requiem Element instance representing to
+	 *                          the single target element.
+	 *
+	 * @alias module:requiem~dom.sightread
 	 */
+	function sightread() {
+	  var element = document;
+	  var classRegistry = (0, _getClassRegistry2.default)();
+	  var exclusive = false;
 	
-	var Video = (function (_Element) {
-	  _inherits(Video, _Element);
+	  if (arguments.length === 1) {
+	    var arg = arguments[0];
+	    (0, _assertType2.default)(arg, [Node, 'boolean'], true);
 	
-	  function Video() {
-	    _classCallCheck(this, Video);
+	    if (arg instanceof Node) {
+	      element = arg;
+	    } else if (typeof obj === 'boolean') {
+	      exclusive = arg;
+	    }
+	  } else if (arguments.length === 2) {
+	    var arg1 = arguments[0];
+	    var arg2 = arguments[1];
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Video).apply(this, arguments));
+	    (0, _assertType2.default)(arg1, Node, true);
+	    (0, _assertType2.default)(arg2, 'boolean', true);
+	
+	    if (arg1 !== undefined) element = arg1;
+	    if (arg2 !== undefined) exclusive = arg2;
 	  }
 	
-	  _createClass(Video, [{
-	    key: 'update',
+	  if (element === document) exclusive = true;
 	
-	    /**
-	     * @inheritdoc
-	     */
-	    value: function update() {
-	      if (this.updateDelegate.isDirty(_DirtyType2.default.DATA)) this.__update_source();
-	      _get(Object.getPrototypeOf(Video.prototype), 'update', this).call(this);
-	    }
+	  if (!exclusive) {
+	    var instanceName = (0, _getInstanceNameFromElement2.default)(element);
+	    var ControllerClass = (0, _getControllerClassFromElement2.default)(element);
 	
-	    /**
-	     * @inheritdoc
-	     */
+	    (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(element) + '\' is not found in specified controller scope: ' + classRegistry);
 	
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return document.createElement('video');
-	    }
+	    return new ControllerClass({
+	      element: element,
+	      name: instanceName,
+	      children: sightread(element, true)
+	    });
+	  } else {
+	    var Element = __webpack_require__(4);
+	    var children = null;
 	
-	    /**
-	     * Updates the sources in this Video instance.
-	     *
-	     * @private
-	     */
+	    if (!(0, _assert2.default)(element instanceof Node || element instanceof Element || document && element === document, 'Element must be an instance of an Node or the DOM itself.')) return null;
+	    if (element instanceof Element) element = element.element;
 	
-	  }, {
-	    key: '__update_source',
-	    value: function __update_source() {
-	      var i = undefined;
-	      var arrlen = undefined;
+	    var nodeList = element.querySelectorAll('[' + _Directive2.default.CLASS + '], [' + _Directive2.default.INSTANCE + ']');
+	    var qualifiedChildren = _filterParentElements(nodeList);
+	    var n = qualifiedChildren.length;
 	
-	      // Update source(s).
-	      var oldSources = this.element.getElementsByTagName('source');
+	    for (var i = 0; i < n; i++) {
+	      var child = qualifiedChildren[i];
+	      var instanceName = (0, _getInstanceNameFromElement2.default)(child);
+	      var ControllerClass = (0, _getControllerClassFromElement2.default)(child, classRegistry);
 	
-	      arrlen = oldSources.length;
+	      (0, _assertType2.default)(ControllerClass, 'function', false, 'Class \'' + (0, _getControllerClassNameFromElement2.default)(child) + '\' is not found in specified controller scope: ' + classRegistry);
 	
-	      for (i = 0; i < arrlen; i++) {
-	        var oldSource = oldSources[i];
+	      var m = new ControllerClass({
+	        element: child,
+	        name: instanceName,
+	        children: sightread(child, true)
+	      });
 	
-	        this.element.removeChild(oldSource);
-	      }
+	      if (instanceName && instanceName.length > 0) {
+	        if (!children) children = {};
 	
-	      if (!this.source) return;
-	
-	      arrlen = this.source.length;
-	
-	      for (i = 0; i < arrlen; i++) {
-	        var newSource = document.createElement('source');
-	        var path = this.source[i].src;
-	        var type = this.source[i].type;
-	        var ext = path.split('.').pop();
-	
-	        newSource.setAttribute('src', path);
-	        newSource.setAttribute('type', type || 'video/' + ext);
-	
-	        this.element.appendChild(newSource);
+	        if (!children[instanceName]) {
+	          children[instanceName] = m;
+	        } else {
+	          if (children[instanceName] instanceof Array) {
+	            children[instanceName].push(m);
+	          } else {
+	            var a = [children[instanceName]];
+	            a.push(m);
+	            children[instanceName] = a;
+	          }
+	        }
 	      }
 	    }
 	
-	    /**
-	     * @inheritdoc
-	     */
+	    return children;
+	  }
+	}
 	
-	  }, {
-	    key: '__validate_element',
-	    value: function __validate_element(element) {
-	      return true;
-	      // return assert(element instanceof HTMLVideoElement, 'Element validation failed');
+	/**
+	 * Scans the provided node list and returns a new node list with only parent
+	 * nodes.
+	 *
+	 * @param {NodeList} nodeList - The node list.
+	 *
+	 * @return {NodeList} The filtered node list containing only parent nodes.
+	 *
+	 * @private
+	 * @alias module:requiem~dom._filterParentElements
+	 */
+	function _filterParentElements(nodeList) {
+	  var n = nodeList.length;
+	  var o = [];
+	
+	  for (var i = 0; i < n; i++) {
+	    var isParent = true;
+	    var child = nodeList[i];
+	
+	    for (var j = 0; j < n; j++) {
+	      if (i === j) continue;
+	
+	      var parent = nodeList[j];
+	
+	      if ((0, _hasChild2.default)(parent, child)) {
+	        isParent = false;
+	        break;
+	      }
 	    }
 	
-	    /**
-	     * @inheritdoc
-	     */
-	
-	  }, {
-	    key: '__define_properties',
-	    value: function __define_properties() {
-	      var _this2 = this;
-	
-	      /**
-	       * Specifies that the video will start playing as soon as it is ready.
-	       *
-	       * @property {boolean}
-	       */
-	      Object.defineProperty(this, 'autoplay', {
-	        get: function get() {
-	          return _this2.element.autoplay;
-	        },
-	        set: function set(value) {
-	          _this2.element.autoplay = value;
-	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
-	        }
-	      });
-	
-	      /**
-	       * Specifies that video controls should be displayed (such as a play/pause
-	       * button etc).
-	       *
-	       * @property {boolean}
-	       */
-	      Object.defineProperty(this, 'controls', {
-	        get: function get() {
-	          return _this2.element.controls;
-	        },
-	        set: function set(value) {
-	          _this2.element.controls = value;
-	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
-	        }
-	      });
-	
-	      /**
-	       * Specifies that the video will start over again, every time it is
-	       * finished.
-	       *
-	       * @property {boolean}
-	       */
-	      Object.defineProperty(this, 'loop', {
-	        get: function get() {
-	          return _this2.element.loop;
-	        },
-	        set: function set(value) {
-	          _this2.element.loop = value;
-	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
-	        }
-	      });
-	
-	      /**
-	       * Specifies that the audio output of the video should be muted.
-	       *
-	       * @property {boolean}
-	       */
-	      Object.defineProperty(this, 'muted', {
-	        get: function get() {
-	          return _this2.element.muted;
-	        },
-	        set: function set(value) {
-	          _this2.element.muted = value;
-	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
-	        }
-	      });
-	
-	      /**
-	       * Specifies an image to be shown while the video is downloading, or until
-	       * the user hits the play button.
-	       *
-	       * @property {string}
-	       */
-	      Object.defineProperty(this, 'poster', {
-	        get: function get() {
-	          return _this2.element.poster;
-	        },
-	        set: function set(value) {
-	          _this2.element.poster = value;
-	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
-	        }
-	      });
-	
-	      /**
-	       * Specifies if and how the author thinks the video should be loaded when
-	       * the page loads
-	       *
-	       * @property {string}
-	       */
-	      Object.defineProperty(this, 'preload', {
-	        get: function get() {
-	          return _this2.element.preload;
-	        },
-	        set: function set(value) {
-	          _this2.element.preload = value;
-	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
-	        }
-	      });
-	
-	      /**
-	       * Array of sources containing elements in the form of:
-	       * Object {
-	       *   {string} src  - Path of source.
-	       *   {string} type - Type of source.
-	       * }
-	       *
-	       * @property {Object[]}
-	       */
-	      _Element3.default.defineProperty(this, 'source', {
-	        get: true,
-	        set: true,
-	        dirtyType: _DirtyType2.default.DATA
-	      });
-	
-	      _get(Object.getPrototypeOf(Video.prototype), '__define_properties', this).call(this);
+	    if (isParent) {
+	      o.push(child);
 	    }
-	  }]);
+	  }
 	
-	  return Video;
-	})(_Element3.default);
+	  return o;
+	}
 	
-	module.exports = Video;
+	module.exports = sightread;
 
 /***/ },
-/* 32 */
+/* 17 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 *
+	 * Element node states.
+	 *
+	 * @type {Object}
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Enum for all node states.
+	 *
+	 * @readonly
+	 * @enum {number}
+	 * @alias module:requiem~enums.NodeState
+	 */
+	
+	var NodeState = {
+	  /**
+	   * Element is instantiated but not initialized yet. This state almost never
+	   * persists.
+	   */
+	  IDLE: 0,
+	
+	  /**
+	   * Element is initialized, but not updated yet.
+	   */
+	  INITIALIZED: 1,
+	
+	  /**
+	   * Element is updated at least once.
+	   */
+	  UPDATED: 2,
+	
+	  /**
+	   * Element is destroyed.
+	   */
+	  DESTROYED: 3,
+	
+	  /**
+	   * Gets the name of a node state.
+	   *
+	   * @param {NodeState} nodeState - Node state.
+	   *
+	   * @return {string} Name of the node state.
+	   */
+	  toString: function toString(nodeState) {
+	    switch (nodeState) {
+	      case NodeState.IDLE:
+	        return 'IDLE';
+	      case NodeState.INITIALIZED:
+	        return 'INITIALIZED';
+	      case NodeState.UPDATED:
+	        return 'UPDATED';
+	      case NodeState.DESTROYED:
+	        return 'DESTROYED';
+	      default:
+	        return 'UNKNOWN';
+	    }
+	  }
+	};
+	
+	module.exports = NodeState;
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 *
+	 * Orientation types.
+	 *
+	 * @type {Object}
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Enum for all orientation types.
+	 *
+	 * @readonly
+	 * @enum {number}
+	 * @alias module:requiem~enums.Orientation
+	 */
+	
+	var Orientation = {
+	  /**
+	   * Portrait orientation, where height > width.
+	   */
+	  PORTRAIT: 0,
+	
+	  /**
+	   * Landscape orientation, where width > height.
+	   */
+	  LANDSCAPE: 1,
+	
+	  /**
+	   * Gets the name of an orientation enum.
+	   *
+	   * @param {Orientation} orientation - Orientation.
+	   *
+	   * @return {string} Name of the orientation.
+	   */
+	  toString: function toString(orientation) {
+	    switch (orientation) {
+	      case Orientation.PORTRAIT:
+	        return 'PORTRAIT';
+	      case Orientation.LANDSCAPE:
+	        return 'LANDSCAPE';
+	      default:
+	        return 'UNKNOWN';
+	    }
+	  }
+	};
+	
+	module.exports = Orientation;
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var Directive = __webpack_require__(5);
+	
+	/**
+	 * Gets the controller class name from the DOM element.
+	 *
+	 * @param {Node} element - The DOM element.
+	 *
+	 * @return {string} The controller class name.
+	 *
+	 * @alias module:requiem~helpers.getControllerClassNameFromElement
+	 */
+	function getControllerClassNameFromElement(element) {
+	  return element.getAttribute(Directive.CLASS);
+	}
+	
+	module.exports = getControllerClassNameFromElement;
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Gets the name of a function/class.
+	 *
+	 * @param {Function} f - The function/class.
+	 *
+	 * @return {string} Name of the function/class.
+	 *
+	 * @alias module:requiem~helpers.getFunctionName
+	 */
+	
+	function getFunctionName(f) {
+	  if (!f) return;
+	  if (f.name) return f.name;
+	
+	  var regex = /function\s([^(]{1,})\(/;
+	  var name = regex.exec(f.toString());
+	
+	  return name && name.length > 1 ? name[1].trim() : '';
+	}
+	
+	module.exports = getFunctionName;
+
+/***/ },
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _getRect = __webpack_require__(28);
+	var _getRect = __webpack_require__(6);
 	
 	var _getRect2 = _interopRequireDefault(_getRect);
 	
-	var _translate3d = __webpack_require__(33);
+	var _translate3d = __webpack_require__(27);
 	
 	var _translate3d2 = _interopRequireDefault(_translate3d);
 	
-	var _transform = __webpack_require__(34);
+	var _transform = __webpack_require__(26);
 	
 	var _transform2 = _interopRequireDefault(_transform);
 	
-	var _Element2 = __webpack_require__(19);
+	var _Element2 = __webpack_require__(4);
 	
 	var _Element3 = _interopRequireDefault(_Element2);
 	
-	var _DirtyType = __webpack_require__(23);
+	var _DirtyType = __webpack_require__(7);
 	
 	var _DirtyType2 = _interopRequireDefault(_DirtyType);
 	
-	var _EventType = __webpack_require__(25);
+	var _EventType = __webpack_require__(8);
 	
 	var _EventType2 = _interopRequireDefault(_EventType);
 	
-	var _Orientation = __webpack_require__(35);
+	var _Orientation = __webpack_require__(18);
 	
 	var _Orientation2 = _interopRequireDefault(_Orientation);
 	
-	var _assertType = __webpack_require__(5);
+	var _assertType = __webpack_require__(2);
 	
 	var _assertType2 = _interopRequireDefault(_assertType);
 	
@@ -4540,7 +3314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~ui.Grid
 	 */
 	
-	var Grid = (function (_Element) {
+	var Grid = function (_Element) {
 	  _inherits(Grid, _Element);
 	
 	  function Grid() {
@@ -4551,6 +3325,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  _createClass(Grid, [{
 	    key: 'init',
+	
 	
 	    /** @inheritdoc */
 	    value: function init() {
@@ -4623,8 +3398,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Computes the position of the specified children according to a vacancy
 	     * map.
-	     * @param  {Element} item      - Target item.
-	     * @param  {Array}   vacancies - Array of open slots.
+	     * @param {Element} item      - Target item.
+	     * @param {Array}   vacancies - Array of open slots.
 	     *
 	     * @return {Object} Hash describing the computed position of the target item.
 	     *
@@ -4941,12 +3716,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 	
 	  return Grid;
-	})(_Element3.default);
+	}(_Element3.default);
 	
 	module.exports = Grid;
 
 /***/ },
-/* 33 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4959,95 +3734,347 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _assert = __webpack_require__(6);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _DirtyType = __webpack_require__(7);
+	
+	var _DirtyType2 = _interopRequireDefault(_DirtyType);
+	
+	var _Element2 = __webpack_require__(4);
+	
+	var _Element3 = _interopRequireDefault(_Element2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	/**
+	 * @class
+	 *
+	 * Controller of a DOM 'video' element.
+	 *
+	 * @extends module:requiem~ui.Element
+	 * @alias module:requiem~ui.Video
+	 */
+	
+	var Video = function (_Element) {
+	  _inherits(Video, _Element);
+	
+	  function Video() {
+	    _classCallCheck(this, Video);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Video).apply(this, arguments));
+	  }
+	
+	  _createClass(Video, [{
+	    key: 'update',
+	
+	    /**
+	     * @inheritdoc
+	     */
+	    value: function update() {
+	      if (this.updateDelegate.isDirty(_DirtyType2.default.DATA)) this.__update_source();
+	      _get(Object.getPrototypeOf(Video.prototype), 'update', this).call(this);
+	    }
+	
+	    /**
+	     * @inheritdoc
+	     */
+	
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return document.createElement('video');
+	    }
+	
+	    /**
+	     * Updates the sources in this Video instance.
+	     *
+	     * @private
+	     */
+	
+	  }, {
+	    key: '__update_source',
+	    value: function __update_source() {
+	      var i = undefined;
+	      var arrlen = undefined;
+	
+	      // Update source(s).
+	      var oldSources = this.element.getElementsByTagName('source');
+	
+	      arrlen = oldSources.length;
+	
+	      for (i = 0; i < arrlen; i++) {
+	        var oldSource = oldSources[i];
+	
+	        this.element.removeChild(oldSource);
+	      }
+	
+	      if (!this.source) return;
+	
+	      arrlen = this.source.length;
+	
+	      for (i = 0; i < arrlen; i++) {
+	        var newSource = document.createElement('source');
+	        var path = this.source[i].src;
+	        var type = this.source[i].type;
+	        var ext = path.split('.').pop();
+	
+	        newSource.setAttribute('src', path);
+	        newSource.setAttribute('type', type || 'video/' + ext);
+	
+	        this.element.appendChild(newSource);
+	      }
+	    }
+	
+	    /**
+	     * @inheritdoc
+	     */
+	
+	  }, {
+	    key: '__validate_element',
+	    value: function __validate_element(element) {
+	      return true;
+	    }
+	
+	    /**
+	     * @inheritdoc
+	     */
+	
+	  }, {
+	    key: '__define_properties',
+	    value: function __define_properties() {
+	      var _this2 = this;
+	
+	      /**
+	       * Specifies that the video will start playing as soon as it is ready.
+	       *
+	       * @property {boolean}
+	       */
+	      Object.defineProperty(this, 'autoplay', {
+	        get: function get() {
+	          return _this2.element.autoplay;
+	        },
+	        set: function set(value) {
+	          _this2.element.autoplay = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+	
+	      /**
+	       * Specifies that video controls should be displayed (such as a play/pause
+	       * button etc).
+	       *
+	       * @property {boolean}
+	       */
+	      Object.defineProperty(this, 'controls', {
+	        get: function get() {
+	          return _this2.element.controls;
+	        },
+	        set: function set(value) {
+	          _this2.element.controls = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+	
+	      /**
+	       * Specifies that the video will start over again, every time it is
+	       * finished.
+	       *
+	       * @property {boolean}
+	       */
+	      Object.defineProperty(this, 'loop', {
+	        get: function get() {
+	          return _this2.element.loop;
+	        },
+	        set: function set(value) {
+	          _this2.element.loop = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+	
+	      /**
+	       * Specifies that the audio output of the video should be muted.
+	       *
+	       * @property {boolean}
+	       */
+	      Object.defineProperty(this, 'muted', {
+	        get: function get() {
+	          return _this2.element.muted;
+	        },
+	        set: function set(value) {
+	          _this2.element.muted = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+	
+	      /**
+	       * Specifies an image to be shown while the video is downloading, or until
+	       * the user hits the play button.
+	       *
+	       * @property {string}
+	       */
+	      Object.defineProperty(this, 'poster', {
+	        get: function get() {
+	          return _this2.element.poster;
+	        },
+	        set: function set(value) {
+	          _this2.element.poster = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+	
+	      /**
+	       * Specifies if and how the author thinks the video should be loaded when
+	       * the page loads
+	       *
+	       * @property {string}
+	       */
+	      Object.defineProperty(this, 'preload', {
+	        get: function get() {
+	          return _this2.element.preload;
+	        },
+	        set: function set(value) {
+	          _this2.element.preload = value;
+	          _this2.updateDelegate.setDirty(_DirtyType2.default.CUSTOM);
+	        }
+	      });
+	
+	      /**
+	       * Array of sources containing elements in the form of:
+	       * Object {
+	       *   {string} src  - Path of source.
+	       *   {string} type - Type of source.
+	       * }
+	       *
+	       * @property {Object[]}
+	       */
+	      _Element3.default.defineProperty(this, 'source', {
+	        get: true,
+	        set: true,
+	        dirtyType: _DirtyType2.default.DATA
+	      });
+	
+	      _get(Object.getPrototypeOf(Video.prototype), '__define_properties', this).call(this);
+	    }
+	  }]);
+	
+	  return Video;
+	}(_Element3.default);
+	
+	module.exports = Video;
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(29);
+	var _Element = __webpack_require__(4);
+	
+	var _Element2 = _interopRequireDefault(_Element);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Gets the index of a specified class in a DOM element,
+	 *
+	 * @param {Node|Element} element
+	 * @param {string}       className
+	 *
+	 * @return {number} Index of given class name. -1 if not found.
+	 *
+	 * @alias module:requiem~utils.getClassIndex
+	 */
+	function getClassIndex(element, className) {
+	  if (!(0, _assert2.default)(element && (element instanceof Node || element instanceof _Element2.default), 'Invalid element specified. Element must be an instance of Node or Element.')) return null;
+	  if (element instanceof _Element2.default) element = element.element;
+	
+	  if (!(0, _assert2.default)(className && typeof className === 'string', 'Invalid class name: ' + className)) return -1;
+	
+	  var classList = element.className.split(' ');
+	
+	  return classList.indexOf(className);
+	}
+	
+	module.exports = getClassIndex;
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _assert = __webpack_require__(1);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	var _toElementArray = __webpack_require__(3);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/**
-	 * Translates a DOM element.
+	 * Checks if specified parent contains specified child.
 	 *
-	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to
-	 *                                                                perform the
-	 *                                                                3D translation.
-	 * @param {Object} [properties] - Translation properties (if unspecified, all
-	 *                                translation coordinates will be reset to 0).
-	 * @param {number} [properties.x] - X-coordinate.
-	 * @param {number} [properties.y] - Y-coordinate.
-	 * @param {number} [properties.z] - Z-coordinate.
-	 * @param {string} [properties.units='px'] - Unit of translations.
-	 * @param {Object} [constraints] - Translation constraints.
-	 * @param {number} [constraints.x] - Bounded x-coordinate.
-	 * @param {number} [constraints.y] - Bounded y-coordinate.
-	 * @param {number} [constraints.z] - Bounded z-coordinate.
+	 * @param {Node|Element} parent - Node or Element instance.
+	 * @param {Node|Element} child  - Node or Element instance.
 	 *
-	 * @return {Object} Translated properties.
+	 * @return {boolean} True if parent has given child, false otherwise.
 	 *
-	 * @alias module:requiem~utils.translate3d
+	 * @alias module:requiem~utils.hasChild
 	 */
-	function translate3d(element, properties, constraints) {
-	  var elements = (0, _toElementArray2.default)(element);
-	  var n = elements.length;
+	function hasChild(parent, child) {
+	  var ps = (0, _toElementArray2.default)(parent);
+	  var cs = (0, _toElementArray2.default)(child);
 	
-	  if (properties) {
-	    if (!(0, _assert2.default)(properties.x === undefined || !isNaN(properties.x), 'X property must be a number.')) return null;
-	    if (!(0, _assert2.default)(properties.y === undefined || !isNaN(properties.y), 'Y property must be a number.')) return null;
-	    if (!(0, _assert2.default)(properties.z === undefined || !isNaN(properties.z), 'Z property must be a number.')) return null;
+	  if (!(0, _assert2.default)(ps.length === 1, 'Invalid parent specified. Parent must be a single Node or Element instance.')) return false;
+	  if (!(0, _assert2.default)(cs.length === 1, 'Invalid child specified. Child must be a single Node or Element instance.')) return false;
 	
-	    var units = properties.units || 'px';
+	  var p = ps[0];
+	  var c = cs[0];
 	
-	    if (constraints) {
-	      if (!(0, _assert2.default)(constraints.x === undefined || !isNaN(constraints.x), 'X constraint must be a number.')) return null;
-	      if (!(0, _assert2.default)(constraints.y === undefined || !isNaN(constraints.y), 'Y constraint must be a number.')) return null;
-	      if (!(0, _assert2.default)(constraints.z === undefined || !isNaN(constraints.z), 'Z constraint must be a number.')) return null;
-	    }
+	  if (!c.parentNode) return false;
 	
-	    var x = constraints && constraints.x !== undefined ? Math.min(properties.x, constraints.x) : properties.x;
-	    var y = constraints && constraints.y !== undefined ? Math.min(properties.y, constraints.y) : properties.y;
-	    var z = constraints && constraints.z !== undefined ? Math.min(properties.z, constraints.z) : properties.z;
-	
-	    var translateX = properties.x !== undefined ? 'translateX(' + x + units + ')' : null;
-	    var translateY = properties.y !== undefined ? 'translateY(' + y + units + ')' : null;
-	    var translateZ = properties.z !== undefined ? 'translateZ(' + z + units + ')' : null;
-	    var transforms = '';
-	
-	    if (translateX) transforms += transforms === '' ? translateX : ' ' + translateX;
-	    if (translateY) transforms += transforms === '' ? translateY : ' ' + translateY;
-	    if (translateZ) transforms += transforms === '' ? translateZ : ' ' + translateZ;
-	
-	    for (var i = 0; i < n; i++) {
-	      elements[i].style.transform = transforms;
-	    }
-	
-	    var t = {};
-	
-	    if (translateX) t.x = x;
-	    if (translateY) t.y = y;
-	    if (translateZ) t.z = z;
-	
-	    return t;
-	  } else {
-	    for (var j = 0; j < n; j++) {
-	      elements[j].style.transform = 'translateX(0) translateY(0) translateZ(0)';
-	    }
-	
-	    return {
-	      x: 0,
-	      y: 0,
-	      z: 0
-	    };
+	  while (c !== null && c !== undefined && c !== document) {
+	    c = c.parentNode;
+	    if (c === p) return true;
 	  }
+	
+	  return false;
 	}
 	
-	module.exports = translate3d;
+	module.exports = hasChild;
 
 /***/ },
-/* 34 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5060,15 +4087,69 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _assert = __webpack_require__(6);
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(29);
+	var _toElementArray = __webpack_require__(3);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _getRect = __webpack_require__(28);
+	var _getClassIndex = __webpack_require__(23);
+	
+	var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Verifies that the specified element(s) has the specified class.
+	 *
+	 * @param {Node|Node[]|Element|Element[]} element
+	 * @param {string}                        className
+	 *
+	 * @return {boolean} True if element(s) has given class, false otherwise.
+	 *
+	 * @alias module:requiem~utils.hasClass
+	 */
+	function hasClass(element, className) {
+	  if (!(0, _assert2.default)(className && typeof className === 'string', 'Invalid class name: ' + className)) return false;
+	
+	  var elements = (0, _toElementArray2.default)(element);
+	  var n = elements.length;
+	
+	  for (var i = 0; i < n; i++) {
+	    var e = elements[i];
+	    if ((0, _getClassIndex2.default)(e, className) < 0) return false;
+	  }
+	
+	  return true;
+	}
+	
+	module.exports = hasClass;
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _assert = __webpack_require__(1);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	var _toElementArray = __webpack_require__(3);
+	
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+	
+	var _getRect = __webpack_require__(6);
 	
 	var _getRect2 = _interopRequireDefault(_getRect);
 	
@@ -5077,9 +4158,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Transforms a DOM element.
 	 *
-	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to
-	 *                                                                perform the
-	 *                                                                transform on.
+	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to perform the
+	 *                                                  transform on.
 	 * @param {Object} [properties] - Transformation properties. (If unspecified,
 	 *                                all transformation styles will be reset to
 	 *                                'initial').
@@ -5189,7 +4269,308 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = transform;
 
 /***/ },
-/* 35 */
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _assert = __webpack_require__(1);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	var _toElementArray = __webpack_require__(3);
+	
+	var _toElementArray2 = _interopRequireDefault(_toElementArray);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Translates a DOM element.
+	 *
+	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to perform the
+	 *                                                  3D translation.
+	 * @param {Object} [properties] - Translation properties (if unspecified, all
+	 *                                translation coordinates will be reset to 0).
+	 * @param {number} [properties.x] - X-coordinate.
+	 * @param {number} [properties.y] - Y-coordinate.
+	 * @param {number} [properties.z] - Z-coordinate.
+	 * @param {string} [properties.units='px'] - Unit of translations.
+	 * @param {Object} [constraints] - Translation constraints.
+	 * @param {number} [constraints.x] - Bounded x-coordinate.
+	 * @param {number} [constraints.y] - Bounded y-coordinate.
+	 * @param {number} [constraints.z] - Bounded z-coordinate.
+	 *
+	 * @return {Object} Translated properties.
+	 *
+	 * @alias module:requiem~utils.translate3d
+	 */
+	function translate3d(element, properties, constraints) {
+	  var elements = (0, _toElementArray2.default)(element);
+	  var n = elements.length;
+	
+	  if (properties) {
+	    if (!(0, _assert2.default)(properties.x === undefined || !isNaN(properties.x), 'X property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.y === undefined || !isNaN(properties.y), 'Y property must be a number.')) return null;
+	    if (!(0, _assert2.default)(properties.z === undefined || !isNaN(properties.z), 'Z property must be a number.')) return null;
+	
+	    var units = properties.units || 'px';
+	
+	    if (constraints) {
+	      if (!(0, _assert2.default)(constraints.x === undefined || !isNaN(constraints.x), 'X constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.y === undefined || !isNaN(constraints.y), 'Y constraint must be a number.')) return null;
+	      if (!(0, _assert2.default)(constraints.z === undefined || !isNaN(constraints.z), 'Z constraint must be a number.')) return null;
+	    }
+	
+	    var x = constraints && constraints.x !== undefined ? Math.min(properties.x, constraints.x) : properties.x;
+	    var y = constraints && constraints.y !== undefined ? Math.min(properties.y, constraints.y) : properties.y;
+	    var z = constraints && constraints.z !== undefined ? Math.min(properties.z, constraints.z) : properties.z;
+	
+	    var translateX = properties.x !== undefined ? 'translateX(' + x + units + ')' : null;
+	    var translateY = properties.y !== undefined ? 'translateY(' + y + units + ')' : null;
+	    var translateZ = properties.z !== undefined ? 'translateZ(' + z + units + ')' : null;
+	    var transforms = '';
+	
+	    if (translateX) transforms += transforms === '' ? translateX : ' ' + translateX;
+	    if (translateY) transforms += transforms === '' ? translateY : ' ' + translateY;
+	    if (translateZ) transforms += transforms === '' ? translateZ : ' ' + translateZ;
+	
+	    for (var i = 0; i < n; i++) {
+	      elements[i].style.transform = transforms;
+	    }
+	
+	    var t = {};
+	
+	    if (translateX) t.x = x;
+	    if (translateY) t.y = y;
+	    if (translateZ) t.z = z;
+	
+	    return t;
+	  } else {
+	    for (var j = 0; j < n; j++) {
+	      elements[j].style.transform = 'translateX(0) translateY(0) translateZ(0)';
+	    }
+	
+	    return {
+	      x: 0,
+	      y: 0,
+	      z: 0
+	    };
+	  }
+	}
+	
+	module.exports = translate3d;
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _assertType = __webpack_require__(2);
+	
+	var _assertType2 = _interopRequireDefault(_assertType);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Creates a DOM element from the provided string.
+	 *
+	 * @param {string} value - String describing the DOM element.
+	 *
+	 * @return {Node} DOM element.
+	 *
+	 * @alias module:requiem~dom.createElement
+	 */
+	function createElement(value) {
+	  if (!document) return null;
+	
+	  (0, _assertType2.default)(value, 'string', true, 'Value must be a string');
+	
+	  var div = document.createElement('div');
+	  div.innerHTML = value;
+	  return div.firstChild;
+	}
+	
+	module.exports = createElement;
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Collection of DOM manipulation methods.
+	 *
+	 * @namespace module:requiem~dom
+	 */
+	
+	var dom = {};
+	
+	Object.defineProperty(dom, 'createElement', { value: __webpack_require__(28), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'getClassRegistry', { value: __webpack_require__(9), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'getDataRegistry', { value: __webpack_require__(15), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'namespace', { value: __webpack_require__(10), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'ready', { value: __webpack_require__(30), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'register', { value: __webpack_require__(31), writable: false, enumerable: true });
+	Object.defineProperty(dom, 'sightread', { value: __webpack_require__(16), writable: false, enumerable: true });
+	
+	module.exports = dom;
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _assertType = __webpack_require__(2);
+	
+	var _assertType2 = _interopRequireDefault(_assertType);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Invokes a callback when the DOM is ready.
+	 *
+	 * @param {Function} callback - Function invoked when the DOM is ready.
+	 *
+	 * @alias module:requiem~dom.ready
+	 */
+	function ready(callback) {
+	  (0, _assertType2.default)(callback, 'function', false, 'Invalid parameter: callback');
+	
+	  if (!document) return null;
+	
+	  var onLoaded = function onLoaded(event) {
+	    if (document.addEventListener) {
+	      document.removeEventListener('DOMContentLoaded', onLoaded, false);
+	      window.removeEventListener('load', onLoaded, false);
+	    } else if (document.attachEvent) {
+	      document.detachEvent('onreadystatechange', onLoaded);
+	      window.detachEvent('onload', onLoaded);
+	    }
+	
+	    setTimeout(callback, 1);
+	  };
+	
+	  if (document.readyState === 'complete') {
+	    return setTimeout(callback, 1);
+	  }
+	
+	  if (document.addEventListener) {
+	    document.addEventListener('DOMContentLoaded', onLoaded, false);
+	    window.addEventListener('load', onLoaded, false);
+	  } else if (document.attachEvent) {
+	    document.attachEvent('onreadystatechange', onLoaded);
+	    window.attachEvent('onload', onLoaded);
+	  }
+	
+	  return null;
+	}
+	
+	module.exports = ready;
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _getClassRegistry = __webpack_require__(9);
+	
+	var _getClassRegistry2 = _interopRequireDefault(_getClassRegistry);
+	
+	var _namespace = __webpack_require__(10);
+	
+	var _namespace2 = _interopRequireDefault(_namespace);
+	
+	var _assert = __webpack_require__(1);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
+	var _assertType = __webpack_require__(2);
+	
+	var _assertType2 = _interopRequireDefault(_assertType);
+	
+	var _getFunctionName = __webpack_require__(20);
+	
+	var _getFunctionName2 = _interopRequireDefault(_getFunctionName);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Registers a controller class with Requiem to be used for instantiating
+	 * custom elements during the sighreading process.
+	 *
+	 * @param {Class}  c   - Class to be registered.
+	 * @param {string} [n] - Namespace of class.
+	 *
+	 * @return {Class} The registered class.
+	 *
+	 * @alias module:requiem~dom.register
+	 */
+	function register(c, n) {
+	  (0, _assertType2.default)(c, 'function', false, 'Invalid class provided');
+	  (0, _assertType2.default)(n, 'string', true, 'Invalid optional parameter: namespace');
+	
+	  var className = (0, _getFunctionName2.default)(c);
+	
+	  if (typeof n === 'string') {
+	    var groups = n.split('.');
+	    className = groups.pop();
+	    n = groups.join('.');
+	  }
+	
+	  if (!(0, _assert2.default)((0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] === undefined, 'Class name ' + className + ' is already registered')) return;
+	  (0, _namespace2.default)(n, (0, _getClassRegistry2.default)())[className] = c;
+	
+	  return c;
+	}
+	
+	module.exports = register;
+
+/***/ },
+/* 32 */
 /***/ function(module, exports) {
 
 	/**
@@ -5199,7 +4580,344 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
 	 *
-	 * Orientation types.
+	 * @type {Object}
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Enum for universal key codes.
+	 *
+	 * @readonly
+	 * @enum {number}
+	 * @alias module:requiem~enums.KeyCode
+	 */
+	
+	var KeyCode = {
+	  BACKSPACE: 8,
+	  TAB: 9,
+	  ENTER: 13,
+	  SHIFT: 16,
+	  CTRL: 17,
+	  ALT: 18,
+	  PAUSE_BREAK: 19,
+	  CAPS_LOCK: 20,
+	  ESCAPE: 27,
+	  PAGE_UP: 33,
+	  PAGE_DOWN: 34,
+	  END: 35,
+	  HOME: 36,
+	  LEFT_ARROW: 37,
+	  UP_ARROW: 38,
+	  RIGHT_ARROW: 39,
+	  DOWN_ARROW: 40,
+	  INSERT: 45,
+	  DELETE: 46,
+	  ZERO: 48,
+	  ONE: 49,
+	  TWO: 50,
+	  THREE: 51,
+	  FOUR: 52,
+	  FIVE: 53,
+	  SIX: 54,
+	  SEVEN: 55,
+	  EIGHT: 56,
+	  NINE: 57,
+	  A: 65,
+	  B: 66,
+	  C: 67,
+	  D: 68,
+	  E: 69,
+	  F: 70,
+	  G: 71,
+	  H: 72,
+	  I: 73,
+	  J: 74,
+	  K: 75,
+	  L: 76,
+	  M: 77,
+	  N: 78,
+	  O: 79,
+	  P: 80,
+	  Q: 81,
+	  R: 82,
+	  S: 83,
+	  T: 84,
+	  U: 85,
+	  V: 86,
+	  W: 87,
+	  X: 88,
+	  Y: 89,
+	  Z: 90,
+	  LEFT_CMD: 91,
+	  RIGHT_CMD: 92,
+	  SELECT: 93,
+	  NUMPAD_ZERO: 96,
+	  NUMPAD_ONE: 97,
+	  NUMPAD_TWO: 98,
+	  NUMPAD_THREE: 99,
+	  NUMPAD_FOUR: 100,
+	  NUMPAD_FIVE: 101,
+	  NUMPAD_SIX: 102,
+	  NUMPAD_SEVEN: 103,
+	  NUMPAD_EIGHT: 104,
+	  NUMPAD_NINE: 105,
+	  MULTIPLY: 106,
+	  ADD: 107,
+	  SUBTRACT: 109,
+	  DECIMAL: 110,
+	  DIVIDE: 111,
+	  F1: 112,
+	  F2: 113,
+	  F3: 114,
+	  F4: 115,
+	  F5: 116,
+	  F6: 117,
+	  F7: 118,
+	  F8: 119,
+	  F9: 120,
+	  F10: 121,
+	  F11: 122,
+	  F12: 123,
+	  NUM_LOCK: 144,
+	  SCROLL_LOCK: 145,
+	  SEMI_COLON: 186,
+	  EQUAL: 187,
+	  COMMA: 188,
+	  DASH: 189,
+	  PERIOD: 190,
+	  FORWARD_SLASH: 191,
+	  GRAVE_ACCENT: 192,
+	  OPEN_BRACKET: 219,
+	  BACK_SLASH: 220,
+	  CLOSE_BRACKET: 221,
+	  SINGLE_QUOTE: 222,
+	
+	  /**
+	   * Gets the name of a key code.
+	   *
+	   * @param {KeyCode} keyCode - Key code.
+	   *
+	   * @return {string} Name of the key code.
+	   */
+	  toString: function toString(keyCode) {
+	    switch (keyCode) {
+	      case KeyCode.BACKSPACE:
+	        return 'BACKSPACE';
+	      case KeyCode.TAB:
+	        return 'TAB';
+	      case KeyCode.ENTER:
+	        return 'ENTER';
+	      case KeyCode.SHIFT:
+	        return 'SHIFT';
+	      case KeyCode.CTRL:
+	        return 'CTRL';
+	      case KeyCode.ALT:
+	        return 'ALT';
+	      case KeyCode.PAUSE_BREAK:
+	        return 'PAUSE_BREAK';
+	      case KeyCode.CAPS_LOCK:
+	        return 'CAPS_LOCK';
+	      case KeyCode.ESCAPE:
+	        return 'ESCAPE';
+	      case KeyCode.PAGE_UP:
+	        return 'PAGE_UP';
+	      case KeyCode.PAGE_DOWN:
+	        return 'PAGE_DOWN';
+	      case KeyCode.END:
+	        return 'END';
+	      case KeyCode.HOME:
+	        return 'HOME';
+	      case KeyCode.LEFT_ARROW:
+	        return 'LEFT_ARROW';
+	      case KeyCode.UP_ARROW:
+	        return 'UP_ARROW';
+	      case KeyCode.RIGHT_ARROW:
+	        return 'RIGHT_ARROW';
+	      case KeyCode.DOWN_ARROW:
+	        return 'DOWN_ARROW';
+	      case KeyCode.INSERT:
+	        return 'INSERT';
+	      case KeyCode.DELETE:
+	        return 'DELETE';
+	      case KeyCode.ZERO:
+	        return 'ZERO';
+	      case KeyCode.ONE:
+	        return 'ONE';
+	      case KeyCode.TWO:
+	        return 'TWO';
+	      case KeyCode.THREE:
+	        return 'THREE';
+	      case KeyCode.FOUR:
+	        return 'FOUR';
+	      case KeyCode.FIVE:
+	        return 'FIVE';
+	      case KeyCode.SIX:
+	        return 'SIX';
+	      case KeyCode.SEVEN:
+	        return 'SEVEN';
+	      case KeyCode.EIGHT:
+	        return 'EIGHT';
+	      case KeyCode.NINE:
+	        return 'NINE';
+	      case KeyCode.A:
+	        return 'A';
+	      case KeyCode.B:
+	        return 'B';
+	      case KeyCode.C:
+	        return 'C';
+	      case KeyCode.D:
+	        return 'D';
+	      case KeyCode.E:
+	        return 'E';
+	      case KeyCode.F:
+	        return 'F';
+	      case KeyCode.G:
+	        return 'G';
+	      case KeyCode.H:
+	        return 'H';
+	      case KeyCode.I:
+	        return 'I';
+	      case KeyCode.J:
+	        return 'J';
+	      case KeyCode.K:
+	        return 'K';
+	      case KeyCode.L:
+	        return 'L';
+	      case KeyCode.M:
+	        return 'M';
+	      case KeyCode.N:
+	        return 'N';
+	      case KeyCode.O:
+	        return 'O';
+	      case KeyCode.P:
+	        return 'P';
+	      case KeyCode.Q:
+	        return 'Q';
+	      case KeyCode.R:
+	        return 'R';
+	      case KeyCode.S:
+	        return 'S';
+	      case KeyCode.T:
+	        return 'T';
+	      case KeyCode.U:
+	        return 'U';
+	      case KeyCode.V:
+	        return 'V';
+	      case KeyCode.W:
+	        return 'W';
+	      case KeyCode.X:
+	        return 'X';
+	      case KeyCode.Y:
+	        return 'Y';
+	      case KeyCode.Z:
+	        return 'Z';
+	      case KeyCode.LEFT_CMD:
+	        return 'LEFT_CMD';
+	      case KeyCode.RIGHT_CMD:
+	        return 'RIGHT_CMD';
+	      case KeyCode.SELECT:
+	        return 'SELECT';
+	      case KeyCode.NUMPAD_ZERO:
+	        return 'NUMPAD_ZERO';
+	      case KeyCode.NUMPAD_ONE:
+	        return 'NUMPAD_ONE';
+	      case KeyCode.NUMPAD_TWO:
+	        return 'NUMPAD_TWO';
+	      case KeyCode.NUMPAD_THREE:
+	        return 'NUMPAD_THREE';
+	      case KeyCode.NUMPAD_FOUR:
+	        return 'NUMPAD_FOUR';
+	      case KeyCode.NUMPAD_FIVE:
+	        return 'NUMPAD_FIVE';
+	      case KeyCode.NUMPAD_SIX:
+	        return 'NUMPAD_SIX';
+	      case KeyCode.NUMPAD_SEVEN:
+	        return 'NUMPAD_SEVEN';
+	      case KeyCode.NUMPAD_EIGHT:
+	        return 'NUMPAD_EIGHT';
+	      case KeyCode.NUMPAD_NINE:
+	        return 'NUMPAD_NINE';
+	      case KeyCode.MULTIPLY:
+	        return 'MULTIPLY';
+	      case KeyCode.ADD:
+	        return 'ADD';
+	      case KeyCode.SUBTRACT:
+	        return 'SUBTRACT';
+	      case KeyCode.DECIMAL:
+	        return 'DECIMAL';
+	      case KeyCode.DIVIDE:
+	        return 'DIVIDE';
+	      case KeyCode.F1:
+	        return 'F1';
+	      case KeyCode.F2:
+	        return 'F2';
+	      case KeyCode.F3:
+	        return 'F3';
+	      case KeyCode.F4:
+	        return 'F4';
+	      case KeyCode.F5:
+	        return 'F5';
+	      case KeyCode.F6:
+	        return 'F6';
+	      case KeyCode.F7:
+	        return 'F7';
+	      case KeyCode.F8:
+	        return 'F8';
+	      case KeyCode.F9:
+	        return 'F9';
+	      case KeyCode.F10:
+	        return 'F10';
+	      case KeyCode.F11:
+	        return 'F11';
+	      case KeyCode.F12:
+	        return 'F12';
+	      case KeyCode.NUM_LOCK:
+	        return 'NUM_LOCK';
+	      case KeyCode.SCROLL_LOCK:
+	        return 'SCROLL_LOCK';
+	      case KeyCode.SEMI_COLON:
+	        return 'SEMI_COLON';
+	      case KeyCode.EQUAL:
+	        return 'EQUAL';
+	      case KeyCode.COMMA:
+	        return 'COMMA';
+	      case KeyCode.DASH:
+	        return 'DASH';
+	      case KeyCode.PERIOD:
+	        return 'PERIOD';
+	      case KeyCode.FORWARD_SLASH:
+	        return 'FORWARD_SLASH';
+	      case KeyCode.GRAVE_ACCENT:
+	        return 'GRAVE_ACCENT';
+	      case KeyCode.OPEN_BRACKET:
+	        return 'OPEN_BRACKET';
+	      case KeyCode.BACK_SLASH:
+	        return 'BACK_SLASH';
+	      case KeyCode.CLOSE_BRACKET:
+	        return 'CLOSE_BRACKET';
+	      case KeyCode.SINGLE_QUOTE:
+	        return 'SINGLE_QUOTE';
+	      default:
+	        return 'UNKNOWN';
+	    }
+	  }
+	};
+	
+	module.exports = KeyCode;
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 *
+	 * Viewport types.
 	 *
 	 * @type {Object}
 	 */
@@ -5207,47 +4925,80 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	/**
-	 * Enum for all orientation types.
+	 * Enum for all viewport size classes (defaults to portrait).
 	 *
 	 * @readonly
 	 * @enum {number}
-	 * @alias module:requiem~enums.Orientation
+	 * @alias module:requiem~enums.NodeState
 	 */
 	
-	var Orientation = {
+	var ViewportSizeClass = {
 	  /**
-	   * Portrait orientation, where height > width.
+	   * Mobile devices.
 	   */
-	  PORTRAIT: 0,
+	  MOBILE: {
+	    id: 0,
+	    min: 0,
+	    max: 599
+	  },
 	
 	  /**
-	   * Landscape orientation, where width > height.
+	   * Phablet devices
 	   */
-	  LANDSCAPE: 1,
+	  PHABLET: {
+	    id: 1,
+	    min: 600,
+	    max: 767
+	  },
 	
 	  /**
-	   * Gets the name of an orientation enum.
-	   *
-	   * @param  {Orientation} orientation - Orientation.
-	   *
-	   * @return {string} Name of the orientation.
+	   * Tablet devices.
 	   */
-	  toString: function toString(orientation) {
-	    switch (orientation) {
-	      case Orientation.PORTRAIT:
-	        return 'PORTRAIT';
-	      case Orientation.LANDSCAPE:
-	        return 'LANDSCAPE';
-	      default:
-	        return 'UNKNOWN';
-	    }
+	  TABLET: {
+	    id: 2,
+	    min: 768,
+	    max: 1024
+	  },
+	
+	  /**
+	   * Desktop devices.
+	   */
+	  DESKTOP: {
+	    id: 3,
+	    min: 1025,
+	    max: 100000
+	  },
+	
+	  /**
+	   * Gets the viewport size class.
+	   *
+	   * @param {string} [measurement='width'] - Specifies whether to use a specific
+	   *                                         measurement to determine the size
+	   *                                         class ('width', 'height', 'min' or
+	   *                                         'max').
+	   *
+	   * @return {ViewportSizeClass} The viewport size class enum.
+	   */
+	  get: function get(measurement) {
+	    if (typeof measurement !== 'string') measurement = 'width';
+	
+	    var rect = __webpack_require__(14)();
+	    var t = undefined;
+	
+	    if (measurement === 'height') t = rect.height;else if (measurement === 'max') t = Math.max(rect.width, rect.height);else if (measurement === 'min') t = Math.min(rect.width, rect.height);else t = rect.width;
+	
+	    if (t >= ViewportSizeClass.MOBILE.min && t <= ViewportSizeClass.MOBILE.max) return ViewportSizeClass.MOBILE;
+	    if (t >= ViewportSizeClass.PHABLET.min && t <= ViewportSizeClass.PHABLET.max) return ViewportSizeClass.PHABLET;
+	    if (t >= ViewportSizeClass.TABLET.min && t <= ViewportSizeClass.TABLET.max) return ViewportSizeClass.TABLET;
+	    if (t >= ViewportSizeClass.DESKTOP.min && t <= ViewportSizeClass.DESKTOP.max) return ViewportSizeClass.DESKTOP;
+	    return null;
 	  }
 	};
 	
-	module.exports = Orientation;
+	module.exports = ViewportSizeClass;
 
 /***/ },
-/* 36 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5260,286 +5011,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _assert = __webpack_require__(6);
+	/**
+	 * Collection of Requiem enums and types.
+	 *
+	 * @namespace module:requiem~enums
+	 */
+	
+	var enums = {};
+	enums['Directive'] = __webpack_require__(5);
+	enums['DirtyType'] = __webpack_require__(7);
+	enums['EventType'] = __webpack_require__(8);
+	enums['KeyCode'] = __webpack_require__(32);
+	enums['NodeState'] = __webpack_require__(17);
+	enums['Orientation'] = __webpack_require__(18);
+	enums['ViewportSizeClass'] = __webpack_require__(33);
+	
+	module.exports = enums;
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(29);
-	
-	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Checks if specified parent contains specified child.
-	 *
-	 * @param {Node|Element} parent - Node or Element instance.
-	 * @param {Node|Element} child  - Node or Element instance.
-	 *
-	 * @return {boolean} True if parent has given child, false otherwise.
-	 *
-	 * @alias module:requiem~utils.hasChild
-	 */
-	function hasChild(parent, child) {
-	  var ps = (0, _toElementArray2.default)(parent);
-	  var cs = (0, _toElementArray2.default)(child);
-	
-	  if (!(0, _assert2.default)(ps.length === 1, 'Invalid parent specified. Parent must be a single Node or Element instance.')) return false;
-	  if (!(0, _assert2.default)(cs.length === 1, 'Invalid child specified. Child must be a single Node or Element instance.')) return false;
-	  if (!(0, _assert2.default)(document, 'Document not found. This method requires document to be valid.')) return false;
-	
-	  var p = ps[0];
-	  var c = cs[0];
-	
-	  if (!c.parentNode) return false;
-	
-	  while (c !== null && c !== undefined && c !== document) {
-	    c = c.parentNode;
-	
-	    if (c === p) return true;
-	  }
-	
-	  return false;
-	}
-	
-	module.exports = hasChild;
-
-/***/ },
-/* 37 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Collection of event related classes/methods.
-	 *
-	 * @namespace module:requiem~events
-	 */
-	
-	var events = {};
-	
-	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(38), writable: false, enumerable: true });
-	Object.defineProperty(events, 'EventTimer', { value: __webpack_require__(39), writable: false, enumerable: true });
-	
-	module.exports = events;
-
-/***/ },
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _assertType = __webpack_require__(5);
+	var _assertType = __webpack_require__(2);
 	
 	var _assertType2 = _interopRequireDefault(_assertType);
 	
-	var _log = __webpack_require__(21);
-	
-	var _log2 = _interopRequireDefault(_log);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	/**
-	 * @class
-	 *
-	 * Custom event dispatcher object.
-	 *
-	 * @alias module:requiem~events.EventDispatcher
-	 */
-	
-	var EventDispatcher = (function () {
-	  /**
-	   * Creates a new EventDispatcher instance.
-	   *
-	   * @return {EventDispatcher} A new EventDispatcher instance.
-	   */
-	
-	  function EventDispatcher() {
-	    _classCallCheck(this, EventDispatcher);
-	
-	    this.__define_properties();
-	  }
-	
-	  /**
-	   * Adds an event listener to this EventDispatcher instance.
-	   *
-	   * @param {string}   type
-	   * @param {Function} listener
-	   */
-	
-	  _createClass(EventDispatcher, [{
-	    key: 'addEventListener',
-	    value: function addEventListener(type, listener) {
-	      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
-	      if (!(0, _assertType2.default)(listener, 'function', false, 'Invalid parameter: listener')) return;
-	
-	      (0, _log2.default)('[EventDispatcher]::addEventListener(' + type + ')');
-	
-	      if (!this.__private__.listenerMap[type]) {
-	        this.__private__.listenerMap[type] = [];
-	      }
-	
-	      this.__private__.listenerMap[type].push(listener);
-	    }
-	
-	    /**
-	     * Removes an event listener from this EventDispatcher instance. If no
-	     * listener method is specified, all the listeners of the specified type
-	     * will be removed.
-	     *
-	     * @param {string}   type
-	     * @param {Function} listener:undefined
-	     */
-	
-	  }, {
-	    key: 'removeEventListener',
-	    value: function removeEventListener(type, listener) {
-	      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
-	      if (!(0, _assertType2.default)(listener, 'function', true, 'Invalid parameter: listener')) return;
-	      if (!(0, _assert2.default)(this.__private__.listenerMap, 'Listener map is null.')) return;
-	      if (!(0, _assert2.default)(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
-	
-	      (0, _log2.default)('[EventDispatcher]::removeEventListener(' + type + ')');
-	
-	      if (listener) {
-	        var index = this.__private__.listenerMap[type].indexOf(listener);
-	
-	        if (index > -1) {
-	          this.__private__.listenerMap[type].splice(index, 1);
-	        }
-	      } else {
-	        delete this.__private__.listenerMap[type];
-	      }
-	    }
-	
-	    /**
-	     * Determines whether this EventDispatcher instance has a specific event
-	     * listener registered. If no listener is specified, it will check if any
-	     * listener of the specified event type is registered.
-	     *
-	     * @param {string}   type
-	     * @param {Function} [listener]
-	     *
-	     * @return {boolean}
-	     */
-	
-	  }, {
-	    key: 'hasEventListener',
-	    value: function hasEventListener(type, listener) {
-	      if (!(0, _assertType2.default)(type, 'string', false, 'Invalid parameter: type')) return;
-	      if (!(0, _assertType2.default)(listener, 'function', true, 'Invalid parameter: listener')) return;
-	      if (!(0, _assert2.default)(this.__private__.listenerMap, 'Listener map is null.')) return;
-	      if (!(0, _assert2.default)(this.__private__.listenerMap[type], 'There are no listeners registered for event type: ' + type)) return;
-	
-	      if (listener) {
-	        var index = this.__private__.listenerMap[type].indexOf(listener);
-	
-	        return index > -1;
-	      } else {
-	        return true;
-	      }
-	    }
-	
-	    /**
-	     * Dispatches the specified event.
-	     *
-	     * @param {Event} event
-	     */
-	
-	  }, {
-	    key: 'dispatchEvent',
-	    value: function dispatchEvent(event) {
-	      if (!(0, _assertType2.default)(event, Event, false, 'Event must be specified.')) return;
-	      if (!(0, _assert2.default)(this.__private__.listenerMap, 'Listener map is null.')) return;
-	
-	      if (!this.__private__.listenerMap[event.type]) return;
-	
-	      (0, _log2.default)('[EventDispatcher]::dispatchEvent(' + event.type + ')');
-	
-	      var arrlen = this.__private__.listenerMap[event.type].length;
-	
-	      for (var i = 0; i < arrlen; i++) {
-	        var listener = this.__private__.listenerMap[event.type][i];
-	        listener.call(this, event);
-	      }
-	    }
-	
-	    /**
-	     * Defines all properties.
-	     *
-	     * @private
-	     */
-	
-	  }, {
-	    key: '__define_properties',
-	    value: function __define_properties() {
-	      if (!this.__private__) this.__private__ = {};
-	
-	      Object.defineProperty(this.__private__, 'listenerMap', {
-	        value: {},
-	        writable: true
-	      });
-	    }
-	  }]);
-	
-	  return EventDispatcher;
-	})();
-	
-	module.exports = EventDispatcher;
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _assertType = __webpack_require__(5);
-	
-	var _assertType2 = _interopRequireDefault(_assertType);
-	
-	var _log = __webpack_require__(21);
-	
-	var _log2 = _interopRequireDefault(_log);
-	
-	var _EventDispatcher2 = __webpack_require__(38);
+	var _EventDispatcher2 = __webpack_require__(11);
 	
 	var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
 	
@@ -5559,7 +5072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @alias module:requiem~events.EventTimer
 	 */
 	
-	var EventTimer = (function (_EventDispatcher) {
+	var EventTimer = function (_EventDispatcher) {
 	  _inherits(EventTimer, _EventDispatcher);
 	
 	  function EventTimer() {
@@ -5570,6 +5083,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  _createClass(EventTimer, [{
 	    key: 'addEvent',
+	
 	
 	    /**
 	     * Adds an event to the EventTimer.
@@ -5646,7 +5160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * Removes a timed event by its ID.
 	     *
-	     * @param  {string} id - ID of the timed event.
+	     * @param {string} id - ID of the timed event.
 	     */
 	
 	  }, {
@@ -5674,6 +5188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'eventPool',
 	
+	
 	    /**
 	     * The current event pool.
 	     *
@@ -5685,6 +5200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }], [{
 	    key: 'addEvent',
+	
 	
 	    /**
 	     * @see module:requiem~events.EventTimer.addEvent
@@ -5768,12 +5284,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 	
 	  return EventTimer;
-	})(_EventDispatcher3.default);
+	}(_EventDispatcher3.default);
 	
 	module.exports = EventTimer;
 
 /***/ },
-/* 40 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5787,16 +5303,237 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	/**
-	 * Collection of network related methods/classes.
+	 * Collection of event related classes/methods.
 	 *
-	 * @namespace module:requiem~net
+	 * @namespace module:requiem~events
 	 */
 	
-	var net = {};
+	var events = {};
 	
-	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(41), writable: false, enumerable: true });
+	Object.defineProperty(events, 'EventDispatcher', { value: __webpack_require__(11), writable: false, enumerable: true });
+	Object.defineProperty(events, 'EventTimer', { value: __webpack_require__(35), writable: false, enumerable: true });
 	
-	module.exports = net;
+	module.exports = events;
+
+/***/ },
+/* 37 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Verifies that a given is of the given type.
+	 *
+	 * @param {*} value - Any value.
+	 * @param {*} type  - Any class or string that describes a type.
+	 *
+	 * @return {boolean} True if validation passes, false otherwise.
+	 *
+	 * @alias module:requiem~helpers.checkType
+	 */
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	function checkType(value, type) {
+	  if (typeof type === 'string') {
+	    switch (type) {
+	      case 'string':
+	      case 'object':
+	      case 'number':
+	      case 'boolean':
+	      case 'function':
+	        return (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === type;
+	
+	      case 'class':
+	        return typeof value === 'function';
+	
+	      case 'array':
+	        return value.constructor === Array;
+	
+	      default:
+	        return false;
+	    }
+	  } else {
+	    return value instanceof type;
+	  }
+	}
+	
+	module.exports = checkType;
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var assertType = __webpack_require__(2);
+	
+	/**
+	 * Returns a function that, as long as it continues to be invoked, will not
+	 * be triggered. The function will be called after it stops being called for
+	 * N milliseconds. If 'leading' is passed, the function will be triggered on
+	 * the leading edge instead of the trailing.
+	 *
+	 * @param {Function} method          - Method to be debounced.
+	 * @param {number}   [delay=0]       - Debounce rate in milliseconds.
+	 * @param {boolean}  [leading=false] - Indicates whether the method is triggered
+	 *                                     on the leading edge instead of the
+	 *                                     trailing.
+	 *
+	 * @return {Function} The debounced method.
+	 *
+	 * @alias module:requiem~helpers.debounce
+	 */
+	function debounce(method, delay, leading) {
+	  assertType(method, 'function', false, 'Invalid parameter: method');
+	  assertType(delay, 'number', true, 'Invalid optional parameter: delay');
+	  assertType(leading, 'boolean', true, 'Invalid optional parameter: leading');
+	
+	  if (delay === undefined) delay = 0;
+	  if (leading === undefined) leading = false;
+	
+	  var timeout = undefined;
+	
+	  return function () {
+	    var context = this;
+	    var args = arguments;
+	
+	    var later = function later() {
+	      timeout = null;
+	      if (!leading) method.apply(context, args);
+	    };
+	
+	    var callNow = leading && !timeout;
+	    clearTimeout(timeout);
+	    timeout = setTimeout(later, delay);
+	
+	    if (callNow) method.apply(context, args);
+	  };
+	}
+	
+	module.exports = debounce;
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var getControllerClassNameFromElement = __webpack_require__(19);
+	var getInstanceNameFromElement = __webpack_require__(12);
+	var getClassRegistry = __webpack_require__(9);
+	var namespace = __webpack_require__(10);
+	
+	/**
+	 * Gets the controller class from the DOM element.
+	 *
+	 * @param {Node} element
+	 *
+	 * @return {Class} The controller class.
+	 *
+	 * @alias module:requiem~helpers.getControllerClassFromElement
+	 */
+	function getControllerClassFromElement(element) {
+	  var classRegistry = getClassRegistry();
+	  var controllerClassName = getControllerClassNameFromElement(element);
+	  var instanceName = getInstanceNameFromElement(element);
+	  var controllerClass = controllerClassName ? namespace(controllerClassName, classRegistry) : undefined;
+	
+	  // If no controller class is specified but element is marked as an instance,
+	  // default the controller class to Element.
+	  if (!controllerClass && instanceName && instanceName.length > 0) {
+	    controllerClass = __webpack_require__(4);
+	  } else if (typeof controllerClass !== 'function') {
+	    switch (controllerClassName) {
+	      case 'Video':
+	        controllerClass = __webpack_require__(22);
+	        break;
+	
+	      case 'Element':
+	        controllerClass = __webpack_require__(4);
+	        break;
+	
+	      case 'Grid':
+	        controllerClass = __webpack_require__(21);
+	        break;
+	
+	      default:
+	        controllerClass = null;
+	    }
+	  }
+	
+	  return controllerClass;
+	}
+	
+	module.exports = getControllerClassFromElement;
+
+/***/ },
+/* 40 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Injects a module and all of its sub-modules into a target module.
+	 *
+	 * @param {Object} target     - Target module for injecting a module into.
+	 * @param {string} moduleName - Name of the module to be injected (used as the
+	 *                              key for the key-value pair in target module).
+	 * @param {Object} module     - Module object (used as value for the key-value
+	 *                              pair in target module).
+	 *
+	 * @alias module:requiem~helpers.injectModule
+	 */
+	
+	function injectModule(target, moduleName, module) {
+	  Object.defineProperty(target, moduleName, {
+	    value: module,
+	    writable: false
+	  });
+	
+	  for (var key in module) {
+	    if (module.hasOwnProperty(key)) {
+	      Object.defineProperty(target, key, {
+	        value: module[key],
+	        writable: false
+	      });
+	    }
+	  }
+	}
+	
+	module.exports = injectModule;
 
 /***/ },
 /* 41 */
@@ -5812,33 +5549,190 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	var assertType = __webpack_require__(2);
+	
+	/**
+	 * Checks if a given value is equal to null. Option to specify recursion, which
+	 * would further evaluate inner elements, such as when an Array or Object is
+	 * specified.
+	 *
+	 * @param {*}       value              - Value to evaluate.
+	 * @param {boolean} [recursive=false]  - Specifies whether to recursively
+	 *                                       evaluate the supplied value's inner
+	 *                                       values (i.e. an Array or Object).
+	 *
+	 * @return {boolean} True if null, false otherwise.
+	 *
+	 * @alias module:requiem~helpers.noval
+	 */
+	function noval(value, recursive) {
+	  assertType(recursive, 'boolean', true, 'Invalid parameter: recursive');
+	
+	  if (recursive === undefined) recursive = false;
+	
+	  if (value === undefined || value === null) {
+	    return true;
+	  } else if (typeof value === 'string') {
+	    return value === '';
+	  } else if (recursive && value instanceof Array) {
+	    var n = value.length;
+	
+	    for (var i = 0; i < n; i++) {
+	      if (!noval(value[i], true)) return false;
+	    }
+	
+	    return true;
+	  } else if (recursive && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object) {
+	    for (var p in value) {
+	      if (!noval(value[p], true)) return false;
+	    }
+	
+	    return true;
+	  } else {
+	    return false;
+	  }
+	}
+	
+	module.exports = noval;
+
+/***/ },
+/* 42 */
+/***/ function(module, exports) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Applies special polyfills to the browser window (i.e. IE happiness).
+	 *
+	 * @alias module:requiem~helpers.polyfill
+	 */
+	
+	function polyfill() {
+	  if (!window) return;
+	
+	  // Create CustomEvent class.
+	  function CustomEvent(event, params) {
+	    params = params || { bubbles: false, cancelable: false, detail: undefined };
+	    var evt = document.createEvent('CustomEvent');
+	    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+	    return evt;
+	  }
+	
+	  CustomEvent.prototype = window.Event.prototype;
+	
+	  window.CustomEvent = CustomEvent;
+	
+	  // Polyfill to support passing of arguments to the callback function of either
+	  // setTimeout() or setInterval() in IE9 and below.
+	  //
+	  // @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval}
+	  if (document.all && !window.setTimeout.isPolyfill) {
+	    (function () {
+	      var __nativeST__ = window.setTimeout;
+	      window.setTimeout = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
+	        var aArgs = Array.prototype.slice.call(arguments, 2);
+	        return __nativeST__(vCallback instanceof Function ? function () {
+	          vCallback.apply(null, aArgs);
+	        } : vCallback, nDelay);
+	      };
+	      window.setTimeout.isPolyfill = true;
+	    })();
+	  }
+	
+	  if (document.all && !window.setInterval.isPolyfill) {
+	    (function () {
+	      var __nativeSI__ = window.setInterval;
+	      window.setInterval = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
+	        var aArgs = Array.prototype.slice.call(arguments, 2);
+	        return __nativeSI__(vCallback instanceof Function ? function () {
+	          vCallback.apply(null, aArgs);
+	        } : vCallback, nDelay);
+	      };
+	      window.setInterval.isPolyfill = true;
+	    })();
+	  }
+	}
+	
+	module.exports = polyfill;
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var Directive = __webpack_require__(5);
+	
+	/**
+	 * Validates whether an attribute can be used (could be reserved by Requiem).
+	 *
+	 * @param {string} attribute - Name of the attribute.
+	 *
+	 * @return {boolean} True if attribute is OK to be used, false otherwise.
+	 *
+	 * @alias module:requiem~helpers.validateAttribute
+	 */
+	function validateAttribute(attribute) {
+	  for (var d in Directive) {
+	    if (attribute === Directive[d]) return false;
+	  }
+	
+	  return true;
+	}
+	
+	module.exports = validateAttribute;
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _assert = __webpack_require__(6);
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _inherit = __webpack_require__(42);
-	
-	var _inherit2 = _interopRequireDefault(_inherit);
-	
-	var _log = __webpack_require__(21);
-	
-	var _log2 = _interopRequireDefault(_log);
-	
-	var _EventDispatcher2 = __webpack_require__(38);
+	var _EventDispatcher2 = __webpack_require__(11);
 	
 	var _EventDispatcher3 = _interopRequireDefault(_EventDispatcher2);
 	
-	var _EventType = __webpack_require__(25);
+	var _EventType = __webpack_require__(8);
 	
 	var _EventType2 = _interopRequireDefault(_EventType);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -5919,26 +5813,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @extends module:requiem~events.EventDispatcher
 	 */
 	
-	var AssetLoader = (function (_EventDispatcher) {
+	var AssetLoader = function (_EventDispatcher) {
 	  _inherits(AssetLoader, _EventDispatcher);
 	
 	  function AssetLoader() {
 	    _classCallCheck(this, AssetLoader);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AssetLoader).call(this));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AssetLoader).apply(this, arguments));
 	  }
-	
-	  /**
-	   * Initializes this AssetLoader instance and begins loading assets in the
-	   * queue.
-	   */
 	
 	  _createClass(AssetLoader, [{
 	    key: 'init',
+	
+	    /**
+	     * Initializes this AssetLoader instance and begins loading assets in the
+	     * queue.
+	     */
 	    value: function init() {
 	      if (this.queue.length < 1) return;
-	
-	      (0, _log2.default)('[AssetLoader]::init()');
 	
 	      var arrlen = this.queue.length;
 	
@@ -5947,8 +5839,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      for (var i = 0; i < arrlen; i++) {
 	        var target = this.queue[i];
-	
-	        (0, _log2.default)('[AssetLoader]::Started loading: ' + target.path);
 	
 	        var xhr = this.getXHR({
 	          id: i,
@@ -6006,8 +5896,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!arguments) return;
 	      if (arguments.length <= 0) return;
 	      if (this.state === AssetLoader.STATE.IN_PROGRESS) return;
-	
-	      (0, _log2.default)('[AssetLoader]::enqueue(' + arguments + ')');
 	
 	      var arrlen = arguments.length;
 	
@@ -6147,8 +6035,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      if (!this._bytesLoaded) this._bytesLoaded = [];
 	
-	      (0, _log2.default)('[AssetLoader]::_onXHRProgress("' + path + '":' + bytesLoaded + '/' + bytesTotal + ')');
-	
 	      var progressEvent = new CustomEvent(_EventType2.default.OBJECT.PROGRESS, {
 	        bubbles: true,
 	        cancelable: true,
@@ -6180,8 +6066,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var id = xhr.data.id;
 	      var path = xhr.data.path;
 	      var type = xhr.data.type;
-	
-	      (0, _log2.default)('[AssetLoader]::_onXHRLoadComplete("' + path + '"")');
 	
 	      this._pending--;
 	
@@ -6216,8 +6100,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var id = xhr.data.id;
 	      var path = xhr.data.path;
 	      var type = xhr.data.type;
-	
-	      (0, _log2.default)('[AssetLoader]::_onXHRLoadError("' + path + '"")');
 	
 	      this._pending--;
 	
@@ -6269,8 +6151,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var id = xhr.data.id;
 	      var path = xhr.data.path;
 	      var type = xhr.data.type;
-	
-	      (0, _log2.default)('[AssetLoader]::_onXHRLoadError("' + path + '"")');
 	
 	      this._pending--;
 	
@@ -6482,7 +6362,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 	
 	  return AssetLoader;
-	})(_EventDispatcher3.default);
+	}(_EventDispatcher3.default);
 	
 	/**
 	 * @static
@@ -6491,6 +6371,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @enum {number}
 	 */
+	
 	
 	AssetLoader.STATE = {
 	  IDLE: 0,
@@ -6516,423 +6397,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = AssetLoader;
 
 /***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var assertType = __webpack_require__(5);
-	
-	/**
-	 * Sets up prototypal inheritance between a child class and a parent class.
-	 *
-	 * @param {Class} childClass  - Child class.
-	 * @param {Class} parentClass - Parent class.
-	 *
-	 * @return {Class} Extended child class.
-	 *
-	 * @alias module:requiem~helpers.inherit
-	 */
-	function inherit(childClass, parentClass) {
-	  assertType(childClass, 'class', false, 'Invalid parameter: childClass');
-	  assertType(parentClass, 'class', false, 'Invalid parameter: parentClass');
-	
-	  for (var key in parentClass) {
-	    if (parentClass.hasOwnProperty(key)) {
-	      childClass[key] = parentClass[key];
-	    }
-	  }
-	
-	  function C() {
-	    this.constructor = childClass;
-	  }
-	
-	  C.prototype = Object.create(parentClass.prototype);
-	  childClass.prototype = new C();
-	  childClass.__super__ = parentClass.prototype;
-	  return childClass;
-	}
-	
-	module.exports = inherit;
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Collection of Requiem enums and types.
-	 *
-	 * @namespace module:requiem~enums
-	 */
-	
-	var enums = {};
-	
-	Object.defineProperty(enums, 'Directive', { value: __webpack_require__(16), writable: false, enumerable: true });
-	Object.defineProperty(enums, 'DirtyType', { value: __webpack_require__(23), writable: false, enumerable: true });
-	Object.defineProperty(enums, 'EventType', { value: __webpack_require__(25), writable: false, enumerable: true });
-	Object.defineProperty(enums, 'KeyCode', { value: __webpack_require__(44), writable: false, enumerable: true });
-	Object.defineProperty(enums, 'NodeState', { value: __webpack_require__(24), writable: false, enumerable: true });
-	Object.defineProperty(enums, 'Orientation', { value: __webpack_require__(35), writable: false, enumerable: true });
-	Object.defineProperty(enums, 'ViewportSizeClass', { value: __webpack_require__(45), writable: false, enumerable: true });
-	
-	module.exports = enums;
-
-/***/ },
-/* 44 */
-/***/ function(module, exports) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 *
-	 * @type {Object}
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Enum for universal key codes.
-	 *
-	 * @readonly
-	 * @enum {number}
-	 * @alias module:requiem~enums.KeyCode
-	 */
-	
-	var KeyCode = {
-	  BACKSPACE: 8,
-	  TAB: 9,
-	  ENTER: 13,
-	  SHIFT: 16,
-	  CTRL: 17,
-	  ALT: 18,
-	  PAUSE_BREAK: 19,
-	  CAPS_LOCK: 20,
-	  ESCAPE: 27,
-	  PAGE_UP: 33,
-	  PAGE_DOWN: 34,
-	  END: 35,
-	  HOME: 36,
-	  LEFT_ARROW: 37,
-	  UP_ARROW: 38,
-	  RIGHT_ARROW: 39,
-	  DOWN_ARROW: 40,
-	  INSERT: 45,
-	  DELETE: 46,
-	  ZERO: 48,
-	  ONE: 49,
-	  TWO: 50,
-	  THREE: 51,
-	  FOUR: 52,
-	  FIVE: 53,
-	  SIX: 54,
-	  SEVEN: 55,
-	  EIGHT: 56,
-	  NINE: 57,
-	  A: 65,
-	  B: 66,
-	  C: 67,
-	  D: 68,
-	  E: 69,
-	  F: 70,
-	  G: 71,
-	  H: 72,
-	  I: 73,
-	  J: 74,
-	  K: 75,
-	  L: 76,
-	  M: 77,
-	  N: 78,
-	  O: 79,
-	  P: 80,
-	  Q: 81,
-	  R: 82,
-	  S: 83,
-	  T: 84,
-	  U: 85,
-	  V: 86,
-	  W: 87,
-	  X: 88,
-	  Y: 89,
-	  Z: 90,
-	  LEFT_CMD: 91,
-	  RIGHT_CMD: 92,
-	  SELECT: 93,
-	  NUMPAD_ZERO: 96,
-	  NUMPAD_ONE: 97,
-	  NUMPAD_TWO: 98,
-	  NUMPAD_THREE: 99,
-	  NUMPAD_FOUR: 100,
-	  NUMPAD_FIVE: 101,
-	  NUMPAD_SIX: 102,
-	  NUMPAD_SEVEN: 103,
-	  NUMPAD_EIGHT: 104,
-	  NUMPAD_NINE: 105,
-	  MULTIPLY: 106,
-	  ADD: 107,
-	  SUBTRACT: 109,
-	  DECIMAL: 110,
-	  DIVIDE: 111,
-	  F1: 112,
-	  F2: 113,
-	  F3: 114,
-	  F4: 115,
-	  F5: 116,
-	  F6: 117,
-	  F7: 118,
-	  F8: 119,
-	  F9: 120,
-	  F10: 121,
-	  F11: 122,
-	  F12: 123,
-	  NUM_LOCK: 144,
-	  SCROLL_LOCK: 145,
-	  SEMI_COLON: 186,
-	  EQUAL: 187,
-	  COMMA: 188,
-	  DASH: 189,
-	  PERIOD: 190,
-	  FORWARD_SLASH: 191,
-	  GRAVE_ACCENT: 192,
-	  OPEN_BRACKET: 219,
-	  BACK_SLASH: 220,
-	  CLOSE_BRACKET: 221,
-	  SINGLE_QUOTE: 222,
-	
-	  /**
-	   * Gets the name of a key code.
-	   *
-	   * @param  {KeyCode} keyCode - Key code.
-	   *
-	   * @return {string} Name of the key code.
-	   */
-	  toString: function toString(keyCode) {
-	    switch (keyCode) {
-	      case KeyCode.BACKSPACE:
-	        return 'BACKSPACE';
-	      case KeyCode.TAB:
-	        return 'TAB';
-	      case KeyCode.ENTER:
-	        return 'ENTER';
-	      case KeyCode.SHIFT:
-	        return 'SHIFT';
-	      case KeyCode.CTRL:
-	        return 'CTRL';
-	      case KeyCode.ALT:
-	        return 'ALT';
-	      case KeyCode.PAUSE_BREAK:
-	        return 'PAUSE_BREAK';
-	      case KeyCode.CAPS_LOCK:
-	        return 'CAPS_LOCK';
-	      case KeyCode.ESCAPE:
-	        return 'ESCAPE';
-	      case KeyCode.PAGE_UP:
-	        return 'PAGE_UP';
-	      case KeyCode.PAGE_DOWN:
-	        return 'PAGE_DOWN';
-	      case KeyCode.END:
-	        return 'END';
-	      case KeyCode.HOME:
-	        return 'HOME';
-	      case KeyCode.LEFT_ARROW:
-	        return 'LEFT_ARROW';
-	      case KeyCode.UP_ARROW:
-	        return 'UP_ARROW';
-	      case KeyCode.RIGHT_ARROW:
-	        return 'RIGHT_ARROW';
-	      case KeyCode.DOWN_ARROW:
-	        return 'DOWN_ARROW';
-	      case KeyCode.INSERT:
-	        return 'INSERT';
-	      case KeyCode.DELETE:
-	        return 'DELETE';
-	      case KeyCode.ZERO:
-	        return 'ZERO';
-	      case KeyCode.ONE:
-	        return 'ONE';
-	      case KeyCode.TWO:
-	        return 'TWO';
-	      case KeyCode.THREE:
-	        return 'THREE';
-	      case KeyCode.FOUR:
-	        return 'FOUR';
-	      case KeyCode.FIVE:
-	        return 'FIVE';
-	      case KeyCode.SIX:
-	        return 'SIX';
-	      case KeyCode.SEVEN:
-	        return 'SEVEN';
-	      case KeyCode.EIGHT:
-	        return 'EIGHT';
-	      case KeyCode.NINE:
-	        return 'NINE';
-	      case KeyCode.A:
-	        return 'A';
-	      case KeyCode.B:
-	        return 'B';
-	      case KeyCode.C:
-	        return 'C';
-	      case KeyCode.D:
-	        return 'D';
-	      case KeyCode.E:
-	        return 'E';
-	      case KeyCode.F:
-	        return 'F';
-	      case KeyCode.G:
-	        return 'G';
-	      case KeyCode.H:
-	        return 'H';
-	      case KeyCode.I:
-	        return 'I';
-	      case KeyCode.J:
-	        return 'J';
-	      case KeyCode.K:
-	        return 'K';
-	      case KeyCode.L:
-	        return 'L';
-	      case KeyCode.M:
-	        return 'M';
-	      case KeyCode.N:
-	        return 'N';
-	      case KeyCode.O:
-	        return 'O';
-	      case KeyCode.P:
-	        return 'P';
-	      case KeyCode.Q:
-	        return 'Q';
-	      case KeyCode.R:
-	        return 'R';
-	      case KeyCode.S:
-	        return 'S';
-	      case KeyCode.T:
-	        return 'T';
-	      case KeyCode.U:
-	        return 'U';
-	      case KeyCode.V:
-	        return 'V';
-	      case KeyCode.W:
-	        return 'W';
-	      case KeyCode.X:
-	        return 'X';
-	      case KeyCode.Y:
-	        return 'Y';
-	      case KeyCode.Z:
-	        return 'Z';
-	      case KeyCode.LEFT_CMD:
-	        return 'LEFT_CMD';
-	      case KeyCode.RIGHT_CMD:
-	        return 'RIGHT_CMD';
-	      case KeyCode.SELECT:
-	        return 'SELECT';
-	      case KeyCode.NUMPAD_ZERO:
-	        return 'NUMPAD_ZERO';
-	      case KeyCode.NUMPAD_ONE:
-	        return 'NUMPAD_ONE';
-	      case KeyCode.NUMPAD_TWO:
-	        return 'NUMPAD_TWO';
-	      case KeyCode.NUMPAD_THREE:
-	        return 'NUMPAD_THREE';
-	      case KeyCode.NUMPAD_FOUR:
-	        return 'NUMPAD_FOUR';
-	      case KeyCode.NUMPAD_FIVE:
-	        return 'NUMPAD_FIVE';
-	      case KeyCode.NUMPAD_SIX:
-	        return 'NUMPAD_SIX';
-	      case KeyCode.NUMPAD_SEVEN:
-	        return 'NUMPAD_SEVEN';
-	      case KeyCode.NUMPAD_EIGHT:
-	        return 'NUMPAD_EIGHT';
-	      case KeyCode.NUMPAD_NINE:
-	        return 'NUMPAD_NINE';
-	      case KeyCode.MULTIPLY:
-	        return 'MULTIPLY';
-	      case KeyCode.ADD:
-	        return 'ADD';
-	      case KeyCode.SUBTRACT:
-	        return 'SUBTRACT';
-	      case KeyCode.DECIMAL:
-	        return 'DECIMAL';
-	      case KeyCode.DIVIDE:
-	        return 'DIVIDE';
-	      case KeyCode.F1:
-	        return 'F1';
-	      case KeyCode.F2:
-	        return 'F2';
-	      case KeyCode.F3:
-	        return 'F3';
-	      case KeyCode.F4:
-	        return 'F4';
-	      case KeyCode.F5:
-	        return 'F5';
-	      case KeyCode.F6:
-	        return 'F6';
-	      case KeyCode.F7:
-	        return 'F7';
-	      case KeyCode.F8:
-	        return 'F8';
-	      case KeyCode.F9:
-	        return 'F9';
-	      case KeyCode.F10:
-	        return 'F10';
-	      case KeyCode.F11:
-	        return 'F11';
-	      case KeyCode.F12:
-	        return 'F12';
-	      case KeyCode.NUM_LOCK:
-	        return 'NUM_LOCK';
-	      case KeyCode.SCROLL_LOCK:
-	        return 'SCROLL_LOCK';
-	      case KeyCode.SEMI_COLON:
-	        return 'SEMI_COLON';
-	      case KeyCode.EQUAL:
-	        return 'EQUAL';
-	      case KeyCode.COMMA:
-	        return 'COMMA';
-	      case KeyCode.DASH:
-	        return 'DASH';
-	      case KeyCode.PERIOD:
-	        return 'PERIOD';
-	      case KeyCode.FORWARD_SLASH:
-	        return 'FORWARD_SLASH';
-	      case KeyCode.GRAVE_ACCENT:
-	        return 'GRAVE_ACCENT';
-	      case KeyCode.OPEN_BRACKET:
-	        return 'OPEN_BRACKET';
-	      case KeyCode.BACK_SLASH:
-	        return 'BACK_SLASH';
-	      case KeyCode.CLOSE_BRACKET:
-	        return 'CLOSE_BRACKET';
-	      case KeyCode.SINGLE_QUOTE:
-	        return 'SINGLE_QUOTE';
-	      default:
-	        return 'UNKNOWN';
-	    }
-	  }
-	};
-	
-	module.exports = KeyCode;
-
-/***/ },
 /* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -6942,97 +6406,553 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * This software is released under the MIT License:
 	 * http://www.opensource.org/licenses/mit-license.php
-	 *
-	 * Viewport types.
-	 *
-	 * @type {Object}
 	 */
 	
 	'use strict';
 	
 	/**
-	 * Enum for all viewport size classes (defaults to portrait).
+	 * Collection of network related methods/classes.
 	 *
-	 * @readonly
-	 * @enum {number}
-	 * @alias module:requiem~enums.NodeState
+	 * @namespace module:requiem~net
 	 */
 	
-	var ViewportSizeClass = {
-	  /**
-	   * Mobile devices.
-	   */
-	  MOBILE: {
-	    id: 0,
-	    min: 0,
-	    max: 599
-	  },
+	var net = {};
 	
-	  /**
-	   * Phablet devices
-	   */
-	  PHABLET: {
-	    id: 1,
-	    min: 600,
-	    max: 767
-	  },
+	Object.defineProperty(net, 'AssetLoader', { value: __webpack_require__(44), writable: false, enumerable: true });
 	
-	  /**
-	   * Tablet devices.
-	   */
-	  TABLET: {
-	    id: 2,
-	    min: 768,
-	    max: 1024
-	  },
-	
-	  /**
-	   * Desktop devices.
-	   */
-	  DESKTOP: {
-	    id: 3,
-	    min: 1025,
-	    max: 100000
-	  },
-	
-	  /**
-	   * Gets the viewport size class.
-	   *
-	   * @param {string} [measurement='width'] - Specifies whether to use a specific
-	   *                                         measurement to determine the size
-	   *                                         class ('width', 'height', 'min' or
-	   *                                         'max').
-	   *
-	   * @return {ViewportSizeClass} The viewport size class enum.
-	   */
-	  get: function get(measurement) {
-	    if (typeof measurement !== 'string') measurement = 'width';
-	
-	    var rect = __webpack_require__(30)();
-	    var t = undefined;
-	
-	    if (measurement === 'height') {
-	      t = rect.height;
-	    } else if (measurement === 'max') {
-	      t = Math.max(rect.width, rect.height);
-	    } else if (measurement === 'min') {
-	      t = Math.min(rect.width, rect.height);
-	    } else {
-	      t = rect.width;
-	    }
-	
-	    if (t >= ViewportSizeClass.MOBILE.min && t <= ViewportSizeClass.MOBILE.max) return ViewportSizeClass.MOBILE;
-	    if (t >= ViewportSizeClass.PHABLET.min && t <= ViewportSizeClass.PHABLET.max) return ViewportSizeClass.PHABLET;
-	    if (t >= ViewportSizeClass.TABLET.min && t <= ViewportSizeClass.TABLET.max) return ViewportSizeClass.TABLET;
-	    if (t >= ViewportSizeClass.DESKTOP.min && t <= ViewportSizeClass.DESKTOP.max) return ViewportSizeClass.DESKTOP;
-	    return null;
-	  }
-	};
-	
-	module.exports = ViewportSizeClass;
+	module.exports = net;
 
 /***/ },
 /* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _debounce = __webpack_require__(38);
+	
+	var _debounce2 = _interopRequireDefault(_debounce);
+	
+	var _DirtyType = __webpack_require__(7);
+	
+	var _DirtyType2 = _interopRequireDefault(_DirtyType);
+	
+	var _EventType = __webpack_require__(8);
+	
+	var _EventType2 = _interopRequireDefault(_EventType);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	/**
+	 * Default refresh (debounce) rate in milliseconds.
+	 *
+	 * @const
+	 * @memberof module:requiem~ui.ElementUpdateDelegate
+	 * @type {number}
+	 * @default
+	 */
+	var DEFAULT_REFRESH_RATE = 0.0;
+	
+	/**
+	 * @class
+	 *
+	 * Delegate for managing update calls of a Requiem Element.
+	 *
+	 * @alias module:requiem~ui.ElementUpdateDelegate
+	 */
+	
+	var ElementUpdateDelegate = function () {
+	  /**
+	   * @class
+	   *
+	   * Creates a new ElementUpdateDelegate instance.
+	   *
+	   * @param {Element} delegate - The Requiem Element instance of which this
+	   *                             ElementUpdateDelgate instance manages.
+	   *
+	   * @alias module:requiem~ui.ElementUpdateDelegate
+	   */
+	
+	  function ElementUpdateDelegate(delegate) {
+	    _classCallCheck(this, ElementUpdateDelegate);
+	
+	    this.__define_properties();
+	
+	    var mDirtyTable = 0;
+	    var mResizeHandler = null;
+	    var mScrollHandler = null;
+	    var mMouseMoveHandler = null;
+	    var mOrientationChangeHandler = null;
+	    var mMouseWheelHandler = null;
+	    var mKeyUpHandler = null;
+	    var mKeyPressHandler = null;
+	    var mKeyDownHandler = null;
+	
+	    this.delegate = delegate;
+	
+	    /**
+	     * Custom requestAnimationFrame implementation.
+	     *
+	     * @param {Function} callback
+	     *
+	     * @private
+	     */
+	    var _requestAnimationFrame = function _requestAnimationFrame(callback) {
+	      var raf = window && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame) || null;
+	
+	      if (!raf) {
+	        raf = function raf(callback) {
+	          return window.setTimeout(callback, 10.0);
+	        };
+	      }
+	
+	      return raf(callback);
+	    };
+	
+	    /**
+	     * Custom cancelAnimationFrame implementation.
+	     *
+	     * @return {Function} callback
+	     *
+	     * @private
+	     */
+	    var _cancelAnimationFrame = function _cancelAnimationFrame(callback) {
+	      var caf = window && (window.requestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
+	
+	      if (!caf) {
+	        caf = function caf(callback) {
+	          return window.clearTimeout(callback);
+	        };
+	      }
+	
+	      return caf;
+	    };
+	
+	    /**
+	     * Handler invoked when the window resizes.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowResize = function _onWindowResize(event) {
+	      this.setDirty(_DirtyType2.default.SIZE);
+	    };
+	
+	    /**
+	     * Handler invoked when the window scrolls.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowScroll = function _onWindowScroll(event) {
+	      this.setDirty(_DirtyType2.default.POSITION);
+	    };
+	
+	    /**
+	     * Handler invoked when mouse moves in the window.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowMouseMove = function _onWindowMouseMove(event) {
+	      this.mouse.pointerX = event.clientX;
+	      this.mouse.pointerY = event.clientY;
+	
+	      this.setDirty(_DirtyType2.default.INPUT);
+	    };
+	
+	    /**
+	     * Handler invoked when mouse wheel moves in the window.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowMouseWheel = function _onWindowMouseWheel(event) {
+	      this.mouse.wheelX = event.deltaX;
+	      this.mouse.wheelY = event.deltaY;
+	
+	      this.setDirty(_DirtyType2.default.INPUT);
+	    };
+	
+	    /**
+	     * Handler invoked when device orientation changes.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowOrientationChange = function _onWindowOrientationChange(event) {
+	      if (!window) return;
+	
+	      var x = undefined,
+	          y = undefined,
+	          z = undefined;
+	
+	      if (event instanceof window.DeviceOrientationEvent) {
+	        x = event.beta;
+	        y = event.gamma;
+	        z = event.alpha;
+	      } else if (event instanceof window.DeviceMotionEvent) {
+	        x = event.acceleration.x * 2;
+	        y = event.acceleration.y * 2;
+	        z = event.acceleration.z * 2;
+	      } else {
+	        x = event.orientation.x * 50;
+	        y = event.orientation.y * 50;
+	        z = event.orientation.z * 50;
+	      }
+	
+	      this.orientation.x = x;
+	      this.orientation.y = y;
+	      this.orientation.z = z;
+	
+	      this.setDirty(_DirtyType2.default.ORIENTATION);
+	    };
+	
+	    /**
+	     * Handler invoked when a key is pressed down.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowKeyDown = function _onWindowKeyDown(event) {
+	      if (!window) return;
+	      if (this.keyCode.down === undefined) this.keyCode.down = [];
+	      this.keyCode.down.push(event.keyCode);
+	      this.setDirty(_DirtyType2.default.INPUT);
+	    };
+	
+	    /**
+	     * Handler invoked when a key is pressed.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowKeyPress = function _onWindowKeyPress(event) {
+	      if (!window) return;
+	      if (this.keyCode.press === undefined) this.keyCode.press = [];
+	      this.keyCode.press.push(event.keyCode);
+	      this.setDirty(_DirtyType2.default.INPUT);
+	    };
+	
+	    /**
+	     * Handler invoked when a key is pressed up.
+	     *
+	     * @param {Event} event
+	     *
+	     * @private
+	     */
+	    var _onWindowKeyUp = function _onWindowKeyUp(event) {
+	      if (!window) return;
+	      if (this.keyCode.up === undefined) this.keyCode.up = [];
+	      this.keyCode.up.push(event.keyCode);
+	      this.setDirty(_DirtyType2.default.INPUT);
+	    };
+	
+	    /**
+	     * Sets a dirty type as dirty.
+	     *
+	     * @param {number} dirtyType
+	     */
+	    this.setDirty = function (dirtyType, validateNow) {
+	      if (this.transmissive !== _DirtyType2.default.NONE) {
+	        if (this.delegate.children) {
+	          for (var name in this.delegate.children) {
+	            var children = undefined;
+	
+	            if (this.delegate.children[name] instanceof Array) {
+	              children = this.delegate.children[name];
+	            } else {
+	              children = [this.delegate.children[name]];
+	            }
+	
+	            var n = children.length;
+	
+	            for (var i = 0; i < n; i++) {
+	              var child = children[i];
+	
+	              if (child.updateDelegate && child.updateDelegate.setDirty) {
+	                var transmitted = dirtyType & child.updateDelegate.receptive;
+	
+	                if (transmitted !== _DirtyType2.default.NONE) {
+	                  child.updateDelegate.setDirty(transmitted, validateNow);
+	                }
+	              }
+	            }
+	          }
+	        }
+	      }
+	
+	      if (this.isDirty(dirtyType) && !validateNow) return;
+	
+	      switch (dirtyType) {
+	        case _DirtyType2.default.NONE:
+	        case _DirtyType2.default.ALL:
+	          mDirtyTable = dirtyType;
+	          break;
+	        default:
+	          mDirtyTable |= dirtyType;
+	      }
+	
+	      if (validateNow) {
+	        this.update();
+	      } else if (!this._pendingAnimationFrame) {
+	        this._pendingAnimationFrame = _requestAnimationFrame(this.update.bind(this));
+	      }
+	    };
+	
+	    /**
+	     * Checks dirty status of a given dirty type.
+	     *
+	     * @param {number} dirtyType [description]
+	     *
+	     * @return {boolean}
+	     */
+	    this.isDirty = function (dirtyType) {
+	      switch (dirtyType) {
+	        case _DirtyType2.default.NONE:
+	        case _DirtyType2.default.ALL:
+	          return mDirtyTable === dirtyType;
+	        default:
+	          return (dirtyType & mDirtyTable) !== 0;
+	      }
+	    };
+	
+	    /**
+	     * Initializes this ElementUpdateDelegate instance. Must manually invoke.
+	     */
+	    this.init = function () {
+	      var conductor = this.conductor || window;
+	
+	      if (window && conductor && conductor.addEventListener && (this.responsive === true || this.responsive instanceof Array)) {
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.OBJECT.RESIZE) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.ORIENTATION_CHANGE) > -1) mResizeHandler = this.refreshRate === 0.0 ? _onWindowResize.bind(this) : (0, _debounce2.default)(_onWindowResize.bind(this), this.refreshRate);
+	
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.OBJECT.SCROLL) > -1) mScrollHandler = this.refreshRate === 0.0 ? _onWindowScroll.bind(this) : (0, _debounce2.default)(_onWindowScroll.bind(this), this.refreshRate);
+	
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.MISC.WHEEL) > -1) mMouseWheelHandler = this.refreshRate === 0.0 ? _onWindowMouseWheel.bind(this) : (0, _debounce2.default)(_onWindowMouseWheel.bind(this), this.refreshRate);
+	
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.MOUSE.MOUSE_MOVE) > -1) mMouseMoveHandler = this.refreshRate === 0.0 ? _onWindowMouseMove.bind(this) : (0, _debounce2.default)(_onWindowMouseMove.bind(this), this.refreshRate);
+	
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.DEVICE.DEVICE_ORIENTATION) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.DEVICE_MOTION) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.ORIENTATION) > -1) mOrientationChangeHandler = this.refreshRate === 0.0 ? _onWindowOrientationChange.bind(this) : (0, _debounce2.default)(_onWindowOrientationChange.bind(this), this.refreshRate);
+	
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_DOWN) > -1) mKeyDownHandler = _onWindowKeyDown.bind(this);
+	
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_PRESS) > -1) mKeyPressHandler = _onWindowKeyPress.bind(this);
+	
+	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_UP) > -1) mKeyUpHandler = _onWindowKeyUp.bind(this);
+	
+	        if (mResizeHandler) {
+	          window.addEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
+	          window.addEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
+	        }
+	
+	        if (mScrollHandler) conductor.addEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
+	
+	        if (mMouseWheelHandler) conductor.addEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
+	
+	        if (mMouseMoveHandler) conductor.addEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+	
+	        if (mOrientationChangeHandler) {
+	          if (window.DeviceOrientationEvent) window.addEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);else if (window.DeviceMotionEvent) window.addEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+	        }
+	
+	        if (mKeyDownHandler) window.addEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
+	
+	        if (mKeyPressHandler) window.addEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
+	
+	        if (mKeyUpHandler) window.addEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
+	      }
+	
+	      this.setDirty(_DirtyType2.default.ALL);
+	    };
+	
+	    /**
+	     * Destroys this ElementUpdateDelegate instance.
+	     */
+	    this.destroy = function () {
+	      _cancelAnimationFrame();
+	
+	      var conductor = this.conductor || window;
+	
+	      if (window && conductor && conductor.removeEventListener) {
+	        if (mResizeHandler) {
+	          window.removeEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
+	          window.removeEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
+	        }
+	
+	        if (mScrollHandler) conductor.removeEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
+	
+	        if (mMouseWheelHandler) conductor.removeEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
+	
+	        if (mMouseMoveHandler) conductor.removeEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+	
+	        if (mOrientationChangeHandler) {
+	          if (window.DeviceOrientationEvent) window.removeEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);else if (window.DeviceMotionEvent) window.removeEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+	        }
+	
+	        if (mKeyDownHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
+	
+	        if (mKeyPressHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
+	
+	        if (mKeyUpHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
+	      }
+	
+	      mResizeHandler = null;
+	      mScrollHandler = null;
+	      mMouseWheelHandler = null;
+	      mMouseMoveHandler = null;
+	      mOrientationChangeHandler = null;
+	      mKeyDownHandler = null;
+	      mKeyPressHandler = null;
+	      mKeyUpHandler = null;
+	    };
+	
+	    /**
+	     * Handler invoked whenever a visual update is required.
+	     */
+	    this.update = function () {
+	      _cancelAnimationFrame(this._pendingAnimationFrame);
+	
+	      if (this.delegate && this.delegate.update) {
+	        this.delegate.update.call(this.delegate);
+	      }
+	
+	      // Reset the dirty status of all types.
+	      this.setDirty(_DirtyType2.default.NONE);
+	
+	      delete this.mouse.pointerX;
+	      delete this.mouse.pointerY;
+	      delete this.mouse.wheelX;
+	      delete this.mouse.wheelY;
+	      delete this.orientation.x;
+	      delete this.orientation.y;
+	      delete this.orientation.z;
+	      delete this.keyCode.up;
+	      delete this.keyCode.press;
+	      delete this.keyCode.down;
+	
+	      this._pendingAnimationFrame = null;
+	    };
+	  }
+	
+	  /**
+	   * Gets the string representation of this ElementUpdateDelegate instance.
+	   *
+	   * @return {string}
+	   */
+	
+	
+	  _createClass(ElementUpdateDelegate, [{
+	    key: 'toString',
+	    value: function toString() {
+	      return '[ElementUpdateDelegate{' + (this.delegate && this.delegate.name || 'undefined') + '}]';
+	    }
+	
+	    /**
+	     * Defines all properties.
+	     *
+	     * @private
+	     */
+	
+	  }, {
+	    key: '__define_properties',
+	    value: function __define_properties() {
+	      /**
+	       * Delegate of this ElementUpdateDelegate instance.
+	       *
+	       * @property {Element}
+	       */
+	      this.delegate = null;
+	
+	      /**
+	       * Indicates whether this ElementUpdateDelegate auto responds to window
+	       * behaviors (i.e. resizing, scrolling).
+	       *
+	       * @property {boolean}
+	       */
+	      this.responsive = false;
+	
+	      /**
+	       * Indicates the debounce rate of this ElementUpdateDelegate instance.
+	       *
+	       * @property {number}
+	       */
+	      this.refreshRate = DEFAULT_REFRESH_RATE;
+	
+	      /**
+	       * Indicates the dirty flags in which ElementUpdateDelgate instance will
+	       * transmit to its child Elements.
+	       *
+	       * @property {number}
+	       */
+	      this.transmissive = _DirtyType2.default.NONE;
+	
+	      /**
+	       * Indicates the dirty flags in which this ElementUpdateDelegate is capable
+	       * of receiving from parent Elements.
+	       *
+	       * @property {number}
+	       */
+	      this.receptive = _DirtyType2.default.NONE;
+	
+	      /**
+	       * Indicates the conductor in which this ElementUpdateDelegate responds to
+	       * (defaults to window).
+	       *
+	       * @property {Node|window}
+	       */
+	      this.conductor = window;
+	
+	      /**
+	       * Stores mouse properties if this ElementUpdateDelegate responds to mouse
+	       * events.
+	       *
+	       * @property {Object}
+	       */
+	      this.mouse = {};
+	
+	      /**
+	       * Stores orientation properties if this ElementUpdateDelgate responds to
+	       * device orientations (i.e. device accelerometer).
+	       *
+	       * @property {Object}
+	       */
+	      this.orientation = {};
+	
+	      /**
+	       * Stores pressed keycodes if this ElementUpdateDelegate responds to
+	       * keyboard events.
+	       *
+	       * @property {Object}
+	       */
+	      this.keyCode = {};
+	    }
+	  }]);
+	
+	  return ElementUpdateDelegate;
+	}();
+	
+	module.exports = ElementUpdateDelegate;
+
+/***/ },
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7053,52 +6973,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var ui = {};
 	
-	Object.defineProperty(ui, 'Element', { value: __webpack_require__(19), writable: false, enumerable: true });
-	Object.defineProperty(ui, 'ElementUpdateDelegate', { value: __webpack_require__(26), writable: false, enumerable: true });
-	Object.defineProperty(ui, 'Video', { value: __webpack_require__(31), writable: false, enumerable: true });
-	Object.defineProperty(ui, 'Grid', { value: __webpack_require__(32), writable: false, enumerable: true });
+	Object.defineProperty(ui, 'Element', { value: __webpack_require__(4), writable: false, enumerable: true });
+	Object.defineProperty(ui, 'Video', { value: __webpack_require__(22), writable: false, enumerable: true });
+	Object.defineProperty(ui, 'Grid', { value: __webpack_require__(21), writable: false, enumerable: true });
 	
 	module.exports = ui;
-
-/***/ },
-/* 47 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Utility methods.
-	 *
-	 * @namespace module:requiem~utils
-	 */
-	
-	var utils = {};
-	
-	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(48), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'changeElementState', { value: __webpack_require__(51), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(49), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(36), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(50), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getElementState', { value: __webpack_require__(52), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(53), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(28), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(30), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(54), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(55), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(56), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate', { value: __webpack_require__(57), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(33), writable: false, enumerable: true });
-	Object.defineProperty(utils, 'transform', { value: __webpack_require__(34), writable: false, enumerable: true });
-	
-	module.exports = utils;
 
 /***/ },
 /* 48 */
@@ -7114,25 +6993,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _assert = __webpack_require__(6);
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(29);
+	var _toElementArray = __webpack_require__(3);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
-	var _hasClass = __webpack_require__(49);
+	var _hasClass = __webpack_require__(25);
 	
 	var _hasClass2 = _interopRequireDefault(_hasClass);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/**
-	 * Adds a class(es) to DOM element(s).
+	 * Adds class(es) to DOM element(s).
 	 *
 	 * @param {Node|Node[]|Element|Element[]} element
-	 * @param {string|string[]}                             className
+	 * @param {string|string[]}               className
 	 *
 	 * @alias module:requiem~utils.addClass
 	 */
@@ -7143,11 +7022,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  if (!(0, _assert2.default)(typeof className === 'string' || className instanceof Array, 'Invalid class name specified. Must be either a string or an array of strings.')) return;
 	
-	  if (typeof className === 'string') {
-	    classes.push(className);
-	  } else {
-	    classes = className;
-	  }
+	  if (typeof className === 'string') classes.push(className);else classes = className;
 	
 	  var nClasses = classes.length;
 	
@@ -7181,334 +7056,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _assert = __webpack_require__(6);
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(29);
-	
-	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-	
-	var _getClassIndex = __webpack_require__(50);
-	
-	var _getClassIndex2 = _interopRequireDefault(_getClassIndex);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Verifies that the specified element(s) has the specified class.
-	 *
-	 * @param {Node|Node[]|Element|Element[]} element
-	 * @param {string}                                      className
-	 *
-	 * @return {boolean} True if element(s) has given class, false otherwise.
-	 *
-	 * @alias module:requiem~utils.hasClass
-	 */
-	function hasClass(element, className) {
-	  if (!(0, _assert2.default)(className && typeof className === 'string', 'Invalid class name: ' + className)) return false;
-	
-	  var elements = (0, _toElementArray2.default)(element);
-	  var n = elements.length;
-	
-	  for (var i = 0; i < n; i++) {
-	    var e = elements[i];
-	    if ((0, _getClassIndex2.default)(e, className) < 0) return false;
-	  }
-	
-	  return true;
-	}
-	
-	module.exports = hasClass;
-
-/***/ },
-/* 50 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _Element = __webpack_require__(19);
-	
-	var _Element2 = _interopRequireDefault(_Element);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Gets the index of a specified class in a DOM element,
-	 *
-	 * @param {Node|Element} element
-	 * @param {string}       className
-	 *
-	 * @return {number} Index of given class name. -1 if not found.
-	 *
-	 * @alias module:requiem~utils.getClassIndex
-	 */
-	function getClassIndex(element, className) {
-	  if (!(0, _assert2.default)(element && (element instanceof Node || element instanceof _Element2.default), 'Invalid element specified. Element must be an instance of Node or Element.')) return null;
-	  if (element instanceof _Element2.default) element = element.element;
-	
-	  if (!(0, _assert2.default)(className && typeof className === 'string', 'Invalid class name: ' + className)) return -1;
-	
-	  var classList = element.className.split(' ');
-	
-	  return classList.indexOf(className);
-	}
-	
-	module.exports = getClassIndex;
-
-/***/ },
-/* 51 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _toElementArray = __webpack_require__(29);
-	
-	var _toElementArray2 = _interopRequireDefault(_toElementArray);
-	
-	var _getElementState = __webpack_require__(52);
-	
-	var _getElementState2 = _interopRequireDefault(_getElementState);
-	
-	var _Directive = __webpack_require__(16);
-	
-	var _Directive2 = _interopRequireDefault(_Directive);
-	
-	var _Element = __webpack_require__(19);
-	
-	var _Element2 = _interopRequireDefault(_Element);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Changes the state of DOM element(s), assumes that state classes are prefixed
-	 * with 'state-'.
-	 *
-	 * @param {Node|Node[]|Element|Element[]} element
-	 * @param {string}                                      state
-	 *
-	 * @alias module:requiem~utils.changeElementState
-	 */
-	function changeElementState(element, state) {
-	  var elements = (0, _toElementArray2.default)(element, true);
-	
-	  if (!elements) return;
-	
-	  var n = elements.length;
-	
-	  for (var i = 0; i < n; i++) {
-	    var e = elements[i];
-	
-	    if ((0, _getElementState2.default)(e) === state) continue;
-	
-	    if (e instanceof _Element2.default) {
-	      e.state = state;
-	    } else {
-	      e.setAttribute(_Directive2.default.STATE, state);
-	    }
-	  }
-	}
-	
-	module.exports = changeElementState;
-
-/***/ },
-/* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _Directive = __webpack_require__(16);
-	
-	var _Directive2 = _interopRequireDefault(_Directive);
-	
-	var _Element = __webpack_require__(19);
-	
-	var _Element2 = _interopRequireDefault(_Element);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Gets the state of a DOM element, assumes that state classes are prefixed with
-	 * 'state-'.
-	 *
-	 * @param {Node|Element} element
-	 *
-	 * @return {string} State of the given element ('state-' prefix is omitted).
-	 *
-	 * @alias module:requiem~utils.getElementState
-	 */
-	function getElementState(element) {
-	  if (!(0, _assert2.default)(element && (element instanceof Node || element instanceof _Element2.default), 'Invalid element specified.')) return null;
-	
-	  var s = undefined;
-	
-	  if (element instanceof _Element2.default) {
-	    s = element.state;
-	  } else {
-	    s = element.getAttribute(_Directive2.default.STATE);
-	  }
-	
-	  if (!s || s === '') {
-	    return null;
-	  } else {
-	    return s;
-	  }
-	}
-	
-	module.exports = getElementState;
-
-/***/ },
-/* 53 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _getRect = __webpack_require__(28);
-	
-	var _getRect2 = _interopRequireDefault(_getRect);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/**
-	 * Computes the intersecting rect of 2 given elements. If only 1 element is
-	 * specified, the other element will default to the current viewport.
-	 *
-	 * @param {...Node|...Element} element
-	 *
-	 * @return {Object} Object containing width, height.
-	 *
-	 * @alias module:requiem~utils.getIntersectRect
-	 */
-	function getIntersectRect(element) {
-	  if (!(0, _assert2.default)(window, 'This method relies on the window object, which is undefined.')) return null;
-	
-	  var n = arguments.length;
-	
-	  if (!(0, _assert2.default)(n > 0, 'This method requires at least 1 argument specified.')) return null;
-	
-	  var rect = {};
-	  var currRect = undefined,
-	      nextRect = undefined;
-	
-	  for (var i = 0; i < n; i++) {
-	    if (!currRect) currRect = (0, _getRect2.default)(arguments[i]);
-	
-	    if (!(0, _assert2.default)(currRect, 'Invalid computed rect.')) return null;
-	
-	    if (i === 0 && i + 1 === n) {
-	      nextRect = (0, _getRect2.default)(window);
-	    } else if (i + 1 < n) {
-	      nextRect = (0, _getRect2.default)(arguments[i + 1]);
-	    } else {
-	      break;
-	    }
-	
-	    if (!(0, _assert2.default)(nextRect, 'Invalid computed rect.')) return null;
-	
-	    rect.width = Math.max(0.0, Math.min(currRect.right, nextRect.right) - Math.max(currRect.left, nextRect.left));
-	    rect.height = Math.max(0.0, Math.min(currRect.bottom, nextRect.bottom) - Math.max(currRect.top, nextRect.top));
-	    rect.top = Math.max(currRect.top, nextRect.top);
-	    rect.left = Math.max(currRect.left, nextRect.left);
-	    rect.bottom = rect.top + rect.height;
-	    rect.right = rect.left + rect.width;
-	
-	    if (rect.width * rect.height === 0) {
-	      rect.width = 0;
-	      rect.height = 0;
-	      rect.top = 0;
-	      rect.left = 0;
-	      rect.bottom = 0;
-	      rect.right = 0;
-	    }
-	
-	    currRect = rect;
-	  }
-	
-	  return rect;
-	}
-	
-	module.exports = getIntersectRect;
-
-/***/ },
-/* 54 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Requiem
-	 * (c) VARIANTE (http://variante.io)
-	 *
-	 * This software is released under the MIT License:
-	 * http://www.opensource.org/licenses/mit-license.php
-	 */
-	
-	'use strict';
-	
-	var _assert = __webpack_require__(6);
-	
-	var _assert2 = _interopRequireDefault(_assert);
-	
-	var _getIntersectRect = __webpack_require__(53);
+	var _getIntersectRect = __webpack_require__(13);
 	
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
-	var _getRect = __webpack_require__(28);
+	var _getRect = __webpack_require__(6);
 	
 	var _getRect2 = _interopRequireDefault(_getRect);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
 	
 	/**
 	 * Hit tests a vector or element against other elements.
 	 *
 	 * @param {Object|Node|Element} obj
-	 * @param {number}                     obj.x
-	 * @param {number}                     obj.y
+	 * @param {number}              obj.x
+	 * @param {number}              obj.y
 	 * @param {...(Node|Element)}   elements
 	 *
 	 * @return {boolean} True if test passes, false otherwise.
@@ -7549,7 +7118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hitTestElement;
 
 /***/ },
-/* 55 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7562,29 +7131,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _assert = __webpack_require__(6);
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _getIntersectRect = __webpack_require__(53);
+	var _getIntersectRect = __webpack_require__(13);
 	
 	var _getIntersectRect2 = _interopRequireDefault(_getIntersectRect);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
-	
 	/**
 	 * Hit tests a vector or element against other elements.
 	 *
 	 * @param {Object|Node|Element} obj
-	 * @param {number}                     obj.x
-	 * @param {number}                     obj.y
-	 * @param {...Object}                  rects
-	 * @param {number}                     rects.top
-	 * @param {number}                     rects.right
-	 * @param {number}                     rects.bottom
-	 * @param {number}                     rects.left
+	 * @param {number}              obj.x
+	 * @param {number}              obj.y
+	 * @param {...Object}           rects
+	 * @param {number}              rects.top
+	 * @param {number}              rects.right
+	 * @param {number}              rects.bottom
+	 * @param {number}              rects.left
 	 *
 	 * @return {boolean} True if test passes, false otherwise.
 	 *
@@ -7627,7 +7196,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = hitTestRect;
 
 /***/ },
-/* 56 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7640,11 +7209,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _assert = __webpack_require__(6);
+	/**
+	 * Utility methods.
+	 *
+	 * @namespace module:requiem~utils
+	 */
+	
+	var utils = {};
+	
+	Object.defineProperty(utils, 'addClass', { value: __webpack_require__(48), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasClass', { value: __webpack_require__(25), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hasChild', { value: __webpack_require__(24), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getClassIndex', { value: __webpack_require__(23), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getIntersectRect', { value: __webpack_require__(13), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getRect', { value: __webpack_require__(6), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'getViewportRect', { value: __webpack_require__(14), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestElement', { value: __webpack_require__(49), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'hitTestRect', { value: __webpack_require__(50), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'removeClass', { value: __webpack_require__(52), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate', { value: __webpack_require__(53), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'translate3d', { value: __webpack_require__(27), writable: false, enumerable: true });
+	Object.defineProperty(utils, 'transform', { value: __webpack_require__(26), writable: false, enumerable: true });
+	
+	module.exports = utils;
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Requiem
+	 * (c) VARIANTE (http://variante.io)
+	 *
+	 * This software is released under the MIT License:
+	 * http://www.opensource.org/licenses/mit-license.php
+	 */
+	
+	'use strict';
+	
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(29);
+	var _toElementArray = __webpack_require__(3);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -7654,7 +7261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Removes a class(es) from DOM element(s).
 	 *
 	 * @param {Node|Node[]|Element|Element[]} element
-	 * @param {string|string[]}                             className
+	 * @param {string|string[]}               className
 	 *
 	 * @alias module:requiem~utils.removeClass
 	 */
@@ -7694,7 +7301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = removeClass;
 
 /***/ },
-/* 57 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7707,11 +7314,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var _assert = __webpack_require__(6);
+	var _assert = __webpack_require__(1);
 	
 	var _assert2 = _interopRequireDefault(_assert);
 	
-	var _toElementArray = __webpack_require__(29);
+	var _toElementArray = __webpack_require__(3);
 	
 	var _toElementArray2 = _interopRequireDefault(_toElementArray);
 	
@@ -7720,9 +7327,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Translates a DOM element.
 	 *
-	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to
-	 *                                                                perform the
-	 *                                                                translate on.
+	 * @param {Node|Node[]|Element|Element[]} element - Element(s) to perform the
+	 *                                                  translate on.
 	 * @param {Object} [properties] - Translation properties. (if unspecified, all
 	 *                                translation values will be reset to 'initial').
 	 * @param {number} [properties.top] - Top translation value.

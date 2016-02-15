@@ -15,9 +15,8 @@ import getRect from './getRect';
 /**
  * Transforms a DOM element.
  *
- * @param {Node|Node[]|Element|Element[]} element - Element(s) to
- *                                                                perform the
- *                                                                transform on.
+ * @param {Node|Node[]|Element|Element[]} element - Element(s) to perform the
+ *                                                  transform on.
  * @param {Object} [properties] - Transformation properties. (If unspecified,
  *                                all transformation styles will be reset to
  *                                'initial').

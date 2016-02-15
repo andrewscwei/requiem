@@ -14,9 +14,8 @@ import toElementArray from '../helpers/toElementArray';
 /**
  * Translates a DOM element.
  *
- * @param {Node|Node[]|Element|Element[]} element - Element(s) to
- *                                                                perform the
- *                                                                translate on.
+ * @param {Node|Node[]|Element|Element[]} element - Element(s) to perform the
+ *                                                  translate on.
  * @param {Object} [properties] - Translation properties. (if unspecified, all
  *                                translation values will be reset to 'initial').
  * @param {number} [properties.top] - Top translation value.

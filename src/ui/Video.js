@@ -8,7 +8,6 @@
 
 'use strict';
 
-import assert from '../helpers/assert';
 import DirtyType from '../enums/DirtyType';
 import Element from './Element';
 
@@ -78,7 +77,6 @@ class Video extends Element {
    */
   __validate_element(element) {
     return true;
-    // return assert(element instanceof HTMLVideoElement, 'Element validation failed');
   }
 
   /**

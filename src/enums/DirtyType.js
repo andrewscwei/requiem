@@ -89,7 +89,7 @@ let DirtyType = {
   /**
    * Gets the name of the dirty type.
    *
-   * @param  {DirtyType} dirtyType - Dirty type.
+   * @param {DirtyType} dirtyType - Dirty type.
    *
    * @return {string} - Name of the dirty type.
    */
@@ -102,9 +102,7 @@ let DirtyType = {
 
     for (let i = 0; i < n; i++) {
       let bit = (dirtyType  >> i) & 1;
-
       if (bit === 0) continue;
-
       switch (1<<i) {
         case DirtyType.POSITION: o += 'POSITION'; break;
         case DirtyType.SIZE: o += 'SIZE'; break;

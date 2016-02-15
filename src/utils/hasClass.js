@@ -16,7 +16,7 @@ import getClassIndex from './getClassIndex';
  * Verifies that the specified element(s) has the specified class.
  *
  * @param {Node|Node[]|Element|Element[]} element
- * @param {string}                                      className
+ * @param {string}                        className
  *
  * @return {boolean} True if element(s) has given class, false otherwise.
  *

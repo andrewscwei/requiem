@@ -14,9 +14,8 @@ import toElementArray from '../helpers/toElementArray';
 /**
  * Translates a DOM element.
  *
- * @param {Node|Node[]|Element|Element[]} element - Element(s) to
- *                                                                perform the
- *                                                                3D translation.
+ * @param {Node|Node[]|Element|Element[]} element - Element(s) to perform the
+ *                                                  3D translation.
  * @param {Object} [properties] - Translation properties (if unspecified, all
  *                                translation coordinates will be reset to 0).
  * @param {number} [properties.x] - X-coordinate.
