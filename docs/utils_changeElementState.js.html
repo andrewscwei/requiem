@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: enums/Orientation.js</title>
+    <title>JSDoc: Source: utils/changeElementState.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: enums/Orientation.js</h1>
+    <h1 class="page-title">Source: utils/changeElementState.js</h1>
 
     
 
@@ -32,49 +32,44 @@
  *
  * This software is released under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
- *
- * Orientation types.
- *
- * @type {Object}
  */
 
 'use strict';
 
+import toElementArray from '../helpers/toElementArray';
+import getElementState from './getElementState';
+import Directive from '../enums/Directive';
+import Element from '../ui/Element';
+
 /**
- * Enum for all orientation types.
+ * Changes the state of DOM element(s), assumes that state classes are prefixed
+ * with 'state-'.
  *
- * @readonly
- * @enum {number}
- * @alias module:requiem~enums.Orientation
+ * @param {Node|Node[]|Element|Element[]} element
+ * @param {string}                        state
+ *
+ * @alias module:requiem~utils.changeElementState
  */
-let Orientation = {
-  /**
-   * Portrait orientation, where height > width.
-   */
-  PORTRAIT: 0,
+function changeElementState(element, state) {
+  let elements = toElementArray(element, true);
 
-  /**
-   * Landscape orientation, where width > height.
-   */
-  LANDSCAPE: 1,
+  if (!elements) return;
 
-  /**
-   * Gets the name of an orientation enum.
-   *
-   * @param {Orientation} orientation - Orientation.
-   *
-   * @return {string} Name of the orientation.
-   */
-  toString: (orientation) => {
-    switch (orientation) {
-      case Orientation.PORTRAIT: return 'PORTRAIT';
-      case Orientation.LANDSCAPE: return 'LANDSCAPE';
-      default: return 'UNKNOWN';
-    }
+  let n = elements.length;
+
+  for (let i = 0; i &lt; n; i++) {
+    let e = elements[i];
+
+    if (getElementState(e) === state) continue;
+
+    if (e instanceof Element)
+      e.state = state;
+    else
+      e.setAttribute(Directive.STATE, state);
   }
-};
+}
 
-module.exports = Orientation;
+module.exports = changeElementState;
 </code></pre>
         </article>
     </section>
