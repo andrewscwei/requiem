@@ -8,6 +8,7 @@
 
 'use strict';
 
+import assert from '../helpers/assert';
 import debounce from '../helpers/debounce';
 import DirtyType from '../enums/DirtyType';
 import EventType from '../enums/EventType';
@@ -44,6 +45,7 @@ class ElementUpdateDelegate {
     this.__define_properties();
 
     let mDirtyTable = 0;
+    let mConductorTable = {};
     let mResizeHandler = null;
     let mScrollHandler = null;
     let mMouseMoveHandler = null;
@@ -62,15 +64,9 @@ class ElementUpdateDelegate {
      *
      * @private
      */
-    let _requestAnimationFrame = function(callback) {
+    let _requestAnimationFrame = (callback) => {
       let raf = window && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame) || null;
-
-      if (!raf) {
-        raf = function(callback) {
-          return window.setTimeout(callback, 10.0);
-        };
-      }
-
+      if (!raf) raf = (callback) => (window.setTimeout(callback, 10.0));
       return raf(callback);
     };
 
@@ -83,13 +79,7 @@ class ElementUpdateDelegate {
      */
     let _cancelAnimationFrame = function(callback) {
       let caf = window && (window.requestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
-
-      if (!caf) {
-        caf = function(callback) {
-          return window.clearTimeout(callback);
-        };
-      }
-
+      if (!caf) caf = (callback) => (window.clearTimeout(callback));
       return caf;
     };
 
@@ -100,9 +90,7 @@ class ElementUpdateDelegate {
      *
      * @private
      */
-    let _onWindowResize = function(event) {
-      this.setDirty(DirtyType.SIZE);
-    };
+    let _onWindowResize = (event) => this.setDirty(DirtyType.SIZE);
 
     /**
      * Handler invoked when the window scrolls.
@@ -111,9 +99,7 @@ class ElementUpdateDelegate {
      *
      * @private
      */
-    let _onWindowScroll = function(event) {
-      this.setDirty(DirtyType.POSITION);
-    };
+    let _onWindowScroll = (event) => this.setDirty(DirtyType.POSITION);
 
     /**
      * Handler invoked when mouse moves in the window.
@@ -122,10 +108,9 @@ class ElementUpdateDelegate {
      *
      * @private
      */
-    let _onWindowMouseMove = function(event) {
+    let _onWindowMouseMove = (event) => {
       this.mouse.pointerX = event.clientX;
       this.mouse.pointerY = event.clientY;
-
       this.setDirty(DirtyType.INPUT);
     };
 
@@ -136,10 +121,9 @@ class ElementUpdateDelegate {
      *
      * @private
      */
-    let _onWindowMouseWheel = function(event) {
+    let _onWindowMouseWheel = (event) => {
       this.mouse.wheelX = event.deltaX;
       this.mouse.wheelY = event.deltaY;
-
       this.setDirty(DirtyType.INPUT);
     };
 
@@ -150,9 +134,7 @@ class ElementUpdateDelegate {
      *
      * @private
      */
-    let _onWindowOrientationChange = function(event) {
-      if (!window) return;
-
+    let _onWindowOrientationChange = (event) => {
       let x, y, z;
 
       if (event instanceof window.DeviceOrientationEvent) {
@@ -185,8 +167,7 @@ class ElementUpdateDelegate {
      *
      * @private
      */
-    let _onWindowKeyDown = function(event) {
-      if (!window) return;
+    let _onWindowKeyDown = (event) => {
       if (this.keyCode.down === undefined) this.keyCode.down = [];
       this.keyCode.down.push(event.keyCode);
       this.setDirty(DirtyType.INPUT);
@@ -199,8 +180,7 @@ class ElementUpdateDelegate {
      *
      * @private
      */
-    let _onWindowKeyPress = function(event) {
-      if (!window) return;
+    let _onWindowKeyPress = (event) => {
       if (this.keyCode.press === undefined) this.keyCode.press = [];
       this.keyCode.press.push(event.keyCode);
       this.setDirty(DirtyType.INPUT);
@@ -213,8 +193,7 @@ class ElementUpdateDelegate {
      *
      * @private
      */
-    let _onWindowKeyUp = function(event) {
-      if (!window) return;
+    let _onWindowKeyUp = (event) => {
       if (this.keyCode.up === undefined) this.keyCode.up = [];
       this.keyCode.up.push(event.keyCode);
       this.setDirty(DirtyType.INPUT);
@@ -225,7 +204,7 @@ class ElementUpdateDelegate {
      *
      * @param {number} dirtyType
      */
-    this.setDirty = function(dirtyType, validateNow) {
+    this.setDirty = (dirtyType, validateNow) => {
       if (this.transmissive !== DirtyType.NONE) {
         if (this.delegate.children) {
           for (let name in this.delegate.children) {
@@ -280,7 +259,7 @@ class ElementUpdateDelegate {
      *
      * @return {boolean}
      */
-    this.isDirty = function(dirtyType) {
+    this.isDirty = (dirtyType) => {
       switch (dirtyType) {
         case DirtyType.NONE:
         case DirtyType.ALL:
@@ -293,107 +272,46 @@ class ElementUpdateDelegate {
     /**
      * Initializes this ElementUpdateDelegate instance. Must manually invoke.
      */
-    this.init = function() {
-      let conductor = this.conductor || window;
-
-      if (window && conductor && conductor.addEventListener && (this.responsive === true || this.responsive instanceof Array)) {
-        if (this.responsive === true || this.responsive.indexOf(EventType.OBJECT.RESIZE) > -1 || this.responsive.indexOf(EventType.DEVICE.ORIENTATION_CHANGE) > -1)
-          mResizeHandler = (this.refreshRate === 0.0) ? _onWindowResize.bind(this) : debounce(_onWindowResize.bind(this), this.refreshRate);
-
-        if (this.responsive === true || this.responsive.indexOf(EventType.OBJECT.SCROLL) > -1)
-          mScrollHandler = (this.refreshRate === 0.0) ? _onWindowScroll.bind(this) : debounce(_onWindowScroll.bind(this), this.refreshRate);
-
-        if (this.responsive === true || this.responsive.indexOf(EventType.MISC.WHEEL) > -1)
-          mMouseWheelHandler = (this.refreshRate === 0.0) ? _onWindowMouseWheel.bind(this) : debounce(_onWindowMouseWheel.bind(this), this.refreshRate);
-
-        if (this.responsive === true || this.responsive.indexOf(EventType.MOUSE.MOUSE_MOVE) > -1)
-          mMouseMoveHandler = (this.refreshRate === 0.0) ? _onWindowMouseMove.bind(this) : debounce(_onWindowMouseMove.bind(this), this.refreshRate);
-
-        if (this.responsive === true || this.responsive.indexOf(EventType.DEVICE.DEVICE_ORIENTATION) > -1 || this.responsive.indexOf(EventType.DEVICE.DEVICE_MOTION) > -1 || this.responsive.indexOf(EventType.DEVICE.ORIENTATION) > -1)
-          mOrientationChangeHandler = (this.refreshRate === 0.0) ? _onWindowOrientationChange.bind(this) : debounce(_onWindowOrientationChange.bind(this), this.refreshRate);
-
-        if (this.responsive === true || this.responsive.indexOf(EventType.KEYBOARD.KEY_DOWN) > -1)
-          mKeyDownHandler = _onWindowKeyDown.bind(this);
-
-        if (this.responsive === true || this.responsive.indexOf(EventType.KEYBOARD.KEY_PRESS) > -1)
-          mKeyPressHandler = _onWindowKeyPress.bind(this);
-
-        if (this.responsive === true || this.responsive.indexOf(EventType.KEYBOARD.KEY_UP) > -1)
-          mKeyUpHandler = _onWindowKeyUp.bind(this);
-
-        if (mResizeHandler) {
-          window.addEventListener(EventType.OBJECT.RESIZE, mResizeHandler);
-          window.addEventListener(EventType.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
-        }
-
-        if (mScrollHandler)
-          conductor.addEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
-
-        if (mMouseWheelHandler)
-          conductor.addEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
-
-        if (mMouseMoveHandler)
-          conductor.addEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
-
-        if (mOrientationChangeHandler) {
-          if (window.DeviceOrientationEvent)
-            window.addEventListener(EventType.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
-          else if (window.DeviceMotionEvent)
-            window.addEventListener(EventType.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
-        }
-
-        if (mKeyDownHandler)
-          window.addEventListener(EventType.KEYBOARD.KEY_DOWN, mKeyDownHandler);
-
-        if (mKeyPressHandler)
-          window.addEventListener(EventType.KEYBOARD.KEY_PRESS, mKeyPressHandler);
-
-        if (mKeyUpHandler)
-          window.addEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
-      }
-
+    this.init = () => {
       this.setDirty(DirtyType.ALL);
     };
 
     /**
      * Destroys this ElementUpdateDelegate instance.
      */
-    this.destroy = function() {
+    this.destroy = () => {
       _cancelAnimationFrame();
 
-      let conductor = this.conductor || window;
-
-      if (window && conductor && conductor.removeEventListener) {
-        if (mResizeHandler) {
-          window.removeEventListener(EventType.OBJECT.RESIZE, mResizeHandler);
-          window.removeEventListener(EventType.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
-        }
-
-        if (mScrollHandler)
-          conductor.removeEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
-
-        if (mMouseWheelHandler)
-          conductor.removeEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
-
-        if (mMouseMoveHandler)
-          conductor.removeEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
-
-        if (mOrientationChangeHandler) {
-          if (window.DeviceOrientationEvent)
-            window.removeEventListener(EventType.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
-          else if (window.DeviceMotionEvent)
-            window.removeEventListener(EventType.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
-        }
-
-        if (mKeyDownHandler)
-          window.removeEventListener(EventType.KEYBOARD.KEY_DOWN, mKeyDownHandler);
-
-        if (mKeyPressHandler)
-          window.removeEventListener(EventType.KEYBOARD.KEY_PRESS, mKeyPressHandler);
-
-        if (mKeyUpHandler)
-          window.removeEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
+      if (mResizeHandler) {
+        window.removeEventListener(EventType.OBJECT.RESIZE, mResizeHandler);
+        window.removeEventListener(EventType.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
       }
+
+      if (mScrollHandler) {
+        let conductor = mConductorTable.scroll || window;
+        conductor.removeEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
+      }
+
+      if (mMouseWheelHandler) {
+        let conductor = mConductorTable.mouseWheel || window;
+        conductor.removeEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
+      }
+
+      if (mMouseMoveHandler) {
+        let conductor = mConductorTable.mouseMove || window;
+        conductor.removeEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+      }
+
+      if (mOrientationChangeHandler) {
+        if (window.DeviceOrientationEvent)
+          window.removeEventListener(EventType.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
+        else if (window.DeviceMotionEvent)
+          window.removeEventListener(EventType.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+      }
+
+      if (mKeyDownHandler) window.removeEventListener(EventType.KEYBOARD.KEY_DOWN, mKeyDownHandler);
+      if (mKeyPressHandler) window.removeEventListener(EventType.KEYBOARD.KEY_PRESS, mKeyPressHandler);
+      if (mKeyUpHandler) window.removeEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
 
       mResizeHandler = null;
       mScrollHandler = null;
@@ -403,17 +321,17 @@ class ElementUpdateDelegate {
       mKeyDownHandler = null;
       mKeyPressHandler = null;
       mKeyUpHandler = null;
+      mConductorTable = null;
     };
 
     /**
      * Handler invoked whenever a visual update is required.
      */
-    this.update = function() {
+    this.update = () => {
       _cancelAnimationFrame(this._pendingAnimationFrame);
 
-      if (this.delegate && this.delegate.update) {
+      if (this.delegate && this.delegate.update)
         this.delegate.update.call(this.delegate);
-      }
 
       // Reset the dirty status of all types.
       this.setDirty(DirtyType.NONE);
@@ -430,6 +348,108 @@ class ElementUpdateDelegate {
       delete this.keyCode.down;
 
       this._pendingAnimationFrame = null;
+    };
+
+    /**
+     * Sets up the responsiveness to the provided conductor. Only the following
+     * event types support a custom conductor; the rest uses window as the
+     * conductor:
+     *   1. EventType.OBJECT.SCROLL
+     *   2. EventType.MISC.WHEEL
+     *   3. EventType.MOUSE_MOUSE_MOVE
+     *
+     * @param {Object|Number|...args} - This could be the conductor (defaults to
+     *                                  window if unspecified), refresh rate
+     *                                  (defaults to the default value if
+     *                                  unspecified) or the EventType(s).
+     * @param {number|...args}        - Either the refresh rate (defaults to
+     *                                  the default value if unspecified) or
+     *                                  the EventType(s).
+     * @param {...args}               - EventType(s) which the delegate will
+     *                                  respond to.
+     */
+    this.initResponsiveness = function() {
+      let args = Array.prototype.slice.call(arguments);
+
+      assert(args.length > 0, 'Insufficient arguments provided');
+
+      let conductor = ((typeof args[0] !== 'number') && (typeof args[0] !== 'string')) ? args.shift() : window;
+      let delay = (typeof args[0] === 'number') ? args.shift() : DEFAULT_REFRESH_RATE;
+      let universal = (args.length === 0);
+
+      assert(conductor && conductor.addEventListener, 'Invalid conductor specified');
+
+      if (universal || args.indexOf(EventType.OBJECT.RESIZE) > -1 || args.indexOf(EventType.DEVICE.ORIENTATION_CHANGE) > -1) {
+        if (mResizeHandler) {
+          window.removeEventListener(EventType.OBJECT.RESIZE, mResizeHandler);
+          window.removeEventListener(EventType.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
+        }
+        mResizeHandler = (delay === 0.0) ? _onWindowResize.bind(this) : debounce(_onWindowResize.bind(this), delay);
+        window.addEventListener(EventType.OBJECT.RESIZE, mResizeHandler);
+        window.addEventListener(EventType.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
+      }
+
+      if (universal || args.indexOf(EventType.OBJECT.SCROLL) > -1) {
+        if (mScrollHandler) {
+          let c = mConductorTable.scroll || window;
+          c.removeEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
+        }
+        mScrollHandler = (delay === 0.0) ? _onWindowScroll.bind(this) : debounce(_onWindowScroll.bind(this), delay);
+        mConductorTable.scroll = conductor;
+        conductor.addEventListener(EventType.OBJECT.SCROLL, mScrollHandler);
+      }
+
+      if (universal || args.indexOf(EventType.MISC.WHEEL) > -1) {
+        if (mMouseWheelHandler) {
+          let c = mConductorTable.mouseWheel || window;
+          c.removeEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
+        }
+        mMouseWheelHandler = (delay === 0.0) ? _onWindowMouseWheel.bind(this) : debounce(_onWindowMouseWheel.bind(this), delay);
+        mConductorTable.mouseWheel = conductor;
+        conductor.addEventListener(EventType.MISC.WHEEL, mMouseWheelHandler);
+      }
+
+      if (universal || args.indexOf(EventType.MOUSE.MOUSE_MOVE) > -1) {
+        if (mMouseMoveHandler) {
+          let c = mConductorTable.mouseMove || window;
+          c.removeEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+        }
+        mMouseMoveHandler = (delay === 0.0) ? _onWindowMouseMove.bind(this) : debounce(_onWindowMouseMove.bind(this), delay);
+        mConductorTable.mouseMove = conductor;
+        conductor.addEventListener(EventType.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+      }
+
+      if (universal || args.indexOf(EventType.DEVICE.DEVICE_ORIENTATION) > -1 || args.indexOf(EventType.DEVICE.DEVICE_MOTION) > -1 || args.indexOf(EventType.DEVICE.ORIENTATION) > -1) {
+        if (mOrientationChangeHandler) {
+          if (window.DeviceOrientationEvent)
+            window.removeEventListener(EventType.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
+          else if (window.DeviceMotionEvent)
+            window.removeEventListener(EventType.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+        }
+        mOrientationChangeHandler = (delay === 0.0) ? _onWindowOrientationChange.bind(this) : debounce(_onWindowOrientationChange.bind(this), delay);
+        if (window.DeviceOrientationEvent)
+          window.addEventListener(EventType.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);
+        else if (window.DeviceMotionEvent)
+          window.addEventListener(EventType.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+      }
+
+      if (universal || args.indexOf(EventType.KEYBOARD.KEY_DOWN) > -1) {
+        if (mKeyDownHandler) window.removeEventListener(EventType.KEYBOARD.KEY_DOWN, mKeyDownHandler);
+        mKeyDownHandler = _onWindowKeyDown.bind(this);
+        window.addEventListener(EventType.KEYBOARD.KEY_DOWN, mKeyDownHandler);
+      }
+
+      if (universal || args.indexOf(EventType.KEYBOARD.KEY_PRESS) > -1) {
+        if (mKeyPressHandler) window.removeEventListener(EventType.KEYBOARD.KEY_PRESS, mKeyPressHandler);
+        mKeyPressHandler = _onWindowKeyPress.bind(this);
+        window.addEventListener(EventType.KEYBOARD.KEY_PRESS, mKeyPressHandler);
+      }
+
+      if (universal || args.indexOf(EventType.KEYBOARD.KEY_UP) > -1) {
+        if (mKeyUpHandler) window.removeEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
+        mKeyUpHandler = _onWindowKeyUp.bind(this);
+        window.addEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
+      }
     };
   }
 
@@ -456,21 +476,6 @@ class ElementUpdateDelegate {
     this.delegate = null;
 
     /**
-     * Indicates whether this ElementUpdateDelegate auto responds to window
-     * behaviors (i.e. resizing, scrolling).
-     *
-     * @property {boolean}
-     */
-    this.responsive = false;
-
-    /**
-     * Indicates the debounce rate of this ElementUpdateDelegate instance.
-     *
-     * @property {number}
-     */
-    this.refreshRate = DEFAULT_REFRESH_RATE;
-
-    /**
      * Indicates the dirty flags in which ElementUpdateDelgate instance will
      * transmit to its child Elements.
      *
@@ -485,14 +490,6 @@ class ElementUpdateDelegate {
      * @property {number}
      */
     this.receptive = DirtyType.NONE;
-
-    /**
-     * Indicates the conductor in which this ElementUpdateDelegate responds to
-     * (defaults to window).
-     *
-     * @property {Node|window}
-     */
-    this.conductor = window;
 
     /**
      * Stores mouse properties if this ElementUpdateDelegate responds to mouse

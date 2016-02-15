@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @property {string} version - Version number.
 	 */
-	Object.defineProperty(requiem, 'version', { value: '0.30.3', writable: false });
+	Object.defineProperty(requiem, 'version', { value: '0.31.0', writable: false });
 	
 	(0, _injectModule2.default)(requiem, 'dom', __webpack_require__(29));
 	(0, _injectModule2.default)(requiem, 'events', __webpack_require__(36));
@@ -575,40 +575,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    /**
-	     * Sets up the responsiveness of the internal ElementUpdateDelegate
-	     * instance.
-	     *
-	     * @param {Object|Number}  Either the conductor or the refresh rate (if 1
-	     *                         argument supplied).
-	     * @param {number}         Refresh rate.
-	     * @param {...args}        EventType(s) which this element will respond to.
+	     * @see module:requiem~ui.ElementUpdateDelegate#initResponsiveness
 	     */
 	
 	  }, {
 	    key: 'respondsTo',
 	    value: function respondsTo() {
-	      var args = Array.prototype.slice.call(arguments);
-	      var n = args.length;
-	
-	      if (!(0, _assert2.default)(n > 0, 'Too few arguments')) return;
-	      if (!(0, _assert2.default)(this.nodeState === _NodeState2.default.IDLE, 'Responsiveness must be defined when the node state of this element is IDLE')) return;
-	
-	      if (isNaN(args[0])) {
-	        this.updateDelegate.conductor = args.shift();
-	        this.updateDelegate.refreshRate = args.shift();
-	      } else {
-	        this.updateDelegate.refreshRate = args.shift();
-	      }
-	
-	      if (args.length === 0) {
-	        this.updateDelegate.responsive = true;
-	      } else {
-	        if (this.updateDelegate.responsive instanceof Array) {
-	          this.updateDelegate.responsive = this.updateDelegate.responsive.concat(args);
-	        } else {
-	          this.updateDelegate.responsive = args;
-	        }
-	      }
+	      this.updateDelegate.initResponsiveness.apply(this.updateDelegate, arguments);
 	    }
 	
 	    /**
@@ -6438,6 +6411,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	var _assert = __webpack_require__(1);
+	
+	var _assert2 = _interopRequireDefault(_assert);
+	
 	var _debounce = __webpack_require__(38);
 	
 	var _debounce2 = _interopRequireDefault(_debounce);
@@ -6485,11 +6462,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	
 	  function ElementUpdateDelegate(delegate) {
+	    var _this = this;
+	
 	    _classCallCheck(this, ElementUpdateDelegate);
 	
 	    this.__define_properties();
 	
 	    var mDirtyTable = 0;
+	    var mConductorTable = {};
 	    var mResizeHandler = null;
 	    var mScrollHandler = null;
 	    var mMouseMoveHandler = null;
@@ -6510,13 +6490,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    var _requestAnimationFrame = function _requestAnimationFrame(callback) {
 	      var raf = window && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame) || null;
-	
-	      if (!raf) {
-	        raf = function raf(callback) {
-	          return window.setTimeout(callback, 10.0);
-	        };
-	      }
-	
+	      if (!raf) raf = function raf(callback) {
+	        return window.setTimeout(callback, 10.0);
+	      };
 	      return raf(callback);
 	    };
 	
@@ -6529,13 +6505,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    var _cancelAnimationFrame = function _cancelAnimationFrame(callback) {
 	      var caf = window && (window.requestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
-	
-	      if (!caf) {
-	        caf = function caf(callback) {
-	          return window.clearTimeout(callback);
-	        };
-	      }
-	
+	      if (!caf) caf = function caf(callback) {
+	        return window.clearTimeout(callback);
+	      };
 	      return caf;
 	    };
 	
@@ -6547,7 +6519,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @private
 	     */
 	    var _onWindowResize = function _onWindowResize(event) {
-	      this.setDirty(_DirtyType2.default.SIZE);
+	      return _this.setDirty(_DirtyType2.default.SIZE);
 	    };
 	
 	    /**
@@ -6558,7 +6530,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @private
 	     */
 	    var _onWindowScroll = function _onWindowScroll(event) {
-	      this.setDirty(_DirtyType2.default.POSITION);
+	      return _this.setDirty(_DirtyType2.default.POSITION);
 	    };
 	
 	    /**
@@ -6569,10 +6541,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @private
 	     */
 	    var _onWindowMouseMove = function _onWindowMouseMove(event) {
-	      this.mouse.pointerX = event.clientX;
-	      this.mouse.pointerY = event.clientY;
-	
-	      this.setDirty(_DirtyType2.default.INPUT);
+	      _this.mouse.pointerX = event.clientX;
+	      _this.mouse.pointerY = event.clientY;
+	      _this.setDirty(_DirtyType2.default.INPUT);
 	    };
 	
 	    /**
@@ -6583,10 +6554,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @private
 	     */
 	    var _onWindowMouseWheel = function _onWindowMouseWheel(event) {
-	      this.mouse.wheelX = event.deltaX;
-	      this.mouse.wheelY = event.deltaY;
-	
-	      this.setDirty(_DirtyType2.default.INPUT);
+	      _this.mouse.wheelX = event.deltaX;
+	      _this.mouse.wheelY = event.deltaY;
+	      _this.setDirty(_DirtyType2.default.INPUT);
 	    };
 	
 	    /**
@@ -6597,8 +6567,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @private
 	     */
 	    var _onWindowOrientationChange = function _onWindowOrientationChange(event) {
-	      if (!window) return;
-	
 	      var x = undefined,
 	          y = undefined,
 	          z = undefined;
@@ -6617,11 +6585,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        z = event.orientation.z * 50;
 	      }
 	
-	      this.orientation.x = x;
-	      this.orientation.y = y;
-	      this.orientation.z = z;
+	      _this.orientation.x = x;
+	      _this.orientation.y = y;
+	      _this.orientation.z = z;
 	
-	      this.setDirty(_DirtyType2.default.ORIENTATION);
+	      _this.setDirty(_DirtyType2.default.ORIENTATION);
 	    };
 	
 	    /**
@@ -6632,10 +6600,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @private
 	     */
 	    var _onWindowKeyDown = function _onWindowKeyDown(event) {
-	      if (!window) return;
-	      if (this.keyCode.down === undefined) this.keyCode.down = [];
-	      this.keyCode.down.push(event.keyCode);
-	      this.setDirty(_DirtyType2.default.INPUT);
+	      if (_this.keyCode.down === undefined) _this.keyCode.down = [];
+	      _this.keyCode.down.push(event.keyCode);
+	      _this.setDirty(_DirtyType2.default.INPUT);
 	    };
 	
 	    /**
@@ -6646,10 +6613,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @private
 	     */
 	    var _onWindowKeyPress = function _onWindowKeyPress(event) {
-	      if (!window) return;
-	      if (this.keyCode.press === undefined) this.keyCode.press = [];
-	      this.keyCode.press.push(event.keyCode);
-	      this.setDirty(_DirtyType2.default.INPUT);
+	      if (_this.keyCode.press === undefined) _this.keyCode.press = [];
+	      _this.keyCode.press.push(event.keyCode);
+	      _this.setDirty(_DirtyType2.default.INPUT);
 	    };
 	
 	    /**
@@ -6660,10 +6626,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @private
 	     */
 	    var _onWindowKeyUp = function _onWindowKeyUp(event) {
-	      if (!window) return;
-	      if (this.keyCode.up === undefined) this.keyCode.up = [];
-	      this.keyCode.up.push(event.keyCode);
-	      this.setDirty(_DirtyType2.default.INPUT);
+	      if (_this.keyCode.up === undefined) _this.keyCode.up = [];
+	      _this.keyCode.up.push(event.keyCode);
+	      _this.setDirty(_DirtyType2.default.INPUT);
 	    };
 	
 	    /**
@@ -6672,15 +6637,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {number} dirtyType
 	     */
 	    this.setDirty = function (dirtyType, validateNow) {
-	      if (this.transmissive !== _DirtyType2.default.NONE) {
-	        if (this.delegate.children) {
-	          for (var name in this.delegate.children) {
+	      if (_this.transmissive !== _DirtyType2.default.NONE) {
+	        if (_this.delegate.children) {
+	          for (var name in _this.delegate.children) {
 	            var children = undefined;
 	
-	            if (this.delegate.children[name] instanceof Array) {
-	              children = this.delegate.children[name];
+	            if (_this.delegate.children[name] instanceof Array) {
+	              children = _this.delegate.children[name];
 	            } else {
-	              children = [this.delegate.children[name]];
+	              children = [_this.delegate.children[name]];
 	            }
 	
 	            var n = children.length;
@@ -6700,7 +6665,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	
-	      if (this.isDirty(dirtyType) && !validateNow) return;
+	      if (_this.isDirty(dirtyType) && !validateNow) return;
 	
 	      switch (dirtyType) {
 	        case _DirtyType2.default.NONE:
@@ -6712,9 +6677,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	
 	      if (validateNow) {
-	        this.update();
-	      } else if (!this._pendingAnimationFrame) {
-	        this._pendingAnimationFrame = _requestAnimationFrame(this.update.bind(this));
+	        _this.update();
+	      } else if (!_this._pendingAnimationFrame) {
+	        _this._pendingAnimationFrame = _requestAnimationFrame(_this.update.bind(_this));
 	      }
 	    };
 	
@@ -6739,48 +6704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Initializes this ElementUpdateDelegate instance. Must manually invoke.
 	     */
 	    this.init = function () {
-	      var conductor = this.conductor || window;
-	
-	      if (window && conductor && conductor.addEventListener && (this.responsive === true || this.responsive instanceof Array)) {
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.OBJECT.RESIZE) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.ORIENTATION_CHANGE) > -1) mResizeHandler = this.refreshRate === 0.0 ? _onWindowResize.bind(this) : (0, _debounce2.default)(_onWindowResize.bind(this), this.refreshRate);
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.OBJECT.SCROLL) > -1) mScrollHandler = this.refreshRate === 0.0 ? _onWindowScroll.bind(this) : (0, _debounce2.default)(_onWindowScroll.bind(this), this.refreshRate);
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.MISC.WHEEL) > -1) mMouseWheelHandler = this.refreshRate === 0.0 ? _onWindowMouseWheel.bind(this) : (0, _debounce2.default)(_onWindowMouseWheel.bind(this), this.refreshRate);
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.MOUSE.MOUSE_MOVE) > -1) mMouseMoveHandler = this.refreshRate === 0.0 ? _onWindowMouseMove.bind(this) : (0, _debounce2.default)(_onWindowMouseMove.bind(this), this.refreshRate);
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.DEVICE.DEVICE_ORIENTATION) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.DEVICE_MOTION) > -1 || this.responsive.indexOf(_EventType2.default.DEVICE.ORIENTATION) > -1) mOrientationChangeHandler = this.refreshRate === 0.0 ? _onWindowOrientationChange.bind(this) : (0, _debounce2.default)(_onWindowOrientationChange.bind(this), this.refreshRate);
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_DOWN) > -1) mKeyDownHandler = _onWindowKeyDown.bind(this);
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_PRESS) > -1) mKeyPressHandler = _onWindowKeyPress.bind(this);
-	
-	        if (this.responsive === true || this.responsive.indexOf(_EventType2.default.KEYBOARD.KEY_UP) > -1) mKeyUpHandler = _onWindowKeyUp.bind(this);
-	
-	        if (mResizeHandler) {
-	          window.addEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
-	          window.addEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
-	        }
-	
-	        if (mScrollHandler) conductor.addEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
-	
-	        if (mMouseWheelHandler) conductor.addEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
-	
-	        if (mMouseMoveHandler) conductor.addEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
-	
-	        if (mOrientationChangeHandler) {
-	          if (window.DeviceOrientationEvent) window.addEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);else if (window.DeviceMotionEvent) window.addEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
-	        }
-	
-	        if (mKeyDownHandler) window.addEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
-	
-	        if (mKeyPressHandler) window.addEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
-	
-	        if (mKeyUpHandler) window.addEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
-	      }
-	
-	      this.setDirty(_DirtyType2.default.ALL);
+	      _this.setDirty(_DirtyType2.default.ALL);
 	    };
 	
 	    /**
@@ -6789,30 +6713,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.destroy = function () {
 	      _cancelAnimationFrame();
 	
-	      var conductor = this.conductor || window;
-	
-	      if (window && conductor && conductor.removeEventListener) {
-	        if (mResizeHandler) {
-	          window.removeEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
-	          window.removeEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
-	        }
-	
-	        if (mScrollHandler) conductor.removeEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
-	
-	        if (mMouseWheelHandler) conductor.removeEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
-	
-	        if (mMouseMoveHandler) conductor.removeEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
-	
-	        if (mOrientationChangeHandler) {
-	          if (window.DeviceOrientationEvent) window.removeEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);else if (window.DeviceMotionEvent) window.removeEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
-	        }
-	
-	        if (mKeyDownHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
-	
-	        if (mKeyPressHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
-	
-	        if (mKeyUpHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
+	      if (mResizeHandler) {
+	        window.removeEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
+	        window.removeEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
 	      }
+	
+	      if (mScrollHandler) {
+	        var conductor = mConductorTable.scroll || window;
+	        conductor.removeEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
+	      }
+	
+	      if (mMouseWheelHandler) {
+	        var conductor = mConductorTable.mouseWheel || window;
+	        conductor.removeEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
+	      }
+	
+	      if (mMouseMoveHandler) {
+	        var conductor = mConductorTable.mouseMove || window;
+	        conductor.removeEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+	      }
+	
+	      if (mOrientationChangeHandler) {
+	        if (window.DeviceOrientationEvent) window.removeEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);else if (window.DeviceMotionEvent) window.removeEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+	      }
+	
+	      if (mKeyDownHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
+	      if (mKeyPressHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
+	      if (mKeyUpHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
 	
 	      mResizeHandler = null;
 	      mScrollHandler = null;
@@ -6822,33 +6749,128 @@ return /******/ (function(modules) { // webpackBootstrap
 	      mKeyDownHandler = null;
 	      mKeyPressHandler = null;
 	      mKeyUpHandler = null;
+	      mConductorTable = null;
 	    };
 	
 	    /**
 	     * Handler invoked whenever a visual update is required.
 	     */
 	    this.update = function () {
-	      _cancelAnimationFrame(this._pendingAnimationFrame);
+	      _cancelAnimationFrame(_this._pendingAnimationFrame);
 	
-	      if (this.delegate && this.delegate.update) {
-	        this.delegate.update.call(this.delegate);
-	      }
+	      if (_this.delegate && _this.delegate.update) _this.delegate.update.call(_this.delegate);
 	
 	      // Reset the dirty status of all types.
-	      this.setDirty(_DirtyType2.default.NONE);
+	      _this.setDirty(_DirtyType2.default.NONE);
 	
-	      delete this.mouse.pointerX;
-	      delete this.mouse.pointerY;
-	      delete this.mouse.wheelX;
-	      delete this.mouse.wheelY;
-	      delete this.orientation.x;
-	      delete this.orientation.y;
-	      delete this.orientation.z;
-	      delete this.keyCode.up;
-	      delete this.keyCode.press;
-	      delete this.keyCode.down;
+	      delete _this.mouse.pointerX;
+	      delete _this.mouse.pointerY;
+	      delete _this.mouse.wheelX;
+	      delete _this.mouse.wheelY;
+	      delete _this.orientation.x;
+	      delete _this.orientation.y;
+	      delete _this.orientation.z;
+	      delete _this.keyCode.up;
+	      delete _this.keyCode.press;
+	      delete _this.keyCode.down;
 	
-	      this._pendingAnimationFrame = null;
+	      _this._pendingAnimationFrame = null;
+	    };
+	
+	    /**
+	     * Sets up the responsiveness to the provided conductor. Only the following
+	     * event types support a custom conductor; the rest uses window as the
+	     * conductor:
+	     *   1. EventType.OBJECT.SCROLL
+	     *   2. EventType.MISC.WHEEL
+	     *   3. EventType.MOUSE_MOUSE_MOVE
+	     *
+	     * @param {Object|Number|...args} - This could be the conductor (defaults to
+	     *                                  window if unspecified), refresh rate
+	     *                                  (defaults to the default value if
+	     *                                  unspecified) or the EventType(s).
+	     * @param {number|...args}        - Either the refresh rate (defaults to
+	     *                                  the default value if unspecified) or
+	     *                                  the EventType(s).
+	     * @param {...args}               - EventType(s) which the delegate will
+	     *                                  respond to.
+	     */
+	    this.initResponsiveness = function () {
+	      var args = Array.prototype.slice.call(arguments);
+	
+	      (0, _assert2.default)(args.length > 0, 'Insufficient arguments provided');
+	
+	      var conductor = typeof args[0] !== 'number' && typeof args[0] !== 'string' ? args.shift() : window;
+	      var delay = typeof args[0] === 'number' ? args.shift() : DEFAULT_REFRESH_RATE;
+	      var universal = args.length === 0;
+	
+	      (0, _assert2.default)(conductor && conductor.addEventListener, 'Invalid conductor specified');
+	
+	      if (universal || args.indexOf(_EventType2.default.OBJECT.RESIZE) > -1 || args.indexOf(_EventType2.default.DEVICE.ORIENTATION_CHANGE) > -1) {
+	        if (mResizeHandler) {
+	          window.removeEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
+	          window.removeEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
+	        }
+	        mResizeHandler = delay === 0.0 ? _onWindowResize.bind(this) : (0, _debounce2.default)(_onWindowResize.bind(this), delay);
+	        window.addEventListener(_EventType2.default.OBJECT.RESIZE, mResizeHandler);
+	        window.addEventListener(_EventType2.default.DEVICE.ORIENTATION_CHANGE, mResizeHandler);
+	      }
+	
+	      if (universal || args.indexOf(_EventType2.default.OBJECT.SCROLL) > -1) {
+	        if (mScrollHandler) {
+	          var c = mConductorTable.scroll || window;
+	          c.removeEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
+	        }
+	        mScrollHandler = delay === 0.0 ? _onWindowScroll.bind(this) : (0, _debounce2.default)(_onWindowScroll.bind(this), delay);
+	        mConductorTable.scroll = conductor;
+	        conductor.addEventListener(_EventType2.default.OBJECT.SCROLL, mScrollHandler);
+	      }
+	
+	      if (universal || args.indexOf(_EventType2.default.MISC.WHEEL) > -1) {
+	        if (mMouseWheelHandler) {
+	          var c = mConductorTable.mouseWheel || window;
+	          c.removeEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
+	        }
+	        mMouseWheelHandler = delay === 0.0 ? _onWindowMouseWheel.bind(this) : (0, _debounce2.default)(_onWindowMouseWheel.bind(this), delay);
+	        mConductorTable.mouseWheel = conductor;
+	        conductor.addEventListener(_EventType2.default.MISC.WHEEL, mMouseWheelHandler);
+	      }
+	
+	      if (universal || args.indexOf(_EventType2.default.MOUSE.MOUSE_MOVE) > -1) {
+	        if (mMouseMoveHandler) {
+	          var c = mConductorTable.mouseMove || window;
+	          c.removeEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+	        }
+	        mMouseMoveHandler = delay === 0.0 ? _onWindowMouseMove.bind(this) : (0, _debounce2.default)(_onWindowMouseMove.bind(this), delay);
+	        mConductorTable.mouseMove = conductor;
+	        conductor.addEventListener(_EventType2.default.MOUSE.MOUSE_MOVE, mMouseMoveHandler);
+	      }
+	
+	      if (universal || args.indexOf(_EventType2.default.DEVICE.DEVICE_ORIENTATION) > -1 || args.indexOf(_EventType2.default.DEVICE.DEVICE_MOTION) > -1 || args.indexOf(_EventType2.default.DEVICE.ORIENTATION) > -1) {
+	        if (mOrientationChangeHandler) {
+	          if (window.DeviceOrientationEvent) window.removeEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);else if (window.DeviceMotionEvent) window.removeEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+	        }
+	        mOrientationChangeHandler = delay === 0.0 ? _onWindowOrientationChange.bind(this) : (0, _debounce2.default)(_onWindowOrientationChange.bind(this), delay);
+	        if (window.DeviceOrientationEvent) window.addEventListener(_EventType2.default.DEVICE.DEVICE_ORIENTATION, mOrientationChangeHandler);else if (window.DeviceMotionEvent) window.addEventListener(_EventType2.default.DEVICE.DEVICE_MOTION, mOrientationChangeHandler);
+	      }
+	
+	      if (universal || args.indexOf(_EventType2.default.KEYBOARD.KEY_DOWN) > -1) {
+	        if (mKeyDownHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
+	        mKeyDownHandler = _onWindowKeyDown.bind(this);
+	        window.addEventListener(_EventType2.default.KEYBOARD.KEY_DOWN, mKeyDownHandler);
+	      }
+	
+	      if (universal || args.indexOf(_EventType2.default.KEYBOARD.KEY_PRESS) > -1) {
+	        if (mKeyPressHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
+	        mKeyPressHandler = _onWindowKeyPress.bind(this);
+	        window.addEventListener(_EventType2.default.KEYBOARD.KEY_PRESS, mKeyPressHandler);
+	      }
+	
+	      if (universal || args.indexOf(_EventType2.default.KEYBOARD.KEY_UP) > -1) {
+	        if (mKeyUpHandler) window.removeEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
+	        mKeyUpHandler = _onWindowKeyUp.bind(this);
+	        window.addEventListener(_EventType2.default.KEYBOARD.KEY_UP, mKeyUpHandler);
+	      }
 	    };
 	  }
 	
@@ -6882,21 +6904,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.delegate = null;
 	
 	      /**
-	       * Indicates whether this ElementUpdateDelegate auto responds to window
-	       * behaviors (i.e. resizing, scrolling).
-	       *
-	       * @property {boolean}
-	       */
-	      this.responsive = false;
-	
-	      /**
-	       * Indicates the debounce rate of this ElementUpdateDelegate instance.
-	       *
-	       * @property {number}
-	       */
-	      this.refreshRate = DEFAULT_REFRESH_RATE;
-	
-	      /**
 	       * Indicates the dirty flags in which ElementUpdateDelgate instance will
 	       * transmit to its child Elements.
 	       *
@@ -6911,14 +6918,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * @property {number}
 	       */
 	      this.receptive = _DirtyType2.default.NONE;
-	
-	      /**
-	       * Indicates the conductor in which this ElementUpdateDelegate responds to
-	       * (defaults to window).
-	       *
-	       * @property {Node|window}
-	       */
-	      this.conductor = window;
 	
 	      /**
 	       * Stores mouse properties if this ElementUpdateDelegate responds to mouse

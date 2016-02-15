@@ -466,40 +466,10 @@ class Element {
   }
 
   /**
-   * Sets up the responsiveness of the internal ElementUpdateDelegate
-   * instance.
-   *
-   * @param {Object|Number}  Either the conductor or the refresh rate (if 1
-   *                         argument supplied).
-   * @param {number}         Refresh rate.
-   * @param {...args}        EventType(s) which this element will respond to.
+   * @see module:requiem~ui.ElementUpdateDelegate#initResponsiveness
    */
   respondsTo() {
-    let args = Array.prototype.slice.call(arguments);
-    let n = args.length;
-
-    if (!assert(n > 0, 'Too few arguments')) return;
-    if (!assert(this.nodeState === NodeState.IDLE, 'Responsiveness must be defined when the node state of this element is IDLE')) return;
-
-    if (isNaN(args[0])) {
-      this.updateDelegate.conductor = args.shift();
-      this.updateDelegate.refreshRate = args.shift();
-    }
-    else {
-      this.updateDelegate.refreshRate = args.shift();
-    }
-
-    if (args.length === 0) {
-      this.updateDelegate.responsive = true;
-    }
-    else {
-      if (this.updateDelegate.responsive instanceof Array) {
-        this.updateDelegate.responsive = this.updateDelegate.responsive.concat(args);
-      }
-      else {
-        this.updateDelegate.responsive = args;
-      }
-    }
+    this.updateDelegate.initResponsiveness.apply(this.updateDelegate, arguments);
   }
 
   /**

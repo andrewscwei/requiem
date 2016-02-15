@@ -1,12 +1,12 @@
 /*! requiem-styles, (c) VARIANTE (http://variante.io) */
-html, body, article, aside, details, dialog, summary, footer, header, main, figcaption, figure, hgroup, nav, section, div, table, tr, td, th, tbody, thead, tfoot, col, a[type='button'], input[type='submit'], input[type='button'], input[type='checkbox'], input[type='file'], button, p, li, em, strong, label, span[type='label'], h1, h2, h3, h4, h5, h6, ul, ol, input[type='text'], input[type='password'], input[type='number'], input[type='date'], input[type='month'], input[type='week'], input[type='time'], input[type='datetime'], input[type='datetime-local'], input[type='email'], input[type='search'], input[type='tel'], input[type='url'], textarea, form {
+html, body, article, aside, details, dialog, summary, footer, header, main, figcaption, figure, hgroup, nav, section, div, table, tr, td, th, tbody, thead, tfoot, col, a[type='button'], input[type='submit'], input[type='button'], input[type='checkbox'], input[type='file'], button, p, em, strong, label, a[type='label'], li[type='label'], span[type='label'], h1, h2, h3, h4, h5, h6, ul, ol, input[type='text'], input[type='password'], input[type='number'], input[type='date'], input[type='month'], input[type='week'], input[type='time'], input[type='datetime'], input[type='datetime-local'], input[type='email'], input[type='search'], input[type='tel'], input[type='url'], textarea, form {
   margin: 0;
   padding: 0;
   border: none;
   box-sizing: border-box;
   outline: none; }
 
-article, aside, details, dialog, summary, footer, header, main, figcaption, figure, hgroup, nav, section, div, table, tr, td, th, tbody, thead, tfoot, col, a[type='button'], input[type='submit'], input[type='button'], input[type='checkbox'], input[type='file'], button, p, li, em, strong, label, span[type='label'], h1, h2, h3, h4, h5, h6, ul, ol, input[type='text'], input[type='password'], input[type='number'], input[type='date'], input[type='month'], input[type='week'], input[type='time'], input[type='datetime'], input[type='datetime-local'], input[type='email'], input[type='search'], input[type='tel'], input[type='url'], textarea, form {
+article, aside, details, dialog, summary, footer, header, main, figcaption, figure, hgroup, nav, section, div, table, tr, td, th, tbody, thead, tfoot, col, a[type='button'], input[type='submit'], input[type='button'], input[type='checkbox'], input[type='file'], button, p, em, strong, label, a[type='label'], li[type='label'], span[type='label'], h1, h2, h3, h4, h5, h6, ul, ol, input[type='text'], input[type='password'], input[type='number'], input[type='date'], input[type='month'], input[type='week'], input[type='time'], input[type='datetime'], input[type='datetime-local'], input[type='email'], input[type='search'], input[type='tel'], input[type='url'], textarea, form {
   font-weight: normal;
   text-decoration: none;
   line-height: normal;
@@ -140,10 +140,17 @@ a[type='button'] {
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
+    -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+            align-content: center;
     display: -webkit-inline-box;
     display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
     display: inline-flex; }
+    a[type='button']:not(button):not(input) > * {
+      -webkit-flex-shrink: 0;
+          -ms-flex-negative: 0;
+              flex-shrink: 0; }
   a[type='button']:disabled {
     cursor: default; }
 
@@ -169,10 +176,17 @@ input[type='submit'] {
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
+    -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+            align-content: center;
     display: -webkit-inline-box;
     display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
     display: inline-flex; }
+    input[type='submit']:not(button):not(input) > * {
+      -webkit-flex-shrink: 0;
+          -ms-flex-negative: 0;
+              flex-shrink: 0; }
   input[type='submit']:disabled {
     cursor: default; }
 
@@ -198,10 +212,17 @@ input[type='button'] {
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
+    -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+            align-content: center;
     display: -webkit-inline-box;
     display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
     display: inline-flex; }
+    input[type='button']:not(button):not(input) > * {
+      -webkit-flex-shrink: 0;
+          -ms-flex-negative: 0;
+              flex-shrink: 0; }
   input[type='button']:disabled {
     cursor: default; }
 
@@ -227,10 +248,17 @@ input[type='checkbox'] {
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
+    -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+            align-content: center;
     display: -webkit-inline-box;
     display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
     display: inline-flex; }
+    input[type='checkbox']:not(button):not(input) > * {
+      -webkit-flex-shrink: 0;
+          -ms-flex-negative: 0;
+              flex-shrink: 0; }
   input[type='checkbox']:disabled {
     cursor: default; }
 
@@ -256,10 +284,17 @@ input[type='file'] {
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
+    -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+            align-content: center;
     display: -webkit-inline-box;
     display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
     display: inline-flex; }
+    input[type='file']:not(button):not(input) > * {
+      -webkit-flex-shrink: 0;
+          -ms-flex-negative: 0;
+              flex-shrink: 0; }
   input[type='file']:disabled {
     cursor: default; }
 
@@ -285,10 +320,17 @@ button {
     -webkit-align-items: center;
         -ms-flex-align: center;
             align-items: center;
+    -webkit-align-content: center;
+        -ms-flex-line-pack: center;
+            align-content: center;
     display: -webkit-inline-box;
     display: -webkit-inline-flex;
     display: -ms-inline-flexbox;
     display: inline-flex; }
+    button:not(button):not(input) > * {
+      -webkit-flex-shrink: 0;
+          -ms-flex-negative: 0;
+              flex-shrink: 0; }
   button:disabled {
     cursor: default; }
 
@@ -407,6 +449,13 @@ textarea {
 form {
   position: static; }
 
+a:not([type='button']):not([type='label']) {
+  text-decoration: none; }
+  a:not([type='button']):not([type='label']):hover {
+    text-decoration: none; }
+  a:not([type='button']):not([type='label'])[data-state='hover'] {
+    text-decoration: none; }
+
 audio,
 canvas,
 progress,
@@ -490,9 +539,9 @@ select {
   text-transform: none; }
 
 button,
-html input[type="button"],
-input[type="reset"],
-input[type="submit"] {
+html input[type='button'],
+input[type='reset'],
+input[type='submit'] {
   -webkit-appearance: button;
   cursor: pointer; }
 
@@ -508,21 +557,21 @@ input::-moz-focus-inner {
 input {
   line-height: normal; }
 
-input[type="checkbox"],
-input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
   box-sizing: border-box;
   padding: 0; }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   height: auto; }
 
-input[type="search"] {
+input[type='search'] {
   -webkit-appearance: textfield;
   box-sizing: content-box; }
 
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-decoration {
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration {
   -webkit-appearance: none; }
 
 fieldset {
@@ -583,6 +632,9 @@ th {
   -webkit-align-items: flex-start;
       -ms-flex-align: start;
           align-items: flex-start;
+  -webkit-align-content: flex-start;
+      -ms-flex-line-pack: start;
+          align-content: flex-start;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -590,6 +642,10 @@ th {
   width: 100%;
   height: auto;
   padding: 50px; }
+  [data-class='Playground'] > * {
+    -webkit-flex-shrink: 0;
+        -ms-flex-negative: 0;
+            flex-shrink: 0; }
   [data-class='Playground'] [data-instance='grid'] > div {
     width: 300px;
     height: 200px;
