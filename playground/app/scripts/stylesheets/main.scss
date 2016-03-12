@@ -1,12 +1,4 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
-
-@import '~requiem-styles/dist/sass/requiem';
+@import '~requiem-styles/lib/sass/requiem';
 
 @include class('Playground') {
   @include flex-block('center', 'top');

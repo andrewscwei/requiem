@@ -20,9 +20,7 @@ module.exports = {
   devtool: 'eval',
   context: path.join(sourceDir, 'scripts'),
   entry: {
-    main: [
-      './main.js'
-    ]
+    main: './main.js'
   },
   output: {
     path: path.join(buildDir, 'javascripts'),
@@ -55,7 +53,7 @@ module.exports = {
     }]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.scss', '.sass', '.jade', '.html'],
+    extensions: ['', '.js', '.scss', '.jade'],
     root: [
       path.join(sourceDir, 'scripts'),
       path.join(sourceDir),
