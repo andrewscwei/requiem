@@ -14,10 +14,10 @@ then
 fi
 git checkout -b gh-pages
 
-# Build site.
+# Build docs.
 npm run docs
 
-# Delete and move files.
+# Move generated docs to root and delete everything else.
 find . -maxdepth 1 ! -name 'docs' ! -name '.git' ! -name '.gitignore' -exec rm -rf {} \;
 mv docs/* .
 rm -R docs/
@@ -30,9 +30,9 @@ git add -fA
 git commit --allow-empty -m "$(git log -1 --pretty=%B) [ci skip]"
 git push -f $ORIGIN_URL gh-pages
 
-# Move back to previous branch.
-git checkout -
-
 echo "Done publishing docs"
+
+echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login
+npm publish
 
 exit 0

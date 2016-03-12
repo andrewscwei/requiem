@@ -5,8 +5,9 @@ machine:
   node:
     version: 5.6.0
 deployment:
-  production:
-    branch: master
+  release:
+    tag: /release-.*/
+    owner: VARIANTE
     commands:
-      - chmod +x ./scripts/deploy.sh
-      - ./scripts/deploy.sh
+      - chmod +x ./scripts/release.sh
+      - ./scripts/release.sh
