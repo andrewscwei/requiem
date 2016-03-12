@@ -5,4 +5,5 @@ deployment:
   production:
     branch: master
     commands:
+      - chmod +x ./scripts/deploy
       - ./scripts/deploy
