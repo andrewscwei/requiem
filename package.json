@@ -1,6 +1,6 @@
 {
   "name": "requiem",
-  "version": "0.34.0",
+  "version": "0.34.1",
   "description": "An experimental front-end JS framework.",
   "homepage": "http://VARIANTE.github.io/requiem",
   "license": "MIT",
@@ -36,6 +36,7 @@
     "jade": "^1.11.0",
     "jsdoc": "^3.4.0",
     "requiem-styles": "^0.18.8",
+    "rimraf": "^2.5.2",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
     "template-html-loader": "0.0.3",

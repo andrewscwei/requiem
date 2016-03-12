@@ -1,4 +1,4 @@
-# Requiem
+# Requiem [![Circle CI](https://circleci.com/gh/VARIANTE/requiem/tree/master.svg?style=svg)](https://circleci.com/gh/VARIANTE/requiem/tree/master) [![npm version](https://badge.fury.io/js/requiem.svg)](https://badge.fury.io/js/requiem)
 
 Requiem is VARIANTE's on-going pet project for experimenting with web UI building techniques. It is a stand-alone front-end framework that, at its current state, is not production ready, has an ever-changing API, and lacks proper documentation. Its features are driven by internal requirements and is meant for internal use only.
 
