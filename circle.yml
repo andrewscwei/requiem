@@ -1,7 +1,4 @@
 machine:
-  environment:
-    USER_NAME: andrewscwei
-    USER_EMAIL: andrew@variante.io
   node:
     version: 5.6.0
 deployment:
