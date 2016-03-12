@@ -33,9 +33,15 @@ git push -f $ORIGIN_URL gh-pages
 echo "Done publishing docs, now publishing to npm..."
 
 git checkout -
-echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login
-npm publish
 
-echo "Done"
+if [[ -n "$NPM_AUTH" && -n "$NPM_EMAIL" ]]; then
+  echo "_auth=$NPM_AUTH" >> ~/.npmrc
+  echo "email=$NPM_EMAIL" >> ~/.npmrc
+
+  npm publish
+  echo "Done"
+else
+  echo "'npm publish' was skipped because NPM_AUTH and NPM_EMAIL are not set." >&2
+fi
 
 exit 0
