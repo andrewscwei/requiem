@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ui/Grid.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ui/Grid.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// © Grubbb
+
+import getRect from '../utils/getRect';
+import translate3d from '../utils/translate3d';
+import transform from '../utils/transform';
+import Element from './Element';
+import DirtyType from '../enums/DirtyType';
+import EventType from '../enums/EventType';
+import Orientation from '../enums/Orientation';
+import assertType from '../helpers/assertType';
+
+/**
+ * @class
+ *
+ * Masonry grid element.
+ *
+ * @alias module:requiem~ui.Grid
+ */
+class Grid extends Element {
+  /**
+   * Uniform padding between each grid item. This padding can be defined as
+   * a member or a DOM attribute, prioritized respectively.
+   *
+   * @type {number}
+   */
+  get padding() {
+    let v1 = this.__private__.padding;
+    let v2 = this.getProperty('padding');
+    if (!isNaN(v1)) return v1;
+    if (!isNaN(v2)) return v2;
+    return 0;
+  }
+
+  set padding(value) {
+    assertType(value, 'number', false, 'Padding must be a number in pixels');
+    if (value === this.padding) return;
+    this.__private__.padding = value;
+    this.setDirty(DirtyType.LAYOUT);
+  }
+
+  /**
+   * Max width of this grid. Max width can be defined as a member, a CSS style
+   * rule, or a DOM attribute, prioritized respectively.
+   *
+   * @type {number}
+   */
+  get maxWidth() {
+    let refPadding = Element.getStyle(this.element.parentNode, 'padding-left', true, true).value + Element.getStyle(this.element.parentNode, 'padding-right', true, true).value;
+    let ref = getRect(this.element.parentNode).width - refPadding;
+    let v1 = this.__private__.maxWidth;
+    let v2 = this.getStyle('max-width', true);
+    let v3 = this.getProperty('maxWidth');
+    let v;
+
+    if (v3 !== null &amp;&amp; v3 !== undefined) v = v3;
+    if (v2 !== null &amp;&amp; v2 !== undefined) v = v2;
+    if (v1 !== null &amp;&amp; v1 !== undefined) v = v1;
+    if (v === null || v === undefined) v = ref;
+
+    assertType(v, ['number', 'string'], false, 'Invalid max width provided');
+
+    if (typeof v === 'number') return v;
+    if (v.indexOf('px') > -1) return Number(v.substring(0, v.length-2));
+    if (v.indexOf('%') > -1) return (Number(v.substring(0, v.length-1))/100*ref);
+    return ref;
+  }
+
+  set maxWidth(value) {
+    assertType(value, 'number', false, 'Max width must be a number in pixels');
+    if (value === this.maxWidth) return;
+    this.__private__.maxWidth = value;
+    this.setDirty(DirtyType.SIZE);
+  }
+
+  /**
+   * Max height of this grid. Max height can be defined as a member, a CSS style
+   * rule, or a DOM attribute, prioritized respectively.
+   *
+   * @type {number}
+   */
+  get maxHeight() {
+    let ref = getRect(this.element.parentNode).height;
+    let v1 = this.__private__.maxHeight;
+    let v2 = this.getStyle('max-height', true);
+    let v3 = this.getProperty('maxHeight');
+    let v;
+
+    if (v3 !== null &amp;&amp; v3 !== undefined) v = v3;
+    if (v2 !== null &amp;&amp; v2 !== undefined) v = v2;
+    if (v1 !== null &amp;&amp; v1 !== undefined) v = v1;
+    if (v === null || v === undefined) v = ref;
+
+    assertType(v, ['number', 'string'], false, 'Invalid max height provided');
+
+    if (typeof v === 'number') return v;
+    if (v.indexOf('px') > -1) return Number(v.substring(0, v.length-2));
+    if (v.indexOf('%') > -1) return (Number(v.substring(0, v.length-1))/100*ref);
+    return ref;
+  }
+
+  set maxHeight(value) {
+    assertType(value, 'number', false, 'Max height must be a number in pixels');
+    if (value === this.maxHeight) return;
+    this.__private__.maxHeight = value;
+    this.setDirty(DirtyType.SIZE);
+  }
+
+  /**
+   * Orientation of the grid, either portrait or landscape.
+   *
+   * @type {Orientation}
+   * @see module:requiem~enums.Orientation
+   */
+  get orientation() {
+    let v1 = this.__private__.orientation;
+    let v2 = this.getProperty('orientation');
+
+    if (!isNaN(v1)) return v1;
+    if (!isNaN(v2)) return v2;
+    return Orientation.PORTRAIT;
+  }
+
+  set orientation(value) {
+    assertType(value, 'number', false, 'Invalid orientation provided');
+    if (value === this.orientation) return;
+    this.__private__.orientation = value;
+    this.setDirty(DirtyType.LAYOUT);
+  }
+
+  /**
+   * Number of items in this grid.
+   *
+   * @type {number}
+   * @readonly
+   */
+  get length() {
+    let items = this.items;
+    if (items) return items.length;
+    return 0;
+  }
+
+  /**
+   * Array of items in this grid.
+   *
+   * @type {Array}
+   * @readonly
+   */
+  get items() {
+    let children = this.getChild('item');
+    if (children instanceof Array) return children;
+    if (children instanceof Element) return [children];
+    return null;
+  }
+
+  /**
+   * Individual item width. This can either be specified as a member or as a
+   * DOM attribute, prioritized respectively. If unspecified or set as NaN, the
+   * width will be derived naturally from individual child item.
+   *
+   * @type {number}
+   */
+  get itemWidth() {
+    let v1 = this.__private__.itemWidth;
+    let v2 = this.getProperty('itemWidth');
+
+    if (!isNaN(v1)) return v1;
+    if (!isNaN(v2)) return v2;
+    return NaN;
+  }
+
+  set itemWidth(value) {
+    if (value === this.itemWidth) return;
+
+    if (value === null) {
+      this.__private__.itemWidth = NaN;
+    }
+    else {
+      assertType(value, 'number', false);
+      this.__private__.itemWidth = value;
+    }
+
+    this.setDirty(DirtyType.SIZE);
+  }
+
+  /**
+   * Individual item height. This can either be specified as a member or as a
+   * DOM attribute, prioritized respectively. If unspecified or set as NaN, the
+   * height will be derived naturally from individual child item.
+   *
+   * @type {number}
+   */
+  get itemHeight() {
+    let v1 = this.__private__.itemHeight;
+    let v2 = this.getProperty('itemHeight');
+
+    if (!isNaN(v1)) return v1;
+    if (!isNaN(v2)) return v2;
+    return NaN;
+  }
+
+  set itemHeight(value) {
+    if (value === this.itemHeight) return;
+
+    if (value === null) {
+      this.__private__.itemHeight = NaN;
+    }
+    else {
+      assertType(value, 'number', false);
+      this.__private__.itemHeight = value;
+    }
+
+    this.setDirty(DirtyType.SIZE);
+  }
+
+  /**
+   * Specifies whether this grid will auto resize itself to fit child items.
+   *
+   * @type {boolean}
+   */
+  get autoResize() {
+    let v1 = this.__private__.autoResize;
+    let v2 = this.getProperty('autoResize');
+    let v;
+
+    if (v1 !== null &amp;&amp; v1 !== undefined) {
+      v = v1;
+    }
+    else if (v2 !== null &amp;&amp; v2 !== undefined) {
+      v = v2;
+    }
+    else {
+      v = false;
+    }
+
+    assertType(v, 'boolean', false);
+
+    return v;
+  }
+
+  set autoResize(value) {
+    if (value === this.autoResize) return;
+    this.__private__.autoResize = value;
+    this.setDirty(DirtyType.SIZE);
+  }
+
+  /** @inheritdoc */
+  init() {
+    this.respondsTo(10.0, EventType.OBJECT.RESIZE);
+
+    super.init();
+  }
+
+  /** @inheritdoc */
+  update() {
+    if (this.isDirty(DirtyType.SIZE|DirtyType.LAYOUT)) {
+      this.reposition();
+    }
+
+    super.update();
+  }
+
+  /**
+   * Repositions invidual child item.
+   */
+  reposition() {
+    let l = this.length;
+    if (this.length &lt; 2) return;
+
+    let map = [{ x: 0, y: 0, width: this.maxWidth, height: this.maxHeight }];
+    let w = 0;
+    let h = 0;
+    let mw = NaN;
+    let mh = NaN;
+
+    for (let i = 0; i &lt; l; i++) {
+      let item = this.getChild('item')[i];
+
+      if (!isNaN(this.itemWidth)) transform(item, { width: this.itemWidth });
+      if (!isNaN(this.itemHeight)) transform(item, { height: this.itemHeight });
+
+      let slot = this.__computeItemPosition(item, map);
+
+      if (!slot) continue;
+
+      item.setStyle('position', 'absolute');
+      translate3d(item, { x: slot.x, y: slot.y });
+
+      let rect = getRect(item);
+
+      if (slot.x + rect.width > w) w = slot.x + rect.width;
+      if (slot.y + rect.height > h) h = slot.y + rect.height;
+
+      if (isNaN(mw) || (rect.width &lt; mw)) mw = rect.width;
+      if (isNaN(mh) || (rect.height &lt; mh)) mh = rect.height;
+    }
+
+    if (!this.autoResize) {
+      if (!isNaN(mw) &amp;&amp; this.orientation === Orientation.PORTRAIT) {
+        w = this.maxWidth - ((this.maxWidth - w) % (mw + this.padding));
+      }
+      else if (!isNaN(mh)) {
+        h = this.maxHeight - ((this.maxHeight - h) % (mh + this.padding));
+      }
+    }
+
+    transform(this, { width: w, height: h });
+  }
+
+  /**
+   * Computes the position of the specified children according to a vacancy
+   * map.
+   * @param {Element} item      - Target item.
+   * @param {Array}   vacancies - Array of open slots.
+   *
+   * @return {Object} Hash describing the computed position of the target item.
+   *
+   * @private
+   */
+  __computeItemPosition(item, vacancies) {
+    let rect = item.rect;
+    let slot = null;
+    let index = -1;
+    let n = vacancies.length;
+
+    for (let i = 0; i &lt; n; i++) {
+      let vacancy = vacancies[i];
+
+      if (this.orientation === Orientation.PORTRAIT) {
+        if (vacancy.width >= rect.width) {
+          if (!slot || (vacancy.y &lt; slot.y) || (vacancy.y === slot.y &amp;&amp; vacancy.x &lt; slot.x)) {
+            slot = vacancy;
+            index = i;
+          }
+        }
+      }
+      else {
+        if (vacancy.height >= rect.height) {
+          if (!slot || (vacancy.x &lt; slot.x) || (vacancy.x === slot.x &amp;&amp; vacancy.y &lt; slot.y)) {
+            slot = vacancy;
+            index = i;
+          }
+        }
+      }
+    }
+
+    if (slot &amp;&amp; index > -1) {
+      if (this.orientation === Orientation.PORTRAIT) {
+        if ((slot.width - rect.width - this.padding) > 0) {
+          vacancies[index] = {
+            x: slot.x + rect.width + this.padding,
+            y: slot.y,
+            width: slot.width - rect.width - this.padding
+          };
+        }
+        else {
+          vacancies.splice(index, 1);
+        }
+
+        vacancies.push({
+          x: slot.x,
+          y: slot.y + rect.height + this.padding,
+          width: rect.width
+        });
+      }
+      else {
+        if ((slot.height - rect.height - this.padding) > 0) {
+          vacancies[index] = {
+            x: slot.x,
+            y: slot.y + rect.height + this.padding,
+            height: slot.height - rect.height - this.padding
+          };
+        }
+        else {
+          vacancies.splice(index, 1);
+        }
+
+        vacancies.push({
+          x: slot.x + rect.width + this.padding,
+          y: slot.y,
+          height: rect.height
+        });
+      }
+    }
+
+    return slot;
+  }
+}
+
+module.exports = Grid;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="AssetLoader.html">AssetLoader</a></li><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-events.EventTimer.html">EventTimer</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li><li><a href="module-requiem-ui.Grid.html">Grid</a></li><li><a href="module-requiem-ui.Video.html">Video</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-enums.html">enums</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-net.html">net</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Mar 11 2016 18:42:16 GMT-0800 (PST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

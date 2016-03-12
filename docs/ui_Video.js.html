@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ui/Video.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ui/Video.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Requiem
+ * (c) VARIANTE (http://variante.io)
+ *
+ * This software is released under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+
+'use strict';
+
+import DirtyType from '../enums/DirtyType';
+import Element from './Element';
+
+/**
+ * @class
+ *
+ * Controller of a DOM 'video' element.
+ *
+ * @extends module:requiem~ui.Element
+ * @alias module:requiem~ui.Video
+ */
+class Video extends Element {
+  /**
+   * @inheritdoc
+   */
+  update() {
+    if (this.updateDelegate.isDirty(DirtyType.DATA)) this.__update_source();
+    super.update();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  render() {
+    return document.createElement('video');
+  }
+
+  /**
+   * Updates the sources in this Video instance.
+   *
+   * @private
+   */
+  __update_source() {
+    let i;
+    let arrlen;
+
+    // Update source(s).
+    let oldSources = this.element.getElementsByTagName('source');
+
+    arrlen = oldSources.length;
+
+    for (i = 0; i &lt; arrlen; i++) {
+      let oldSource = oldSources[i];
+
+      this.element.removeChild(oldSource);
+    }
+
+    if (!this.source) return;
+
+    arrlen = this.source.length;
+
+    for (i = 0; i &lt; arrlen; i++) {
+      let newSource = document.createElement('source');
+      let path = this.source[i].src;
+      let type = this.source[i].type;
+      let ext = path.split('.').pop();
+
+      newSource.setAttribute('src', path);
+      newSource.setAttribute('type', type || 'video/' + ext);
+
+      this.element.appendChild(newSource);
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
+  __validate_element(element) {
+    return true;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  __define_properties() {
+    /**
+     * Specifies that the video will start playing as soon as it is ready.
+     *
+     * @property {boolean}
+     */
+    Object.defineProperty(this, 'autoplay', {
+      get: () => (this.element.autoplay),
+      set: (value) => {
+        this.element.autoplay = value;
+        this.updateDelegate.setDirty(DirtyType.CUSTOM);
+      }
+    });
+
+    /**
+     * Specifies that video controls should be displayed (such as a play/pause
+     * button etc).
+     *
+     * @property {boolean}
+     */
+    Object.defineProperty(this, 'controls', {
+      get: () => (this.element.controls),
+      set: (value) => {
+        this.element.controls = value;
+        this.updateDelegate.setDirty(DirtyType.CUSTOM);
+      }
+    });
+
+    /**
+     * Specifies that the video will start over again, every time it is
+     * finished.
+     *
+     * @property {boolean}
+     */
+    Object.defineProperty(this, 'loop', {
+      get: () => (this.element.loop),
+      set: (value) => {
+        this.element.loop = value;
+        this.updateDelegate.setDirty(DirtyType.CUSTOM);
+      }
+    });
+
+    /**
+     * Specifies that the audio output of the video should be muted.
+     *
+     * @property {boolean}
+     */
+    Object.defineProperty(this, 'muted', {
+      get: () => (this.element.muted),
+      set: (value) => {
+        this.element.muted = value;
+        this.updateDelegate.setDirty(DirtyType.CUSTOM);
+      }
+    });
+
+    /**
+     * Specifies an image to be shown while the video is downloading, or until
+     * the user hits the play button.
+     *
+     * @property {string}
+     */
+    Object.defineProperty(this, 'poster', {
+      get: () => (this.element.poster),
+      set: (value) => {
+        this.element.poster = value;
+        this.updateDelegate.setDirty(DirtyType.CUSTOM);
+      }
+    });
+
+    /**
+     * Specifies if and how the author thinks the video should be loaded when
+     * the page loads
+     *
+     * @property {string}
+     */
+    Object.defineProperty(this, 'preload', {
+      get: () => (this.element.preload),
+      set: (value) => {
+        this.element.preload = value;
+        this.updateDelegate.setDirty(DirtyType.CUSTOM);
+      }
+    });
+
+    /**
+     * Array of sources containing elements in the form of:
+     * Object {
+     *   {string} src  - Path of source.
+     *   {string} type - Type of source.
+     * }
+     *
+     * @property {Object[]}
+     */
+    Element.defineProperty(this, 'source', {
+      get: true,
+      set: true,
+      dirtyType: DirtyType.DATA
+    });
+
+    super.__define_properties();
+  }
+}
+
+module.exports = Video;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="AssetLoader.html">AssetLoader</a></li><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-events.EventTimer.html">EventTimer</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li><li><a href="module-requiem-ui.Grid.html">Grid</a></li><li><a href="module-requiem-ui.Video.html">Video</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-enums.html">enums</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-net.html">net</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Mar 11 2016 18:42:16 GMT-0800 (PST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
