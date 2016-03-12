@@ -1,6 +1,6 @@
 {
   "name": "requiem",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "description": "An experimental front-end JS framework.",
   "homepage": "http://VARIANTE.github.io/requiem",
   "license": "MIT",
@@ -17,7 +17,8 @@
     "build:play:scripts": "webpack --colors --profile --config ./playground/webpack.config.babel.js",
     "serve:play": "webpack-dev-server --progress --inline --hot --config playground/webpack.config.babel.js --content-base playground/public --port 8080 --watch",
     "docs": "npm run clean:docs && npm run build:docs",
-    "play": "npm run clean && npm run build:dev && npm run clean:play && npm run build:play:templates && npm run serve:play"
+    "play": "npm run clean && npm run build:dev && npm run clean:play && npm run build:play:templates && npm run serve:play",
+    "test": "npm run build"
   },
   "authors": [
     "Andrew Wei <andrew@variante.io>"

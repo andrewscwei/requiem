@@ -1,4 +1,6 @@
+.publish
 bower_components
 node_modules
+dist
+docs
 public
-.publish
