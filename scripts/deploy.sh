@@ -23,8 +23,8 @@ mv docs/* .
 rm -R docs/
 
 # Push to gh-pages.
-git config user.name "$andrewscwei"
-git config user.email "$andrew@variante.io"
+git config user.name "$USER_NAME"
+git config user.email "$USER_EMAIL"
 
 git add -fA
 git commit --allow-empty -m "$(git log -1 --pretty=%B) [ci skip]"

@@ -1,9 +1,12 @@
 machine:
+  environment:
+    USER_NAME: andrewscwei
+    USER_EMAIL: andrew@variante.io
   node:
     version: 5.6.0
 deployment:
   production:
     branch: master
     commands:
-      - chmod +x ./scripts/deploy
-      - ./scripts/deploy
+      - chmod +x ./scripts/deploy.sh
+      - ./scripts/deploy.sh
