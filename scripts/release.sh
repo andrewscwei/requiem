@@ -30,9 +30,12 @@ git add -fA
 git commit --allow-empty -m "$(git log -1 --pretty=%B) [ci skip]"
 git push -f $ORIGIN_URL gh-pages
 
-echo "Done publishing docs"
+echo "Done publishing docs, now publishing to npm..."
 
+git checkout -
 echo -e "$NPM_USERNAME\n$NPM_PASSWORD\n$NPM_EMAIL" | npm login
 npm publish
+
+echo "Done"
 
 exit 0
