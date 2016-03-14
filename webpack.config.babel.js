@@ -24,7 +24,6 @@ console.log(`Webpack is using ${debug ? 'debug' : 'production'} configurations..
 module.exports = {
   cache: debug,
   debug: debug,
-  devtool: debug ? 'eval-source-map' : null,
   context: sourceDir,
   entry: {
     requiem: './requiem.js'
