@@ -12,6 +12,7 @@ import path from 'path';
 import webpack from 'webpack';
 
 const debug = (process.env.NODE_ENV === 'development');
+const enableSourcemaps = (process.env.ENABLE_SOURCEMAPS === 'true');
 const sourceDir = path.join(__dirname, 'src');
 const buildDir = path.join(__dirname, 'dist');
 const plugins = [
@@ -25,6 +26,7 @@ module.exports = {
   cache: debug,
   debug: debug,
   context: sourceDir,
+  devtool: enableSourcemaps ? 'eval-source-map' : null,
   entry: {
     requiem: './requiem.js'
   },

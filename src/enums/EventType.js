@@ -134,7 +134,8 @@ let EventType = {
     SHOW: 'show',
     STORAGE: 'storage',
     TOGGLE: 'toggle',
-    WHEEL: 'wheel'
+    WHEEL: 'wheel',
+    ENTER_FRAME: 'enterframe' // Custom
   },
   TOUCH: {
     TOUCH_CANCEL: 'touchcancel',

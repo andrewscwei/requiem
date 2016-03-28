@@ -77,9 +77,14 @@ let DirtyType = {
   ORIENTATION: 1 << 10,
 
   /**
+   * Indicates that UI element frames have advanced.
+   */
+  FRAME: 1 << 11,
+
+  /**
    * Custom type used as a base for creating new types.
    */
-  CUSTOM: 1 << 11,
+  CUSTOM: 1 << 12,
 
   /**
    * Indicates that everything has changed in the UI.

@@ -1,6 +1,6 @@
 {
   "name": "requiem",
-  "version": "0.37.1",
+  "version": "0.38.0",
   "description": "An experimental front-end JS framework.",
   "homepage": "http://VARIANTE.github.io/requiem",
   "license": "MIT",
@@ -16,9 +16,10 @@
     "build:docs": "jsdoc src -r -R README.md -c .docconfig",
     "build:play:templates": "jade -O \"{basedir:'playground/app/templates'}\" -P -o playground/public playground/app/templates/index.jade",
     "build:play:scripts": "webpack --colors --profile --config ./playground/webpack.config.babel.js --display-error-details",
+    "watch:dev": "NODE_ENV=development webpack --colors --profile --config ./webpack.config.babel.js --display-error-details --watch",
     "serve:play": "webpack-dev-server --progress --inline --hot --config playground/webpack.config.babel.js --content-base playground/public --port 8080",
     "docs": "npm run clean:docs && npm run build:docs",
-    "play": "npm run clean && npm run build:dev && npm run clean:play && npm run build:play:templates && npm run serve:play",
+    "play": "npm run clean && ENABLE_SOURCEMAPS=true npm run watch:dev & npm run clean:play && npm run build:play:templates && npm run serve:play",
     "test": "npm run build"
   },
   "authors": [

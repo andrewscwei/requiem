@@ -54,6 +54,7 @@ class ElementUpdateDelegate {
     let mKeyUpHandler = null;
     let mKeyPressHandler = null;
     let mKeyDownHandler = null;
+    let mEnterFrameHandler = null;
 
     this.delegate = delegate;
 
@@ -200,6 +201,17 @@ class ElementUpdateDelegate {
     };
 
     /**
+     * Handler invoked when frame advances.
+     *
+     * @param  {Event} event
+     *
+     * @private
+     */
+    let _onEnterFrame = (event) => {
+      this.setDirty(DirtyType.FRAME);
+    }
+
+    /**
      * Sets a dirty type as dirty.
      *
      * @param {number} dirtyType
@@ -312,6 +324,7 @@ class ElementUpdateDelegate {
       if (mKeyDownHandler) window.removeEventListener(EventType.KEYBOARD.KEY_DOWN, mKeyDownHandler);
       if (mKeyPressHandler) window.removeEventListener(EventType.KEYBOARD.KEY_PRESS, mKeyPressHandler);
       if (mKeyUpHandler) window.removeEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
+      if (mEnterFrameHandler) window.clearInterval(mEnterFrameHandler);
 
       mResizeHandler = null;
       mScrollHandler = null;
@@ -322,6 +335,7 @@ class ElementUpdateDelegate {
       mKeyPressHandler = null;
       mKeyUpHandler = null;
       mConductorTable = null;
+      mEnterFrameHandler = null;
     };
 
     /**
@@ -449,6 +463,11 @@ class ElementUpdateDelegate {
         if (mKeyUpHandler) window.removeEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
         mKeyUpHandler = _onWindowKeyUp.bind(this);
         window.addEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
+      }
+
+      if (universal || args.indexOf(EventType.MISC.ENTER_FRAME) > -1) {
+        if (mEnterFrameHandler) window.clearInterval(mEnterFrameHandler);
+        mEnterFrameHandler = window.setInterval(_onEnterFrame.bind(this), delay);
       }
     };
   }
