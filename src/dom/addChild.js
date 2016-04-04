@@ -8,6 +8,7 @@
 
 'use strict';
 
+import Directive from '../enums/Directive';
 import NodeState from '../enums/NodeState';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
