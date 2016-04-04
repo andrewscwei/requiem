@@ -8,7 +8,7 @@
 
 'use strict';
 
-import getDataRegistry from '../dom/getDataRegistry';
+import dom from '../dom';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
 import noval from '../helpers/noval';
@@ -21,7 +21,6 @@ import EventType from '../enums/EventType';
 import Directive from '../enums/Directive';
 import ElementUpdateDelegate from '../ui/ElementUpdateDelegate';
 import getRect from '../utils/getRect';
-import sightread from '../dom/sightread';
 
 /**
  * @class
@@ -88,7 +87,7 @@ class Element {
     // Check if this Element needs seed data from the data registry.
     if (this.hasAttribute(Directive.REF)) {
       let ref = this.getAttribute(Directive.REF);
-      let data = getDataRegistry()[ref];
+      let data = dom.getDataRegistry()[ref];
 
       if (data) this.setProperties(data);
     }
@@ -290,6 +289,13 @@ class Element {
   }
 
   /**
+   * @see module:requiem~ui.Element#addEventListener
+   */
+  static on() {
+    Element.addEventListener.apply(null, arguments);
+  }
+
+  /**
    * Removes an event listener from an Element instance.
    *
    * @see module:requiem~ui.Element#removeEventListener
@@ -473,303 +479,35 @@ class Element {
   }
 
   /**
-   * Adds a child or multiple children to this Element instance. Any added
-   * must be a Requiem Element. If an Node is provided, it will be
-   * transformed into a Requiem Element. A child is automatically appended
-   * to the DOM tree of this instance.
-   *
-   * @param {Element|Element[]|Node|Node[]} child  - Single child or an array of
-   *                                                 children. Child elements
-   *                                                 can be instance(s) of
-   *                                                 Requiem Elements or Nodes.
-   * @param {string} [name] - The name of the child/children to be added.
-   *                          Typically a name is required. If it is not
-   *                          specified, this method will attempt to deduct the
-   *                          name from the provided child/children. This method
-   *                          fails if no name is specified or deducted. If there
-   *                          exists another child with the same name, the added
-   *                          child will be grouped together with the existing
-   *                          child.
-   * @param {boolean} [prepend=false] - Specifies whether the child is prepended
-   *                                    to this element instead of appended.
-   *
-   * @return {Element|Element[]} The added element(s).
+   * @see module:requiem~dom.addChild
    */
   addChild(child, name, prepend) {
-    if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
-    if (typeof prepend !== 'boolean') prepend = false;
-
-    if (child instanceof Array) {
-      let n = child.length;
-      let children = [];
-
-      if (prepend) {
-        for (let i = n-1; i >= 0; i--) {
-          let c = child[i];
-          children.push(this.addChild(c, name, true));
-        }
-      }
-      else {
-        for (let i = 0; i < n; i++) {
-          let c = child[i];
-          children.push(this.addChild(c, name));
-        }
-      }
-
-      return children;
-    }
-    else {
-      if (!assertType(child, [Node, Element], false, 'Invalid child specified. Child must be an instance of Node or Requiem Element.')) return null;
-
-      if (child instanceof Node) {
-        if (noval(name)) name = getInstanceNameFromElement(child);
-        if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
-
-        child.removeAttribute(Directive.INSTANCE);
-        child.setAttribute(Directive.INSTANCE, name);
-        child = sightread(child);
-      }
-      else {
-        if (noval(name)) name = child.name;
-        if (!assert(!noval(name), 'Either child name was unprovided or it cannot be deducted from the specified child')) return null;
-
-        child.name = name;
-      }
-
-      if (this.children[name]) {
-        if (this.children[name] instanceof Array) {
-          this.children[name].push(child);
-        }
-        else {
-          let a = [this.children[name]];
-          a.push(child);
-          this.children[name] = a;
-        }
-      }
-      else {
-        this.children[name] = child;
-      }
-
-      if (child.nodeState === NodeState.IDLE || child.nodeState === NodeState.DESTROYED) {
-        child.init();
-      }
-
-      let shouldAddChild = true;
-
-      if (child.element.parentNode && document) {
-        let e = child.element;
-
-        while (e !== null && e !== undefined && e !== document) {
-          e = e.parentNode;
-
-          if (e === this.element) {
-            shouldAddChild = false;
-            break;
-          }
-        }
-      }
-
-      if (shouldAddChild) {
-        if (prepend) {
-          this.element.insertBefore(child.element, this.element.firstChild);
-        }
-        else {
-          this.element.appendChild(child.element);
-        }
-      }
-
-      return child;
-    }
+    dom.addChild(child, name, prepend, this);
   }
 
   /**
-   * Determines if this Element instance contains the specified child.
-   *
-   * @param {Element|Node|string} child - A child is a Requiem Element, or Node.
-   *                                      It can also be a string of child
-   *                                      name(s) separated by '.'.
-   *
-   * @return {boolean} True if this Element instance has the specified child,
-   *                   false otherwise.
+   * @see module:requiem~dom.hasChild
    */
   hasChild(child) {
-    if (!assert(child !== undefined, 'Child is undefined')) return false;
-
-    if (typeof child === 'string') {
-      return !noval(this.getChild(child));
-    }
-    else {
-      let node = (child instanceof Element) ? child.element : child;
-
-      while (!noval(node) && node !== document) {
-        node = node.parentNode;
-        if (node === this.element) return true;
-      }
-
-      return false;
-    }
+    return dom.hasChild(child, this);
   }
 
   /**
-   * Removes a child or multiple children from this Element instance.
-   *
-   * @param {Node|Element|Array|string} child - Child/children to be removed.
-   *                                            This can either be an Element or
-   *                                            Node instance or array. It can
-   *                                            also be a string namespace of
-   *                                            the target child/children.
-   *
-   * @return {Element|Element[]} The removed element(s).
+   * @see module:requiem~dom.removeChild
    */
   removeChild(child) {
-    if (!assert(!noval(child, true), 'No valid child specified')) return;
-
-    // If child is a string, treat each entry separated by '.' as a child name.
-    if (typeof child === 'string') {
-      this.removeChild(this.getChild(child));
-    }
-    // If child is an array, remove each element inside recursively.
-    else if ((child instanceof Array)) {
-      while (child.length > 0) {
-        this.removeChild(child[0]);
-      }
-    }
-    // If child is not an array, assume that it is an object that equates or
-    // contains a valid DOM element. Remove it accordingly if this Element
-    // instance is indeed its parent/ancestor.
-    else if (this.hasChild(child)) {
-      // First extract the DOM element.
-      let e;
-      let a = [];
-
-      if (child instanceof Element) {
-        e = child.element;
-      }
-      else if (child instanceof Node) {
-        e = child;
-      }
-
-      // No valid DOM element found? Terminate.
-      if (noval(e)) return null;
-
-      for (let key in this.children) {
-        let c = this.children[key];
-
-        if (c instanceof Array) {
-          let n = c.length;
-          let t = 0;
-
-          for (let i = 0; i < n; i++) {
-            let element = c[i];
-            t = i;
-
-            if (element.element === e) {
-              a.push(element);
-              element.destroy();
-              e.parentNode.removeChild(e);
-              break;
-            }
-          }
-
-          c.splice(t, 1);
-
-          if (c.length === 0) {
-            delete this.children[key];
-          }
-        }
-        else if (c instanceof Element) {
-          if (c.element === e) {
-            a.push(c);
-            c.destroy();
-            e.parentNode.removeChild(e);
-            delete this.children[key];
-          }
-          else {
-            a.push(c.removeChild(child));
-          }
-        }
-      }
-
-      if (a.length === 0) {
-        return null;
-      }
-      else if (a.length === 1) {
-        return a[0];
-      }
-      else {
-        return a;
-      }
-    }
+    dom.removeChild(child, this);
   }
 
   /**
-   * Gets a child by its name. If child is an array, it will be returned
-   * immediately.
-   *
-   * @param {string}  [name]           - Name of the child, depth separated by
-   *                                     '.' (i.e. 'foo.bar'). If unspecified,
-   *                                     the entire child list of this Element
-   *                                     will be returned.
-   * @param {boolean} [recursive=true] - Speciifies whether to search for the
-   *                                     child recursively down the tree.
-   *
-   * @return {Element|Array|Object} The fetched child.
+   * @see module:requiem~dom.getChild
    */
   getChild(name, recursive) {
-    if (!assertType(name, 'string', true, 'Child name must be string')) return null;
-    if (!assertType(recursive, 'boolean', true, 'Parameter \'recursive\', if specified, must be a boolean')) return null;
-
-    if (!name) return this.children;
-
-    recursive = (recursive === undefined) ? true : recursive;
-
-    let targets = name.split('.');
-    let currentTarget = targets.shift();
-    let child = this.children[currentTarget];
-
-    if (recursive && (targets.length > 0)) {
-      if (child instanceof Array) {
-        let children = [];
-        let n = child.length;
-
-        for (let i = 0; i < n; i++) {
-          let c = child[i];
-
-          if (c instanceof Element) {
-            children.push(c.getChild(targets.join('.')));
-          }
-          else {
-            children.push(null);
-          }
-        }
-
-        if (!noval(children, true)) {
-          return children;
-        }
-        else {
-          return null;
-        }
-      }
-      else if (child instanceof Element) {
-        return child.getChild(targets.join('.'));
-      }
-      else {
-        return null;
-      }
-    }
-    else if (child instanceof Element) {
-      return child;
-    }
-    else if (!noval(child, true)) {
-      return child;
-    }
-    else {
-      return null;
-    }
+    return dom.getChild(name, recursive, this);
   }
 
   /**
-   * @see Node#addEventListener
+   * @see module:requiem~ui.Element#addEventListener
    */
   addEventListener() {
     let event = arguments[0];
@@ -824,6 +562,13 @@ class Element {
     else {
       this.element.addEventListener.apply(this.element, arguments);
     }
+  }
+
+  /**
+   * @see Element#addEventListener
+   */
+  on() {
+    this.addEventListener.apply(this, arguments);
   }
 
   /**
@@ -1193,7 +938,7 @@ class Element {
    * @return {Element}
    */
   render() {
-    return document.createElement('div');
+    return '<div>';
   }
 
   /**
@@ -1234,10 +979,11 @@ class Element {
       get: (value) => {
         if (!this.__private__.element) {
           let e = this.render();
+          if (typeof e === 'string') e = dom.createElement(e);
 
           if (this.__validate_element(e)) this.__private__.element = e;
 
-          let children = sightread(e, true);
+          let children = dom.sightread(e, true);
 
           for (let childName in children) {
             this.addChild(children[childName], childName);
@@ -1511,8 +1257,7 @@ class Element {
    * @private
    */
   __validate_element(element) {
-    return true;
-    // return assert(element instanceof Node, 'Element validation failed');
+    return assert(element instanceof Node, 'Element validation failed');
   }
 
   /**

@@ -1,6 +1,6 @@
 @import '~requiem-styles/lib/sass/requiem';
 
-@include class('Playground') {
+.playground {
   @include flex-block('center', 'top');
   width: 100%;
   height: auto;

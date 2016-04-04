@@ -1,15 +1,9 @@
 'use strict';
 
-import { dom, Element, EventType } from 'requiem';
+import { Element } from 'requiem';
 
 class Foo extends Element {
   init() {
-    this.setStyle('width', 100);
-    this.setStyle('height', 50);
-    this.setStyle('backgroundColor', '#000');
-
-    this.addEventListener(EventType.MOUSE.CLICK, (event) => this.dispatchEvent(new Event(EventType.DATA.DATA_CHANGE)));
-
     super.init();
   }
 
@@ -18,7 +12,7 @@ class Foo extends Element {
   }
 
   render() {
-    return dom.createElement(require('templates/components/Foo'));
+    return require('templates/components/foo.jade')();
   }
 }
 

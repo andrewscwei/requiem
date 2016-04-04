@@ -17,7 +17,7 @@ const buildDir = path.join(__dirname, 'public');
 module.exports = {
   cache: true,
   debug: true,
-  devtool: 'eval',
+  devtool: 'eval-source-map',
   context: path.join(sourceDir, 'scripts'),
   entry: {
     main: './main.js'
@@ -44,12 +44,8 @@ module.exports = {
         `sass?includePaths=${path.join(sourceDir, 'scripts', 'stylesheets')},outputStyle=expanded,sourceMap`
       ]
     }, {
-      test: /\.(htm?l|jade)$/,
-      loader: 'template-html',
-      query: {
-        basedir: path.join(sourceDir, 'templates'),
-        template: true
-      }
+      test: /\.jade$/,
+      loader: `jade?root=${path.join(sourceDir, 'templates')}`
     }]
   },
   resolve: {

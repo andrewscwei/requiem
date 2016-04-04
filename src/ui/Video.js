@@ -32,7 +32,7 @@ class Video extends Element {
    * @inheritdoc
    */
   render() {
-    return document.createElement('video');
+    return '<video>';
   }
 
   /**
@@ -70,13 +70,6 @@ class Video extends Element {
 
       this.element.appendChild(newSource);
     }
-  }
-
-  /**
-   * @inheritdoc
-   */
-  __validate_element(element) {
-    return true;
   }
 
   /**

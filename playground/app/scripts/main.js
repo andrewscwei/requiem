@@ -8,7 +8,8 @@
 
 'use strict';
 
-import Requiem from 'requiem';
+import Requiem, { dom } from 'requiem';
+import Playground from 'components/Playground';
 
 // Load all stylesheets.
 function requireAll(ctx) { return ctx.keys().map(ctx); }
@@ -22,5 +23,7 @@ req.keys().forEach((path) => {
 });
 
 Requiem.sightread();
+
+dom.addChild(new Playground());
 
 if (module.hot) module.hot.accept();

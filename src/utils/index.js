@@ -18,7 +18,6 @@ let utils = {};
 Object.defineProperty(utils, 'addClass',           { value: require('./addClass'),           writable: false, enumerable: true });
 Object.defineProperty(utils, 'changeElementState', { value: require('./changeElementState'), writable: false, enumerable: true });
 Object.defineProperty(utils, 'hasClass',           { value: require('./hasClass'),           writable: false, enumerable: true });
-Object.defineProperty(utils, 'hasChild',           { value: require('./hasChild'),           writable: false, enumerable: true });
 Object.defineProperty(utils, 'getClassIndex',      { value: require('./getClassIndex'),      writable: false, enumerable: true });
 Object.defineProperty(utils, 'getElementState',    { value: require('./getElementState'),    writable: false, enumerable: true });
 Object.defineProperty(utils, 'getIntersectRect',   { value: require('./getIntersectRect'),   writable: false, enumerable: true });

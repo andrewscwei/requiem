@@ -21,25 +21,30 @@ import noval from '../helpers/noval';
  *                                     will be returned.
  * @param {boolean} [recursive=true] - Speciifies whether to search for the
  *                                     child recursively down the tree.
+ * @param {Element} [element]        - Specifies the parent Element instance
+ *                                     to fetch the child from.
  *
  * @return {Element|Array|Object}
  *
  * @alias module:requiem~dom.getChild
  */
-function getChild(name, recursive) {
+function getChild(name, recursive, element) {
   const Element = require('../ui/Element');
 
-  if (window._children === undefined || window._children === null) return null;
   if (!assertType(name, 'string', true, 'Child name must be string')) return null;
   if (!assertType(recursive, 'boolean', true, 'Parameter \'recursive\', if specified, must be a boolean')) return null;
+  if (!assertType(element, Element, true, 'Parameter \'element\', if specified, must be an Element instance')) return null;
 
-  if (!name) return window._children;
+  let childrenHash = (element instanceof Element) ? element.children : window._children;
+  if (childrenHash === undefined || childrenHash === null) return null;
+
+  if (!name) return (element instanceof Element) ? element.element : document.body;
 
   recursive = (recursive === undefined) ? true : recursive;
 
   let targets = name.split('.');
   let currentTarget = targets.shift();
-  let child = window._children[currentTarget];
+  let child = childrenHash[currentTarget];
 
   if (recursive && (targets.length > 0)) {
     if (child instanceof Array) {

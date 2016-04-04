@@ -9,13 +9,13 @@
 'use strict';
 
 import getClassRegistry from '../dom/getClassRegistry';
+import hasChild from '../dom/hasChild';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
 import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
 import getControllerClassFromElement from '../helpers/getControllerClassFromElement';
 import getControllerClassNameFromElement from '../helpers/getControllerClassNameFromElement';
 import Directive from '../enums/Directive';
-import hasChild from '../utils/hasChild';
 
 /**
  * Crawls a DOM node and performs transformations on child nodes marked with
@@ -137,7 +137,7 @@ function sightread() {
 
     if (element === document) {
       let n = window._children.count;
-      window._children = children;
+      window._children = children || {};
       window._children.count = n;
     }
 
@@ -169,7 +169,7 @@ function _filterParentElements(nodeList) {
 
       let parent = nodeList[j];
 
-      if (hasChild(parent, child)) {
+      if (hasChild(child, parent)) {
         isParent = false;
         break;
       }

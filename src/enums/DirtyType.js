@@ -119,6 +119,7 @@ let DirtyType = {
         case DirtyType.CONFIG: o += 'CONFIG'; break;
         case DirtyType.STYLE: o += 'STYLE'; break;
         case DirtyType.INPUT: o += 'INPUT'; break;
+        case DirtyType.FRAME: o += 'FRAME'; break;
         case DirtyType.ORIENTATION: o += 'ORIENTATION'; break;
         default: o += String(1<<i);
       }

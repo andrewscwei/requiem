@@ -2,8 +2,6 @@
 
 import { Element, Video, EventType, DirtyType, utils } from 'requiem';
 
-import Foo from './Foo';
-
 class Playground extends Element {
   init() {
     let grid = this.getChild('grid');
@@ -16,6 +14,10 @@ class Playground extends Element {
 
   update() {
     super.update();
+  }
+
+  render() {
+    return require('templates/components/playground.jade')({ n: 200 });
   }
 }
 
