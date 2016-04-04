@@ -706,16 +706,20 @@ class Element {
    * Gets a child by its name. If child is an array, it will be returned
    * immediately.
    *
-   * @param {string}  name             - Name of the child, depth separated by
-   *                                     '.' (i.e. 'foo.bar').
+   * @param {string}  [name]           - Name of the child, depth separated by
+   *                                     '.' (i.e. 'foo.bar'). If unspecified,
+   *                                     the entire child list of this Element
+   *                                     will be returned.
    * @param {boolean} [recursive=true] - Speciifies whether to search for the
    *                                     child recursively down the tree.
    *
-   * @return {Object|Array} The fetched child.
+   * @return {Element|Array|Object} The fetched child.
    */
   getChild(name, recursive) {
-    if (!assertType(name, 'string', false, 'Child name must be specified')) return null;
+    if (!assertType(name, 'string', true, 'Child name must be string')) return null;
     if (!assertType(recursive, 'boolean', true, 'Parameter \'recursive\', if specified, must be a boolean')) return null;
+
+    if (!name) return this.children;
 
     recursive = (recursive === undefined) ? true : recursive;
 

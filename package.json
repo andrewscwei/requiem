@@ -7,19 +7,11 @@
   "main": "dist/requiem.js",
   "scripts": {
     "clean": "rimraf dist && rimraf lib",
-    "clean:docs": "rimraf docs",
-    "clean:play": "rimraf playground/public",
-    "build": "npm run clean && npm run build:lib && npm run build:dev && npm run build:prod",
-    "build:lib": "babel -D src/ --out-dir lib/",
+    "build": "npm run clean && babel -D src/ --out-dir lib/ && npm run build:dev && npm run build:prod",
     "build:dev": "NODE_ENV=development webpack --colors --profile --config ./webpack.config.babel.js --display-error-details",
     "build:prod": "NODE_ENV=production webpack --colors --profile --config ./webpack.config.babel.js --display-error-details",
-    "build:docs": "jsdoc src -r -R README.md -c .docconfig",
-    "build:play:templates": "jade -O \"{basedir:'playground/app/templates'}\" -P -o playground/public playground/app/templates/index.jade",
-    "build:play:scripts": "webpack --colors --profile --config ./playground/webpack.config.babel.js --display-error-details",
-    "watch:dev": "NODE_ENV=development webpack --colors --profile --config ./webpack.config.babel.js --display-error-details --watch",
-    "serve:play": "webpack-dev-server --progress --inline --hot --config playground/webpack.config.babel.js --content-base playground/public --port 8080",
-    "docs": "npm run clean:docs && npm run build:docs",
-    "play": "npm run clean && ENABLE_SOURCEMAPS=true npm run watch:dev & npm run clean:play && npm run build:play:templates && npm run serve:play",
+    "docs": "rimraf docs && jsdoc src -r -R README.md -c .docconfig",
+    "play": "npm run clean && ENABLE_SOURCEMAPS=true npm run build:dev -- --watch & rimraf playground/public && jade -O \"{basedir:'playground/app/templates'}\" -P -w -o playground/public playground/app/templates/index.jade & webpack-dev-server --progress --inline --hot --config playground/webpack.config.babel.js --content-base playground/public --port 8080",
     "test": "npm run build"
   },
   "authors": [

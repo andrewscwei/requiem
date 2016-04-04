@@ -41,6 +41,9 @@ function sightread() {
   let classRegistry = getClassRegistry();
   let exclusive = false;
 
+  if (window._children === undefined || window._children === null) window._children = {};
+  if (typeof window._children.count !== 'number') window._children.count = 0;
+
   if (arguments.length === 1) {
     let arg = arguments[0];
     assertType(arg, [Node, 'boolean'], true);
@@ -48,7 +51,7 @@ function sightread() {
     if (arg instanceof Node) {
       element = arg;
     }
-    else if (typeof obj === 'boolean') {
+    else if (typeof arg === 'boolean') {
       exclusive = arg;
     }
   }
@@ -69,7 +72,13 @@ function sightread() {
     let instanceName = getInstanceNameFromElement(element);
     let ControllerClass = getControllerClassFromElement(element);
 
+    if (typeof instanceName !== 'string') {
+      instanceName = `instance${window._children.count}`;
+    }
+
     assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + classRegistry);
+
+    window._children.count++;
 
     return new ControllerClass({
       element: element,
@@ -93,7 +102,13 @@ function sightread() {
       let instanceName = getInstanceNameFromElement(child);
       let ControllerClass = getControllerClassFromElement(child, classRegistry);
 
+      if (typeof instanceName !== 'string') {
+        instanceName = `instance${window._children.count}`;
+      }
+
       assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + classRegistry);
+
+      window._children.count++;
 
       let m = new ControllerClass({
         element: child,
@@ -118,6 +133,12 @@ function sightread() {
           }
         }
       }
+    }
+
+    if (element === document) {
+      let n = window._children.count;
+      window._children = children;
+      window._children.count = n;
     }
 
     return children;

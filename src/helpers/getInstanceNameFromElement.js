@@ -20,7 +20,8 @@ let Directive = require('../enums/Directive');
  * @alias module:requiem~helpers.getInstanceNameFromElement
  */
 function getInstanceNameFromElement(element) {
-  return element.getAttribute(Directive.INSTANCE);
+  let name = element.getAttribute(Directive.INSTANCE);
+  return name;
 }
 
 module.exports = getInstanceNameFromElement;
