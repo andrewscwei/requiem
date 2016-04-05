@@ -8,6 +8,7 @@
 
 'use strict';
 
+import sightread from './sightread';
 import Directive from '../enums/Directive';
 import NodeState from '../enums/NodeState';
 import assert from '../helpers/assert';
@@ -80,7 +81,7 @@ function addChild(child, name, prepend, element) {
 
       child.removeAttribute(Directive.INSTANCE);
       child.setAttribute(Directive.INSTANCE, name);
-      child = dom.sightread(child);
+      child = sightread(child);
     }
     else if (child instanceof Element) {
       if (noval(name)) name = child.name;
