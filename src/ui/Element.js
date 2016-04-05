@@ -482,7 +482,7 @@ class Element {
    * @see module:requiem~dom.addChild
    */
   addChild(child, name, prepend) {
-    dom.addChild(child, name, prepend, this);
+    return dom.addChild(child, name, prepend, this);
   }
 
   /**
