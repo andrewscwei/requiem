@@ -17,7 +17,7 @@
  * @enum {number}
  * @alias module:requiem~enums.KeyCode
  */
-let KeyCode = {
+const KeyCode = {
   BACKSPACE:     8,
   TAB:           9,
   ENTER:         13,
@@ -229,4 +229,4 @@ let KeyCode = {
   }
 };
 
-module.exports = KeyCode;
+export default KeyCode;

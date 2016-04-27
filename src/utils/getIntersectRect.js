@@ -70,4 +70,4 @@ function getIntersectRect() {
   return rect;
 }
 
-module.exports = getIntersectRect;
+export default getIntersectRect;

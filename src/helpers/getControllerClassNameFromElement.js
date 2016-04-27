@@ -8,7 +8,7 @@
 
 'use strict';
 
-let Directive = require('../enums/Directive');
+import Directive from '../enums/Directive';
 
 /**
  * Gets the controller class name from the DOM element.
@@ -23,4 +23,4 @@ function getControllerClassNameFromElement(element) {
   return element.getAttribute(Directive.CLASS);
 }
 
-module.exports = getControllerClassNameFromElement;
+export default getControllerClassNameFromElement;

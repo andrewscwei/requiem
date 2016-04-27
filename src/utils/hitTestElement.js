@@ -56,4 +56,4 @@ function hitTestElement(obj, elements) {
   }
 }
 
-module.exports = hitTestElement;
+export default hitTestElement;

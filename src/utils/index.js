@@ -8,26 +8,41 @@
 
 'use strict';
 
+import addClass from './addClass';
+import changeElementState from './changeElementState';
+import hasClass from './hasClass';
+import getClassIndex from './getClassIndex';
+import getElementState from './getElementState';
+import getIntersectRect from './getIntersectRect';
+import getRect from './getRect';
+import getViewportRect from './getViewportRect';
+import hitTestElement from './hitTestElement';
+import hitTestRect from './hitTestRect';
+import removeClass from './removeClass';
+import translate from './translate';
+import translate3d from './translate3d';
+import transform from './transform';
+
 /**
  * Utility methods.
  *
  * @namespace module:requiem~utils
  */
-let utils = {};
+const utils = {
+  addClass: addClass,
+  changeElementState: changeElementState,
+  hasClass: hasClass,
+  getClassIndex: getClassIndex,
+  getElementState: getElementState,
+  getIntersectRect: getIntersectRect,
+  getRect: getRect,
+  getViewportRect: getViewportRect,
+  hitTestElement: hitTestElement,
+  hitTestRect: hitTestRect,
+  removeClass: removeClass,
+  translate: translate,
+  translate3d: translate3d,
+  transform: transform
+};
 
-Object.defineProperty(utils, 'addClass',           { value: require('./addClass'),           writable: false, enumerable: true });
-Object.defineProperty(utils, 'changeElementState', { value: require('./changeElementState'), writable: false, enumerable: true });
-Object.defineProperty(utils, 'hasClass',           { value: require('./hasClass'),           writable: false, enumerable: true });
-Object.defineProperty(utils, 'getClassIndex',      { value: require('./getClassIndex'),      writable: false, enumerable: true });
-Object.defineProperty(utils, 'getElementState',    { value: require('./getElementState'),    writable: false, enumerable: true });
-Object.defineProperty(utils, 'getIntersectRect',   { value: require('./getIntersectRect'),   writable: false, enumerable: true });
-Object.defineProperty(utils, 'getRect',            { value: require('./getRect'),            writable: false, enumerable: true });
-Object.defineProperty(utils, 'getViewportRect',    { value: require('./getViewportRect'),    writable: false, enumerable: true });
-Object.defineProperty(utils, 'hitTestElement',     { value: require('./hitTestElement'),     writable: false, enumerable: true });
-Object.defineProperty(utils, 'hitTestRect',        { value: require('./hitTestRect'),        writable: false, enumerable: true });
-Object.defineProperty(utils, 'removeClass',        { value: require('./removeClass'),        writable: false, enumerable: true });
-Object.defineProperty(utils, 'translate',          { value: require('./translate'),          writable: false, enumerable: true });
-Object.defineProperty(utils, 'translate3d',        { value: require('./translate3d'),        writable: false, enumerable: true });
-Object.defineProperty(utils, 'transform',          { value: require('./transform'),          writable: false, enumerable: true });
-
-module.exports = utils;
+export default utils;

@@ -1,7 +1,7 @@
-@import '~requiem-styles/lib/sass/requiem';
+@import '~minuet/lib/sass/minuet';
 
 .playground {
-  @include flex-block('center', 'top');
+  @include display('box>', top center);
   width: 100%;
   height: auto;
   padding: 50px;

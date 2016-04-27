@@ -386,4 +386,4 @@ class Grid extends Element {
   }
 }
 
-module.exports = Grid;
+export default Grid;

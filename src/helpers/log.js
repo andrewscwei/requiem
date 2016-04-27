@@ -22,4 +22,4 @@ function log(message) {
   }
 }
 
-module.exports = log;
+export default log;

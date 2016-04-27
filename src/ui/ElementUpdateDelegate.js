@@ -536,4 +536,4 @@ class ElementUpdateDelegate {
   }
 }
 
-module.exports = ElementUpdateDelegate;
+export default ElementUpdateDelegate;

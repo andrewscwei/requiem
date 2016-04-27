@@ -8,7 +8,7 @@
 
 'use strict';
 
-let Directive = require('../enums/Directive');
+import Directive from '../enums/Directive';
 
 /**
  * Gets the instance name from a DOM element.
@@ -24,4 +24,4 @@ function getInstanceNameFromElement(element) {
   return name;
 }
 
-module.exports = getInstanceNameFromElement;
+export default getInstanceNameFromElement;

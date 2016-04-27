@@ -8,18 +8,27 @@
 
 'use strict';
 
+import Directive from './Directive';
+import DirtyType from './DirtyType';
+import EventType from './EventType';
+import KeyCode from './KeyCode';
+import NodeState from './NodeState';
+import Orientation from './Orientation';
+import ViewportSizeClass from './ViewportSizeClass';
+
 /**
  * Collection of Requiem enums and types.
  *
  * @namespace module:requiem~enums
  */
-let enums = {};
-enums['Directive']         = require('./Directive');
-enums['DirtyType']         = require('./DirtyType');
-enums['EventType']         = require('./EventType');
-enums['KeyCode']           = require('./KeyCode');
-enums['NodeState']         = require('./NodeState');
-enums['Orientation']       = require('./Orientation');
-enums['ViewportSizeClass'] = require('./ViewportSizeClass');
+const enums = {
+  Directive: Directive,
+  DirtyType: DirtyType,
+  EventType: EventType,
+  KeyCode: KeyCode,
+  NodeState: NodeState,
+  Orientation: Orientation,
+  ViewportSizeClass: ViewportSizeClass
+};
 
-module.exports = enums;
+export default enums;

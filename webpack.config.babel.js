@@ -22,7 +22,7 @@ const plugins = [
 
 console.log(`Webpack is using ${debug ? 'debug' : 'production'} configurations...`);
 
-module.exports = {
+export default {
   cache: debug,
   debug: debug,
   context: sourceDir,

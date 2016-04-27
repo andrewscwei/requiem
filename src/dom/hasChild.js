@@ -11,6 +11,7 @@
 import getChild from './getChild';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
+import Element from '../ui/Element';
 import noval from '../helpers/noval';
 
 /**
@@ -26,8 +27,6 @@ import noval from '../helpers/noval';
  *                   false otherwise.
  */
 function hasChild(child, element) {
-  let Element = require('../ui/Element');
-
   if (!assert(child !== undefined, 'Child is undefined')) return false;
   if (!assertType(element, [Element, Node], true, 'Parameter \'element\', if specified, must be an Element instance or a Node')) return;
 
@@ -53,4 +52,4 @@ function hasChild(child, element) {
   }
 }
 
-module.exports = hasChild;
+export default hasChild;

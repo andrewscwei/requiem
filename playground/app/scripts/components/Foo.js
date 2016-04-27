@@ -1,8 +1,8 @@
 'use strict';
 
-import { Element } from 'requiem';
+import { ui } from 'requiem';
 
-class Foo extends Element {
+class Foo extends ui.Element {
   init() {
     super.init();
   }

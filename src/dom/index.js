@@ -8,23 +8,35 @@
 
 'use strict';
 
+import addChild from './addChild';
+import createElement from './createElement';
+import getChild from './getChild';
+import getClassRegistry from './getClassRegistry';
+import getDataRegistry from './getDataRegistry';
+import hasChild from './hasChild';
+import namespace from './namespace';
+import ready from './ready';
+import register from './register';
+import removeChild from './removeChild';
+import sightread from './sightread';
+
 /**
  * Collection of DOM manipulation methods.
  *
  * @namespace module:requiem~dom
  */
-let dom = {};
+const dom = {
+  addChild: addChild,
+  createElement: createElement,
+  getChild: getChild,
+  getClassRegistry: getClassRegistry,
+  getDataRegistry: getDataRegistry,
+  hasChild: hasChild,
+  namespace: namespace,
+  ready: ready,
+  register: register,
+  removeChild: removeChild,
+  sightread: sightread
+};
 
-Object.defineProperty(dom, 'createElement',    { value: require('./createElement'),    writable: false, enumerable: true });
-Object.defineProperty(dom, 'getClassRegistry', { value: require('./getClassRegistry'), writable: false, enumerable: true });
-Object.defineProperty(dom, 'getDataRegistry',  { value: require('./getDataRegistry'),  writable: false, enumerable: true });
-Object.defineProperty(dom, 'addChild',         { value: require('./addChild'),         writable: false, enumerable: true });
-Object.defineProperty(dom, 'getChild',         { value: require('./getChild'),         writable: false, enumerable: true });
-Object.defineProperty(dom, 'hasChild',         { value: require('./hasChild'),         writable: false, enumerable: true });
-Object.defineProperty(dom, 'removeChild',      { value: require('./removeChild'),      writable: false, enumerable: true });
-Object.defineProperty(dom, 'namespace',        { value: require('./namespace'),        writable: false, enumerable: true });
-Object.defineProperty(dom, 'ready',            { value: require('./ready'),            writable: false, enumerable: true });
-Object.defineProperty(dom, 'register',         { value: require('./register'),         writable: false, enumerable: true });
-Object.defineProperty(dom, 'sightread',        { value: require('./sightread'),        writable: false, enumerable: true });
-
-module.exports = dom;
+export default dom;

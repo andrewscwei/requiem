@@ -8,14 +8,17 @@
 
 'use strict';
 
+import EventDispatcher from './EventDispatcher';
+import EventTimer from './EventTimer';
+
 /**
  * Collection of event related classes/methods.
  *
  * @namespace module:requiem~events
  */
-let events = {};
+const events = {
+  EventDispatcher: EventDispatcher,
+  EventTimer: EventTimer
+};
 
-Object.defineProperty(events, 'EventDispatcher', { value: require('./EventDispatcher'), writable: false, enumerable: true });
-Object.defineProperty(events, 'EventTimer', { value: require('./EventTimer'), writable: false, enumerable: true });
-
-module.exports = events;
+export default events;

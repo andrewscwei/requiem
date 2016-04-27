@@ -25,4 +25,4 @@ function assert(condition, message) {
   return condition;
 }
 
-module.exports = assert;
+export default assert;

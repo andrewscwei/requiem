@@ -16,7 +16,7 @@
  * @enum {number}
  * @alias module:requiem~enums.DirtyType
  */
-let DirtyType = {
+const DirtyType = {
   /**
    * Indicates that nothing in the UI has changed.
    */
@@ -129,4 +129,4 @@ let DirtyType = {
   }
 };
 
-module.exports = DirtyType;
+export default DirtyType;

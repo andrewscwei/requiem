@@ -12,6 +12,8 @@
 
 'use strict';
 
+import getViewportRect from '../utils/getViewportRect';
+
 /**
  * Enum for all viewport size classes (defaults to portrait).
  *
@@ -19,7 +21,7 @@
  * @enum {number}
  * @alias module:requiem~enums.NodeState
  */
-let ViewportSizeClass = {
+const ViewportSizeClass = {
   /**
    * Mobile devices.
    */
@@ -69,7 +71,7 @@ let ViewportSizeClass = {
   get: (measurement) => {
     if (typeof measurement !== 'string') measurement = 'width';
 
-    let rect = require('../utils/getViewportRect')();
+    let rect = getViewportRect();
     let t;
 
     if (measurement === 'height')
@@ -89,4 +91,4 @@ let ViewportSizeClass = {
   }
 };
 
-module.exports = ViewportSizeClass;
+export default ViewportSizeClass;

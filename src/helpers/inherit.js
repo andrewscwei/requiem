@@ -8,7 +8,7 @@
 
 'use strict';
 
-let assertType = require('./assertType');
+import assertType from './assertType';
 
 /**
  * Sets up prototypal inheritance between a child class and a parent class.
@@ -40,4 +40,4 @@ function inherit(childClass, parentClass) {
   return childClass;
 }
 
-module.exports = inherit;
+export default inherit;

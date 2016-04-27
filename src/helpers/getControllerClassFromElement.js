@@ -8,10 +8,13 @@
 
 'use strict';
 
-let getControllerClassNameFromElement = require('./getControllerClassNameFromElement');
-let getInstanceNameFromElement = require('./getInstanceNameFromElement');
-let getClassRegistry = require('../dom/getClassRegistry');
-let namespace = require('../dom/namespace');
+import Element from '../ui/Element';
+import Grid from '../ui/Grid';
+import Video from '../ui/Video';
+import getClassRegistry from '../dom/getClassRegistry';
+import getControllerClassNameFromElement from './getControllerClassNameFromElement';
+import getInstanceNameFromElement from './getInstanceNameFromElement';
+import namespace from '../dom/namespace';
 
 /**
  * Gets the controller class from the DOM element.
@@ -31,20 +34,20 @@ function getControllerClassFromElement(element) {
   // If no controller class is specified but element is marked as an instance,
   // default the controller class to Element.
   if (!controllerClass && instanceName && instanceName.length > 0) {
-    controllerClass = require('../ui/Element');
+    controllerClass = Element;
   }
   else if (typeof controllerClass !== 'function') {
     switch (controllerClassName) {
       case 'Video':
-        controllerClass = require('../ui/Video');
+        controllerClass = Video;
         break;
 
       case 'Element':
-        controllerClass = require('../ui/Element');
+        controllerClass = Element;
         break;
 
       case 'Grid':
-        controllerClass = require('../ui/Grid');
+        controllerClass = Grid;
         break;
 
       default:
@@ -55,4 +58,4 @@ function getControllerClassFromElement(element) {
   return controllerClass;
 }
 
-module.exports = getControllerClassFromElement;
+export default getControllerClassFromElement;

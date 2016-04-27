@@ -9,6 +9,7 @@
 'use strict';
 
 import assertType from '../helpers/assertType';
+import Element from '../ui/Element';
 import noval from '../helpers/noval';
 
 /**
@@ -29,8 +30,6 @@ import noval from '../helpers/noval';
  * @alias module:requiem~dom.getChild
  */
 function getChild(name, recursive, element) {
-  const Element = require('../ui/Element');
-
   if (!assertType(name, 'string', true, 'Child name must be string')) return null;
   if (!assertType(recursive, 'boolean', true, 'Parameter \'recursive\', if specified, must be a boolean')) return null;
   if (!assertType(element, Element, true, 'Parameter \'element\', if specified, must be an Element instance')) return null;
@@ -87,4 +86,4 @@ function getChild(name, recursive, element) {
   }
 }
 
-module.exports = getChild;
+export default getChild;

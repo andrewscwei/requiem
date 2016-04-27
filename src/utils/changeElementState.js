@@ -41,4 +41,4 @@ function changeElementState(element, state) {
   }
 }
 
-module.exports = changeElementState;
+export default changeElementState;

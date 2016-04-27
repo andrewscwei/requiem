@@ -177,4 +177,4 @@ class Video extends Element {
   }
 }
 
-module.exports = Video;
+export default Video;

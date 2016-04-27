@@ -48,4 +48,4 @@ function addClass(element, className) {
   }
 }
 
-module.exports = addClass;
+export default addClass;

@@ -19,7 +19,7 @@
  * @enum {number}
  * @alias module:requiem~enums.NodeState
  */
-let NodeState = {
+const NodeState = {
   /**
    * Element is instantiated but not initialized yet. This state almost never
    * persists.
@@ -59,4 +59,4 @@ let NodeState = {
   }
 };
 
-module.exports = NodeState;
+export default NodeState;

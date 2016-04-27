@@ -38,4 +38,4 @@ function getElementState(element) {
     return s;
 }
 
-module.exports = getElementState;
+export default getElementState;

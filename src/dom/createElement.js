@@ -29,4 +29,4 @@ function createElement(value) {
   return div.firstChild;
 }
 
-module.exports = createElement;
+export default createElement;

@@ -20,4 +20,4 @@ function getClassRegistry() {
   return window._classRegistry;
 }
 
-module.exports = getClassRegistry;
+export default getClassRegistry;

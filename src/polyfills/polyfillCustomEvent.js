@@ -25,4 +25,4 @@ function polyfillCustomEvent() {
   window.CustomEvent = CustomEvent;
 }
 
-module.exports = polyfillCustomEvent;
+export default polyfillCustomEvent;

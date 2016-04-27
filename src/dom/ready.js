@@ -51,4 +51,4 @@ function ready(callback) {
   return null;
 }
 
-module.exports = ready;
+export default ready;

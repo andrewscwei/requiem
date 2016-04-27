@@ -64,4 +64,4 @@ function getRect(element, reference) {
   return rect;
 }
 
-module.exports = getRect;
+export default getRect;

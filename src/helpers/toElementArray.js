@@ -8,6 +8,8 @@
 
 'use strict';
 
+import Element from '../ui/Element';
+
 /**
  * Transforms given element(s) to an element array.
  *
@@ -17,8 +19,6 @@
  * @alias module:requiem~helpers.toElementArray
  */
 function toElementArray(element, keepElement) {
-  let Element = require('../ui/Element');
-
   if (!element) return null;
 
   let elements;
@@ -43,4 +43,4 @@ function toElementArray(element, keepElement) {
   return elements;
 }
 
-module.exports = toElementArray;
+export default toElementArray;

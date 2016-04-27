@@ -43,4 +43,4 @@ function register(c, n) {
   return c;
 }
 
-module.exports = register;
+export default register;

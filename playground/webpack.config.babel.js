@@ -14,7 +14,7 @@ import webpack from 'webpack';
 const sourceDir = path.join(__dirname, 'app');
 const buildDir = path.join(__dirname, 'public');
 
-module.exports = {
+export default {
   cache: true,
   debug: true,
   devtool: 'eval-source-map',

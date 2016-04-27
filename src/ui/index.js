@@ -8,15 +8,19 @@
 
 'use strict';
 
+import Element from './Element';
+import Video from './Video';
+import Grid from './Grid';
+
 /**
  * Collection of UI related methods/classes.
  *
  * @namespace module:requiem~ui
  */
-let ui = {};
+const ui = {
+  Element: Element,
+  Video: Video,
+  Grid: Grid
+};
 
-Object.defineProperty(ui, 'Element', { value: require('./Element'),               writable: false, enumerable: true });
-Object.defineProperty(ui, 'Video',   { value: require('./Video'),                 writable: false, enumerable: true });
-Object.defineProperty(ui, 'Grid',    { value: require('./Grid'),                  writable: false, enumerable: true });
-
-module.exports = ui;
+export default ui;

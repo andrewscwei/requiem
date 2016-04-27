@@ -8,7 +8,7 @@
 
 'use strict';
 
-let assertType = require('./assertType');
+import assertType from './assertType';
 
 /**
  * Returns a function that, as long as it continues to be invoked, will not
@@ -53,4 +53,4 @@ function debounce(method, delay, leading) {
   };
 }
 
-module.exports = debounce;
+export default debounce;

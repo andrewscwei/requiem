@@ -8,7 +8,7 @@
 
 'use strict';
 
-let Directive = require('../enums/Directive');
+import Directive from '../enums/Directive';
 
 /**
  * Validates whether an attribute can be used (could be reserved by Requiem).
@@ -27,4 +27,4 @@ function validateAttribute(attribute) {
   return true;
 }
 
-module.exports = validateAttribute;
+export default validateAttribute;

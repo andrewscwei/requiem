@@ -53,4 +53,4 @@ function removeClass(element, className) {
   }
 }
 
-module.exports = removeClass;
+export default removeClass;

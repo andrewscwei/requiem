@@ -44,4 +44,4 @@ function namespace(path, scope) {
   return currentScope;
 }
 
-module.exports = namespace;
+export default namespace;

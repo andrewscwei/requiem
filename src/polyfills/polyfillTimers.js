@@ -40,4 +40,4 @@ function polyfillTimers() {
   }
 }
 
-module.exports = polyfillTimers;
+export default polyfillTimers;

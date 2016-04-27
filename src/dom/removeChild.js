@@ -8,10 +8,11 @@
 
 'use strict';
 
-import getChild from './getChild';
-import hasChild from './hasChild';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
+import Element from '../ui/Element';
+import getChild from './getChild';
+import hasChild from './hasChild';
 import noval from '../helpers/noval';
 
 /**
@@ -28,8 +29,6 @@ import noval from '../helpers/noval';
  * @return {Element|Element[]} The removed element(s).
  */
 function removeChild(child, element) {
-  let Element = require('../ui/Element');
-
   if (!assert(!noval(child, true), 'No valid child specified')) return;
   if (!assertType(element, Element, true, 'Parameter \'element\', if specified, must be an Element instance')) return;
 
@@ -113,4 +112,4 @@ function removeChild(child, element) {
   }
 }
 
-module.exports = removeChild;
+export default removeChild;

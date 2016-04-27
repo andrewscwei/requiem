@@ -32,4 +32,4 @@ function getClassIndex(element, className) {
   return classList.indexOf(className);
 }
 
-module.exports = getClassIndex;
+export default getClassIndex;

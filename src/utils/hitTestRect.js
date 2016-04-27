@@ -62,4 +62,4 @@ function hitTestRect(obj, rects) {
   }
 }
 
-module.exports = hitTestRect;
+export default hitTestRect;

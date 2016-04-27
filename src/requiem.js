@@ -1,39 +1,29 @@
-/*!
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
-
+/*! Requiem, @license MIT */
 'use strict';
 
 import assert from './helpers/assert';
-import injectModule from './helpers/injectModule';
+import dom from './dom';
+import enums from './enums';
+import events from './events';
+import net from './net';
+import ui from './ui';
+import utils from './utils';
 import polyfillCustomEvent from './polyfills/polyfillCustomEvent';
 import polyfillTimers from './polyfills/polyfillTimers';
 
 /**
  * @module requiem
  */
-let requiem = {};
-
-/**
- * @property {string} name - Module name.
- */
-Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
-
-/**
- * @property {string} version - Version number.
- */
-Object.defineProperty(requiem, 'version', { value: '0.40.3', writable: false });
-
-injectModule(requiem, 'dom',    require('./dom'));
-injectModule(requiem, 'events', require('./events'));
-injectModule(requiem, 'net',    require('./net'));
-injectModule(requiem, 'enums',  require('./enums'));
-injectModule(requiem, 'ui',     require('./ui'));
-injectModule(requiem, 'utils',  require('./utils'));
+const requiem = {
+  name: 'Requiem',
+  version: '0.40.3',
+  dom: dom,
+  enums: enums,
+  events: events,
+  net: net,
+  ui: ui,
+  utils: utils
+};
 
 polyfillCustomEvent();
 polyfillTimers();

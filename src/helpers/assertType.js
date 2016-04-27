@@ -8,8 +8,8 @@
 
 'use strict';
 
-let assert = require('./assert');
-let checkType = require('./checkType');
+import assert from './assert';
+import checkType from './checkType';
 
 /**
  * Asserts the specified condition and throws a warning if assertion fails.
@@ -61,4 +61,4 @@ function assertType(value, type, allowUndefined, message) {
   throw new Error(message || 'AssertType failed');
 }
 
-module.exports = assertType;
+export default assertType;

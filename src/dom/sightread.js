@@ -12,6 +12,7 @@ import getClassRegistry from '../dom/getClassRegistry';
 import hasChild from '../dom/hasChild';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
+import Element from '../ui/Element';
 import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
 import getControllerClassFromElement from '../helpers/getControllerClassFromElement';
 import getControllerClassNameFromElement from '../helpers/getControllerClassNameFromElement';
@@ -87,7 +88,6 @@ function sightread() {
     });
   }
   else {
-    let Element = require('../ui/Element');
     let children = null;
 
     if (!assert((element instanceof Node) || (element instanceof Element) || (document && element === document), 'Element must be an instance of an Node or the DOM itself.')) return null;
@@ -183,4 +183,4 @@ function _filterParentElements(nodeList) {
   return o;
 }
 
-module.exports = sightread;
+export default sightread;

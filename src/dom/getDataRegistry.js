@@ -20,4 +20,4 @@ function getDataRegistry() {
   return window._dataRegistry;
 }
 
-module.exports = getDataRegistry;
+export default getDataRegistry;

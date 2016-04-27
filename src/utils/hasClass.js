@@ -36,4 +36,4 @@ function hasClass(element, className) {
   return true;
 }
 
-module.exports = hasClass;
+export default hasClass;

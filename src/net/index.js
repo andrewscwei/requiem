@@ -8,13 +8,15 @@
 
 'use strict';
 
+import AssetLoader from './AssetLoader';
+
 /**
  * Collection of network related methods/classes.
  *
  * @namespace module:requiem~net
  */
-let net = {};
+const net = {
+  AssetLoader: AssetLoader
+};
 
-Object.defineProperty(net, 'AssetLoader', { value: require('./AssetLoader'), writable: false, enumerable: true });
-
-module.exports = net;
+export default net;

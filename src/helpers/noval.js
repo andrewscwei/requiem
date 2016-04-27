@@ -8,7 +8,7 @@
 
 'use strict';
 
-let assertType = require('./assertType');
+import assertType from './assertType';
 
 /**
  * Checks if a given value is equal to null. Option to specify recursion, which
@@ -56,4 +56,4 @@ function noval(value, recursive) {
   }
 }
 
-module.exports = noval;
+export default noval;

@@ -35,4 +35,4 @@ function injectModule(target, moduleName, module) {
   }
 }
 
-module.exports = injectModule;
+export default injectModule;

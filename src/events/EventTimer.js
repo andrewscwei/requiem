@@ -184,4 +184,4 @@ class EventTimer extends EventDispatcher {
   }
 }
 
-module.exports = EventTimer;
+export default EventTimer;

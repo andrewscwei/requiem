@@ -15,7 +15,7 @@
  * @enum {string}
  * @alias module:requiem~enums.EventType
  */
-let EventType = {
+const EventType = {
   DATA: {
     DATA_CHANGE: 'datachange' // Custom
   },
@@ -145,4 +145,4 @@ let EventType = {
   }
 };
 
-module.exports = EventType;
+export default EventType;

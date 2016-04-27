@@ -19,7 +19,7 @@
  * @enum {number}
  * @alias module:requiem~enums.Orientation
  */
-let Orientation = {
+const Orientation = {
   /**
    * Portrait orientation, where height > width.
    */
@@ -46,4 +46,4 @@ let Orientation = {
   }
 };
 
-module.exports = Orientation;
+export default Orientation;

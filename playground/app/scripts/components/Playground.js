@@ -1,8 +1,8 @@
 'use strict';
 
-import { Element, Video, EventType, DirtyType, utils } from 'requiem';
+import { enums, ui, utils } from 'requiem';
 
-class Playground extends Element {
+class Playground extends ui.Element {
   init() {
     let grid = this.getChild('grid');
     grid.padding = 10;

@@ -86,4 +86,4 @@ function translate3d(element, properties, constraints) {
   }
 }
 
-module.exports = translate3d;
+export default translate3d;

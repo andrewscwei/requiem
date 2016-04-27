@@ -625,4 +625,4 @@ AssetLoader.TYPE = {
   AUDIO: 'audio'
 };
 
-module.exports = AssetLoader;
+export default AssetLoader;

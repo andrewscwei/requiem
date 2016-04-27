@@ -28,4 +28,4 @@ function getViewportRect() {
   return rect;
 }
 
-module.exports = getViewportRect;
+export default getViewportRect;

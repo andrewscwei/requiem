@@ -128,4 +128,4 @@ function transform(element, properties, constraints) {
   }
 }
 
-module.exports = transform;
+export default transform;

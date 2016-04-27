@@ -10,6 +10,7 @@
 
 import sightread from './sightread';
 import Directive from '../enums/Directive';
+import Element from '../ui/Element';
 import NodeState from '../enums/NodeState';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
@@ -42,8 +43,6 @@ import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
  * @return {Element|Element[]} The added element(s).
  */
 function addChild(child, name, prepend, element) {
-  let Element = require('../ui/Element');
-
   if (!assert(child !== undefined, 'Parameter \'child\' must be specified')) return null;
   if (typeof prepend !== 'boolean') prepend = false;
   if (!assertType(element, Element, true, 'Parameter \'element\', if specified, must be an Element instance')) return null;
@@ -140,4 +139,4 @@ function addChild(child, name, prepend, element) {
   }
 }
 
-module.exports = addChild;
+export default addChild;

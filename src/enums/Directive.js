@@ -16,7 +16,7 @@
  * @alias module:requiem~enums.Directive
  * @see {@link module:requiem~dom.sightread}
  */
-let Directive = {
+const Directive = {
   /**
    * Use this directive for attaching a controller class to a DOM element.
    * Controller classes are automatically instantiated during the sightreading
@@ -45,4 +45,4 @@ let Directive = {
   PROPERTY: 'data-'
 };
 
-module.exports = Directive;
+export default Directive;

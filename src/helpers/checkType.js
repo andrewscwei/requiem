@@ -43,4 +43,4 @@ function checkType(value, type) {
   }
 }
 
-module.exports = checkType;
+export default checkType;

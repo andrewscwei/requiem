@@ -90,4 +90,4 @@ function translate(element, properties, constraints) {
   }
 }
 
-module.exports = translate;
+export default translate;

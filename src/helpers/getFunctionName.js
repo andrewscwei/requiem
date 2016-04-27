@@ -27,4 +27,4 @@ function getFunctionName(f) {
   return (name && name.length > 1) ? name[1].trim() : '';
 }
 
-module.exports = getFunctionName;
+export default getFunctionName;
