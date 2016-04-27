@@ -12,7 +12,6 @@ import assert from './helpers/assert';
 import injectModule from './helpers/injectModule';
 import polyfillCustomEvent from './polyfills/polyfillCustomEvent';
 import polyfillTimers from './polyfills/polyfillTimers';
-import { version } from '../package.json';
 
 /**
  * @module requiem
@@ -27,7 +26,7 @@ Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
 /**
  * @property {string} version - Version number.
  */
-Object.defineProperty(requiem, 'version', { value: version, writable: false });
+Object.defineProperty(requiem, 'version', { value: '0.40.3', writable: false });
 
 injectModule(requiem, 'dom',    require('./dom'));
 injectModule(requiem, 'events', require('./events'));
