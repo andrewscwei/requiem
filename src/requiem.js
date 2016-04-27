@@ -10,7 +10,9 @@
 
 import assert from './helpers/assert';
 import injectModule from './helpers/injectModule';
-import polyfill from './helpers/polyfill';
+import polyfillCustomEvent from './polyfills/polyfillCustomEvent';
+import polyfillTimers from './polyfills/polyfillTimers';
+import { version } from '../package.json';
 
 /**
  * @module requiem
@@ -25,7 +27,7 @@ Object.defineProperty(requiem, 'name', { value: 'Requiem', writable: false });
 /**
  * @property {string} version - Version number.
  */
-Object.defineProperty(requiem, 'version', { value: '0.32.0', writable: false });
+Object.defineProperty(requiem, 'version', { value: version, writable: false });
 
 injectModule(requiem, 'dom',    require('./dom'));
 injectModule(requiem, 'events', require('./events'));
@@ -34,7 +36,8 @@ injectModule(requiem, 'enums',  require('./enums'));
 injectModule(requiem, 'ui',     require('./ui'));
 injectModule(requiem, 'utils',  require('./utils'));
 
-polyfill();
+polyfillCustomEvent();
+polyfillTimers();
 
 assert(window && document, 'Requiem is a front-end web framework where \'window\' and \'document\' must be defined');
 

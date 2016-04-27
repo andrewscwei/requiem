@@ -40,9 +40,11 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.jsx?$/,
-      loaders: [
-        'babel'
-      ],
+      loader: 'babel',
+      exclude: /node_modules/
+    }, {
+      test: /\.json$/,
+      loader: 'json',
       exclude: /node_modules/
     }]
   },

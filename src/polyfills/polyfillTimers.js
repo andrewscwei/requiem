@@ -9,29 +9,14 @@
 'use strict';
 
 /**
- * Applies special polyfills to the browser window (i.e. IE happiness).
+ * Polyfill to support passing of arguments to the callback function of either
+ * setTimeout() or setInterval() in IE9 and below.
  *
- * @alias module:requiem~helpers.polyfill
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval}
+ *
+ * @alias module:requiem~polyfills.polyfillTimers
  */
-function polyfill() {
-  if (!window) return;
-
-  // Create CustomEvent class.
-  function CustomEvent ( event, params ) {
-    params = params || { bubbles: false, cancelable: false, detail: undefined };
-    let evt = document.createEvent( 'CustomEvent' );
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-    return evt;
-  }
-
-  CustomEvent.prototype = window.Event.prototype;
-
-  window.CustomEvent = CustomEvent;
-
-  // Polyfill to support passing of arguments to the callback function of either
-  // setTimeout() or setInterval() in IE9 and below.
-  //
-  // @see {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval}
+function polyfillTimers() {
   if (document.all && !window.setTimeout.isPolyfill) {
     let __nativeST__ = window.setTimeout;
     window.setTimeout = function (vCallback, nDelay /*, argumentToPass1, argumentToPass2, etc. */) {
@@ -55,4 +40,4 @@ function polyfill() {
   }
 }
 
-module.exports = polyfill;
+module.exports = polyfillTimers;
