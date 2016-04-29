@@ -14,6 +14,14 @@ import hasOwnValue from '../helpers/hasOwnValue';
 import noval from '../helpers/noval';
 import getRect from '../utils/getRect';
 
+// HACK: In Safari typeof HTMLElement === 'object'
+// @see {@link https://bugs.webkit.org/show_bug.cgi?id=74193}
+if (typeof HTMLElement !== 'function') {
+  var _HTMLElement = function(){};
+  _HTMLElement.prototype = HTMLElement.prototype;
+  HTMLElement = _HTMLElement;
+}
+
 /**
  * @class
  *

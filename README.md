@@ -6,6 +6,10 @@ Requiem is packaged with UI utilities and leverages [WebComponents](http://webco
 
 Requiem is best paired with its sister stylesheet library [Minuet](https://github.com/VARIANTE/minuet).
 
+# Polyfill
+
+If needed for cross browser support, the minimum required polyfill is [webcomponents-lite.js](http://webcomponents.org/polyfills/).
+
 # Overview
 
 Requiem leverages custom elements following the [WebComponents](http://webcomponents.org/) standard while keeping HTML markup, JavaScripts and stylesheets separate. Hence it is very easy to use your favorite preprocessor language alongside Requiem.

@@ -12,13 +12,19 @@ import polyfillCustomEvent from './polyfills/polyfillCustomEvent';
 import polyfillTimers from './polyfills/polyfillTimers';
 import polyfillClassList from './polyfills/polyfillClassList';
 
+assert(window && document, 'Requiem is a front-end web framework where \'window\' and \'document\' must be defined');
+
+polyfillCustomEvent();
+polyfillTimers();
+polyfillClassList();
+
 /**
  * @module requiem
  */
 function requiem() {
   if (requiem.initialized === false) {
     dom.sightread();
-    delete requiem.uninitialized;
+    delete requiem.initialized;
   }
 
   if (arguments.length > 0)
@@ -34,11 +40,5 @@ requiem.net = net;
 requiem.ui = ui;
 requiem.utils = utils;
 requiem.register = function() { return dom.register.apply(null, arguments); }
-
-polyfillCustomEvent();
-polyfillTimers();
-polyfillClassList();
-
-assert(window && document, 'Requiem is a front-end web framework where \'window\' and \'document\' must be defined');
 
 module.exports = requiem;

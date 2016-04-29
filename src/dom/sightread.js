@@ -43,7 +43,6 @@ function sightread(element, childRegistry) {
     let e = element.childNodes[i];
 
     if (!(e instanceof Node)) continue;
-
     if (addToChildRegistry(childRegistry, e)) {
       if (!e.getChild) {
         if (!e.__private__) e.__private__ = {};

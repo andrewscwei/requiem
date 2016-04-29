@@ -1,6 +1,6 @@
 {
   "name": "requiem",
-  "version": "0.41.3",
+  "version": "0.41.4",
   "description": "An experimental front-end JS framework.",
   "homepage": "http://VARIANTE.github.io/requiem",
   "license": "MIT",
@@ -40,6 +40,7 @@
     "rimraf": "^2.5.2",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
+    "webcomponents.js": "^0.7.22",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1"
   },

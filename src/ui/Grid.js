@@ -49,7 +49,7 @@ class Grid extends Element {
    * @type {number}
    */
   get maxWidth() {
-    let parentNode = (this.parentNode instanceof ShadowRoot) ? this.parentNode.host : this.parentNode;
+    let parentNode = this.parentNode && (this.parentNode.host || this.parentNode);
     let refPadding = parentNode ? (dom.getStyle(parentNode, 'padding-left', true, true).value + dom.getStyle(parentNode, 'padding-right', true, true).value) : 0;
     let ref = (parentNode ? getRect(parentNode).width : 0) - refPadding;
     let v1 = this.__private__.maxWidth;
@@ -84,7 +84,7 @@ class Grid extends Element {
    * @type {number}
    */
   get maxHeight() {
-    let parentNode = (this.parentNode instanceof ShadowRoot) ? this.parentNode.host : this.parentNode;
+    let parentNode = this.parentNode && (this.parentNode.host || this.parentNode);
     let refPadding = parentNode ? (dom.getStyle(parentNode, 'padding-top', true, true).value + dom.getStyle(parentNode, 'padding-bottom', true, true).value) : 0;
     let ref = (parentNode ? getRect(parentNode).height : 0) - refPadding;
     let v1 = this.__private__.maxHeight;
