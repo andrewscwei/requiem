@@ -24,13 +24,16 @@ import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
  *
  * @alias module:requiem~dom.sightread
  */
-function sightread(element) {
+function sightread(element, childRegistry) {
   if (!element || element === document) element = window;
-  if (!getChildRegistry(element)) return;
+  if (!childRegistry && !getChildRegistry(element)) return;
 
   // Clear the child registry.
-  element.__private__.childRegistry = {};
-  let childRegistry = getChildRegistry(element);
+  if (!childRegistry) {
+    element.__private__.childRegistry = {};
+    childRegistry = getChildRegistry(element);
+  }
+
   element = (element === window) ? document.body : (element.shadowRoot ? element.shadowRoot : element);
 
   assert(element, 'Element is invalid. Too early to sightread?');
@@ -46,6 +49,9 @@ function sightread(element) {
         if (!e.__private__.childRegistry) e.__private__.childRegistry = {};
         sightread(e);
       }
+    }
+    else {
+      sightread(e, childRegistry);
     }
   }
 }
