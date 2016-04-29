@@ -1,16 +1,10 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
 import Element from './Element';
-import Video from './Video';
 import Grid from './Grid';
+import register from '../dom/register';
 
 /**
  * Collection of UI related methods/classes.
@@ -19,8 +13,10 @@ import Grid from './Grid';
  */
 const ui = {
   Element: Element,
-  Video: Video,
   Grid: Grid
 };
+
+register(Element);
+register(Grid);
 
 export default ui;

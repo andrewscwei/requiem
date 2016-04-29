@@ -1,24 +1,18 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
-import assert from '../helpers/assert';
 import getIntersectRect from './getIntersectRect';
 import getRect from './getRect';
+import assert from '../helpers/assert';
 
 /**
  * Hit tests a vector or element against other elements.
  *
- * @param {Object|Node|Element} obj
- * @param {number}              obj.x
- * @param {number}              obj.y
- * @param {...(Node|Element)}   elements
+ * @param {Object|Node} obj
+ * @param {number} obj.x
+ * @param {number} obj.y
+ * @param {...Node} elements
  *
  * @return {boolean} True if test passes, false otherwise.
  *

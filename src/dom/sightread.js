@@ -1,186 +1,53 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
-import getClassRegistry from '../dom/getClassRegistry';
-import hasChild from '../dom/hasChild';
+import addToChildRegistry from './addToChildRegistry';
+import getChildRegistry from './getChildRegistry';
 import assert from '../helpers/assert';
-import assertType from '../helpers/assertType';
-import Element from '../ui/Element';
 import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
-import getControllerClassFromElement from '../helpers/getControllerClassFromElement';
-import getControllerClassNameFromElement from '../helpers/getControllerClassNameFromElement';
-import Directive from '../enums/Directive';
 
 /**
- * Crawls a DOM node and performs transformations on child nodes marked with
- * Requiem attributes, such as instantiating controller classes and assigning
- * instance names. Transformations are also applied to the specified DOM node,
- * not just its children.
+ * Crawls a DOM element that supports child registries and returns a dictionary
+ * of all identifiable child elements. The scope is bounded by the DOM element
+ * that has its own local child registry and does not crawl beyond a child that
+ * has its own local child registry. The Document will be used if no element is
+ * specified. The Document possesses the global child registry.
  *
- * @param {Node}   [element=document] - Target element for sightreading. By
- *                                      default this will be the document.
- * @param {Object} [exclusive=false]  - Specifies whether the root node should
- *                                      be excluded from the sightread.
+ * @param {Node} [element=window] - Target element for sightreading. By default
+ *                                  this will be the document.
  *
- * @return {Object|Element} Either a dictionary (object literal) containing
- *                          all instantiated Requiem Element instances (if the
- *                          target element was the entire document) or a
- *                          single Requiem Element instance representing to
- *                          the single target element.
+ * @return {Object} Dictionary (object literal) containing all identifiable
+ *                  child elements (elements with an 'id' or 'name' attribute,
+ *                  'id' being the dominant if both are present) of the target
+ *                  element.
  *
  * @alias module:requiem~dom.sightread
  */
-function sightread() {
-  let element = document;
-  let classRegistry = getClassRegistry();
-  let exclusive = false;
+function sightread(element) {
+  if (!element || element === document) element = window;
+  if (!getChildRegistry(element)) return;
 
-  if (window._children === undefined || window._children === null) window._children = {};
-  if (typeof window._children.count !== 'number') window._children.count = 0;
+  // Clear the child registry.
+  element.__private__.childRegistry = {};
+  let childRegistry = getChildRegistry(element);
+  element = (element === window) ? document.body : (element.shadowRoot ? element.shadowRoot : element);
 
-  if (arguments.length === 1) {
-    let arg = arguments[0];
-    assertType(arg, [Node, 'boolean'], true);
+  assert(element, 'Element is invalid. Too early to sightread?');
 
-    if (arg instanceof Node) {
-      element = arg;
-    }
-    else if (typeof arg === 'boolean') {
-      exclusive = arg;
-    }
-  }
-  else if (arguments.length === 2) {
-    let arg1 = arguments[0];
-    let arg2 = arguments[1];
-
-    assertType(arg1, Node, true);
-    assertType(arg2, 'boolean', true);
-
-    if (arg1 !== undefined) element = arg1;
-    if (arg2 !== undefined) exclusive = arg2;
-  }
-
-  if (element === document) exclusive = true;
-
-  if (!exclusive) {
-    let instanceName = getInstanceNameFromElement(element);
-    let ControllerClass = getControllerClassFromElement(element);
-
-    if (typeof instanceName !== 'string') {
-      instanceName = `instance${window._children.count}`;
-    }
-
-    assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(element) + '\' is not found in specified controller scope: ' + classRegistry);
-
-    window._children.count++;
-
-    return new ControllerClass({
-      element: element,
-      name: instanceName,
-      children: sightread(element, true)
-    });
-  }
-  else {
-    let children = null;
-
-    if (!assert((element instanceof Node) || (element instanceof Element) || (document && element === document), 'Element must be an instance of an Node or the DOM itself.')) return null;
-    if (element instanceof Element) element = element.element;
-
-    let nodeList = element.querySelectorAll('[' + Directive.CLASS + '], [' + Directive.INSTANCE + ']');
-    let qualifiedChildren = _filterParentElements(nodeList);
-    let n = qualifiedChildren.length;
-
-    for (let i = 0; i < n; i++) {
-      let child = qualifiedChildren[i];
-      let instanceName = getInstanceNameFromElement(child);
-      let ControllerClass = getControllerClassFromElement(child, classRegistry);
-
-      if (typeof instanceName !== 'string') {
-        instanceName = `instance${window._children.count}`;
-      }
-
-      assertType(ControllerClass, 'function', false, 'Class \'' + getControllerClassNameFromElement(child) + '\' is not found in specified controller scope: ' + classRegistry);
-
-      window._children.count++;
-
-      let m = new ControllerClass({
-        element: child,
-        name: instanceName,
-        children: sightread(child, true)
-      });
-
-      if (instanceName && instanceName.length > 0) {
-        if (!children) children = {};
-
-        if (!children[instanceName]) {
-          children[instanceName] = m;
-        }
-        else {
-          if (children[instanceName] instanceof Array) {
-            children[instanceName].push(m);
-          }
-          else {
-            let a = [children[instanceName]];
-            a.push(m);
-            children[instanceName] = a;
-          }
-        }
-      }
-    }
-
-    if (element === document) {
-      let n = window._children.count;
-      window._children = children || {};
-      window._children.count = n;
-    }
-
-    return children;
-  }
-}
-
-/**
- * Scans the provided node list and returns a new node list with only parent
- * nodes.
- *
- * @param {NodeList} nodeList - The node list.
- *
- * @return {NodeList} The filtered node list containing only parent nodes.
- *
- * @private
- * @alias module:requiem~dom._filterParentElements
- */
-function _filterParentElements(nodeList) {
-  let n = nodeList.length;
-  let o = [];
+  const n = element.childNodes.length;
 
   for (let i = 0; i < n; i++) {
-    let isParent = true;
-    let child = nodeList[i];
+    let e = element.childNodes[i];
 
-    for (let j = 0; j < n; j++) {
-      if (i === j) continue;
-
-      let parent = nodeList[j];
-
-      if (hasChild(child, parent)) {
-        isParent = false;
-        break;
+    if (addToChildRegistry(childRegistry, e)) {
+      if (!e.getChild) {
+        if (!e.__private__) e.__private__ = {};
+        if (!e.__private__.childRegistry) e.__private__.childRegistry = {};
+        sightread(e);
       }
     }
-
-    if (isParent) {
-      o.push(child);
-    }
   }
-
-  return o;
 }
 
 export default sightread;

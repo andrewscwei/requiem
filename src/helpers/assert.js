@@ -1,10 +1,4 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
@@ -12,7 +6,7 @@
  * Asserts the specified condition and throws a warning if assertion fails.
  *
  * @param {boolean} condition - Condition to validate against.
- * @param {string}  [message] - Message to be displayed when assertion fails.
+ * @param {string} [message] - Message to be displayed when assertion fails.
  *
  * @return {boolean} True if assert passed, false otherwise.
  *

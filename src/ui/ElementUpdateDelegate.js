@@ -1,17 +1,11 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
-import assert from '../helpers/assert';
-import debounce from '../helpers/debounce';
 import DirtyType from '../enums/DirtyType';
 import EventType from '../enums/EventType';
+import assert from '../helpers/assert';
+import debounce from '../helpers/debounce';
 
 /**
  * Default refresh (debounce) rate in milliseconds.
@@ -42,7 +36,36 @@ class ElementUpdateDelegate {
    * @alias module:requiem~ui.ElementUpdateDelegate
    */
   constructor(delegate) {
-    this.__define_properties();
+    /**
+     * Stores mouse properties if this ElementUpdateDelegate responds to mouse
+     * events.
+     *
+     * @property {Object}
+     */
+    Object.defineProperty(this, 'mouse', { value: {}, writable: false });
+
+    /**
+     * Stores orientation properties if this ElementUpdateDelgate responds to
+     * device orientations (i.e. device accelerometer).
+     *
+     * @property {Object}
+     */
+    Object.defineProperty(this, 'orientation', { value: {}, writable: false });
+
+    /**
+     * Stores pressed keycodes if this ElementUpdateDelegate responds to
+     * keyboard events.
+     *
+     * @property {Object}
+     */
+    Object.defineProperty(this, 'keyCode', { value: {}, writable: false });
+
+    /**
+     * Delegate of this ElementUpdateDelegate instance.
+     *
+     * @property {Element}
+     */
+    Object.defineProperty(this, 'delegate', { value: delegate, writable: false });
 
     let mDirtyTable = 0;
     let mConductorTable = {};
@@ -56,8 +79,6 @@ class ElementUpdateDelegate {
     let mKeyDownHandler = null;
     let mEnterFrameHandler = null;
 
-    this.delegate = delegate;
-
     /**
      * Custom requestAnimationFrame implementation.
      *
@@ -66,7 +87,7 @@ class ElementUpdateDelegate {
      * @private
      */
     let _requestAnimationFrame = (callback) => {
-      let raf = window && (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame) || null;
+      let raf = (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame) || null;
       if (!raf) raf = (callback) => (window.setTimeout(callback, 10.0));
       return raf(callback);
     };
@@ -79,7 +100,7 @@ class ElementUpdateDelegate {
      * @private
      */
     let _cancelAnimationFrame = function(callback) {
-      let caf = window && (window.requestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
+      let caf = (window.requestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
       if (!caf) caf = (callback) => (window.clearTimeout(callback));
       return caf;
     };
@@ -217,34 +238,6 @@ class ElementUpdateDelegate {
      * @param {number} dirtyType
      */
     this.setDirty = (dirtyType, validateNow) => {
-      if (this.transmissive !== DirtyType.NONE) {
-        if (this.delegate.children) {
-          for (let name in this.delegate.children) {
-            let children;
-
-            if (this.delegate.children[name] instanceof Array) {
-              children = this.delegate.children[name];
-            } else {
-              children = [this.delegate.children[name]];
-            }
-
-            let n = children.length;
-
-            for (let i = 0; i < n; i++) {
-              let child = children[i];
-
-              if (child.updateDelegate && child.updateDelegate.setDirty) {
-                let transmitted = dirtyType & child.updateDelegate.receptive;
-
-                if (transmitted !== DirtyType.NONE) {
-                  child.updateDelegate.setDirty(transmitted, validateNow);
-                }
-              }
-            }
-          }
-        }
-      }
-
       if (this.isDirty(dirtyType) && !validateNow) return;
 
       switch (dirtyType) {
@@ -470,69 +463,6 @@ class ElementUpdateDelegate {
         mEnterFrameHandler = window.setInterval(_onEnterFrame.bind(this), delay);
       }
     };
-  }
-
-  /**
-   * Gets the string representation of this ElementUpdateDelegate instance.
-   *
-   * @return {string}
-   */
-  toString() {
-    return '[ElementUpdateDelegate{' + ((this.delegate && this.delegate.name) || 'undefined') + '}]';
-  }
-
-  /**
-   * Defines all properties.
-   *
-   * @private
-   */
-  __define_properties() {
-    /**
-     * Delegate of this ElementUpdateDelegate instance.
-     *
-     * @property {Element}
-     */
-    this.delegate = null;
-
-    /**
-     * Indicates the dirty flags in which ElementUpdateDelgate instance will
-     * transmit to its child Elements.
-     *
-     * @property {number}
-     */
-    this.transmissive = DirtyType.NONE;
-
-    /**
-     * Indicates the dirty flags in which this ElementUpdateDelegate is capable
-     * of receiving from parent Elements.
-     *
-     * @property {number}
-     */
-    this.receptive = DirtyType.NONE;
-
-    /**
-     * Stores mouse properties if this ElementUpdateDelegate responds to mouse
-     * events.
-     *
-     * @property {Object}
-     */
-    this.mouse = {};
-
-    /**
-     * Stores orientation properties if this ElementUpdateDelgate responds to
-     * device orientations (i.e. device accelerometer).
-     *
-     * @property {Object}
-     */
-    this.orientation = {};
-
-    /**
-     * Stores pressed keycodes if this ElementUpdateDelegate responds to
-     * keyboard events.
-     *
-     * @property {Object}
-     */
-    this.keyCode = {};
   }
 }
 

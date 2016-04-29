@@ -1,10 +1,4 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
@@ -15,21 +9,16 @@ import checkType from './checkType';
  * Asserts the specified condition and throws a warning if assertion fails.
  * Internal use only.
  *
- * @param {*}            value                  - Value used for the assertion.
- * @param {String|Class} type                   - Type(s) to evaluate against.
- *                                                If this is a string, this
- *                                                method will use 'typeof'
- *                                                operator. Otherwise
- *                                                'instanceof' operator will be
- *                                                used. If this parameter is an
- *                                                array, all elements in the
- *                                                array will be evaluated
- *                                                against.
- * @param {boolean}      [allowUndefined=false] - Specifies whether assertion
- *                                                should pass if the supplied
- *                                                value is undefined.
- * @param {string}       [message]              - Message to be displayed when
- *                                                assertion fails.
+ * @param {*} value - Value used for the assertion.
+ * @param {String|Class} type - Type(s) to evaluate against. If this is a
+ *                              string, this method will use 'typeof' operator.
+ *                              Otherwise 'instanceof' operator will be used. If
+ *                              this parameter is an array, all elements in the
+ *                              array will be evaluated against.
+ * @param {boolean} [allowUndefined=false] - Specifies whether assertion should
+ *                                           pass if the supplied value is
+ *                                           undefined.
+ * @param {string} [message] - Message to be displayed when assertion fails.
  *
  * @return {boolean} True if assert passed, false otherwise.
  *

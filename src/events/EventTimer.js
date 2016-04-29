@@ -1,16 +1,10 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
+import EventDispatcher from './EventDispatcher';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
-import EventDispatcher from './EventDispatcher';
 
 /**
  * @class
@@ -92,21 +86,19 @@ class EventTimer extends EventDispatcher {
 
   /**
    * Adds an event to the EventTimer.
-   * @param {string}   id               - Unique ID of the timed event.
-   * @param {Function} func             - Callback to be invoked when event
-   *                                      triggers.
-   * @param {number}   [delay=0]        - Delay (interval) of event (in ms).
-   * @param {number}   [count=1]        - Number of times the event should
-   *                                      invoke. If set to 0, it will be
-   *                                      infinite.
-   * @param {boolean}  [overwrite=true] - Specifies whether this timed event
-   *                                      should overwrite an existing one
-   *                                      with the same name.
-   * @param {string}   [eventName]      - The event name of the custom event
-   *                                      to be dispatched.
-   * @param {*}        [...params]      - Additional parameters that are passed
-   *                                      through to the function specified by
-   *                                      'func'.
+   *
+   * @param {string} id - Unique ID of the timed event.
+   * @param {Function} func - Callback to be invoked when event triggers.
+   * @param {number} [delay=0] - Delay (interval) of event (in ms).
+   * @param {number} [count=1] - Number of times the event should invoke. If set
+   *                             to 0, it will be infinite.
+   * @param {boolean} [overwrite=true] - Specifies whether this timed event
+   *                                     should overwrite an existing one with
+   *                                     the same name.
+   * @param {string [eventName] - The event name of the custom event to be
+   *                              dispatched.
+   * @param {*} [...params] - Additional parameters that are passed through to
+   *                          the function specified by 'func'.
    */
   addEvent() {
     let id = arguments[0];

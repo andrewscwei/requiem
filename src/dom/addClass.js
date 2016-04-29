@@ -1,27 +1,20 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
-import assert from '../helpers/assert';
-import toElementArray from '../helpers/toElementArray';
 import hasClass from './hasClass';
+import assert from '../helpers/assert';
 
 /**
  * Adds class(es) to DOM element(s).
  *
- * @param {Node|Node[]|Element|Element[]} element
- * @param {string|string[]}               className
+ * @param {Node|Node[]} element - Target element(s).
+ * @param {string|string[]} className - Class(es) to add.
  *
- * @alias module:requiem~utils.addClass
+ * @alias module:requiem~dom.addClass
  */
 function addClass(element, className) {
-  let elements = toElementArray(element);
+  let elements = [].concat(element);
   let classes = [];
   let n = elements.length;
 

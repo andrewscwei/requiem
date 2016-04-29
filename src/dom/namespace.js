@@ -1,10 +1,4 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
@@ -14,8 +8,7 @@ import assertType from '../helpers/assertType';
  * Generates a nested namespace in the specified scope, as described by the dot-
  * notated namespace path.
  *
- * @param {string}        [path]            - Namespace path with keywords
- *                                            separated by dots.
+ * @param {string} [path] - Namespace path with keywords separated by dots.
  * @param {Object|window} [scope=window|{}] - Scope/object to create the nested
  *                                            namespace in. If browser
  *                                            environment is detected, this

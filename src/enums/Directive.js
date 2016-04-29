@@ -1,10 +1,4 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
@@ -18,21 +12,9 @@
  */
 const Directive = {
   /**
-   * Use this directive for attaching a controller class to a DOM element.
-   * Controller classes are automatically instantiated during the sightreading
-   * process.
-   */
-  CLASS: 'data-class',
-
-  /**
-   * Use this directive for assigning an instance name to a DOM element.
-   */
-  INSTANCE: 'data-instance',
-
-  /**
    * Use this directive for managing DOM element states.
    */
-  STATE: 'data-state',
+  STATE: 'state',
 
   /**
    * Use this directive for referencing global shared data.
@@ -42,7 +24,7 @@ const Directive = {
   /**
    * Use this directive to map any property from the DOM to the controller.
    */
-  PROPERTY: 'data-'
+  DATA: 'data-'
 };
 
 export default Directive;

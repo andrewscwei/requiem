@@ -1,10 +1,4 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
@@ -82,9 +76,14 @@ const DirtyType = {
   FRAME: 1 << 11,
 
   /**
+   * Indicates that UI element should rerender.
+   */
+  RENDER: 1 << 12,
+
+  /**
    * Custom type used as a base for creating new types.
    */
-  CUSTOM: 1 << 12,
+  CUSTOM: 1 << 13,
 
   /**
    * Indicates that everything has changed in the UI.
@@ -119,8 +118,9 @@ const DirtyType = {
         case DirtyType.CONFIG: o += 'CONFIG'; break;
         case DirtyType.STYLE: o += 'STYLE'; break;
         case DirtyType.INPUT: o += 'INPUT'; break;
-        case DirtyType.FRAME: o += 'FRAME'; break;
         case DirtyType.ORIENTATION: o += 'ORIENTATION'; break;
+        case DirtyType.FRAME: o += 'FRAME'; break;
+        case DirtyType.RENDER: o += 'RENDER'; break;
         default: o += String(1<<i);
       }
     }

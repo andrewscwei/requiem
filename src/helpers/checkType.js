@@ -1,10 +1,4 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
@@ -27,13 +21,10 @@ function checkType(value, type) {
       case 'boolean':
       case 'function':
         return typeof value === type;
-
       case 'class':
         return typeof value === 'function';
-
       case 'array':
         return value.constructor === Array;
-
       default:
         return false;
     }

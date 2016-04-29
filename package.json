@@ -1,18 +1,19 @@
 {
   "name": "requiem",
-  "version": "0.40.3",
+  "version": "0.41.0",
   "description": "An experimental front-end JS framework.",
   "homepage": "http://VARIANTE.github.io/requiem",
   "license": "MIT",
   "main": "dist/requiem.js",
   "scripts": {
+    "start": "npm run build",
+    "test": "mocha tests --recursive --reporter spec --compilers js:babel-register",
     "clean": "rimraf dist && rimraf lib",
     "build": "npm run clean && babel -D src/ --out-dir lib/ && npm run build:dev && npm run build:prod",
     "build:dev": "NODE_ENV=development webpack --colors --profile --config ./webpack.config.babel.js --display-error-details",
     "build:prod": "NODE_ENV=production webpack --colors --profile --config ./webpack.config.babel.js --display-error-details",
     "docs": "rimraf docs && jsdoc src -r -R README.md -c .docconfig",
-    "play": "npm run clean && ENABLE_SOURCEMAPS=true npm run build:dev -- --watch & rimraf playground/public && jade -O \"{basedir:'playground/app/templates'}\" -P -w -o playground/public playground/app/templates/index.jade & webpack-dev-server --progress --inline --hot --config playground/webpack.config.babel.js --content-base playground/public --port 8080",
-    "test": "npm run build"
+    "play": "npm run clean && ENABLE_SOURCEMAPS=true npm run build:dev -- --watch & rimraf playground/public && jade -O \"{basedir:'playground/app/templates'}\" -P -w -o playground/public playground/app/templates/index.jade & webpack-dev-server --progress --inline --hot --config playground/webpack.config.babel.js --content-base playground/public --port 8080"
   },
   "authors": [
     "Andrew Wei <andrew@variante.io>"
@@ -27,6 +28,7 @@
     "babel-core": "^6.7.7",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.6.0",
+    "babel-register": "^6.7.2",
     "css-loader": "^0.23.1",
     "html-loader": "^0.4.3",
     "jade": "^1.11.0",
@@ -34,6 +36,7 @@
     "jsdoc": "^3.4.0",
     "json-loader": "^0.5.4",
     "minuet": "^0.5.0",
+    "mocha": "^2.4.5",
     "rimraf": "^2.5.2",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
@@ -45,7 +48,7 @@
     "lib"
   ],
   "engines": {
-    "node": "5.6.0",
-    "npm": "3.7.2"
-  }
+    "node": "5.5.0"
+  },
+  "dependencies": {}
 }

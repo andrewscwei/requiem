@@ -1,91 +1,79 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
 import assert from '../helpers/assert';
-import toElementArray from '../helpers/toElementArray';
 
 /**
  * Translates a DOM element.
  *
- * @param {Node|Node[]|Element|Element[]} element - Element(s) to perform the
- *                                                  translate on.
- * @param {Object} [properties] - Translation properties. (if unspecified, all
- *                                translation values will be reset to 'initial').
- * @param {number} [properties.top] - Top translation value.
- * @param {number} [properties.right] - Right translation value.
- * @param {number} [properties.bottom] - Bottom translation value.
- * @param {number} [properties.left] - Left translation value.
- * @param {number} [properties.units='px'] - Unit of translation value.
+ * @param {Node|Node[]} element - Element(s) to perform the 3D translation.
+ * @param {Object} [properties] - Translation properties (if unspecified, all
+ *                                translation coordinates will be reset to 0).
+ * @param {number} [properties.x] - X-coordinate.
+ * @param {number} [properties.y] - Y-coordinate.
+ * @param {number} [properties.z] - Z-coordinate.
+ * @param {string} [properties.units='px'] - Unit of translations.
  * @param {Object} [constraints] - Translation constraints.
- * @param {number} [constraints.top] - Bounded top translation value.
- * @param {number} [constraints.right] - Bounded right translation value.
- * @param {number} [constraints.bottom] - Bounded bottom translation value.
- * @param {number} [constraints.left] - Bounded left translation value.
+ * @param {number} [constraints.x] - Bounded x-coordinate.
+ * @param {number} [constraints.y] - Bounded y-coordinate.
+ * @param {number} [constraints.z] - Bounded z-coordinate.
  *
  * @return {Object} Translated properties.
  *
  * @alias module:requiem~utils.translate
  */
 function translate(element, properties, constraints) {
-  let elements = toElementArray(element);
+  let elements = [].concat(element);
   let n = elements.length;
 
   if (properties) {
-    if (!assert((properties.top === undefined) || !isNaN(properties.top), 'Top property must be a number.')) return null;
-    if (!assert((properties.right === undefined) || !isNaN(properties.right), 'Right property must be a number.')) return null;
-    if (!assert((properties.bottom === undefined) || !isNaN(properties.bottom), 'Bottom property must be a number.')) return null;
-    if (!assert((properties.left === undefined) || !isNaN(properties.left), 'Left property must be a number.')) return null;
+    if (!assert(properties.x === undefined || !isNaN(properties.x), 'X property must be a number.')) return null;
+    if (!assert(properties.y === undefined || !isNaN(properties.y), 'Y property must be a number.')) return null;
+    if (!assert(properties.z === undefined || !isNaN(properties.z), 'Z property must be a number.')) return null;
 
     let units = properties.units || 'px';
 
     if (constraints) {
-      if (!assert((constraints.top === undefined) || !isNaN(constraints.top), 'Top constraint must be a number.')) return null;
-      if (!assert((constraints.right === undefined) || !isNaN(constraints.right), 'Right constraint must be a number.')) return null;
-      if (!assert((constraints.bottom === undefined) || !isNaN(constraints.bottom), 'Bottom constraint must be a number.')) return null;
-      if (!assert((constraints.left === undefined) || !isNaN(constraints.left), 'Left constraint must be a number.')) return null;
+      if (!assert(constraints.x === undefined || !isNaN(constraints.x), 'X constraint must be a number.')) return null;
+      if (!assert(constraints.y === undefined || !isNaN(constraints.y), 'Y constraint must be a number.')) return null;
+      if (!assert(constraints.z === undefined || !isNaN(constraints.z), 'Z constraint must be a number.')) return null;
     }
 
-    let top = (constraints && (constraints.top !== undefined)) ? Math.min(properties.top, constraints.top) : properties.top;
-    let right = (constraints && (constraints.right !== undefined)) ? Math.min(properties.right, constraints.right) : properties.right;
-    let bottom = (constraints && (constraints.bottom !== undefined)) ? Math.min(properties.bottom, constraints.bottom) : properties.bottom;
-    let left = (constraints && (constraints.left !== undefined)) ? Math.min(properties.left, constraints.left) : properties.left;
+    let x = (constraints && (constraints.x !== undefined)) ? Math.min(properties.x, constraints.x) : properties.x;
+    let y = (constraints && (constraints.y !== undefined)) ? Math.min(properties.y, constraints.y) : properties.y;
+    let z = (constraints && (constraints.z !== undefined)) ? Math.min(properties.z, constraints.z) : properties.z;
+
+    let translateX = (properties.x !== undefined) ? 'translateX(' + x + units + ')' : null;
+    let translateY = (properties.y !== undefined) ? 'translateY(' + y + units + ')' : null;
+    let translateZ = (properties.z !== undefined) ? 'translateZ(' + z + units + ')' : null;
+    let transforms = '';
+
+    if (translateX) transforms += (transforms === '') ? translateX : ' ' + translateX;
+    if (translateY) transforms += (transforms === '') ? translateY : ' ' + translateY;
+    if (translateZ) transforms += (transforms === '') ? translateZ : ' ' + translateZ;
 
     for (let i = 0; i < n; i++) {
-      if (properties.top !== undefined) elements[i].style.top = String(top) + units;
-      if (properties.right !== undefined) elements[i].style.right = String(right) + units;
-      if (properties.bottom !== undefined) elements[i].style.bottom = String(bottom) + units;
-      if (properties.left !== undefined) elements[i].style.left = String(left) + units;
+      elements[i].style.transform = transforms;
     }
 
     let t = {};
 
-    if (properties.top !== undefined) t.top = top;
-    if (properties.right !== undefined) t.right = right;
-    if (properties.bottom !== undefined) t.bottom = bottom;
-    if (properties.left !== undefined) t.left = left;
+    if (translateX) t.x = x;
+    if (translateY) t.y = y;
+    if (translateZ) t.z = z;
 
     return t;
   }
   else {
     for (let j = 0; j < n; j++) {
-      elements[j].style.top = 'initial';
-      elements[j].style.right = 'initial';
-      elements[j].style.bottom = 'initial';
-      elements[j].style.left = 'initial';
+      elements[j].style.transform = 'translateX(0) translateY(0) translateZ(0)';
     }
 
     return {
-      top: 'initial',
-      right: 'initial',
-      bottom: 'initial',
-      left: 'initial'
+      x: 0,
+      y: 0,
+      z: 0
     };
   }
 }

@@ -1,26 +1,20 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
 import assertType from './assertType';
 
 /**
- * Returns a function that, as long as it continues to be invoked, will not
- * be triggered. The function will be called after it stops being called for
- * N milliseconds. If 'leading' is passed, the function will be triggered on
- * the leading edge instead of the trailing.
+ * Returns a function that, as long as it continues to be invoked, will not be
+ * triggered. The function will be called after it stops being called for N
+ * milliseconds. If 'leading' is passed, the function will be triggered on the
+ * leading edge instead of the trailing.
  *
- * @param {Function} method          - Method to be debounced.
- * @param {number}   [delay=0]       - Debounce rate in milliseconds.
- * @param {boolean}  [leading=false] - Indicates whether the method is triggered
- *                                     on the leading edge instead of the
- *                                     trailing.
+ * @param {Function} method - Method to be debounced.
+ * @param {number} [delay=0] - Debounce rate in milliseconds.
+ * @param {boolean} [leading=false] - Indicates whether the method is triggered
+ *                                    on the leading edge instead of the
+ *                                    trailing.
  *
  * @return {Function} The debounced method.
  *

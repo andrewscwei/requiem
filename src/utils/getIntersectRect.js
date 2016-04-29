@@ -1,29 +1,21 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
-import assert from '../helpers/assert';
 import getRect from './getRect';
+import assert from '../helpers/assert';
 
 /**
  * Computes the intersecting rect of 2 given elements. If only 1 element is
  * specified, the other element will default to the current viewport.
  *
- * @param {...Node|...Element}
+ * @param {...Node}
  *
  * @return {Object} Object containing width, height.
  *
  * @alias module:requiem~utils.getIntersectRect
  */
 function getIntersectRect() {
-  if (!assert(window, 'This method relies on the window object, which is undefined.')) return null;
-
   let n = arguments.length;
 
   if (!assert(n > 0, 'This method requires at least 1 argument specified.')) return null;

@@ -1,9 +1,12 @@
 'use strict';
 
-import { ui } from 'requiem';
+import { enums, dom, ui } from 'requiem';
 
 class Foo extends ui.Element {
+  static get tag() { return 'foo'; }
+
   init() {
+    this.respondsTo(10.0, enums.EventType.OBJECT.RESIZE);
     super.init();
   }
 
@@ -11,8 +14,8 @@ class Foo extends ui.Element {
     super.update();
   }
 
-  render() {
-    return require('templates/components/foo.jade')();
+  template(data) {
+    return require('templates/components/foo.jade')(data);
   }
 }
 

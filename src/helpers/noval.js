@@ -1,10 +1,4 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
@@ -15,10 +9,10 @@ import assertType from './assertType';
  * would further evaluate inner elements, such as when an Array or Object is
  * specified.
  *
- * @param {*}       value              - Value to evaluate.
- * @param {boolean} [recursive=false]  - Specifies whether to recursively
- *                                       evaluate the supplied value's inner
- *                                       values (i.e. an Array or Object).
+ * @param {*} value - Value to evaluate.
+ * @param {boolean} [recursive=false] - Specifies whether to recursively
+ *                                      evaluate the supplied value's inner
+ *                                      values (i.e. an Array or Object).
  *
  * @return {boolean} True if null, false otherwise.
  *

@@ -1,14 +1,8 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
-import Directive from '../enums/Directive';
+import getAttribute from '../dom/getAttribute';
 
 /**
  * Gets the instance name from a DOM element.
@@ -20,8 +14,16 @@ import Directive from '../enums/Directive';
  * @alias module:requiem~helpers.getInstanceNameFromElement
  */
 function getInstanceNameFromElement(element) {
-  let name = element.getAttribute(Directive.INSTANCE);
-  return name;
+  let nameFromId = getAttribute(element, 'id');
+  let nameFromName = getAttribute(element, 'name');
+
+  if (nameFromId !== null && nameFromId !== undefined && nameFromId !== '')
+    return nameFromId;
+  else if (nameFromName !== null && nameFromName !== undefined && nameFromName !== '')
+    return nameFromName;
+  else
+    return null;
 }
 
 export default getInstanceNameFromElement;
+

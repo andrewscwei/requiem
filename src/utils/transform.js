@@ -1,22 +1,14 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
-import assert from '../helpers/assert';
-import toElementArray from '../helpers/toElementArray';
 import getRect from './getRect';
+import assert from '../helpers/assert';
 
 /**
  * Transforms a DOM element.
  *
- * @param {Node|Node[]|Element|Element[]} element - Element(s) to perform the
- *                                                  transform on.
+ * @param {Node|Node[]} element - Element(s) to perform the transform on.
  * @param {Object} [properties] - Transformation properties. (If unspecified,
  *                                all transformation styles will be reset to
  *                                'initial').
@@ -37,7 +29,7 @@ import getRect from './getRect';
  * @alias module:requiem~utils.transform
  */
 function transform(element, properties, constraints) {
-  let elements = toElementArray(element);
+  let elements = [].concat(element);
   let n = elements.length;
 
   if (properties) {

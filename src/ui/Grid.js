@@ -1,13 +1,14 @@
 // © Grubbb
 
-import getRect from '../utils/getRect';
-import translate3d from '../utils/translate3d';
-import transform from '../utils/transform';
 import Element from './Element';
+import dom from '../dom';
 import DirtyType from '../enums/DirtyType';
 import EventType from '../enums/EventType';
 import Orientation from '../enums/Orientation';
 import assertType from '../helpers/assertType';
+import getRect from '../utils/getRect';
+import transform from '../utils/transform';
+import translate from '../utils/translate';
 
 /**
  * @class
@@ -17,15 +18,18 @@ import assertType from '../helpers/assertType';
  * @alias module:requiem~ui.Grid
  */
 class Grid extends Element {
+  /** @inheritdoc */
+  static get tag() { return 'r-grid'; }
+
   /**
-   * Uniform padding between each grid item. This padding can be defined as
-   * a member or a DOM attribute, prioritized respectively.
+   * Uniform padding between each grid item. This padding can be defined as a
+   * member or a DOM attribute, prioritized respectively.
    *
    * @type {number}
    */
   get padding() {
     let v1 = this.__private__.padding;
-    let v2 = this.getProperty('padding');
+    let v2 = this.getData('padding');
     if (!isNaN(v1)) return v1;
     if (!isNaN(v2)) return v2;
     return 0;
@@ -45,11 +49,12 @@ class Grid extends Element {
    * @type {number}
    */
   get maxWidth() {
-    let refPadding = Element.getStyle(this.element.parentNode, 'padding-left', true, true).value + Element.getStyle(this.element.parentNode, 'padding-right', true, true).value;
-    let ref = getRect(this.element.parentNode).width - refPadding;
+    let parentNode = (this.parentNode instanceof ShadowRoot) ? this.parentNode.host : this.parentNode;
+    let refPadding = parentNode ? (dom.getStyle(parentNode, 'padding-left', true, true).value + dom.getStyle(parentNode, 'padding-right', true, true).value) : 0;
+    let ref = (parentNode ? getRect(parentNode).width : 0) - refPadding;
     let v1 = this.__private__.maxWidth;
     let v2 = this.getStyle('max-width', true);
-    let v3 = this.getProperty('maxWidth');
+    let v3 = this.getData('maxWidth');
     let v;
 
     if (v3 !== null && v3 !== undefined) v = v3;
@@ -79,10 +84,12 @@ class Grid extends Element {
    * @type {number}
    */
   get maxHeight() {
-    let ref = getRect(this.element.parentNode).height;
+    let parentNode = (this.parentNode instanceof ShadowRoot) ? this.parentNode.host : this.parentNode;
+    let refPadding = parentNode ? (dom.getStyle(parentNode, 'padding-top', true, true).value + dom.getStyle(parentNode, 'padding-bottom', true, true).value) : 0;
+    let ref = (parentNode ? getRect(parentNode).height : 0) - refPadding;
     let v1 = this.__private__.maxHeight;
     let v2 = this.getStyle('max-height', true);
-    let v3 = this.getProperty('maxHeight');
+    let v3 = this.getData('maxHeight');
     let v;
 
     if (v3 !== null && v3 !== undefined) v = v3;
@@ -113,7 +120,7 @@ class Grid extends Element {
    */
   get orientation() {
     let v1 = this.__private__.orientation;
-    let v2 = this.getProperty('orientation');
+    let v2 = this.getData('orientation');
 
     if (!isNaN(v1)) return v1;
     if (!isNaN(v2)) return v2;
@@ -146,10 +153,7 @@ class Grid extends Element {
    * @readonly
    */
   get items() {
-    let children = this.getChild('item');
-    if (children instanceof Array) return children;
-    if (children instanceof Element) return [children];
-    return null;
+    return [].concat(this.getChild('item'));
   }
 
   /**
@@ -161,7 +165,7 @@ class Grid extends Element {
    */
   get itemWidth() {
     let v1 = this.__private__.itemWidth;
-    let v2 = this.getProperty('itemWidth');
+    let v2 = this.getData('itemWidth');
 
     if (!isNaN(v1)) return v1;
     if (!isNaN(v2)) return v2;
@@ -191,7 +195,7 @@ class Grid extends Element {
    */
   get itemHeight() {
     let v1 = this.__private__.itemHeight;
-    let v2 = this.getProperty('itemHeight');
+    let v2 = this.getData('itemHeight');
 
     if (!isNaN(v1)) return v1;
     if (!isNaN(v2)) return v2;
@@ -219,7 +223,7 @@ class Grid extends Element {
    */
   get autoResize() {
     let v1 = this.__private__.autoResize;
-    let v2 = this.getProperty('autoResize');
+    let v2 = this.getData('autoResize');
     let v;
 
     if (v1 !== null && v1 !== undefined) {
@@ -246,7 +250,6 @@ class Grid extends Element {
   /** @inheritdoc */
   init() {
     this.respondsTo(10.0, EventType.OBJECT.RESIZE);
-
     super.init();
   }
 
@@ -282,8 +285,8 @@ class Grid extends Element {
 
       if (!slot) continue;
 
-      item.setStyle('position', 'absolute');
-      translate3d(item, { x: slot.x, y: slot.y });
+      dom.setStyle(item, 'position', 'absolute');
+      translate(item, { x: slot.x, y: slot.y });
 
       let rect = getRect(item);
 
@@ -303,7 +306,7 @@ class Grid extends Element {
       }
     }
 
-    transform(this, { width: w, height: h });
+    transform(this, { width: isNaN(w) ? 0 : w, height: isNaN(h) ? 0 : h });
   }
 
   /**
@@ -317,7 +320,7 @@ class Grid extends Element {
    * @private
    */
   __computeItemPosition(item, vacancies) {
-    let rect = item.rect;
+    let rect = getRect(item);
     let slot = null;
     let index = -1;
     let n = vacancies.length;

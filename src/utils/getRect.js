@@ -1,22 +1,15 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
-import assert from '../helpers/assert';
-import toElementArray from '../helpers/toElementArray';
 import getViewportRect from './getViewportRect';
+import assert from '../helpers/assert';
 
 /**
  * Gets the rect of a given element or the overall rect of an array of elements.
  *
- * @param {Node|Node[]|Element|Element[]} element
- * @param {Object}                        [reference=window]
+ * @param {Node|Node[]} element
+ * @param {Object} [reference=window]
  *
  * @return {Object} Object containing top, left, bottom, right, width, height.
  *
@@ -27,7 +20,7 @@ function getRect(element, reference) {
 
   if (!reference) reference = window;
 
-  let elements = toElementArray(element);
+  let elements = [].concat(element);
   let n = elements.length;
 
   if (n <= 0) return null;

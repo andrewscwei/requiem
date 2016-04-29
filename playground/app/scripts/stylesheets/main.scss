@@ -1,13 +1,14 @@
 @import '~minuet/lib/sass/minuet';
 
-.playground {
+playground-element, [is='playground-element'] {
   @include display('box>', top center);
   width: 100%;
   height: auto;
   padding: 50px;
 
-  @include instance('grid') {
-    & > div {
+  r-grid {
+    line-height: 50px;
+    div {
       width: 300px;
       height: 200px;
       background-color: #ccc;

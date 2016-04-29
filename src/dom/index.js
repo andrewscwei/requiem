@@ -1,23 +1,33 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
 import addChild from './addChild';
-import createElement from './createElement';
+import removeChild from './removeChild';
 import getChild from './getChild';
-import getClassRegistry from './getClassRegistry';
-import getDataRegistry from './getDataRegistry';
 import hasChild from './hasChild';
+import addClass from './addClass';
+import removeClass from './removeClass';
+import hasClass from './hasClass';
+import getClassIndex from './getClassIndex';
+import getAttribute from './getAttribute';
+import setAttribute from './setAttribute';
+import hasAttribute from './hasAttribute';
+import getStyle from './getStyle';
+import setStyle from './setStyle';
+import hasStyle from './hasStyle';
+import getState from './getState';
+import setState from './setState';
 import namespace from './namespace';
+import createElement from './createElement';
+import getElementRegistry from './getElementRegistry';
+import getDataRegistry from './getDataRegistry';
+import setDataRegistry from './setDataRegistry';
+import getChildRegistry from './getChildRegistry';
+import addToChildRegistry from './addToChildRegistry';
+import removeFromChildRegistry from './removeFromChildRegistry';
 import ready from './ready';
 import register from './register';
-import removeChild from './removeChild';
 import sightread from './sightread';
 
 /**
@@ -27,15 +37,31 @@ import sightread from './sightread';
  */
 const dom = {
   addChild: addChild,
-  createElement: createElement,
+  removeChild: removeChild,
   getChild: getChild,
-  getClassRegistry: getClassRegistry,
-  getDataRegistry: getDataRegistry,
   hasChild: hasChild,
+  addClass: addClass,
+  removeClass: removeClass,
+  hasClass: hasClass,
+  getClassIndex: getClassIndex,
+  getAttribute: getAttribute,
+  setAttribute: setAttribute,
+  hasAttribute: hasAttribute,
+  getStyle: getStyle,
+  setStyle: setStyle,
+  hasStyle: hasStyle,
+  getState: getState,
+  setState: setState,
+  createElement: createElement,
+  getElementRegistry: getElementRegistry,
+  getDataRegistry: getDataRegistry,
+  setDataRegistry: setDataRegistry,
+  getChildRegistry: getChildRegistry,
+  addToChildRegistry: addToChildRegistry,
+  removeFromChildRegistry: removeFromChildRegistry,
   namespace: namespace,
   ready: ready,
   register: register,
-  removeChild: removeChild,
   sightread: sightread
 };
 

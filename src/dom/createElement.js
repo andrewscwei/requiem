@@ -1,13 +1,8 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) VARIANTE
 
 'use strict';
 
+import getElementRegistry from './getElementRegistry';
 import assertType from '../helpers/assertType';
 
 /**
@@ -24,9 +19,16 @@ function createElement(value) {
 
   assertType(value, 'string', true, 'Value must be a string');
 
-  let div = document.createElement('div');
-  div.innerHTML = value;
-  return div.firstChild;
+  if (value.match(/^([a-z0-9]+-)+[a-z0-9]+$/)) {
+    console.log('foo');
+    return new (getElementRegistry(value))();
+  }
+  else {
+    let div = document.createElement('div');
+    if (value.indexOf('<') !== 0 && value.indexOf('>') !== (value.length - 1)) value = `<${value}>`;
+    div.innerHTML = value;
+    return div.firstChild;
+  }
 }
 
 export default createElement;
