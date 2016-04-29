@@ -14,12 +14,9 @@ import getAttribute from '../dom/getAttribute';
  * @alias module:requiem~helpers.getInstanceNameFromElement
  */
 function getInstanceNameFromElement(element) {
-  let nameFromId = getAttribute(element, 'id');
   let nameFromName = getAttribute(element, 'name');
 
-  if (nameFromId !== null && nameFromId !== undefined && nameFromId !== '')
-    return nameFromId;
-  else if (nameFromName !== null && nameFromName !== undefined && nameFromName !== '')
+  if (nameFromName !== null && nameFromName !== undefined && nameFromName !== '')
     return nameFromName;
   else
     return null;
