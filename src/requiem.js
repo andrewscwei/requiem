@@ -33,7 +33,7 @@ requiem.events = events;
 requiem.net = net;
 requiem.ui = ui;
 requiem.utils = utils;
-requiem.register = () => { return dom.register.apply(this, arguments); }
+requiem.register = function() { return dom.register.apply(null, arguments); }
 
 polyfillCustomEvent();
 polyfillTimers();
