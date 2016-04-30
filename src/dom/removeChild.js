@@ -5,27 +5,41 @@
 import getChild from './getChild';
 import getChildRegistry from './getChildRegistry';
 import removeFromChildRegistry from './removeFromChildRegistry';
+import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
 import noval from '../helpers/noval';
 
 /**
  * Removes a child element(s) from an element.
  *
+ * @param {Node} [element] - Specifies the parent Node to remove the child from.
  * @param {Node|Array|string} child - Child/children to be removed. This can be
  *                                    a Node or array. It can also be a string
  *                                    namespace of the target child/children.
- * @param {Node} [element] - Specifies the parent Node to remove the child from.
  *
  * @alias module:requiem~dom.removeChild
  */
-function removeChild(child, element) {
+function removeChild() {
+  assert((arguments.length > 0) && (arguments.length < 3), 'removeChild() expects either 1 or 2 arguments');
+
+  let element = undefined;
+  let child = undefined;
+
+  if (arguments.length === 1) {
+    child = arguments[0];
+  }
+  else {
+    element = arguments[0];
+    child = arguments[1];
+  }
+
   assertType(element, Node, true, 'Parameter \'element\', if specified, must be a Node');
 
   let childRegistry = getChildRegistry(element);
 
   // If child is a string, treat each entry separated by '.' as a child name.
   if (typeof child === 'string') {
-    return removeChild(getChild(child, true, element), element);
+    return removeChild(element, getChild(element, child, true));
   }
   // If child is an array, remove each element inside recursively.
   else if ((child instanceof Array)) {
@@ -34,7 +48,7 @@ function removeChild(child, element) {
     // 'child' here is a direct reference to the corresponding key in this
     // element's child registry.
     while (child.length > 0) {
-      let c = removeChild(child[0], element);
+      let c = removeChild(element, child[0]);
       if (c)
         a.push(c);
       else

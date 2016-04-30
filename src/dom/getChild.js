@@ -10,19 +10,41 @@ import noval from '../helpers/noval';
  * Gets the a child from the global display tree consisting of all sightread
  * Element instances.
  *
+ * @param {Element} [element] - Specifies the parent Element instance to fetch
+ *                              the child from.
  * @param {string} [name] - Name of the child, depth separated by '.' (i.e.
  *                          'foo.bar'). If unspecified, the entire child list of
  *                          this Element will be returned.
  * @param {boolean} [recursive=true] - Speciifies whether to search for the
  *                                     child recursively down the tree.
- * @param {Element} [element] - Specifies the parent Element instance to fetch
- *                              the child from.
  *
  * @return {Element|Array|Object}
  *
  * @alias module:requiem~dom.getChild
  */
-function getChild(name, recursive, element) {
+function getChild() {
+  let element = undefined;
+  let name = undefined;
+  let recursive = undefined;
+
+  let arg1 = arguments[0];
+  if ((arg1 === window) || (arg1 === document) || (arg1 instanceof Node) || (arg1 === null) || (arg1 === undefined))
+    element = arg1;
+  else if (typeof arg1 === 'string')
+    name = arg1;
+  else if (typeof arg1 === 'boolean')
+    recursive = arg1;
+
+  let arg2 = arguments[1];
+  if ((name === undefined) && ((typeof arg2 === 'string') || (arg2 === null) || (arg2 === undefined)))
+    name = arg2;
+  else if ((recursive === undefined) && (typeof arg2 === 'boolean'))
+    recursive = arg2;
+
+  let arg3 = arguments[2];
+  if ((recursive === undefined) && (typeof arg3 === 'boolean'))
+    recursive = arg3;
+
   if (!assertType(name, 'string', true, 'Child name must be string')) return null;
   if (!assertType(recursive, 'boolean', true, 'Parameter \'recursive\', if specified, must be a boolean')) return null;
 
@@ -42,12 +64,12 @@ function getChild(name, recursive, element) {
       let n = child.length;
 
       for (let i = 0; i < n; i++)
-        children.push(getChild(targets.join('.'), recursive, child[i]));
+        children.push(child[i], getChild(targets.join('.'), recursive));
 
       return (noval(children, true) ? null : children);
     }
     else {
-      return getChild(targets.join('.'), recursive, child);
+      return getChild(child, targets.join('.'), recursive);
     }
   }
   else {

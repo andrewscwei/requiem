@@ -26,9 +26,7 @@ function requiem() {
     dom.sightread();
     delete requiem.initialized;
   }
-
-  if (arguments.length > 0)
-    return dom.register.apply(null, arguments);
+  if (arguments.length > 0) return dom.register.apply(null, arguments);
 }
 
 requiem.initialized = false;

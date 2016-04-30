@@ -337,7 +337,7 @@ class Element extends HTMLElement {
   respondsTo() { this.updateDelegate.initResponsiveness.apply(this.updateDelegate, arguments); }
 
   /** @see module:requiem~dom.addChild */
-  addChild(child, name, prepend) { return dom.addChild(child, name, prepend, this); }
+  addChild(child, name, prepend) { return dom.addChild(this, child, name, prepend); }
 
   /** @see module:requiem~dom.removeChild */
   removeChild(child) {
@@ -346,12 +346,12 @@ class Element extends HTMLElement {
       return super.removeChild(child);
     }
     else {
-      return dom.removeChild(child, this);
+      return dom.removeChild(this, child);
     }
   }
 
   /** @see module:requiem~dom.getChild */
-  getChild(name, recursive) { return dom.getChild(name, recursive, this); }
+  getChild(name, recursive) { return dom.getChild(this, name, recursive); }
 
   /** @see module:requiem~dom.hasChild */
   hasChild(child) { return dom.hasChild(child, this); }

@@ -13,4 +13,4 @@ requireAll(require.context('stylesheets', false, /^\.\//));
 const req = require.context('./', true, /^((?!enums)(?!main).)*.js$/);
 req.keys().forEach((path) => requiem(req(path).default));
 
-// if (module.hot) module.hot.accept();
+if (module.hot) module.hot.accept();

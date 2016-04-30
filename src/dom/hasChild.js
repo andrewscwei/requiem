@@ -24,7 +24,7 @@ function hasChild(child, element) {
   assertType(element, Node, true, 'Parameter \'element\', if specified, must be a Node');
 
   if (typeof child === 'string') {
-    return !noval(getChild(child, true, element));
+    return !noval(getChild(element, child, true));
   }
   else {
     if (!element || element === window || element === document) element = document.body;
