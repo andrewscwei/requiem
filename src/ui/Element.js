@@ -246,7 +246,7 @@ class Element extends HTMLElement {
     for (let i = 0; i < nAtributes; i++) {
       let attribute = attributes[i];
 
-      if (!hasOwnValue(Directive, attribute.name) || !regex.test(attribute.name)) continue;
+      if (hasOwnValue(Directive, attribute.name) || !regex.test(attribute.name)) continue;
 
       // Generate camel case property name from the attribute.
       let propertyName = attribute.name.replace(regex, '').replace(/-([a-z])/g, (g) => (g[1].toUpperCase()));

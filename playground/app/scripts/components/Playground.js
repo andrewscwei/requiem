@@ -15,14 +15,12 @@ class Playground extends ui.Element {
     super.render();
 
     let grid = this.getChild('grid');
-    grid.padding = 10;
     grid.itemWidth = 100;
     grid.itemHeight = 50;
-    grid.orientation = 0;
   }
 
   update() {
-    if (this.isDirty(enums.DirtyType.SIZE)) {
+    if (this.nodeState === enums.NodeState.UPDATED && this.isDirty(enums.DirtyType.SIZE)) {
       this.render();
     }
 
