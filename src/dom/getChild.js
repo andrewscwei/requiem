@@ -64,7 +64,7 @@ function getChild() {
       let n = child.length;
 
       for (let i = 0; i < n; i++)
-        children.push(child[i], getChild(targets.join('.'), recursive));
+        children.push(getChild(child[i], targets.join('.'), recursive));
 
       return (noval(children, true) ? null : children);
     }
