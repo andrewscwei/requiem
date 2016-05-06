@@ -143,7 +143,7 @@ class EventTimer extends EventDispatcher {
           this.dispatchEvent(e);
         }
 
-        if (this.eventPool[id].iteration >= this.eventPool[id].count) {
+        if ((this.eventPool[id].count > 0) && (this.eventPool[id].iteration >= this.eventPool[id].count)) {
           this.removeEvent(id);
         }
       }, delay),
