@@ -20,7 +20,6 @@ function createElement(value) {
   assertType(value, 'string', true, 'Value must be a string');
 
   if (value.match(/^([a-z0-9]+-)+[a-z0-9]+$/)) {
-    console.log('foo');
     return new (getElementRegistry(value))();
   }
   else {

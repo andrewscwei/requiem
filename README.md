@@ -21,12 +21,12 @@ Requiem leverages custom elements following the [WebComponents](http://webcompon
     p= 'Hello, world!'
   ```
 
-2. Create a JavaScript class for the custom element, extending Requiem's native `Element` which comes loaded with many built-in features. Override the static getter `tag()` and the instance method `template()` to specify your custom elemen tag name and template markup respectively. After that, register it somewhere in your scripts. The following example assumes you have Webpack to load an external template into JavaScript. All it matters is that `template()` returns a string containing HTML markup or a DOM `Node`.
+2. Create a JavaScript class for the custom element, extending any HTMLElement classes wrapped by Requiem's native `Element` abstract class which comes loaded with many built-in features. Override the static getter `tag()` and the instance method `template()` to specify your custom elemen tag name and template markup respectively. After that, register it somewhere in your scripts. The following example assumes you have Webpack to load an external template into JavaScript. All it matters is that `template()` returns a string containing HTML markup or a DOM `Node`.
 
   ```js
   import requiem, { ui } from 'requiem';
 
-  class MyElement extends ui.Element {
+  class MyElement extends ui.Element(HTMLElement) {
     /** @inheritdoc */
     static get tag() { return 'my-element'; }
 

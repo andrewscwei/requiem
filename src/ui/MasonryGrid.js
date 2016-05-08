@@ -17,7 +17,7 @@ import translate from '../utils/translate';
  *
  * @alias module:requiem~ui.MasonryGrid
  */
-class MasonryGrid extends Element {
+class MasonryGrid extends Element(HTMLElement) {
   /** @inheritdoc */
   static get tag() { return 'masonry-grid'; }
 

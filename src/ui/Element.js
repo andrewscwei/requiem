@@ -10,6 +10,7 @@ import EventType from '../enums/EventType';
 import NodeState from '../enums/NodeState';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
+import defineProperty from '../helpers/defineProperty';
 import hasOwnValue from '../helpers/hasOwnValue';
 import noval from '../helpers/noval';
 import getRect from '../utils/getRect';
@@ -25,11 +26,14 @@ if (typeof HTMLElement !== 'function') {
 /**
  * @class
  *
- * Custom reactive DOM element.
+ * Abstract class of Node/classes that inherited from Node. Note that this class
+ * is an abstract class and must be 'mixed' into an real class.
+ *
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes}
  *
  * @alias module:requiem~ui.Element
  */
-class Element extends HTMLElement {
+const Element = (Base) => class extends (Base || HTMLElement) {
   /**
    * Gets the tag name of this Element instance. This method is meant to be
    * overridden by sub-classes because this class merely provides the foundation
@@ -55,182 +59,74 @@ class Element extends HTMLElement {
   static factory() { return new (dom.register(this))(); }
 
   /**
-   * Defines a property in an Element instance.
+   * Instance name of this Element instance. Once set, it cannot be changed.
    *
-   * @param {Element} element - Element instance to define the new property in.
-   * @param {string} propertyName - Name of the property to be defined.
-   * @param {Object} descriptor - An object literal that defines the behavior of
-   *                              this new property. This object literal
-   *                              inherits that of the descriptor param in
-   *                              Object#defineProperty.
-   * @param {boolean} [descriptor.unique=true] - Specifies that the modifier
-   *                                             method will only invoke if the
-   *                                             new value is different from the
-   *                                             old value.
-   * @param {DirtyType} [descriptor.dirtyType] - Specifies the DirtyType to flag
-   *                                             whenever a new value is set.
-   * @param {EventType} [descriptor.eventType] - Specifies the EventType to
-   *                                             dispatch whenever a new value
-   *                                             is set.
-   * @param {boolean} [descriptor.attributed] - Specifies whether the a
-   *                                            corresponding DOM attribute will
-   *                                            update whenever a new value is
-   *                                            set.
-   * @param {Function} [descriptor.onChange] - Method invoked when the property
-   *                                           changes.
-   * @param {Function|boolean} [descriptor.get] - Method invoked when the
-   *                                              accessor method is called.
-   *                                              This is a good place to
-   *                                              manipulate the value before it
-   *                                              is returned. If simply set to
-   *                                              true, a generic accessor
-   *                                              method will be used.
-   * @param {Function|boolean} [descriptor.set] - Method invoked when the
-   *                                              modifier method is called.
-   *                                              This is a good placd to
-   *                                              manipulate the value before it
-   *                                              is set. If simply set to true,
-   *                                              a generic modifier method will
-   *                                              be used.
-   * @param {string} [scope] - Name of the instance property of the Element to
-   *                           create the new property in. This property must be
-   *                           enumerable.
+   * @type {string}
    */
-  static defineProperty(element, propertyName, descriptor, scope) {
-    assertType(element, Element, false, 'Parameter \'element\' must be an Element instance');
-    assertType(descriptor, 'object', false, 'Parameter \'descriptor\' must be an object literal');
-    assertType(descriptor.configurable, 'boolean', true, 'Optional configurable key in descriptor must be a boolean');
-    assertType(descriptor.enumerable, 'boolean', true, 'Optional enumerable key in descriptor must be a boolean');
-    assertType(descriptor.writable, 'boolean', true, 'Optional writable key in descriptor must be a boolean');
-    assertType(descriptor.unique, 'boolean', true, 'Optional unique key in descriptor must be a boolean');
-    assertType(descriptor.dirtyType, 'number', true, 'Optional dirty type must be of DirtyType enum (number)');
-    assertType(descriptor.eventType, 'string', true, 'Optional event type must be a string');
-    assertType(descriptor.attributed, 'boolean', true, 'Optional attributed must be a boolean');
-    assertType(descriptor.onChange, 'function', true, 'Optional change handler must be a function');
-    assertType(scope, 'string', true, 'Optional parameter \'scope\' must be a string');
-
-    let dirtyType = descriptor.dirtyType;
-    let defaultValue = descriptor.defaultValue;
-    let attributed = descriptor.attributed;
-    let attributeName = Directive.DATA+propertyName.replace(/([A-Z])/g, ($1) => ('-'+$1.toLowerCase()));
-    let eventType = descriptor.eventType;
-    let unique = descriptor.unique;
-
-    assert(!attributeName || !hasOwnValue(Directive, attributeName), 'Attribute \'' + attributeName + '\' is reserved');
-
-    if (unique === undefined) unique = true;
-
-    if (scope === undefined) {
-      scope = element;
-    }
-    else {
-      assert(element.hasOwnProperty(scope), 'The specified Element instance does not have a property called \'' + scope + '\'');
-      scope = element[scope];
-    }
-
-    if (defaultValue !== undefined) {
-      scope.__private__ = scope.__private__ || {};
-      Object.defineProperty(scope.__private__, propertyName, { value: defaultValue, writable: true });
-    }
-
-    let newDescriptor = {};
-
-    if (descriptor.configurable !== undefined) newDescriptor.configurable = descriptor.configurable;
-    if (descriptor.enumerable !== undefined) newDescriptor.enumerable = descriptor.enumerable;
-    if (descriptor.value !== undefined) newDescriptor.value = descriptor.value;
-    if (descriptor.writable !== undefined) newDescriptor.writable = descriptor.writable;
-
-    if (descriptor.get) {
-      newDescriptor.get = () => ((typeof descriptor.get === 'function') ? descriptor.get(scope.__private__[propertyName]) : scope.__private__[propertyName]);
-    }
-
-    if (descriptor.set) {
-      newDescriptor.set = (val) => {
-        let oldVal = scope.__private__[propertyName];
-
-        if (typeof descriptor.set === 'function') val = descriptor.set(val);
-
-        if (unique && (oldVal === val)) return;
-
-        if (oldVal === undefined) {
-          scope.__private__ = scope.__private__ || {};
-          Object.defineProperty(scope.__private__, propertyName, { value: val, writable: true });
-        }
-        else {
-          scope.__private__[propertyName] = val;
-        }
-
-        if (descriptor.onChange !== undefined) descriptor.onChange(oldVal, val);
-        if (attributed === true) element.setAttribute(attributeName, val);
-        if (dirtyType !== undefined) element.setDirty(dirtyType);
-
-        if (eventType !== undefined) {
-          let event = new CustomEvent(eventType, {
-            detail: {
-              property: propertyName,
-              oldValue: oldVal,
-              newValue: val
-            }
-          });
-
-          element.dispatchEvent(event);
-        }
-      };
-    }
-
-    Object.defineProperty(scope, propertyName, newDescriptor);
-
-    if (defaultValue !== undefined && attributed === true) {
-      element.setAttribute(attributeName, defaultValue);
-    }
-
-    if (defaultValue !== undefined && dirtyType !== undefined && element.nodeState >= NodeState.UPDATED) {
-      element.setDirty(dirtyType);
-    }
+  get name() {
+    let s = this.getAttribute('name');
+    if (!s || s === '') return null;
+    return s;
+  }
+  set name(val) {
+    // Once set, name cannot change.
+    if (!this.name)
+    super.setAttribute('name', val);
   }
 
   /**
-   * Adds an event listener to an Element instance.
+   * State of this Element instance (depicted by Directive.State).
    *
-   * @see module:requiem~ui.Element#addEventListener
+   * @type {string}
    */
-  static addEventListener() {
-    let element = arguments[0];
-    let event = arguments[1];
-    let listener = arguments[2];
-    let useCapture = arguments[3] || false;
-
-    assert(!element || element instanceof Element);
-    if (noval(element)) return;
-    element.addEventListener(event, listener, useCapture);
+  get state() {
+    let s = this.getAttribute(Directive.STATE);
+    if (!s || s === '') return null;
+    return s;
   }
+  set state(val) {
+    if (this.state === val) return;
 
-  /** @see module:requiem~ui.Element#addEventListener */
-  static on() { Element.addEventListener.apply(null, arguments); }
+    let oldValue = this.state;
 
-  /** @see module:requiem~ui.Element#removeEventListener */
-  static off() { Element.removeEventListener.apply(null, arguments); }
+    if (val === null || val === undefined)
+      this.removeAttribute(Directive.STATE);
+    else
+      this.setAttribute(Directive.STATE, val);
+
+    this.updateDelegate.setDirty(DirtyType.STATE);
+
+    let event = new CustomEvent(EventType.OBJECT.STATE, {
+      detail: {
+        property: 'state',
+        oldValue: oldValue,
+        newValue: val
+      }
+    });
+
+    this.dispatchEvent(event);
+  }
 
   /**
-   * Removes an event listener from an Element instance.
+   * Rect of this Element instance.
    *
-   * @see module:requiem~ui.Element#removeEventListener
+   * @type {Object}
    */
-  static removeEventListener() {
-    let element = arguments[0];
-    let event = arguments[1];
-    let listener = arguments[2];
-    let useCapture = arguments[3] || false;
+  get rect() { return getRect(this); }
 
-    assert(!element || element instanceof Element);
-    if (noval(element)) return;
-    element.removeEventListener(event, listener, useCapture);
-  }
+  /**
+   * Opacity of this Element instance.
+   *
+   * @type {number}
+   */
+  get opacity() { return this.getStyle('opacity', true); }
+  set opacity(val) { this.setStyle('opacity', val); }
 
   /** @inheritdoc */
   createdCallback() {
     // Define instance properties.
-    this.__define_properties();
+    this.__defineProperties__();
+
 
     // Check if this Element needs seed data from the data registry.
     this.setData(dom.getDataRegistry(this.getAttribute(Directive.REF)));
@@ -252,7 +148,7 @@ class Element extends HTMLElement {
     }
 
     // Make element invisible until its first update.
-    this.invisible = true;
+    this.setStyle('visibility', 'hidden');
   }
 
   /** @inheritdoc */
@@ -270,7 +166,7 @@ class Element extends HTMLElement {
    * Initializes this Element instance.
    */
   init() {
-    this.__set_node_state(NodeState.INITIALIZED);
+    this.__setNodeState__(NodeState.INITIALIZED);
     this.updateDelegate.init();
   }
 
@@ -280,21 +176,19 @@ class Element extends HTMLElement {
   destroy() {
     this.removeAllEventListeners();
     this.updateDelegate.destroy();
-    this.__set_node_state(NodeState.DESTROYED);
+    this.__setNodeState__(NodeState.DESTROYED);
   }
 
   /**
    * Handler invoked whenever a visual update is required.
    */
   update() {
-    if (this.isDirty(DirtyType.RENDER) && this.nodeState === NodeState.UPDATED) {
-      this.render();
+    if (this.isDirty(DirtyType.RENDER) && this.nodeState === NodeState.UPDATED) this.render();
+
+    if (this.nodeState !== NodeState.UPDATED) {
+      this.__setNodeState__(NodeState.UPDATED);
+      this.invisible = (this.invisible === undefined) ? false : this.invisible;
     }
-
-    this.__set_node_state(NodeState.UPDATED);
-
-    // Make element visible upon first update.
-    this.invisible = false;
   }
 
   /**
@@ -421,10 +315,10 @@ class Element extends HTMLElement {
     let b = true;
 
     if (event === EventType.MOUSE.CLICK_OUTSIDE) {
-      let _listener = listener;
+      let l = listener;
       listener = function(event) {
         if ((event.target !== this.element) && !this.hasChild(event.target)) {
-          _listener(event);
+          l(event);
         }
       }.bind(this);
     }
@@ -455,9 +349,6 @@ class Element extends HTMLElement {
 
   /** @see module:requiem~ui.Element#addEventListener */
   on() { this.addEventListener.apply(this, arguments); }
-
-  /** @see module:requiem~ui.Element#removeEventListener */
-  off() { this.removeEventListener.apply(this, arguments); }
 
   /**
    * Determines if a particular listener (or any listener in the specified
@@ -536,6 +427,9 @@ class Element extends HTMLElement {
     }
   }
 
+  /** @see module:requiem~ui.Element#removeEventListener */
+  off() { this.removeEventListener.apply(this, arguments); }
+
   /**
    * Removes all cached event listeners from this Element instance.
    */
@@ -596,7 +490,7 @@ class Element extends HTMLElement {
         this.data[descriptor] = value;
       }
       else {
-        Element.defineProperty(this, descriptor, {
+        defineProperty(this, descriptor, {
           defaultValue: value,
           dirtyType: DirtyType.DATA,
           get: true,
@@ -634,146 +528,52 @@ class Element extends HTMLElement {
    *
    * @protected
    */
-  __define_properties() {
+  __defineProperties__() {
     this.__private__ = {};
     this.__private__.childRegistry = {};
     this.__private__.listenerRegistry = {};
 
     /**
-     * Instance name of this Element instance. Once set, it cannot be changed.
-     *
-     * @property {string}
-     */
-    Object.defineProperty(this, 'name', {
-      get: () => {
-        let s = this.getAttribute('name');
-        if (!s || s === '') return null;
-        return s;
-      },
-      set: (value) => {
-        // Once set, name cannot change.
-        if (!this.name)
-          super.setAttribute('name', value);
-      }
-    });
-
-    /**
      * Current node state of this Element instance.
      *
-     * @property {NodeState}
+     * @type {NodeState}
      */
-    Element.defineProperty(this, 'nodeState', { defaultValue: NodeState.IDLE, get: true });
-
-    /**
-     * State of this Element instance (depicted by Directive.State).
-     *
-     * @property {string}
-     */
-    Object.defineProperty(this, 'state', {
-      get: () => {
-        let s = this.getAttribute(Directive.STATE);
-        if (!s || s === '') return null;
-        return s;
-      },
-      set: (value) => {
-        if (this.state === value) return;
-
-        let oldValue = this.state;
-
-        if (value === null || value === undefined) {
-          this.removeAttribute(Directive.STATE);
-        }
-        else {
-          this.setAttribute(Directive.STATE, value);
-        }
-
-        this.updateDelegate.setDirty(DirtyType.STATE);
-
-        let event = new CustomEvent(EventType.OBJECT.STATE, {
-          detail: {
-            property: 'state',
-            oldValue: oldValue,
-            newValue: value
-          }
-        });
-
-        this.dispatchEvent(event);
-      }
-    });
+    defineProperty(this, 'nodeState', { defaultValue: NodeState.IDLE, get: true });
 
     /**
      * Data properties.
      *
-     * @property {Object}
+     * @type {Object}
      * @see module:requiem~enums.Directive.DATA
      */
-    Element.defineProperty(this, 'data', { defaultValue: {}, get: true });
+    defineProperty(this, 'data', { defaultValue: {}, get: true });
 
     /**
      * ElementUpdateDelegate instance.
      *
-     * @property {ElementUpdateDelegate}
+     * @type {ElementUpdateDelegate}
      */
-    Element.defineProperty(this, 'updateDelegate', { defaultValue: new ElementUpdateDelegate(this), get: true });
-
-    /**
-     * Gets the total number of immediate children in this Element instance.
-     *
-     * @property {number}
-     */
-    Object.defineProperty(this, 'childCount', {
-      get: () => {
-        let count = 0;
-
-        for (let k in this.__private__.childRegistry) {
-          let child = this.__private__.childRegistry[k];
-
-          if (child instanceof Node) {
-            count += 1;
-          }
-          else if (child instanceof Array) {
-            count += child.length;
-          }
-        }
-
-        return count;
-      }
-    });
-
-    /**
-     * Gets the rect of this Element instance.
-     *
-     * @property {Object}
-     */
-    Object.defineProperty(this, 'rect', {
-      get: () => (getRect(this))
-    });
-
-    /**
-     * Gets/sets the opacity of this Element instance.
-     */
-    Object.defineProperty(this, 'opacity', {
-      get: () => (this.getStyle('opacity', true)),
-      set: (value) => this.setStyle('opacity', value)
-    });
+    defineProperty(this, 'updateDelegate', { defaultValue: new ElementUpdateDelegate(this), get: true });
 
     /**
      * Specifies whether this Element instance is invisible. This property
      * follows the rules of the CSS rule 'visibility: hidden'.
      *
-     * @property {boolean}
+     * @type {boolean}
      */
-    Element.defineProperty(this, 'invisible', {
+    defineProperty(this, 'invisible', {
       get: true,
       set: (value) => {
         assertType(value, 'boolean', false);
 
-        if (value) {
-          this.setStyle('visibility', 'hidden');
-        }
-        else {
-          if (this.getStyle('visibility') === 'hidden') {
-            this.setStyle('visibility', null);
+        if (this.nodeState === NodeState.UPDATED) {
+          if (value) {
+            this.setStyle('visibility', 'hidden');
+          }
+          else {
+            if (this.getStyle('visibility') === 'hidden') {
+              this.setStyle('visibility', null);
+            }
           }
         }
 
@@ -781,15 +581,17 @@ class Element extends HTMLElement {
       }
     });
 
-    /**
-     * Specifies whether this Element instance is disabled.
-     *
-     * @property {boolean}
-     */
-    Object.defineProperty(this, 'disabled', {
-      get: () => (this.hasAttribute('disabled') ? this.getAttribute('disabled') : false),
-      set: (value) => this.setAttribute('disabled', (value ? true : false))
-    });
+    if (this.disabled === undefined) {
+      /**
+       * Specifies whether this Element instance is disabled.
+       *
+       * @type {boolean}
+       */
+      Object.defineProperty(this, 'disabled', {
+        get: () => (this.hasAttribute('disabled') ? this.getAttribute('disabled') : false),
+        set: (value) => this.setAttribute('disabled', (value ? true : false))
+      });
+    }
   }
 
   /**
@@ -799,7 +601,7 @@ class Element extends HTMLElement {
    *
    * @private
    */
-  __set_node_state(nodeState) {
+  __setNodeState__(nodeState) {
     this.__private__.nodeState = nodeState;
   }
 }

@@ -2,7 +2,7 @@
 
 import { enums, ui, utils } from 'requiem';
 
-class Playground extends ui.Element {
+class Playground extends ui.Element(HTMLElement) {
   static get tag() { return 'playground'; }
   static get extends() { return 'div'; }
 

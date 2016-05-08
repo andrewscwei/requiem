@@ -19,7 +19,7 @@ class EventDispatcher {
    * @return {EventDispatcher} A new EventDispatcher instance.
    */
   constructor() {
-    this.__define_properties();
+    this.__defineProperties__();
   }
 
   /**
@@ -113,7 +113,7 @@ class EventDispatcher {
    *
    * @private
    */
-  __define_properties() {
+  __defineProperties__() {
     if (!this.__private__) this.__private__ = {};
 
     Object.defineProperty(this.__private__, 'listenerRegistry', {

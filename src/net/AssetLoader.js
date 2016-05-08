@@ -420,7 +420,7 @@ class AssetLoader extends EventDispatcher {
   /**
    * @inheritdoc
    */
-  __define_properties() {
+  __defineProperties__() {
     /**
      * @property
      *
@@ -587,7 +587,7 @@ class AssetLoader extends EventDispatcher {
       }
     });
 
-    super.__define_properties();
+    super.__defineProperties__();
   }
 }
 

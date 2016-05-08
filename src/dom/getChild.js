@@ -10,15 +10,15 @@ import noval from '../helpers/noval';
  * Gets the a child from the global display tree consisting of all sightread
  * Element instances.
  *
- * @param {Element} [element] - Specifies the parent Element instance to fetch
- *                              the child from.
+ * @param {Node} [element] - Specifies the parent element instance to fetch the
+ *                           child from.
  * @param {string} [name] - Name of the child, depth separated by '.' (i.e.
  *                          'foo.bar'). If unspecified, the entire child list of
  *                          this Element will be returned.
  * @param {boolean} [recursive=true] - Speciifies whether to search for the
  *                                     child recursively down the tree.
  *
- * @return {Element|Array|Object}
+ * @return {Node|Array|Object}
  *
  * @alias module:requiem~dom.getChild
  */
