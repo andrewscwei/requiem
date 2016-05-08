@@ -1,12 +1,12 @@
 @import '~minuet/lib/sass/minuet';
 
-playground-element, [is='playground-element'] {
+@include element('playground-element') {
   @include display('box>', top center);
   width: 100%;
   height: auto;
   padding: 50px;
 
-  r-grid {
+  @include element('masonry-grid') {
     line-height: 50px;
     div {
       width: 300px;

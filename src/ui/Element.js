@@ -31,22 +31,21 @@ if (typeof HTMLElement !== 'function') {
  */
 class Element extends HTMLElement {
   /**
-   * Gets the tag name of this Element instance.
+   * Gets the tag name of this Element instance. This method is meant to be
+   * overridden by sub-classes because this class merely provides the foundation
+   * functionality of a custom element, hence this class does not register
+   * directly with the element registry.
    *
    * @return {string} The tag name.
    */
-  static get tag() {
-    return 'r-element';
-  }
+  static get tag() { return null; }
 
   /**
    * Gets the existing native element which this custom element extends.
    *
    * @return {string} The tag of the native element.
    */
-  static get extends() {
-    return null;
-  }
+  static get extends() { return null; }
 
   /**
    * Creates a new DOM element from this Element class.
@@ -206,12 +205,11 @@ class Element extends HTMLElement {
     element.addEventListener(event, listener, useCapture);
   }
 
-  /**
-   * @see module:requiem~ui.Element#addEventListener
-   */
-  static on() {
-    Element.addEventListener.apply(null, arguments);
-  }
+  /** @see module:requiem~ui.Element#addEventListener */
+  static on() { Element.addEventListener.apply(null, arguments); }
+
+  /** @see module:requiem~ui.Element#removeEventListener */
+  static off() { Element.removeEventListener.apply(null, arguments); }
 
   /**
    * Removes an event listener from an Element instance.
@@ -455,12 +453,11 @@ class Element extends HTMLElement {
     }
   }
 
-  /**
-   * @see module:requiem~ui.Element#addEventListener
-   */
-  on() {
-    this.addEventListener.apply(this, arguments);
-  }
+  /** @see module:requiem~ui.Element#addEventListener */
+  on() { this.addEventListener.apply(this, arguments); }
+
+  /** @see module:requiem~ui.Element#removeEventListener */
+  off() { this.removeEventListener.apply(this, arguments); }
 
   /**
    * Determines if a particular listener (or any listener in the specified

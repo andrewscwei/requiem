@@ -15,11 +15,11 @@ import translate from '../utils/translate';
  *
  * Masonry grid element.
  *
- * @alias module:requiem~ui.Grid
+ * @alias module:requiem~ui.MasonryGrid
  */
-class Grid extends Element {
+class MasonryGrid extends Element {
   /** @inheritdoc */
-  static get tag() { return 'r-grid'; }
+  static get tag() { return 'masonry-grid'; }
 
   /**
    * Uniform padding between each grid item. This padding can be defined as a
@@ -389,4 +389,4 @@ class Grid extends Element {
   }
 }
 
-export default Grid;
+export default MasonryGrid;

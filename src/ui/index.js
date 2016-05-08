@@ -3,7 +3,7 @@
 'use strict';
 
 import Element from './Element';
-import Grid from './Grid';
+import MasonryGrid from './MasonryGrid';
 import register from '../dom/register';
 
 /**
@@ -13,10 +13,9 @@ import register from '../dom/register';
  */
 const ui = {
   Element: Element,
-  Grid: Grid
+  MasonryGrid: MasonryGrid
 };
 
-register(Element);
-register(Grid);
+register(MasonryGrid);
 
 export default ui;
