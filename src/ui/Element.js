@@ -154,29 +154,30 @@ const Element = (Base) => class extends (Base || HTMLElement) {
   /** @inheritdoc */
   attachedCallback() {
     this.render();
-    this.init();
+    this.__setNodeState__(NodeState.INITIALIZED);
+    this.updateDelegate.init();
   }
 
   /** @inheritdoc */
   detachedCallback() {
     this.destroy();
-  }
-
-  /**
-   * Initializes this Element instance.
-   */
-  init() {
-    this.__setNodeState__(NodeState.INITIALIZED);
-    this.updateDelegate.init();
-  }
-
-  /**
-   * Destroys this Element instance.
-   */
-  destroy() {
     this.removeAllEventListeners();
     this.updateDelegate.destroy();
     this.__setNodeState__(NodeState.DESTROYED);
+  }
+
+  /**
+   * Method invoked every time after this element is rendered.
+   */
+  init() {
+    // Needs to be overridden.
+  }
+
+  /**
+   * Method invoked every time before this element is rerendered.
+   */
+  destroy() {
+    // Needs to be overridden.
   }
 
   /**
@@ -195,6 +196,9 @@ const Element = (Base) => class extends (Base || HTMLElement) {
    * Renders the template of this element instance.
    */
   render() {
+    if (this.nodeState === NodeState.UPDATED)
+      this.destroy();
+
     let d = this.data;
     d.state = this.state;
     d.name = this.name;
@@ -223,6 +227,8 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     }
 
     dom.sightread(this);
+
+    this.init();
   }
 
   /** @see module:requiem~ui.ElementUpdateDelegate#initResponsiveness */

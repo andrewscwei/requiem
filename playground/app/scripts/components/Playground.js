@@ -8,15 +8,12 @@ class Playground extends ui.Element(HTMLElement) {
 
   init() {
     this.respondsTo(10.0, enums.EventType.OBJECT.RESIZE);
-    super.init();
-  }
-
-  render() {
-    super.render();
 
     let grid = this.getChild('grid');
     grid.itemWidth = 100;
     grid.itemHeight = 50;
+
+    super.init();
   }
 
   update() {
