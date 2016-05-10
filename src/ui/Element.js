@@ -8,9 +8,11 @@ import Directive from '../enums/Directive';
 import DirtyType from '../enums/DirtyType';
 import EventType from '../enums/EventType';
 import NodeState from '../enums/NodeState';
+import EventQueue from '../events/EventQueue';
 import assert from '../helpers/assert';
 import assertType from '../helpers/assertType';
 import defineProperty from '../helpers/defineProperty';
+import getDirectCustomChildren from '../helpers/getDirectCustomChildren';
 import hasOwnValue from '../helpers/hasOwnValue';
 import noval from '../helpers/noval';
 import polyfillHTMLElements from '../polyfills/polyfillHTMLElements';
@@ -122,7 +124,6 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     // Define instance properties.
     this.__defineProperties__();
 
-
     // Check if this Element needs seed data from the data registry.
     this.setData(dom.getDataRegistry(this.getAttribute(Directive.REF)));
 
@@ -172,7 +173,8 @@ const Element = (Base) => class extends (Base || HTMLElement) {
    * Method invoked every time before this element is rerendered.
    */
   destroy() {
-    // Needs to be overridden.
+    if (this.__private__.eventQueue)
+      this.__private__.eventQueue.kill();
   }
 
   /**
@@ -225,7 +227,22 @@ const Element = (Base) => class extends (Base || HTMLElement) {
 
     dom.sightread(this);
 
-    this.init();
+    let customChildren = getDirectCustomChildren(this, true);
+
+    if (this.__private__.eventQueue) {
+      this.__private__.eventQueue.removeAllEventListeners();
+      this.__private__.eventQueue.kill();
+    }
+
+    this.__private__.eventQueue = new EventQueue();
+
+    customChildren.forEach((child) => {
+      if (child.nodeState < NodeState.INITIALIZED)
+        this.__private__.eventQueue.enqueue(child, EventType.NODE.INITIALIZE);
+    });
+
+    this.__private__.eventQueue.addEventListener(EventType.OBJECT.COMPLETE, this.init.bind(this));
+    this.__private__.eventQueue.start();
   }
 
   /** @see module:requiem~ui.ElementUpdateDelegate#initResponsiveness */
@@ -608,7 +625,15 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     if (this.__private__.nodeState === nodeState) return;
     let oldVal = this.__private__.nodeState;
     this.__private__.nodeState = nodeState;
-    this.dispatchEvent(new CustomEvent(EventType.OBJECT.NODE_STATE, {
+
+    if (nodeState === NodeState.INITIALIZED)
+      this.dispatchEvent(new CustomEvent(EventType.NODE.INITIALIZE));
+    else if (nodeState === NodeState.UPDATED)
+      this.dispatchEvent(new CustomEvent(EventType.NODE.UPDATE));
+    else if (nodeState === NodeState.DESTROYED)
+      this.dispatchEvent(new CustomEvent(EventType.NODE.DESTROY));
+
+    this.dispatchEvent(new CustomEvent(EventType.NODE.NODE_STATE, {
       detail: {
         oldValue: oldVal,
         newValue: nodeState

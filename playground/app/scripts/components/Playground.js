@@ -7,26 +7,22 @@ class Playground extends ui.Element(HTMLElement) {
   static get extends() { return 'div'; }
 
   init() {
-    this.respondsTo(10.0, enums.EventType.OBJECT.RESIZE, enums.EventType.MISC.ENTER_FRAME);
+    this.respondsTo(10.0, enums.EventType.OBJECT.RESIZE);
 
-    // let grid = this.getChild('grid');
-    // grid.itemWidth = 100;
-    // grid.itemHeight = 50;
+    let grid = this.getChild('grid');
+    grid.itemWidth = 100;
+    grid.itemHeight = 50;
 
-    this.__foo = 1;
     super.init();
   }
 
   update() {
-    if (this.nodeState === enums.NodeState.UPDATED && this.isDirty(enums.DirtyType.SIZE)) {
-      this.render();
+    if (this.nodeState < enums.NodeState.UPDATED) {
+      this.dispatchEvent(new CustomEvent('foo'));
     }
 
-    if (this.isDirty(enums.DirtyType.FRAME)) {
-      let foo = document.getElementById('background');
-      dom.setStyle(foo, 'transform', `translate3d(0, 0, 0) scale(${this.__foo})`);
-      this.__foo += .01;
-      console.log(this.__foo);
+    if (this.nodeState === enums.NodeState.UPDATED && this.isDirty(enums.DirtyType.SIZE)) {
+      this.render();
     }
 
     super.update();

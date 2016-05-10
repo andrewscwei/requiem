@@ -39,6 +39,9 @@ class EventDispatcher {
     this.__private__.listenerRegistry[type].push(listener);
   }
 
+  /** @see module:requiem~events.EventDispatcher#addEventListener */
+  on() { this.addEventListener.apply(this, arguments); }
+
   /**
    * Removes an event listener from this EventDispatcher instance. If no
    * listener method is specified, all the listeners of the specified type
@@ -61,6 +64,20 @@ class EventDispatcher {
       }
     } else {
       delete this.__private__.listenerRegistry[type];
+    }
+  }
+
+  /** @see module:requiem~events.EventDispatcher#removeEventListener */
+  off() { this.removeEventListener.apply(this, arguments); }
+
+  /**
+   * Removes all cached event listeners from this Element instance.
+   */
+  removeAllEventListeners() {
+    if (this.__private__.listenerRegistry) {
+      for (let event in this.__private__.listenerRegistry) {
+        this.removeEventListener(event);
+      }
     }
   }
 

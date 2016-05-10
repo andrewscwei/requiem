@@ -10,6 +10,12 @@
  * @alias module:requiem~enums.EventType
  */
 const EventType = {
+  NODE: {
+    INITIALIZE: 'initialize', // Custom
+    UPDATE: 'update', // Custom
+    DESTROY: 'destroy', // Custom
+    NODE_STATE: 'nodestate' // Custom
+  },
   DATA: {
     DATA_CHANGE: 'datachange' // Custom
   },
@@ -50,7 +56,7 @@ const EventType = {
     UNLOAD: 'unload',
     PROGRESS: 'progress', // Custom
     STATE: 'state', // Custom
-    NODE_STATE: 'nodestate' // Custom
+    COMPLETE: 'complete'
   },
   FORM: {
     BLUR: 'blur',

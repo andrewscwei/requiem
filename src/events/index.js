@@ -4,6 +4,7 @@
 
 import EventDispatcher from './EventDispatcher';
 import EventTimer from './EventTimer';
+import EventQueue from './EventQueue';
 
 /**
  * Collection of event related classes/methods.
@@ -12,7 +13,8 @@ import EventTimer from './EventTimer';
  */
 const events = {
   EventDispatcher: EventDispatcher,
-  EventTimer: EventTimer
+  EventTimer: EventTimer,
+  EventQueue: EventQueue
 };
 
 export default events;
