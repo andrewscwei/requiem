@@ -3,8 +3,18 @@
 @include element('playground-element') {
   @include display('box>', top center);
   width: 100%;
-  height: auto;
-  padding: 50px;
+  height: 100%;
+  // padding: 50px;
+
+  #background {
+    @include size(100%);
+    background-image: url(http://res.cloudinary.com/tempest/image/upload/c_limit,cs_srgb,dpr_1.0,q_80,w_10000/MTM1OTg5NTM4OTExNzIwNzIy.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    backface-visibility: hidden;
+    @include transition(transform, 1s, linear);
+  }
 
   @include element('masonry-grid') {
     line-height: 50px;

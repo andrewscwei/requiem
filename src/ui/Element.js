@@ -179,9 +179,11 @@ const Element = (Base) => class extends (Base || HTMLElement) {
    * Handler invoked whenever a visual update is required.
    */
   update() {
+    if (this.nodeState > NodeState.UPDATED) return;
+
     if (this.isDirty(DirtyType.RENDER) && this.nodeState === NodeState.UPDATED) this.render();
 
-    if (this.nodeState !== NodeState.UPDATED) {
+    if (this.nodeState < NodeState.UPDATED) {
       this.__setNodeState__(NodeState.UPDATED);
       this.invisible = (this.invisible === undefined) ? false : this.invisible;
     }
@@ -603,7 +605,15 @@ const Element = (Base) => class extends (Base || HTMLElement) {
    * @private
    */
   __setNodeState__(nodeState) {
+    if (this.__private__.nodeState === nodeState) return;
+    let oldVal = this.__private__.nodeState;
     this.__private__.nodeState = nodeState;
+    this.dispatchEvent(new CustomEvent(EventType.OBJECT.NODE_STATE, {
+      detail: {
+        oldValue: oldVal,
+        newValue: nodeState
+      }
+    }));
   }
 }
 

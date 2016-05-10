@@ -49,7 +49,8 @@ const EventType = {
     SCROLL: 'scroll',
     UNLOAD: 'unload',
     PROGRESS: 'progress', // Custom
-    STATE: 'state' // Custom
+    STATE: 'state', // Custom
+    NODE_STATE: 'nodestate' // Custom
   },
   FORM: {
     BLUR: 'blur',
