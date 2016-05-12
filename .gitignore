@@ -5,3 +5,4 @@ dist
 docs
 lib
 public
+npm-debug.log
