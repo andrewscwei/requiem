@@ -18,4 +18,4 @@ eq.enqueue(dom.getChild('playground'), enums.EventType.NODE.UPDATE);
 eq.enqueue(dom.getChild('playground.grid'), enums.EventType.NODE.UPDATE);
 eq.start();
 
-// if (module.hot) module.hot.accept();
+if (module.hot) module.hot.accept();

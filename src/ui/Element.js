@@ -205,23 +205,35 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     let t = this.template(d);
     if (typeof t === 'string') t = dom.createElement(t);
 
-    assert(!t || (t instanceof HTMLTemplateElement), `Element generated from template() must be an HTMLTemplateElement instance`);
+    assert(!t || (t instanceof Node), `Element generated from template() must be a Node instance`);
 
     if (t) {
-      t = document.importNode(t.content, true);
+      if (t instanceof HTMLTemplateElement) {
+        t = document.importNode(t.content, true);
 
-      // TODO: Add support for shadow DOM in the future when it's easier to style.
-      if (false) {
-        try {
-          if (!this.shadowRoot) this.createShadowRoot();
-          while (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild);
-          this.shadowRoot.appendChild(t);
+        // TODO: Add support for shadow DOM in the future when it's easier to style.
+        if (false) {
+          try {
+            if (!this.shadowRoot) this.createShadowRoot();
+            while (this.shadowRoot.lastChild) this.shadowRoot.removeChild(this.shadowRoot.lastChild);
+            this.shadowRoot.appendChild(t);
+          }
+          catch (err) {}
         }
-        catch (err) {}
+        else {
+          while (this.lastChild) this.removeChild(this.lastChild);
+          this.appendChild(t);
+        }
       }
       else {
-        while(this.lastChild) this.removeChild(this.lastChild);
-        this.appendChild(t);
+        let n = t.childNodes.length;
+
+        while (this.lastChild) this.removeChild(this.lastChild);
+
+        for (let i = 0; i < n; i++) {
+          let node = document.importNode(t.childNodes[i], true);
+          this.appendChild(node);
+        }
       }
     }
 

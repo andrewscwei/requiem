@@ -22,15 +22,13 @@ polyfillClassList();
  * @module requiem
  */
 function requiem() {
-  if (arguments.length > 0) {
+  if (arguments.length > 0)
     return dom.register.apply(null, arguments);
-  }
-  else {
+  else
     return dom.sightread.apply(null, arguments);
-  }
 }
 
-requiem.version = '0.41.0';
+requiem.version = '0.46.3';
 requiem.dom = dom;
 requiem.enums = enums;
 requiem.events = events;
@@ -38,5 +36,7 @@ requiem.net = net;
 requiem.ui = ui;
 requiem.utils = utils;
 requiem.register = function() { return dom.register.apply(null, arguments); }
+
+requiem();
 
 module.exports = requiem;
