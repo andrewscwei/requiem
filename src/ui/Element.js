@@ -406,7 +406,7 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     let listener = arguments[1];
     let useCapture = arguments[2] || false;
 
-    if (this.__private__.listenerRegistry) {
+    if (this.__private__.listenerRegistry && this.__private__.listenerRegistry[event]) {
       let m = this.__private__.listenerRegistry[event];
       let n = m.length;
       let s = -1;
