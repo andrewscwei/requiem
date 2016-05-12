@@ -22,14 +22,14 @@ polyfillClassList();
  * @module requiem
  */
 function requiem() {
-  if (requiem.initialized === false) {
-    dom.sightread();
-    delete requiem.initialized;
+  if (arguments.length > 0) {
+    return dom.register.apply(null, arguments);
   }
-  if (arguments.length > 0) return dom.register.apply(null, arguments);
+  else {
+    return dom.sightread.apply(null, arguments);
+  }
 }
 
-requiem.initialized = false;
 requiem.version = '0.41.0';
 requiem.dom = dom;
 requiem.enums = enums;

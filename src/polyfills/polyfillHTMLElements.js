@@ -23,6 +23,12 @@ function polyfillHTMLElements() {
     _HTMLButtonElement.prototype = HTMLButtonElement.prototype;
     HTMLButtonElement = _HTMLButtonElement;
   }
+
+  if (typeof HTMLAnchorElement !== 'function') {
+    var _HTMLAnchorElement = function(){};
+    _HTMLAnchorElement.prototype = HTMLAnchorElement.prototype;
+    HTMLAnchorElement = _HTMLAnchorElement;
+  }
 }
 
 export default polyfillHTMLElements;
