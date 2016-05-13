@@ -249,7 +249,7 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     this.__private__.eventQueue = new EventQueue();
 
     customChildren.forEach((child) => {
-      if (child.nodeState < NodeState.INITIALIZED)
+      if ((child.nodeState === undefined) || (child.nodeState < NodeState.INITIALIZED))
         this.__private__.eventQueue.enqueue(child, EventType.NODE.INITIALIZE);
     });
 

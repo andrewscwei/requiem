@@ -2,6 +2,7 @@
 
 'use strict';
 
+import isCustomElement from './isCustomElement';
 import getChildRegistry from '../dom/getChildRegistry';
 
 /**
@@ -28,7 +29,7 @@ function getDirectCustomChildren(element, inclusive) {
     let child = [].concat(childRegistry[name]);
 
     child.forEach((c) => {
-      if (c.nodeState !== undefined)
+      if (isCustomElement(c))
         children.push(c);
       else
         children = children.concat(getDirectCustomChildren(c));

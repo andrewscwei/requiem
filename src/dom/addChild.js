@@ -6,6 +6,7 @@ import addToChildRegistry from './addToChildRegistry';
 import getChildRegistry from './getChildRegistry';
 import sightread from './sightread';
 import assertType from '../helpers/assertType';
+import isCustomElement from '../helpers/isCustomElement';
 
 /**
  * Adds a child element(s) to an element. By default the added element(s) are
@@ -99,7 +100,7 @@ function addChild() {
     if (name)
       addToChildRegistry(childRegistry, child, name);
 
-    if (!child.getChild) sightread(child);
+    if (!isCustomElement(child)) sightread(child);
 
     if (element.shadowRoot) element = element.shadowRoot;
 

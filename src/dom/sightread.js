@@ -6,21 +6,17 @@ import addToChildRegistry from './addToChildRegistry';
 import getChildRegistry from './getChildRegistry';
 import assert from '../helpers/assert';
 import getInstanceNameFromElement from '../helpers/getInstanceNameFromElement';
+import isCustomElement from '../helpers/isCustomElement';
 
 /**
- * Crawls a DOM element that supports child registries and returns a dictionary
- * of all identifiable child elements. The scope is bounded by the DOM element
- * that has its own local child registry and does not crawl beyond a child that
- * has its own local child registry. The Document will be used if no element is
- * specified. The Document possesses the global child registry.
+ * Crawls a DOM element, creates a child registry for the element and registers
+ * all of its children into the child registry, recursively.
  *
- * @param {Node} [element=window] - Target element for sightreading. By default
- *                                  this will be the document.
- *
- * @return {Object} Dictionary (object literal) containing all identifiable
- *                  child elements (elements with an 'id' or 'name' attribute,
- *                  'id' being the dominant if both are present) of the target
- *                  element.
+ * @param {Node} [element=document] - Target element for sightreading. By
+ *                                    default this will be the document.
+ * @param {Object} [childRegistry] - Target child registry to register child
+ *                                   elements with. If unspecified it will be
+ *                                   inferred from the target element.
  *
  * @alias module:requiem~dom.sightread
  */
@@ -44,7 +40,7 @@ function sightread(element, childRegistry) {
 
     if (!(e instanceof Node)) continue;
     if (addToChildRegistry(childRegistry, e)) {
-      if (!e.getChild) {
+      if (!isCustomElement(e)) {
         if (!e.__private__) e.__private__ = {};
         if (!e.__private__.childRegistry) e.__private__.childRegistry = {};
         sightread(e);
