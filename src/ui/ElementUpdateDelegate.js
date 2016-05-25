@@ -88,21 +88,21 @@ class ElementUpdateDelegate {
      */
     let _requestAnimationFrame = (callback) => {
       let raf = (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame) || null;
-      if (!raf) raf = (callback) => (window.setTimeout(callback, 10.0));
+      if (!raf) raf = (handler) => (window.setTimeout(handler, 10.0));
       return raf(callback);
     };
 
     /**
      * Custom cancelAnimationFrame implementation.
      *
-     * @return {Function} callback
+     * @return {Function|Object} callbackOrId
      *
      * @private
      */
-    let _cancelAnimationFrame = function(callback) {
-      let caf = (window.requestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
-      if (!caf) caf = (callback) => (window.clearTimeout(callback));
-      return caf;
+    let _cancelAnimationFrame = function(callbackOrId) {
+      let caf = (window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame) || null;
+      if (!caf) caf = (handler) => (window.clearTimeout(handler));
+      return caf(callbackOrId);
     };
 
     /**
