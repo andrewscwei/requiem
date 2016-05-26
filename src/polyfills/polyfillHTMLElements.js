@@ -29,6 +29,12 @@ function polyfillHTMLElements() {
     _HTMLAnchorElement.prototype = HTMLAnchorElement.prototype;
     HTMLAnchorElement = _HTMLAnchorElement;
   }
+
+  if (typeof HTMLCanvasElement !== 'function') {
+    var _HTMLCanvasElement = function(){};
+    _HTMLCanvasElement.prototype = HTMLCanvasElement.prototype;
+    HTMLCanvasElement = _HTMLCanvasElement;
+  }
 }
 
 export default polyfillHTMLElements;
