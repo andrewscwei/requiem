@@ -285,7 +285,7 @@ class ElementUpdateDelegate {
      * Destroys this ElementUpdateDelegate instance.
      */
     this.destroy = () => {
-      _cancelAnimationFrame();
+      _cancelAnimationFrame(this._pendingAnimationFrame);
 
       if (mResizeHandler) {
         window.removeEventListener(EventType.OBJECT.RESIZE, mResizeHandler);
@@ -318,6 +318,8 @@ class ElementUpdateDelegate {
       if (mKeyPressHandler) window.removeEventListener(EventType.KEYBOARD.KEY_PRESS, mKeyPressHandler);
       if (mKeyUpHandler) window.removeEventListener(EventType.KEYBOARD.KEY_UP, mKeyUpHandler);
       if (mEnterFrameHandler) window.clearInterval(mEnterFrameHandler);
+
+      this._pendingAnimationFrame = null;
 
       mResizeHandler = null;
       mScrollHandler = null;
