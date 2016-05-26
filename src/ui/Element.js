@@ -198,7 +198,8 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     if (this.nodeState === NodeState.UPDATED)
       this.destroy();
 
-    let d = this.data;
+    let d = {};
+    for (let k in this.data.__private__) d[k] = this.getData(k);
     d.state = this.state;
     d.name = this.name;
 
