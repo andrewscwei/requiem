@@ -36,8 +36,8 @@ function getRect(element, reference) {
     let e = elements[i];
     let c = e.getBoundingClientRect();
 
-    let w = (e instanceof HTMLCanvasElement) ? e.width : c.width;
-    let h = (e instanceof HTMLCanvasElement) ? e.height : c.height;
+    let w = c.width;
+    let h = c.height;
     let t = c.top + winRect.top;
     if (reference !== window) t -= refRect.top;
     let l = c.left + winRect.left;
