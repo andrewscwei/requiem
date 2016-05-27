@@ -198,10 +198,11 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     if (this.nodeState === NodeState.UPDATED)
       this.destroy();
 
-    let d = {};
-    for (let k in this.data.__private__) d[k] = this.getData(k);
-    d.state = this.state;
-    d.name = this.name;
+    let d = {
+      data: this.data,
+      state: this.state,
+      name: this.name
+    };
 
     let t = this.template(d);
     if (typeof t === 'string') t = dom.createElement(t);
