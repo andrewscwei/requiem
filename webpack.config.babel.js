@@ -8,7 +8,7 @@ import webpack from 'webpack';
 const debug = (process.env.NODE_ENV === 'development');
 const enableSourcemaps = (process.env.ENABLE_SOURCEMAPS === 'true');
 const sourceDir = path.join(__dirname, 'src');
-const buildDir = path.join(__dirname, 'dist');
+const buildDir = path.join(__dirname, 'lib');
 const plugins = [
   new webpack.optimize.OccurenceOrderPlugin(),
   new webpack.optimize.DedupePlugin()

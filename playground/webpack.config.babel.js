@@ -47,7 +47,7 @@ export default {
     root: [
       path.join(sourceDir, 'scripts'),
       path.join(sourceDir),
-      path.join(__dirname, '../', 'dist')
+      path.join(__dirname, '../', 'lib')
     ],
     modulesDirectories: [
       path.join(__dirname, '../', 'node_modules')

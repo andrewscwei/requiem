@@ -1,15 +1,15 @@
 {
   "name": "requiem",
-  "version": "0.48.2",
+  "version": "0.49.0",
   "description": "An experimental front-end JS framework.",
   "homepage": "http://VARIANTE.github.io/requiem",
   "license": "MIT",
-  "main": "dist/requiem.js",
+  "main": "lib/requiem.js",
   "scripts": {
     "start": "npm run build",
     "test": "mocha tests --recursive --reporter spec --compilers js:babel-register",
-    "clean": "rimraf dist && rimraf lib",
-    "build": "npm run clean && babel -D src/ --presets es2015 --out-dir lib/ && npm run build:dev && npm run build:prod",
+    "clean": "rimraf lib",
+    "build": "npm run clean && npm run build:dev && npm run build:prod",
     "build:dev": "NODE_ENV=development webpack --colors --profile --config ./webpack.config.babel.js --display-error-details",
     "build:prod": "NODE_ENV=production webpack --colors --profile --config ./webpack.config.babel.js --display-error-details",
     "docs": "rimraf docs && jsdoc src -r -R README.md -c .docconfig",
@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
-    "babel-cli": "^6.9.0",
     "babel-core": "^6.9.0",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
@@ -46,7 +45,6 @@
     "webpack-dev-server": "^1.14.1"
   },
   "files": [
-    "dist",
     "lib"
   ],
   "engines": {
