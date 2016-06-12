@@ -1,8 +1,8 @@
 {
   "name": "requiem",
-  "version": "0.49.0",
+  "version": "0.50.0",
   "description": "An experimental front-end JS framework.",
-  "homepage": "http://VARIANTE.github.io/requiem",
+  "homepage": "http://andrewscwei.github.io/requiem",
   "license": "MIT",
   "main": "lib/requiem.js",
   "scripts": {
@@ -20,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/VARIANTE/requiem.git"
+    "url": "https://github.com/andrewscwei/requiem.git"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
