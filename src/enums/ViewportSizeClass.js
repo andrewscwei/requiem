@@ -1,14 +1,4 @@
-/**
- * Requiem
- * (c) VARIANTE (http://variante.io)
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- *
- * Viewport types.
- *
- * @type {Object}
- */
+// (c) Andrew Wei
 
 'use strict';
 
