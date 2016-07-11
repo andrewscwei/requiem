@@ -249,12 +249,14 @@ class ElementUpdateDelegate {
           mDirtyTable |= dirtyType;
       }
 
-      if (validateNow) {
+      if (mDirtyTable === DirtyType.NONE) return;
+
+      if (validateNow)
         this.update();
-      }
-      else if (!this._pendingAnimationFrame) {
+      else if (!this._pendingAnimationFrame)
         this._pendingAnimationFrame = _requestAnimationFrame(this.update.bind(this));
-      }
+      else if (this._pendingAnimationFrame)
+        window.setTimeout(() => this.setDirty(dirtyType, validateNow), 0.0);
     };
 
     /**
