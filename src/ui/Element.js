@@ -558,6 +558,21 @@ const Element = (Base) => class extends (Base || HTMLElement) {
   setDirty() { return this.updateDelegate.setDirty.apply(this.updateDelegate, arguments); }
 
   /**
+   * Shorthand for creating/accessing private properties.
+   *
+   * @return {*} Value of private property.
+   */
+  __(propertyName, defaultValue) {
+    assertType(propertyName, 'string', false);
+    if (!this.__private__) this.__private__ = {};
+    if (!this.__private__[propertyName]) this.__private__[propertyName] = defaultValue;
+    return this.__private__[propertyName];
+  }
+
+  /** @see module:requiem~ui.Element#getChild */
+  $() { return this.getChild.apply(this, arguments); }
+
+  /**
    * Defines all properties.
    *
    * @protected
