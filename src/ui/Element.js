@@ -565,7 +565,7 @@ const Element = (Base) => class extends (Base || HTMLElement) {
   __(propertyName, defaultValue) {
     assertType(propertyName, 'string', false);
     if (!this.__private__) this.__private__ = {};
-    if (!this.__private__[propertyName]) this.__private__[propertyName] = defaultValue;
+    if (this.__private__[propertyName] === undefined) this.__private__[propertyName] = defaultValue;
     return this.__private__[propertyName];
   }
 
