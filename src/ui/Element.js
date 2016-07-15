@@ -562,11 +562,23 @@ const Element = (Base) => class extends (Base || HTMLElement) {
    *
    * @return {*} Value of private property.
    */
-  __(propertyName, defaultValue) {
+  get(propertyName, defaultValue) {
     assertType(propertyName, 'string', false);
     if (!this.__private__) this.__private__ = {};
     if (this.__private__[propertyName] === undefined) this.__private__[propertyName] = defaultValue;
     return this.__private__[propertyName];
+  }
+
+  /**
+   * Shorthand for modifying private properties.
+   *
+   * @param {string} propertyName - Name of private property.
+   * @param {*} value - Value of private property to be set.
+   */
+  set(propertyName, value) {
+    assertType(propertyName, 'string', false);
+    if (!this.__private__) this.__private__ = {};
+    this.__private__[propertyName] = value;
   }
 
   /** @see module:requiem~ui.Element#getChild */
