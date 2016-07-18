@@ -581,9 +581,6 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     this.__private__[propertyName] = value;
   }
 
-  /** @see module:requiem~ui.Element#getChild */
-  $() { return this.getChild.apply(this, arguments); }
-
   /**
    * Defines all properties.
    *
