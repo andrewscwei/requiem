@@ -73,7 +73,7 @@ function getChild() {
     }
   }
   else {
-    if (noval(child, true)) return (typeof element.querySelector === 'function') ? element.querySelector(name) : null;
+    if (noval(child, true)) return (typeof (element || document).querySelector === 'function') ? (element || document).querySelector(name) : null;
     return child;
   }
 }
