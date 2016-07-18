@@ -49,7 +49,7 @@ function getChild() {
   if (!assertType(recursive, 'boolean', true, 'Parameter \'recursive\', if specified, must be a boolean')) return null;
 
   let childRegistry = getChildRegistry(element);
-  if (!childRegistry) return null;
+  if (!childRegistry) return (typeof (element || document).querySelector === 'function') ? (element || document).querySelector(name) : null
   if (!name) return childRegistry;
 
   recursive = (typeof recursive === 'boolean') ? recursive : true;

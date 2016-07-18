@@ -5,6 +5,8 @@
 import 'webcomponents.js/webcomponents-lite';
 import requiem, { dom, enums, events } from 'requiem';
 
+const $ = dom.getChild;
+
 // Load all stylesheets.
 function requireAll(ctx) { return ctx.keys().map(ctx); }
 requireAll(require.context('stylesheets', false, /^\.\//));
