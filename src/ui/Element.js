@@ -351,7 +351,7 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     if (event === EventType.MOUSE.CLICK_OUTSIDE) {
       let l = listener;
       listener = function(event) {
-        if ((event.target !== this.element) && !this.hasChild(event.target)) {
+        if ((event.target !== this) && !this.hasChild(event.target)) {
           l(event);
         }
       }.bind(this);
