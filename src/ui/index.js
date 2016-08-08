@@ -3,7 +3,6 @@
 'use strict';
 
 import Element from './Element';
-import MasonryGrid from './MasonryGrid';
 import register from '../dom/register';
 
 /**
@@ -12,10 +11,7 @@ import register from '../dom/register';
  * @namespace module:requiem~ui
  */
 const ui = {
-  Element: Element,
-  MasonryGrid: MasonryGrid
+  Element: Element
 };
-
-register(MasonryGrid);
 
 export default ui;

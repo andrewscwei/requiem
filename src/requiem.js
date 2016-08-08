@@ -5,7 +5,6 @@ import assert from './helpers/assert';
 import dom from './dom';
 import enums from './enums';
 import events from './events';
-import net from './net';
 import ui from './ui';
 import utils from './utils';
 import polyfillCustomEvent from './polyfills/polyfillCustomEvent';
@@ -28,11 +27,10 @@ function requiem() {
     return dom.sightread.apply(null, arguments);
 }
 
-requiem.version = '0.46.3';
+requiem.version = '0.55.0';
 requiem.dom = dom;
 requiem.enums = enums;
 requiem.events = events;
-requiem.net = net;
 requiem.ui = ui;
 requiem.utils = utils;
 requiem.register = function() { return dom.register.apply(null, arguments); }

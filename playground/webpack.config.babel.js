@@ -38,16 +38,16 @@ export default {
         `sass?includePaths=${path.join(sourceDir, 'scripts', 'stylesheets')},outputStyle=expanded,sourceMap`
       ]
     }, {
-      test: /\.jade$/,
-      loader: `jade?root=${path.join(sourceDir, 'templates')}`
+      test: /\.pug$/,
+      loader: `pug?root=${path.join(sourceDir, 'templates')}`
     }]
   },
   resolve: {
-    extensions: ['', '.js', '.scss', '.jade'],
+    extensions: ['', '.js', '.scss', '.pug'],
     root: [
       path.join(sourceDir, 'scripts'),
       path.join(sourceDir),
-      path.join(__dirname, '../', 'lib')
+      path.join(__dirname, '../', 'src')
     ],
     modulesDirectories: [
       path.join(__dirname, '../', 'node_modules')

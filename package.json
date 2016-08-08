@@ -1,6 +1,6 @@
 {
   "name": "requiem",
-  "version": "0.54.0",
+  "version": "0.55.0",
   "description": "An experimental front-end JS framework.",
   "homepage": "http://andrewscwei.github.io/requiem",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "build:dev": "NODE_ENV=development webpack --colors --profile --config ./webpack.config.babel.js --display-error-details",
     "build:prod": "NODE_ENV=production webpack --colors --profile --config ./webpack.config.babel.js --display-error-details",
     "docs": "rimraf docs && jsdoc src -r -R README.md -c .docconfig",
-    "play": "npm run clean && ENABLE_SOURCEMAPS=true npm run build:dev -- --watch & rimraf playground/public && jade -O \"{basedir:'playground/app/templates'}\" -P -w -o playground/public playground/app/templates/index.jade & webpack-dev-server --progress --inline --hot --config playground/webpack.config.babel.js --content-base playground/public --port 8080"
+    "play": "rimraf playground/public && pug -O \"{basedir:'playground/app/templates'}\" -P -w -o playground/public playground/app/templates/index.pug & webpack-dev-server --progress --inline --hot --config playground/webpack.config.babel.js --content-base playground/public --port 8080"
   },
   "authors": [
     "Andrew Wei <andrew@variante.io>"
@@ -23,22 +23,20 @@
     "url": "https://github.com/andrewscwei/requiem.git"
   },
   "devDependencies": {
-    "autoprefixer": "^6.3.6",
-    "babel-core": "^6.9.0",
+    "babel-core": "^6.13.2",
     "babel-loader": "^6.2.4",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-register": "^6.9.0",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-register": "^6.11.6",
     "css-loader": "^0.23.1",
-    "html-loader": "^0.4.3",
-    "jade": "^1.11.0",
-    "jade-loader": "^0.8.0",
     "jsdoc": "^3.4.0",
-    "json-loader": "^0.5.4",
-    "minuet": "^0.8.1",
-    "mocha": "^2.5.3",
-    "node-sass": "^3.7.0",
-    "rimraf": "^2.5.2",
-    "sass-loader": "^3.2.0",
+    "minuet": "^0.13.0",
+    "mocha": "^3.0.2",
+    "node-sass": "^3.8.0",
+    "pug": "^2.0.0-beta4",
+    "pug-cli": "^1.0.0-alpha6",
+    "pug-loader": "^2.2.1",
+    "rimraf": "^2.5.4",
+    "sass-loader": "^4.0.0",
     "style-loader": "^0.13.1",
     "webcomponents.js": "^0.7.22",
     "webpack": "^1.13.1",
@@ -48,7 +46,7 @@
     "lib"
   ],
   "engines": {
-    "node": "5.5.0"
+    "node": "6.2.0"
   },
   "dependencies": {}
 }
