@@ -572,7 +572,7 @@ const Element = (Base) => class extends (Base || HTMLElement) {
     if (!this.__private__) this.__private__ = {};
     if (this.__private__[propertyName] === undefined) {
       if (typeof defaultInitializer === 'function')
-        defaultInitializer(this.__private__[propertyName]);
+        this.__private__[propertyName] = defaultInitializer();
       else
         this.__private__[propertyName] = defaultInitializer;
     }

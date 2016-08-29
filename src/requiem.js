@@ -27,7 +27,7 @@ function requiem() {
     return dom.sightread.apply(null, arguments);
 }
 
-requiem.version = '0.55.0';
+requiem.version = '0.56.0';
 requiem.dom = dom;
 requiem.enums = enums;
 requiem.events = events;
