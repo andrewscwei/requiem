@@ -560,12 +560,23 @@ const Element = (Base) => class extends (Base || HTMLElement) {
   /**
    * Shorthand for creating/accessing private properties.
    *
+   * @param {string} propertyName - Name of private property.
+   * @param {*} [defaultValue] - Optional default value to set the private
+   *                             property to if it doesn't exist.
+   * @param {Function} defaultInitializer - Optional function to call with the
+   *                                        newly created private property as
+   *                                        its only argument if the default
+   *                                        value is set.
+   *
    * @return {*} Value of private property.
    */
-  get(propertyName, defaultValue) {
+  get(propertyName, defaultValue, defaultInitializer) {
     assertType(propertyName, 'string', false);
     if (!this.__private__) this.__private__ = {};
-    if (this.__private__[propertyName] === undefined) this.__private__[propertyName] = defaultValue;
+    if (this.__private__[propertyName] === undefined) {
+      this.__private__[propertyName] = defaultValue;
+      if ((defaultValue !== undefined) && (typeof defaultInitializer === 'function')) defaultInitializer(this.__private__[propertyName]);
+    }
     return this.__private__[propertyName];
   }
 
