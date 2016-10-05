@@ -37,4 +37,4 @@ requiem.register = function() { return dom.register.apply(null, arguments); }
 
 requiem();
 
-module.exports = requiem;
+export default requiem;
