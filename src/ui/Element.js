@@ -39,6 +39,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * `document.registerElement()`.
    *
    * @return {string} The tag name.
+   * 
+   * @alias module:requiem~ui.Element.tag
    */
   static get tag() { return (typeof base === 'string') && base || tag || undefined; }
 
@@ -47,6 +49,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * value is used in the `options` for `document.registerElement()`.
    *
    * @return {string} The tag of the native element.
+   * 
+   * @alias module:requiem~ui.Element.extends
    */
   static get extends() { return null; }
 
@@ -54,6 +58,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * Creates a new DOM element from this Element class.
    *
    * @return {Node}
+   * 
+   * @alias module:requiem~ui.Element.factory
    */
   static factory() { return new (dom.register(this))(); }
 
@@ -61,6 +67,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * Instance name of this Element instance. Once set, it cannot be changed.
    *
    * @type {string}
+   * 
+   * @alias module:requiem~ui.Element#name
    */
   get name() {
     let s = this.getAttribute('name');
@@ -77,6 +85,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * State of this Element instance (depicted by Directive.State).
    *
    * @type {string}
+   * 
+   * @alias module:requiem~ui.Element#state
    */
   get state() {
     let s = this.getAttribute(Directive.STATE);
@@ -110,6 +120,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * Rect of this Element instance.
    *
    * @type {Object}
+   * 
+   * @alias module:requiem~ui.Element#rect
    */
   get rect() { return getRect(this); }
 
@@ -117,11 +129,16 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * Opacity of this Element instance.
    *
    * @type {number}
+   * 
+   * @alias module:requiem~ui.Element#opacity
    */
   get opacity() { return this.getStyle('opacity', true); }
   set opacity(val) { this.setStyle('opacity', val); }
 
-  /** @inheritdoc */
+  /** 
+   * @inheritdoc 
+   * @ignore
+   */
   createdCallback() {
     // Define instance properties.
     this.__defineProperties__();
@@ -149,14 +166,20 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
     this.setStyle('visibility', 'hidden');
   }
 
-  /** @inheritdoc */
+  /** 
+   * @inheritdoc 
+   * @ignore
+   */
   attachedCallback() {
     this.render();
     this.__setNodeState__(NodeState.INITIALIZED);
     this.updateDelegate.init();
   }
 
-  /** @inheritdoc */
+  /** 
+   * @inheritdoc 
+   * @ignore
+   */
   detachedCallback() {
     this.destroy();
     this.removeAllEventListeners();
@@ -166,6 +189,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
 
   /**
    * Method invoked every time after this element is rendered.
+   * 
+   * @alias module:requiem~ui.Element#init
    */
   init() {
     // Needs to be overridden.
@@ -173,6 +198,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
 
   /**
    * Method invoked every time before this element is rerendered.
+   * 
+   * @alias module:requiem~ui.Element#destroy
    */
   destroy() {
     if (this.__private__.eventQueue)
@@ -181,6 +208,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
 
   /**
    * Handler invoked whenever a visual update is required.
+   * 
+   * @alias module:requiem~ui.Element#update
    */
   update() {
     if (this.nodeState > NodeState.UPDATED) return;
@@ -195,6 +224,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
 
   /**
    * Renders the template of this element instance.
+   * 
+   * @alias module:requiem~ui.Element#render
    */
   render() {
     if (this.nodeState === NodeState.UPDATED)
@@ -261,13 +292,22 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
     this.__private__.eventQueue.start();
   }
 
-  /** @see module:requiem~ui.ElementUpdateDelegate#initResponsiveness */
+  /** 
+   * @see module:requiem~ui.ElementUpdateDelegate#initResponsiveness 
+   * @alias module:requiem~ui.Element#respondsTo
+   */
   respondsTo() { this.updateDelegate.initResponsiveness.apply(this.updateDelegate, arguments); }
 
-  /** @see module:requiem~dom.addChild */
+  /** 
+   * @see module:requiem~dom.addChild 
+   * @alias module:requiem~ui.Element#addChild
+   */
   addChild(child, name, prepend) { return dom.addChild(this, child, name, prepend); }
 
-  /** @see module:requiem~dom.removeChild */
+  /** 
+   * @see module:requiem~dom.removeChild 
+   * @alias module:requiem~ui.Element#removeChild
+   */
   removeChild(child) {
     if ((child instanceof Node) && (child.parentNode === this)) {
       dom.removeFromChildRegistry(dom.getChildRegistry(this), child);
@@ -278,22 +318,40 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
     }
   }
 
-  /** @see module:requiem~dom.getChild */
+  /** 
+   * @see module:requiem~dom.getChild 
+   * @alias module:requiem~ui.Element#getChild
+   */
   getChild(name, recursive) { return dom.getChild(this, name, recursive); }
 
-  /** @see module:requiem~dom.hasChild */
+  /** 
+   * @see module:requiem~dom.hasChild 
+   * @alias module:requiem~ui.Element#hasChild
+   */
   hasChild(child) { return dom.hasChild(child, this); }
 
-  /** @see module:requiem~dom.addClass */
+  /** 
+   * @see module:requiem~dom.addClass 
+   * @alias module:requiem~ui.Element#addClass
+   */
   addClass(className) { return dom.addClass(this, className); }
 
-  /** @see module:requiem~dom.removeClass */
+  /** 
+   * @see module:requiem~dom.removeClass 
+   * @alias module:requiem~ui.Element#removeClass
+   */
   removeClass(className) { return dom.removeClass(this, className); }
 
-  /** @see module:requiem~dom.hasClass */
+  /** 
+   * @see module:requiem~dom.hasClass 
+   * @alias module:requiem~ui.Element#hasClass
+   */
   hasClass(className) { return dom.hasClass(this, className); }
 
-  /** @inheritdoc */
+  /** 
+   * @inheritdoc 
+   * @ignore
+   */
   getAttribute(name) {
     let value = super.getAttribute(name);
     if (value === '') return true;
@@ -306,7 +364,10 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
     }
   }
 
-  /** @inheritdoc */
+  /** 
+   * @inheritdoc 
+   * @ignore
+   */
   setAttribute(name, value) {
     switch (name) {
       case 'name':
@@ -324,19 +385,34 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
     }
   }
 
-  /** @see module:requiem~dom.hasAttribute */
+  /** 
+   * @see module:requiem~dom.hasAttribute 
+   * @alias module:requiem~ui.Element#hasAttribute
+   */
   hasAttribute(name) { return dom.hasAttribute(this, name); }
 
-  /** @see module:requiem~dom.getStyle */
+  /** 
+   * @see module:requiem~dom.getStyle 
+   * @alias module:requiem~ui.Element#getStyle
+   */
   getStyle(key, isComputed, isolateUnits) { return dom.getStyle(this, key, isComputed, isolateUnits); }
 
-  /** @see module:requiem~dom.setStyle */
+  /** 
+   * @see module:requiem~dom.setStyle 
+   * @alias module:requiem~ui.Element#setStyle
+   */
   setStyle(key, value) { return dom.setStyle(this, key, value); }
 
-  /** @see module:requiem~dom.hasStyle */
+  /** 
+   * @see module:requiem~dom.hasStyle 
+   * @alias module:requiem~ui.Element#hasStyle
+   */
   hasStyle(key) { return dom.hasStyle(this, key); }
 
-  /** @inheritdoc */
+  /** 
+   * @inheritdoc 
+   * @ignore
+   */
   addEventListener() {
     let event = arguments[0];
     let listener = arguments[1];
@@ -383,7 +459,10 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
     }
   }
 
-  /** @see module:requiem~ui.Element#addEventListener */
+  /** 
+   * @see module:requiem~ui.Element#addEventListener 
+   * @alias module:requiem~ui.Element#on
+   */
   on() { this.addEventListener.apply(this, arguments); }
 
   /**
@@ -394,6 +473,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * @param {Function} listener - Listener function.
    *
    * @return {boolean}
+   * 
+   * @alias module:requiem~ui.Element#hasEventListener
    */
   hasEventListener(event, listener) {
     if (!this.__private__.listenerRegistry) return false;
@@ -416,7 +497,10 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
     }
   }
 
-  /** @inheritdoc */
+  /** 
+   * @inheritdoc 
+   * @ignore
+   */
   removeEventListener() {
     let event = arguments[0];
     let listener = arguments[1];
@@ -463,11 +547,16 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
     }
   }
 
-  /** @see module:requiem~ui.Element#removeEventListener */
+  /** 
+   * @see module:requiem~ui.Element#removeEventListener 
+   * @alias module:requiem~ui.Element#off
+   */
   off() { this.removeEventListener.apply(this, arguments); }
 
   /**
    * Removes all cached event listeners from this Element instance.
+   * 
+   * @alias module:requiem~ui.Element#removeAllEventListeners
    */
   removeAllEventListeners() {
     if (this.__private__.listenerRegistry) {
@@ -483,6 +572,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * @param {string} key - Name of the data property.
    *
    * @return {*} Value of the data property.
+   * 
+   * @alias module:requiem~ui.Element#getData
    */
   getData(key) {
     return this.data[key];
@@ -495,6 +586,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * @param {string} key - Name of the data property.
    *
    * @return {boolean} True if data property exists, false othwerwise.
+   * 
+   * @alias module:requiem~ui.Element#hasData
    */
   hasData(key) {
     return this.data.hasOwnProperty(key);
@@ -514,6 +607,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * @param {boolean} - If defining only one data property, specifies whether
    *                    the data property should also be a data attribute of the
    *                    element.
+   * 
+   * @alias module:requiem~ui.Element#setData
    */
   setData() {
     let descriptor = arguments[0];
@@ -548,15 +643,23 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    * Creates the associated DOM element from a template.
    *
    * @return {Node|string}
+   * 
+   * @alias module:requiem~ui.Element#template
    */
   template(data) {
     return null;
   }
 
-  /** @see ElementUpdateDelegate#isDirty */
+  /** 
+   * @see ElementUpdateDelegate#isDirty 
+   * @alias module:requiem~ui.Element#isDirty
+   */
   isDirty() { return this.updateDelegate.isDirty.apply(this.updateDelegate, arguments); }
 
-  /** @see ElementUpdateDelegate#setDirty */
+  /** 
+   * @see ElementUpdateDelegate#setDirty 
+   * @alias module:requiem~ui.Element#setDirty
+   */
   setDirty() { return this.updateDelegate.setDirty.apply(this.updateDelegate, arguments); }
 
   /**
@@ -568,6 +671,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    *                                   exist.
    *
    * @return {*} Value of private property.
+   * 
+   * @alias module:requiem~ui.Element#get
    */
   get(propertyName, defaultInitializer) {
     assertType(propertyName, 'string', false);
@@ -586,6 +691,8 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
    *
    * @param {string} propertyName - Name of private property.
    * @param {*} value - Value of private property to be set.
+   * 
+   * @alias module:requiem~ui.Element#set
    */
   set(propertyName, value) {
     assertType(propertyName, 'string', false);
@@ -596,7 +703,7 @@ const Element = (base, tag) => (class extends (typeof base !== 'string' && base 
   /**
    * Defines all properties.
    *
-   * @protected
+   * @private
    */
   __defineProperties__() {
     this.__private__ = {};
