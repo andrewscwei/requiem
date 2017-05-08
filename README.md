@@ -1,8 +1,6 @@
 # Requiem [![Circle CI](https://circleci.com/gh/andrewscwei/requiem/tree/master.svg?style=svg)](https://circleci.com/gh/andrewscwei/requiem/tree/master) [![npm version](https://badge.fury.io/js/requiem.svg)](https://badge.fury.io/js/requiem)
 
-Requiem is an on-going pet project for experimenting with web UI building techniques. It is a stand-alone front-end framework that, at its current state, is not production ready, has an ever-changing API, and lacks proper documentation. Its features are driven by internal requirements and is meant for internal use only.
-
-Requiem is packaged with UI utilities and leverages [WebComponents](http://webcomponents.org/) and ES6 standards. It is a stand-alone framework, hence has no external dependencies (i.e. no jQuery required), and around `17kb` gzipped.
+Requiem is a UI framework packaged with DOM utilities and leverages [WebComponents](http://webcomponents.org/) and ES6 standards. It is a stand-alone framework, hence has no external dependencies (i.e. no jQuery required), and around `17kb` gzipped.
 
 Requiem is best paired with its sister stylesheet library [Minuet](https://github.com/andrewscwei/minuet).
 
@@ -51,6 +49,10 @@ $ npm install requiem
 # API
 
 Raw documentation is available [here](http://andrewscwei.github.io/requiem).
+
+## Disclaimer
+
+Requiem is an on-going pet project for experimenting with web UI building techniques. It is a stand-alone front-end framework that, at its current state, is not production ready, has an ever-changing API, and lacks proper documentation. Its features are driven by internal requirements and is meant for internal use only.
 
 ## License
 

@@ -30,19 +30,21 @@ polyfillHTMLElements();
  *
  * @alias module:requiem~ui.Element
  */
-const Element = (Base) => class extends (Base || HTMLElement) {
+const Element = (base, tag) => (class extends (typeof base !== 'string' && base || HTMLElement) {
   /**
    * Gets the tag name of this Element instance. This method is meant to be
    * overridden by sub-classes because this class merely provides the foundation
    * functionality of a custom element, hence this class does not register
-   * directly with the element registry.
+   * directly with the element registry. This tag name is used by
+   * `document.registerElement()`.
    *
    * @return {string} The tag name.
    */
-  static get tag() { return null; }
+  static get tag() { return (typeof base === 'string') && base || tag || undefined; }
 
   /**
-   * Gets the existing native element which this custom element extends.
+   * Gets the existing native element which this custom element extends. This
+   * value is used in the `options` for `document.registerElement()`.
    *
    * @return {string} The tag of the native element.
    */
@@ -688,6 +690,6 @@ const Element = (Base) => class extends (Base || HTMLElement) {
       }
     }));
   }
-}
+});
 
 export default Element;

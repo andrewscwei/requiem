@@ -2,8 +2,7 @@
 
 import { enums, ui } from 'requiem';
 
-class Playground extends ui.Element() {
-  static get tag() { return 'playground'; }
+class Playground extends ui.Element('playground') {
   static get extends() { return 'div'; }
 
   init() {
