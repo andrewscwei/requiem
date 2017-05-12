@@ -10,7 +10,7 @@ jobs:
       - checkout
       - run: 
           name: Install dependencies
-          command: npm install
+          command: yarn
       - run:
           name: Build
           command: npm run build
