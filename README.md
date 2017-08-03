@@ -10,7 +10,7 @@ For cross browser support, the minimum required polyfill is [webcomponents-lite.
 
 ## Overview
 
-Requiem leverages custom elements following the [WebComponents](http://webcomponents.org/) standard while keeping HTML markup, JavaScripts and stylesheets separate. Hence it is very easy to use your favorite preprocessor language alongside Requiem.
+Requiem leverages custom elements following the [WebComponents](http://webcomponents.org/) standard while keeping HTML markup, JavaScripts and stylesheets separate. Hence it is very easy to use your favorite preprocessor language alongside Requiem. [Webpack](https://webpack.js.org/) is recommended so you can load template files in JavaScript.
 
 ### Creating a Component
 
@@ -51,7 +51,7 @@ class MyElement extends ui.Element() {
    */
   template(data) {
     // The 'data' param here comes prepopulated with this.data.
-    return require('components/my-element.jade')(data);
+    return require('components/my-element.pug')(data);
   }
   ...
 }
