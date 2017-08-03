@@ -17,7 +17,7 @@ Requiem crawls your HTML markup on runtime and turns every **marked** element in
 In your HTML, mark every element as an instance of a component by using the `is` tag. You can also use the `name` tag to specify the instance name.
 
 ```html
-<div is='my-element' name='page>
+<div is='my-element' name='page'>
 </div>
 ```
 
@@ -109,7 +109,7 @@ requiem(MyElement);
 dom.sightread();
 ```
 
-### Optional: Define Your Own Shadow DOM for the Component
+## Optional: Define Your Own Shadow DOM for the Component
 
 You can use the `template()` function in `Element` to define your own shadow DOM. Whenever `DirtyType.RENDER` is marked as dirty, the component will replace its body with the output markup of the `template()` function. This function should return a string containing the desired body markup. With Webpack, you can even load an external template file. In the following example, it is loading an external [Pug](https://pugjs.org/api/getting-started.html) file.
 
@@ -139,6 +139,38 @@ And finally create `my-element.pug`:
 ```pug
 template#my-element
   p= 'Hello, world!'
+```
+
+## Nesting Components
+
+You can have an instance of a component inside another component. For example:
+
+```html
+<div is='my-element' name='page'>
+  <div is='foo-element' name='foo'>
+    <div is='bar-element' name='bar'>
+    </div>
+  </div>
+</div>
+```
+
+Inside `MyElement.js`, you can refer to its child components by using the `getChild()` method and passing the child's instance name as its argument:
+
+```js
+import requiem, { ui } from 'requiem';
+
+class MyElement extends ui.Element() {
+  ...
+  
+  init() {
+    let foo = this.getChild('foo'); // This returns the `foo` instance of `FooElement`
+    let bar = this.getChild('foo.bar'); // This returns the `bar` instance of `BarElement`
+    trace(bar === foo.getChild('bar')); // This will return `true`.
+    super.init();
+  }
+  
+  ...
+}
 ```
 
 # Usage
