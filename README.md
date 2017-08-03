@@ -2,35 +2,31 @@
 
 Requiem is a simple, component-based UI library (not framework) packaged with DOM utilities and leverages [WebComponents](http://webcomponents.org/) and ES6 standards. It is stand-alone, hence has no external dependencies (i.e. no jQuery required), and around `17kb` gzipped.
 
-Requiem is best paired with its sister stylesheet library [Minuet](https://github.com/andrewscwei/minuet).
+## Optional Requirements
 
-## Polyfill
-
-For cross browser support, the minimum required polyfill is [webcomponents-lite.js](http://webcomponents.org/polyfills/).
+1. [webcomponents-lite.js](http://webcomponents.org/polyfills/): You may need this polyfill to ensure cross browser support.
+2. [Webpack](https://webpack.js.org/): For loading template files in JavaScript.
+3. [Minuet](https://github.com/andrewscwei/minuet): Requiem's sister stylesheet library.
 
 ## Overview
 
-Requiem leverages custom elements following the [WebComponents](http://webcomponents.org/) standard while keeping HTML markup, JavaScripts and stylesheets separate. Hence it is very easy to use your favorite preprocessor language alongside Requiem. [Webpack](https://webpack.js.org/) is recommended so you can load template files in JavaScript.
+Requiem crawls your HTML markup on runtime and turns every **marked** element into an **instance** of a component that is defined in JS. Hence, there are 3 parts to this:
 
-### Creating a Component
+### Part 1: Mark the Element in HTML
 
-There are two parts to a Requiem component. The first part is the template, which is just HTML markup. The second part is its controller written in JavaScript. Requiem does not govern how you wish to style your components—it is entirely up to you.
+In your HTML, mark every element as an instance of a component by using the `is` tag. You can also use the `name` tag to specify the instance name.
 
-#### Part 1: Creating the Template
-
-The following example is shown using [Pug](https://pugjs.org/api/getting-started.html).
-
-```pug
-template#my-element
-  p= 'Hello, world!'
+```html
+<div is='my-element' name='page>
+</div>
 ```
 
-#### Part 2: Creating the Controller
-
-This controller will be controlling the template defined above.
+### Part 2: Create the Component
 
 ```js
-import requiem, { ui } from 'requiem';
+import requiem, { ui, enums } from 'requiem';
+
+const { DirtyType } = enums;
 
 /**
  * This is the controller for the custom element. Requiem's `Element` class is an abstract 
@@ -40,29 +36,109 @@ import requiem, { ui } from 'requiem';
 class MyElement extends ui.Element() {
   /**
    * Specify the custom element tag.
+   *
    * @inheritdoc 
    */
   static get tag() { return 'my-element'; }
+  
+  /**
+   * Specify the base element tag that this element extends from. This defaults to `div`.
+   *
+   * @inheritdoc 
+   */
+  static get extends() { return 'div'; }
+  
+  /**
+   * Invoked when this script is successfully bound to the markup.
+   *
+   * @inheritdoc
+   */
+  init() {
+    // This is a good place to set up the element with initial properties.
+    super.init();
+  }
+  
+  /**
+   * Invoked when the instance is destroyed or removed from the DOM.
+   *
+   * @inheritdoc
+   */
+  destroy() {
+    // Perform any clean up tasks here.
+    super.destroy();
+  }
+  
+  /**
+   * Invoked whenever this instance requires updates.
+   *
+   * @inheritdoc
+   */
+  update() {
+    // Handle updates here. Every time `setDirty(DirtyType)` is called, this method
+    // will trigger on the next browser animation frame. You can handle different
+    // types of updates by checking for the `DirtyType` that triggered the update.
+    
+    if (isDirty(DirtyType.POSITION)) {  
+    }
+    
+    if (isDirty(DirtyType.LAYOUT)) {
+    }
+    
+    if (isDirty(DirtyType.DATA)) {
+    }
+    
+    // There are more dirty types. See `enums.DirtyType`.
+    
+    super.update();
+  }
+  ...
+}
+```
 
+### Part 3: Register the Component
+
+You must first register the component and then tell Requiem to crawl the markup so it can look for the marked elements and properly instantiate the components. This process is called **sightreading**.
+
+```js
+import requiem, { dom } from 'requiem';
+
+// Register the component.
+requiem(MyElement);
+
+// Begin sightreading.
+dom.sightread();
+```
+
+### Optional: Define Your Own Shadow DOM for the Component
+
+You can use the `template()` function in `Element` to define your own shadow DOM. Whenever `DirtyType.RENDER` is marked as dirty, the component will replace its body with the output markup of the `template()` function. This function should return a string containing the desired body markup. With Webpack, you can even load an external template file. In the following example, it is loading an external [Pug](https://pugjs.org/api/getting-started.html) file.
+
+```js
+import requiem, { ui } from 'requiem';
+
+class MyElement extends ui.Element() {
+  ...
+  
   /**
    * This method is optional. Implement it if you want this component to manage its own 
    * shadow DOM.
+   *
    * @inheritdoc 
    */
   template(data) {
     // The 'data' param here comes prepopulated with this.data.
     return require('components/my-element.pug')(data);
   }
+  
   ...
 }
 ```
 
-#### Part 3: Registering the Controller
+And finally create `my-element.pug`:
 
-You have a view, and you have a controller, so now you just have to bind them so they understand their relationship with each other.
-
-```js
-requiem(MyElement);
+```pug
+template#my-element
+  p= 'Hello, world!'
 ```
 
 # Usage
