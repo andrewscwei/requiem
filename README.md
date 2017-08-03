@@ -1,44 +1,69 @@
 # Requiem [![Circle CI](https://circleci.com/gh/andrewscwei/requiem/tree/master.svg?style=svg)](https://circleci.com/gh/andrewscwei/requiem/tree/master) [![npm version](https://badge.fury.io/js/requiem.svg)](https://badge.fury.io/js/requiem)
 
-Requiem is a UI framework packaged with DOM utilities and leverages [WebComponents](http://webcomponents.org/) and ES6 standards. It is a stand-alone framework, hence has no external dependencies (i.e. no jQuery required), and around `17kb` gzipped.
+Requiem is a simple, component-based UI library (not framework) packaged with DOM utilities and leverages [WebComponents](http://webcomponents.org/) and ES6 standards. It is stand-alone, hence has no external dependencies (i.e. no jQuery required), and around `17kb` gzipped.
 
 Requiem is best paired with its sister stylesheet library [Minuet](https://github.com/andrewscwei/minuet).
 
-# Polyfill
+## Polyfill
 
-If needed for cross browser support, the minimum required polyfill is [webcomponents-lite.js](http://webcomponents.org/polyfills/).
+For cross browser support, the minimum required polyfill is [webcomponents-lite.js](http://webcomponents.org/polyfills/).
 
-# Overview
+## Overview
 
 Requiem leverages custom elements following the [WebComponents](http://webcomponents.org/) standard while keeping HTML markup, JavaScripts and stylesheets separate. Hence it is very easy to use your favorite preprocessor language alongside Requiem.
 
-1. Create a custom element in HTML or any template engine of your choice. If you have a build tool like [Webpack](https://webpack.github.io/) you can even make this template a separate file and later load it in JavaScript. The following example uses [Jade](http://jade-lang.com/):
+### Creating a Component
 
-  ```jade
-  template#my-element
-    p= 'Hello, world!'
-  ```
+There are two parts to a Requiem component. The first part is the template, which is just HTML markup. The second part is its controller written in JavaScript. Requiem does not govern how you wish to style your components—it is entirely up to you.
 
-2. Create a JavaScript class for the custom element, extending any HTMLElement classes wrapped by Requiem's native `Element` abstract class which comes loaded with many built-in features. Override the static getter `tag()` and the instance method `template()` to specify your custom elemen tag name and template markup respectively. After that, register it somewhere in your scripts. The following example assumes you have Webpack to load an external template into JavaScript. All it matters is that `template()` returns a string containing HTML markup or a DOM `Node`.
+#### Part 1: Creating the Template
 
-  ```js
-  import requiem, { ui } from 'requiem';
+The following example is shown using [Pug](https://pugjs.org/api/getting-started.html).
 
-  class MyElement extends ui.Element(HTMLElement) {
-    /** @inheritdoc */
-    static get tag() { return 'my-element'; }
+```pug
+template#my-element
+  p= 'Hello, world!'
+```
 
-    /** @inheritdoc */
-    template(data) {
-      // The 'data' param here comes prepopulated with this.data.
-      return require('components/my-element.jade')(data);
-    }
-    ...
+#### Part 2: Creating the Controller
+
+This controller will be controlling the template defined above.
+
+```js
+import requiem, { ui } from 'requiem';
+
+/**
+ * This is the controller for the custom element. Requiem's `Element` class is an abstract 
+ * class that extends `HTMLElement` and comes loaded with many built-in features, such as
+ * handling states, data and render loops.
+ */
+class MyElement extends ui.Element() {
+  /**
+   * Specify the custom element tag.
+   * @inheritdoc 
+   */
+  static get tag() { return 'my-element'; }
+
+  /**
+   * This method is optional. Implement it if you want this component to manage its own 
+   * shadow DOM.
+   * @inheritdoc 
+   */
+  template(data) {
+    // The 'data' param here comes prepopulated with this.data.
+    return require('components/my-element.jade')(data);
   }
+  ...
+}
+```
 
-  // Register it.
-  requiem(MyElement);
-  ```
+#### Part 3: Registering the Controller
+
+You have a view, and you have a controller, so now you just have to bind them so they understand their relationship with each other.
+
+```js
+requiem(MyElement);
+```
 
 # Usage
 
