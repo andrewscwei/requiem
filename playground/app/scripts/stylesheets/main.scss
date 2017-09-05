@@ -1,9 +1,0 @@
-@import '~minuet/lib/sass/minuet';
-@import '~minuet/lib/sass/reset';
-
-@include element('playground-element') {
-  @include display('box>', top center);
-  width: 100%;
-  height: 100%;
-  padding: 50px;
-}

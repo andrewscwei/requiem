@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Requiem <a href="https://circleci.com/gh/andrewscwei/requiem/tree/master"><img src="https://circleci.com/gh/andrewscwei/requiem/tree/master.svg?style=svg" alt="Circle CI"></a> <a href="https://badge.fury.io/js/requiem"><img src="https://badge.fury.io/js/requiem.svg" alt="npm version"></a></h1><p>Requiem is a simple, component-based UI library (not framework) packaged with DOM utilities and leverages <a href="http://webcomponents.org/">WebComponents</a> and ES6 standards. It is stand-alone, hence has no external dependencies (i.e. no jQuery required), and around <code>17kb</code> gzipped.</p>
+<h2>Optional Requirements</h2><ol>
+<li><a href="http://webcomponents.org/polyfills/">webcomponents-lite.js</a>: You may need this polyfill to ensure cross browser support.</li>
+<li><a href="https://webpack.js.org/">Webpack</a>: For loading template files in JavaScript.</li>
+<li><a href="https://github.com/andrewscwei/minuet">Minuet</a>: Requiem's sister stylesheet library.</li>
+</ol>
+<h2>Overview</h2><p>Requiem crawls your HTML markup on runtime and turns every <strong>marked</strong> element into an <strong>instance</strong> of a component that is defined in JS. Hence, there are 3 parts to this:</p>
+<h3>Part 1: Mark the Element in HTML</h3><p>In your HTML, mark every element as an instance of a component by using the <code>is</code> tag. You can also use the <code>name</code> tag to specify the instance name.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div is='my-element' name='page'>
+&lt;/div></code></pre><h3>Part 2: Create the Component</h3><pre class="prettyprint source lang-js"><code>import requiem, { ui, enums } from 'requiem';
+
+const { DirtyType } = enums;
+
+/**
+ * This is the controller for the custom element. Requiem's `Element` class is an abstract 
+ * class that extends `HTMLElement` and comes loaded with many built-in features, such as
+ * handling states, data and render loops.
+ */
+class MyElement extends ui.Element() {
+  /**
+   * Specify the custom element tag.
+   *
+   * @inheritdoc 
+   */
+  static get tag() { return 'my-element'; }
+
+  /**
+   * Specify the base element tag that this element extends from. This defaults to `div`.
+   *
+   * @inheritdoc 
+   */
+  static get extends() { return 'div'; }
+
+  /**
+   * Invoked when this script is successfully bound to the markup.
+   *
+   * @inheritdoc
+   */
+  init() {
+    // This is a good place to set up the element with initial properties.
+    super.init();
+  }
+
+  /**
+   * Invoked when the instance is destroyed or removed from the DOM.
+   *
+   * @inheritdoc
+   */
+  destroy() {
+    // Perform any clean up tasks here.
+    super.destroy();
+  }
+
+  /**
+   * Invoked whenever this instance requires updates.
+   *
+   * @inheritdoc
+   */
+  update() {
+    // Handle updates here. Every time `setDirty(DirtyType)` is called, this method
+    // will trigger on the next browser animation frame. You can handle different
+    // types of updates by checking for the `DirtyType` that triggered the update.
+
+    if (isDirty(DirtyType.POSITION)) {  
+    }
+
+    if (isDirty(DirtyType.LAYOUT)) {
+    }
+
+    if (isDirty(DirtyType.DATA)) {
+    }
+
+    // There are more dirty types. See `enums.DirtyType`.
+
+    super.update();
+  }
+  ...
+}</code></pre><h3>Part 3: Register the Component</h3><p>You must first register the component and then tell Requiem to crawl the markup so it can look for the marked elements and properly instantiate the components. This process is called <strong>sightreading</strong>.</p>
+<pre class="prettyprint source lang-js"><code>import requiem, { dom } from 'requiem';
+
+// Register the component.
+requiem(MyElement);
+
+// Begin sightreading.
+dom.sightread();</code></pre><h2>Optional: Define Your Own Shadow DOM for the Component</h2><p>You can use the <code>template()</code> function in <code>Element</code> to define your own shadow DOM. Whenever <code>DirtyType.RENDER</code> is marked as dirty, the component will replace its body with the output markup of the <code>template()</code> function. This function should return a string containing the desired body markup. With Webpack, you can even load an external template file. In the following example, it is loading an external <a href="https://pugjs.org/api/getting-started.html">Pug</a> file.</p>
+<pre class="prettyprint source lang-js"><code>import requiem, { ui } from 'requiem';
+
+class MyElement extends ui.Element() {
+  ...
+
+  /**
+   * This method is optional. Implement it if you want this component to manage its own 
+   * shadow DOM.
+   *
+   * @inheritdoc 
+   */
+  template(data) {
+    // The 'data' param here comes prepopulated with this.data.
+    return require('components/my-element.pug')(data);
+  }
+
+  ...
+}</code></pre><p>And finally create <code>my-element.pug</code>:</p>
+<pre class="prettyprint source lang-pug"><code>template#my-element
+  p= 'Hello, world!'</code></pre><h2>Nesting Components</h2><p>You can have an instance of a component inside another component. For example:</p>
+<pre class="prettyprint source lang-html"><code>&lt;div is='my-element' name='page'>
+  &lt;div is='foo-element' name='foo'>
+    &lt;div is='bar-element' name='bar'>
+    &lt;/div>
+  &lt;/div>
+&lt;/div></code></pre><p>Inside <code>MyElement.js</code>, you can refer to its child components by using the <code>getChild()</code> method and passing the child's instance name as its argument:</p>
+<pre class="prettyprint source lang-js"><code>import requiem, { ui } from 'requiem';
+
+class MyElement extends ui.Element() {
+  ...
+
+  init() {
+    let foo = this.getChild('foo'); // This returns the `foo` instance of `FooElement`
+    let bar = this.getChild('foo.bar'); // This returns the `bar` instance of `BarElement`
+    trace(bar === foo.getChild('bar')); // This will return `true`.
+    super.init();
+  }
+
+  ...
+}</code></pre><h1>Usage</h1><pre class="prettyprint source"><code>$ npm install requiem</code></pre><h1>API</h1><p>Raw documentation is available <a href="http://andrewscwei.github.io/requiem">here</a>.</p>
+<h2>Disclaimer</h2><p>Requiem is an on-going pet project for experimenting with web UI building techniques. It is a stand-alone front-end framework that, at its current state, is not production ready, has an ever-changing API, and lacks proper documentation. Its features are driven by internal requirements and is meant for internal use only.</p>
+<h2>License</h2><p>This software is released under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-events.EventQueue.html">EventQueue</a></li><li><a href="module-requiem-events.EventTimer.html">EventTimer</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-enums.html">enums</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Sep 05 2017 00:45:13 GMT+0000 (UTC)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

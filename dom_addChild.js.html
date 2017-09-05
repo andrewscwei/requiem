@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: dom/addChild.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: dom/addChild.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// (c) Andrew Wei
+
+'use strict';
+
+import addToChildRegistry from './addToChildRegistry';
+import getChildRegistry from './getChildRegistry';
+import sightread from './sightread';
+import assertType from '../helpers/assertType';
+import isCustomElement from '../helpers/isCustomElement';
+
+/**
+ * Adds a child element(s) to an element. By default the added element(s) are
+ * appended to the end of the element.
+ *
+ * @param {Node} [element] - Specifies the element to add the child to.
+ * @param {Node|Node[]} child - Single element or an array of elements.
+ * @param {string} [name] - The name of the child/children to be added.
+ *                          Typically a name is required. If it is not
+ *                          specified, this method will attempt to infer the
+ *                          name from the provided child/children. This method
+ *                          fails if a name cannot be inferred. If there
+ *                          exists another child with the same name, the added
+ *                          child will be grouped together with the existing
+ *                          child.
+ * @param {boolean} [prepend=false] - Specifies whether the child is prepended
+ *                                    to this element instead of appended.
+ *
+ * @return {Node|Node[]} The added element(s).
+ *
+ * @alias module:requiem~dom.addChild
+ */
+function addChild() {
+  let element = undefined;
+  let child = undefined;
+  let name = undefined;
+  let prepend = undefined;
+
+  let arg1 = arguments[0];
+  if ((arg1 === window) || (arg1 === document) || (arg1 instanceof Node) || (arg1 === null) || (arg1 === undefined))
+    element = arg1;
+  else if ((arg1 instanceof Node) || (arg1 instanceof Array))
+    child = arg1;
+  else
+    throw new Error('Invalid arguments provided');
+
+  let arg2 = arguments[1];
+  if ((child === undefined) &amp;&amp; ((arg2 instanceof Node) || (arg2 instanceof Array))) {
+    child = arg2;
+  }
+  else if ((child === undefined) &amp;&amp; (element instanceof Node)) {
+    child = element;
+    element = undefined;
+  }
+  else {
+    throw new Error('Child must be specified');
+  }
+
+  if (child) {
+    if ((name === undefined) &amp;&amp; (typeof arg2 === 'string'))
+      name = arg2;
+    else if ((prepend === undefined) &amp;&amp; (typeof arg2 === 'boolean'))
+      prepend = arg2;
+  }
+
+  let arg3 = arguments[2];
+    if ((name === undefined) &amp;&amp; (typeof arg3 === 'string'))
+      name = arg3;
+    else if ((prepend === undefined) &amp;&amp; (typeof arg3 === 'boolean'))
+      prepend = arg3;
+
+  let arg4 = arguments[3];
+    if ((prepend === undefined) &amp;&amp; (typeof arg4 === 'boolean'))
+      prepend = arg4;
+
+  assertType(child, [Node, Array], false, 'Invalid child specified');
+  assertType(prepend, 'boolean', true, `Param 'prepend' must be a boolean`);
+  assertType(element, Node, true, 'Parameter \'element\', if specified, must be a Node');
+
+  if (typeof prepend !== 'boolean') prepend = false;
+  if (!element || element === window || element === document) element = document.body;
+
+  let childRegistry = getChildRegistry(element, true);
+
+  if (child instanceof Array) {
+    let n = child.length;
+    let children = [];
+
+    if (prepend) {
+      for (let i = n-1; i >= 0; i--)
+        children.push(addChild(element, child[i], name, prepend));
+    }
+    else {
+      for (let i = 0; i &lt; n; i++)
+        children.push(addChild(element, child[i], name, prepend));
+    }
+
+    return children;
+  }
+  else {
+    if (name)
+      addToChildRegistry(childRegistry, child, name);
+
+    if (!isCustomElement(child)) sightread(child);
+
+    if (element.shadowRoot) element = element.shadowRoot;
+
+    if (prepend)
+      element.insertBefore(child, element.firstChild);
+    else
+      element.appendChild(child);
+
+    return child;
+  }
+}
+
+export default addChild;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-events.EventQueue.html">EventQueue</a></li><li><a href="module-requiem-events.EventTimer.html">EventTimer</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-enums.html">enums</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Sep 05 2017 00:45:13 GMT+0000 (UTC)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: events/EventQueue.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: events/EventQueue.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// (c) Andrew Wei
+
+'use strict';
+
+import EventDispatcher from './EventDispatcher';
+import EventType from '../enums/EventType';
+import assert from '../helpers/assert';
+
+/**
+ * @class
+ *
+ * A queue that enqueues multiple events of event dispatchers and notifies when
+ * all enqueued events have been dispatched.
+ *
+ * @alias module:requiem~events.EventQueue
+ */
+class EventQueue extends EventDispatcher {
+  /**
+   * Gets the queued up event pool.
+   *
+   * @type {Object}
+   */
+  get eventPool() {
+    if (this.__private__ === undefined) this.__private__ = {};
+    if (this.__private__.eventPool === undefined) this.__private__.eventPool = {};
+    return this.__private__.eventPool;
+  }
+
+  /**
+   * Specifies whether this EventQueue instance is already waiting for queued
+   * events.
+   *
+   * @type {boolean}
+   */
+  get isWaiting() {
+    if (this.__private__ === undefined) this.__private__ = {};
+    return this.__private__.isWaiting || false;
+  }
+
+  /**
+   * Adds an event with the specified event dispatcher and event type to the
+   * queue.
+   *
+   * @param  {EventDispatcher} eventDispatcher - EventDispatcher instance to
+   *                                             register the event with.
+   * @param  {string} eventType - Name of the event to register.
+   */
+  enqueue(eventDispatcher, eventType) {
+    assert((typeof eventDispatcher.dispatchEvent === 'function') &amp;&amp; (typeof eventDispatcher.addEventListener === 'function'), `Not a valid event dispatcher instance`);
+    assert(!this.isWaiting, 'Cannot enqueue when EventQueue instance is already waiting for events');
+    if (this.eventPool[eventType] === undefined) this.eventPool[eventType] = [];
+
+    let pool = this.eventPool[eventType];
+    pool.forEach((event) => assert(event.dispatcher !== eventDispatcher, `The event '${eventType}' of ${eventDispatcher} is already in the queue`));
+    pool.push({ dispatcher: eventDispatcher });
+  }
+
+  /**
+   * Removes an event with the specified event dispatcher and event type from
+   * the queue.
+   *
+   * @param  {EventDispatcher} eventDispatcher - EventDispatcher instance which
+   *                                             the event was registered with.
+   * @param  {string} eventType - Name of the event which the event was
+   *                              registered with.
+   */
+  dequeue(eventDispatcher, eventType) {
+    assert(!this.isWaiting, 'Cannot dequeue when EventQueue instance is already waiting for events');
+    let pool = this.eventPool[eventType];
+    if (!pool) return;
+    let n = pool.length;
+    let t = -1;
+    for (let i = 0; i &lt; n; i++) {
+      if (pool[i].dispatcher === dispatcher) {
+        t = i;
+        break;
+      }
+    }
+    if (~t) pool.splice(t, 1);
+    if (pool.length === 0) delete this.eventPool[eventType];
+  }
+
+  /**
+   * Starts waiting for queued up events.
+   */
+  start() {
+    for (let eventType in this.eventPool) {
+      let pool = this.eventPool[eventType];
+      pool.forEach((eventPair) => {
+        assert(eventPair.handler === undefined, `Handler not supposed to be defined at this point`);
+        eventPair.handler = () => {
+          eventPair.dispatcher.removeEventListener(eventType, eventPair.handler);
+          delete eventPair.handler;
+
+          let allDone = true;
+
+          for (let t in this.eventPool) {
+            let p = this.eventPool[t];
+            let n = p.length;
+            for (let i = 0; i &lt; n; i++) {
+              if (p[i].handler) {
+                allDone = false;
+                break;
+              }
+            }
+            if (!allDone) break;
+          }
+
+          if (allDone) {
+            this.kill();
+            this.dispatchEvent(new CustomEvent(EventType.OBJECT.COMPLETE));
+          }
+        };
+
+        eventPair.dispatcher.addEventListener(eventType, eventPair.handler);
+        this.__private__.isWaiting = true;
+      });
+    }
+
+    if (!this.__private__.isWaiting) {
+      this.kill();
+      this.dispatchEvent(new CustomEvent(EventType.OBJECT.COMPLETE));
+    }
+  }
+
+  /**
+   * Kills this EventQueue instance, setting everything for garbage collection.
+   */
+  kill() {
+    for (let eventType in this.eventPool) {
+      let pool = this.eventPool[eventType];
+      pool.forEach((eventPair) => {
+        if (eventPair.handler) eventPair.dispatcher.removeEventListener(eventType, eventPair.handler);
+      });
+    }
+
+    delete this.__private__.eventPool;
+    this.__private__.isWaiting = false;
+  }
+}
+
+export default EventQueue;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-events.EventQueue.html">EventQueue</a></li><li><a href="module-requiem-events.EventTimer.html">EventTimer</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-enums.html">enums</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Sep 05 2017 00:45:13 GMT+0000 (UTC)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

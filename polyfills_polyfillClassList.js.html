@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: polyfills/polyfillClassList.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: polyfills/polyfillClassList.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// (c) Andrew Wei
+
+'use strict';
+
+/**
+ * Polyfill to support CustomEvent in IE.
+ *
+ * @alias module:requiem~polyfills.polyfillClassList
+ *
+ * @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js
+ */
+function polyfillClassList() {
+  // Full polyfill for browsers with no classList support
+  if (!("classList" in document.createElement("_"))) {
+    (function (view) {
+
+    "use strict";
+
+    if (!('Element' in view)) return;
+
+    var
+        classListProp = "classList"
+      , protoProp = "prototype"
+      , elemCtrProto = view.Element[protoProp]
+      , objCtr = Object
+      , strTrim = String[protoProp].trim || function () {
+        return this.replace(/^\s+|\s+$/g, "");
+      }
+      , arrIndexOf = Array[protoProp].indexOf || function (item) {
+        var
+            i = 0
+          , len = this.length
+        ;
+        for (; i &lt; len; i++) {
+          if (i in this &amp;&amp; this[i] === item) {
+            return i;
+          }
+        }
+        return -1;
+      }
+      // Vendors: please allow content code to instantiate DOMExceptions
+      , DOMEx = function (type, message) {
+        this.name = type;
+        this.code = DOMException[type];
+        this.message = message;
+      }
+      , checkTokenAndGetIndex = function (classList, token) {
+        if (token === "") {
+          throw new DOMEx(
+              "SYNTAX_ERR"
+            , "An invalid or illegal string was specified"
+          );
+        }
+        if (/\s/.test(token)) {
+          throw new DOMEx(
+              "INVALID_CHARACTER_ERR"
+            , "String contains an invalid character"
+          );
+        }
+        return arrIndexOf.call(classList, token);
+      }
+      , ClassList = function (elem) {
+        var
+            trimmedClasses = strTrim.call(elem.getAttribute("class") || "")
+          , classes = trimmedClasses ? trimmedClasses.split(/\s+/) : []
+          , i = 0
+          , len = classes.length
+        ;
+        for (; i &lt; len; i++) {
+          this.push(classes[i]);
+        }
+        this._updateClassName = function () {
+          elem.setAttribute("class", this.toString());
+        };
+      }
+      , classListProto = ClassList[protoProp] = []
+      , classListGetter = function () {
+        return new ClassList(this);
+      }
+    ;
+    // Most DOMException implementations don't allow calling DOMException's toString()
+    // on non-DOMExceptions. Error's toString() is sufficient here.
+    DOMEx[protoProp] = Error[protoProp];
+    classListProto.item = function (i) {
+      return this[i] || null;
+    };
+    classListProto.contains = function (token) {
+      token += "";
+      return checkTokenAndGetIndex(this, token) !== -1;
+    };
+    classListProto.add = function () {
+      var
+          tokens = arguments
+        , i = 0
+        , l = tokens.length
+        , token
+        , updated = false
+      ;
+      do {
+        token = tokens[i] + "";
+        if (checkTokenAndGetIndex(this, token) === -1) {
+          this.push(token);
+          updated = true;
+        }
+      }
+      while (++i &lt; l);
+
+      if (updated) {
+        this._updateClassName();
+      }
+    };
+    classListProto.remove = function () {
+      var
+          tokens = arguments
+        , i = 0
+        , l = tokens.length
+        , token
+        , updated = false
+        , index
+      ;
+      do {
+        token = tokens[i] + "";
+        index = checkTokenAndGetIndex(this, token);
+        while (index !== -1) {
+          this.splice(index, 1);
+          updated = true;
+          index = checkTokenAndGetIndex(this, token);
+        }
+      }
+      while (++i &lt; l);
+
+      if (updated) {
+        this._updateClassName();
+      }
+    };
+    classListProto.toggle = function (token, force) {
+      token += "";
+
+      var
+          result = this.contains(token)
+        , method = result ?
+          force !== true &amp;&amp; "remove"
+        :
+          force !== false &amp;&amp; "add"
+      ;
+
+      if (method) {
+        this[method](token);
+      }
+
+      if (force === true || force === false) {
+        return force;
+      } else {
+        return !result;
+      }
+    };
+    classListProto.toString = function () {
+      return this.join(" ");
+    };
+
+    if (objCtr.defineProperty) {
+      var classListPropDesc = {
+          get: classListGetter
+        , enumerable: true
+        , configurable: true
+      };
+      try {
+        objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+      } catch (ex) { // IE 8 doesn't support enumerable:true
+        if (ex.number === -0x7FF5EC54) {
+          classListPropDesc.enumerable = false;
+          objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+        }
+      }
+    } else if (objCtr[protoProp].__defineGetter__) {
+      elemCtrProto.__defineGetter__(classListProp, classListGetter);
+    }
+
+    }(self));
+
+    } else {
+    // There is full or partial native classList support, so just check if we need
+    // to normalize the add/remove and toggle APIs.
+
+    (function () {
+      "use strict";
+
+      var testElement = document.createElement("_");
+
+      testElement.classList.add("c1", "c2");
+
+      // Polyfill for IE 10/11 and Firefox &lt;26, where classList.add and
+      // classList.remove exist but support only one argument at a time.
+      if (!testElement.classList.contains("c2")) {
+        var createMethod = function(method) {
+          var original = DOMTokenList.prototype[method];
+
+          DOMTokenList.prototype[method] = function(token) {
+            var i, len = arguments.length;
+
+            for (i = 0; i &lt; len; i++) {
+              token = arguments[i];
+              original.call(this, token);
+            }
+          };
+        };
+        createMethod('add');
+        createMethod('remove');
+      }
+
+      testElement.classList.toggle("c3", false);
+
+      // Polyfill for IE 10 and Firefox &lt;24, where classList.toggle does not
+      // support the second argument.
+      if (testElement.classList.contains("c3")) {
+        var _toggle = DOMTokenList.prototype.toggle;
+
+        DOMTokenList.prototype.toggle = function(token, force) {
+          if (1 in arguments &amp;&amp; !this.contains(token) === !force) {
+            return force;
+          } else {
+            return _toggle.call(this, token);
+          }
+        };
+
+      }
+
+      testElement = null;
+    }());
+  }
+}
+
+export default polyfillClassList;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-requiem.html">requiem</a></li></ul><h3>Classes</h3><ul><li><a href="module-requiem-events.EventDispatcher.html">EventDispatcher</a></li><li><a href="module-requiem-events.EventQueue.html">EventQueue</a></li><li><a href="module-requiem-events.EventTimer.html">EventTimer</a></li><li><a href="module-requiem-ui.Element.html">Element</a></li><li><a href="module-requiem-ui.ElementUpdateDelegate.html">ElementUpdateDelegate</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-requiem-dom.html">dom</a></li><li><a href="module-requiem-enums.html">enums</a></li><li><a href="module-requiem-events.html">events</a></li><li><a href="module-requiem-ui.html">ui</a></li><li><a href="module-requiem-utils.html">utils</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Sep 05 2017 00:45:13 GMT+0000 (UTC)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
