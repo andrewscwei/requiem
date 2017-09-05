@@ -1,15 +1,16 @@
 {
   "name": "requiem",
-  "version": "0.58.1",
+  "version": "0.60.0",
   "description": "An experimental front-end JS framework.",
   "homepage": "http://andrewscwei.github.io/requiem",
   "license": "MIT",
-  "main": "lib/requiem.js",
+  "main": "dist/requiem.js",
   "scripts": {
     "start": "npm run build",
     "test": "mocha tests --recursive --reporter spec --compilers js:babel-register",
-    "clean": "rimraf lib",
-    "build": "npm run clean && npm run build:dev && npm run build:prod",
+    "clean": "rimraf dist lib",
+    "build": "npm run clean && npm run build:lib && npm run build:dev && npm run build:prod",
+    "build:lib": "mkdirp lib && ncp src lib",
     "build:dev": "NODE_ENV=development webpack --colors --profile --config ./webpack.config.babel.js --display-error-details",
     "build:prod": "NODE_ENV=production webpack --colors --profile --config ./webpack.config.babel.js --display-error-details",
     "docs": "rimraf docs && jsdoc src -r -R README.md -c .jsdocrc",
@@ -30,7 +31,9 @@
     "css-loader": "^0.28.1",
     "jsdoc": "^3.4.3",
     "minuet": "^0.15.1",
+    "mkdirp": "^0.5.1",
     "mocha": "^3.3.0",
+    "ncp": "^2.0.0",
     "node-sass": "^4.5.2",
     "pug": "^2.0.0-rc.1",
     "pug-cli": "^1.0.0-alpha6",
@@ -43,6 +46,7 @@
     "webpack-dev-server": "^2.4.5"
   },
   "files": [
+    "dist",
     "lib"
   ],
   "dependencies": {}

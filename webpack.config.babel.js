@@ -18,7 +18,7 @@ export default {
     requiem: './requiem.js'
   },
   output: {
-    path: path.join(__dirname, 'lib'),
+    path: path.join(__dirname, 'dist'),
     filename: debug ? '[name].js' : '[name].min.js',
     library: 'requiem',
     libraryTarget: 'umd',
