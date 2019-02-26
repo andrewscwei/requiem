@@ -186,7 +186,3 @@ Raw documentation is available [here](http://andrewscwei.github.io/requiem).
 ## Disclaimer
 
 Requiem is an on-going pet project for experimenting with web UI building techniques. It is a stand-alone front-end framework that, at its current state, is not production ready, has an ever-changing API, and lacks proper documentation. Its features are driven by internal requirements and is meant for internal use only.
-
-## License
-
-This software is released under the [MIT License](http://opensource.org/licenses/MIT).
